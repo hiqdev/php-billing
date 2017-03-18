@@ -1,0 +1,12 @@
+package:
+    type:           library
+    name:           php-billing
+    title:          PHP Billing Library
+    headline:       PHP Billing
+    keywords:       php, billing, tariff plan
+    namespace:      hiqdev\php\billing
+    description:    |
+        Billing library providing:
+
+        - tariff plans management
+        - one-time, metered and recurring charging
