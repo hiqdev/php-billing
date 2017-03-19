@@ -14,39 +14,14 @@ use hiqdev\php\billing\Type;
 class BillResource
 {
     /**
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
-     * @var Bill|null
+     * @var Action
      */
-    public $type;
-
-    /**
-     * @var Type
-     */
-    public $type;
-
-    /**
-     * @var Purse
-     */
-    public $purse;
-
-    /**
-     * @var Object
-     */
-    public $object;
-
-    /**
-     * @var Tariff
-     */
-    public $tariff;
-
-    /**
-     * @var DateTime
-     */
-    public $time;
+    public $action;
 
     /**
      * @var double
@@ -54,12 +29,19 @@ class BillResource
     public $quantity;
 
     /**
-     * @var integer
+     * @var int
      */
     public $sum;
 
     /**
-     * @var bool
+     * @var Bill|null
      */
-    public $isFinished;
+    public $bill;
+
+    public function __construct(Action $action, double $quantity, int $sum)
+    {
+        $this->action = $action;
+        $this->quantity = $quantity;
+        $this->sum = $sum;
+    }
 }

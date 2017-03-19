@@ -12,7 +12,7 @@ use hiqdev\php\billing\TariffResource;
 class Tariff
 {
     /**
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -42,4 +42,21 @@ class Tariff
      */
     public $resources = [];
 
+    /**
+     * Calculate action value.
+     * @param Action $action
+     * @return BillResource[]
+     */
+    public function calculateAction(Action $action)
+    {
+        $results = [];
+        foreach ($this->getResources() as $resource) {
+            $result = $resource->calculateAction($action);
+            if ($result) {
+                $results[] = $result;
+            }
+        }
+
+        return $results;
+    }
 }

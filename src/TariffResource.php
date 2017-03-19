@@ -16,35 +16,50 @@ class TariffResource
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var Type
      */
-    public $type;
+    protected $type;
 
     /**
      * @var Tariff
      */
-    public $tariff;
+    protected $tariff;
 
     /**
      * @var Object
      */
-    public $object;
+    protected $object;
 
     /**
      * @var Unit
      */
-    public $unit;
+    protected $unit;
 
     /**
      * @var double
      */
-    public $quantity;
+    protected $quantity;
 
     /**
      * @var integer
      */
-    public $price;
+    protected $price;
+
+    /**
+     * Calculate action value.
+     * @param Action $action
+     * @return null|BillResource
+     */
+    public function calculateAction(Action $action)
+    {
+        if (!$this->isApplicable($action)) {
+            return null;
+        }
+
+        return BillResource($action, $quantity, $sum);
+    }
+
 }
