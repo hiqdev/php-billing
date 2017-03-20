@@ -3,15 +3,12 @@
 namespace hiqdev\php\billing;
 
 use DateTime;
-use hiqdev\php\billing\Object;
-use hiqdev\php\billing\Tariff;
-use hiqdev\php\billing\Type;
-use hiqdev\php\billing\Unit;
 
 /**
- * Tariff Resource.
+ * Price.
+ * Tariff consists of prices.
  */
-class TariffResource
+class Price
 {
     /**
      * @var integer
@@ -39,6 +36,11 @@ class TariffResource
     protected $unit;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @var double
      */
     protected $quantity;
@@ -53,13 +55,16 @@ class TariffResource
      * @param Action $action
      * @return null|BillResource
      */
-    public function calculateAction(Action $action)
+    public function calculateCharge(Action $action)
     {
         if (!$this->isApplicable($action)) {
             return null;
         }
 
-        return BillResource($action, $quantity, $sum);
+        $quantity = 1;
+        $sum = 1;
+
+        return Charge($action, $quantity, $sum);
     }
 
 }

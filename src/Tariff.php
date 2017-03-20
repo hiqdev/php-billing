@@ -2,10 +2,6 @@
 
 namespace hiqdev\php\billing;
 
-use hiqdev\php\billing\Client;
-use hiqdev\php\billing\Object;
-use hiqdev\php\billing\TariffResource;
-
 /**
  * Tariff Plan.
  */
@@ -38,25 +34,25 @@ class Tariff
     public $object;
 
     /**
-     * @var TariffResource[]
+     * @var Price[]
      */
-    public $resources = [];
+    public $prices = [];
 
     /**
-     * Calculate action value.
+     * Calculate charges for given action.
      * @param Action $action
-     * @return BillResource[]
+     * @return Charges[]
      */
-    public function calculateAction(Action $action)
+    public function calculateCharges(Action $action)
     {
-        $results = [];
-        foreach ($this->getResources() as $resource) {
-            $result = $resource->calculateAction($action);
-            if ($result) {
-                $results[] = $result;
+        $charges = [];
+        foreach ($this->prices as $price) {
+            $charge = $price->calculateCharge($action);
+            if ($charge) {
+                $charges[] = $charge;
             }
         }
 
-        return $results;
+        return $charges;
     }
 }
