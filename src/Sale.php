@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHP Billing Library
+ *
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\billing;
 
@@ -7,22 +15,25 @@ use DateTime;
 /**
  * Sale.
  */
-class Sale
+class Sale implements SaleInterface
 {
+    /**
+     * @var int
+     */
     public $id;
 
     /**
-     * @var Object
+     * @var TargetInterface
      */
-    public $object;
+    public $target;
 
     /**
-     * @var Client
+     * @var ClientInterface
      */
     public $client;
 
     /**
-     * @var Tariff
+     * @var TariffInterface
      */
     public $tariff;
 
@@ -30,6 +41,4 @@ class Sale
      * @var DateTime
      */
     public $time;
-
-    public function calculateChar
 }

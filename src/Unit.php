@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHP Billing Library
+ *
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\billing;
 
@@ -7,7 +15,7 @@ namespace hiqdev\php\billing;
  * For converting raw amount to unit quantity and back.
  * E.g.:
  * - megabyte: factor = 10^6 = 1000000
- * - mebibyte: factor = 2^20 = 1048576
+ * - mebibyte: factor = 2^20 = 1048576.
  */
 class Unit
 {
@@ -34,7 +42,7 @@ class Unit
      */
     public function convertTo($amount)
     {
-        return $amount/$this->factor;
+        return $amount / $this->factor;
     }
 
     /**
@@ -44,6 +52,6 @@ class Unit
      */
     public function convertFrom($quantity)
     {
-        return $quantity*$this->factor;
+        return $quantity * $this->factor;
     }
 }

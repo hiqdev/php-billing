@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHP Billing Library
+ *
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\billing;
 
@@ -25,7 +33,7 @@ class Bill
     public $purse;
 
     /**
-     * @var Object
+     * @var object
      */
     public $object;
 
@@ -55,7 +63,7 @@ class Bill
     public $isFinished;
 
     /**
-     * @var Resource[]
+     * @var resource[]
      */
     public $resources = [];
 }
