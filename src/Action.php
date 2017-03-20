@@ -19,22 +19,18 @@ class Action
     protected $id;
 
     /**
-     * @var Type main action type
-     */
-    protected $type;
-
-    /**
      * @var Sale
      */
     protected $sale;
 
     /**
-     * @var Client
+     * @var Type main action type
      */
-    protected $client;
+    protected $type;
 
     /**
      * @var Object
+     * Action.object MAY differ from Sale.object e.g. for domain: Action.object=domain Sale.object=class(zone)
      */
     protected $object;
 
@@ -47,6 +43,16 @@ class Action
      * @var DateTime
      */
     protected $time;
+
+    /**
+     * @var Object[]
+     */
+    protected $objects;
+
+    /**
+     * @var Charge[]
+     */
+    protected $charges;
 
     public function __construct(Sale $sale, Object $object, Type $type, double $amount)
     {
@@ -64,23 +70,28 @@ class Action
     }
 
     /**
-     * Returns action matching objects.
-     * E.g.:
-     * - for server these are all it's hardware parts.
-     * - for domain these is it's zone
-     * @return void
+     * Returns matching objects. See [[Type::findMatchingObjects()]]
+     * @return Object[]
      */
     public function getObjects()
     {
         if ($this->objects === null) {
-            $this->objects = $this->findObjects();
+            $this->objects = $this->type->findMatchingObjects($this->object);
         }
 
         return $this->objects;
     }
 
-    public function findObjects()
+    /**
+     * Returns calculated charges.
+     * @return Charge[]
+     */
+    public function getCharges()
     {
-        return [$this->object];
+        if ($this->charges === null) {
+            $this->charges = $this->sale->getTariff()->calculateCharges($this);
+        }
+
+        return $this->charges;
     }
 }

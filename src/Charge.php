@@ -9,9 +9,11 @@ use hiqdev\php\billing\Tariff;
 use hiqdev\php\billing\Type;
 
 /**
- * Bill.
+ * Charge.
+ *
+ * [[Action]] is charged with a number of [[Charge]]s.
  */
-class BillResource
+class Charge
 {
     /**
      * @var int
