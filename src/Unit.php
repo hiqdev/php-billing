@@ -3,23 +3,47 @@
 namespace hiqdev\php\billing;
 
 /**
- * Unit.
+ * Unit of measurement.
+ * For converting raw amount to unit quantity and back.
+ * E.g.:
+ * - megabyte: factor = 10^6 = 1000000
+ * - mebibyte: factor = 2^20 = 1048576
  */
 class Unit
 {
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * @var double
      * XXX we need some big number
      */
-    public $factor;
+    protected $factor;
+
+    /**
+     * Converts raw amount to unit quantity.
+     * @param double $amount raw amount
+     * @return double unit quantity
+     */
+    public function convertTo($amount)
+    {
+        return $amount/$this->factor;
+    }
+
+    /**
+     * Converts unit quantity to raw amount.
+     * @param double unit quantity
+     * @return double $amount raw amount
+     */
+    public function convertFrom($quantity)
+    {
+        return $quantity*$this->factor;
+    }
 }
