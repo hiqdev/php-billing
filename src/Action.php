@@ -3,10 +3,6 @@
 namespace hiqdev\php\billing;
 
 use DateTime;
-use hiqdev\php\billing\Client;
-use hiqdev\php\billing\Object;
-use hiqdev\php\billing\Sale;
-use hiqdev\php\billing\Type;
 
 /**
  * Billable Action.
