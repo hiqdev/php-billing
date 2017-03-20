@@ -7,7 +7,7 @@ use DateTime;
 /**
  * Billable Action.
  */
-class Action
+class Action implements ActionInterface
 {
     /**
      * @var int
@@ -15,23 +15,23 @@ class Action
     protected $id;
 
     /**
-     * @var Sale
+     * @var SaleInterface
      */
     protected $sale;
 
     /**
-     * @var Type main action type
+     * @var TypeInterface main action type
      */
     protected $type;
 
     /**
-     * @var Object
-     * Action.object MAY differ from Sale.object e.g. for domain: Action.object=domain Sale.object=class(zone)
+     * @var TargetInterface
+     * Action.target MAY differ from Sale.target e.g. for domain: Action.target=domain Sale.target=class(zone)
      */
-    protected $object;
+    protected $target;
 
     /**
-     * @var double
+     * @var QuantityInterface
      */
     protected $amount;
 
@@ -41,41 +41,46 @@ class Action
     protected $time;
 
     /**
-     * @var Object[]
+     * @var TargetInterface[]
      */
-    protected $objects;
+    protected $entities;
 
     /**
      * @var Charge[]
      */
     protected $charges;
 
-    public function __construct(Sale $sale, Object $object, Type $type, double $amount)
-    {
+    public function __construct(
+        SaleInterface $sale,
+        TargetInterface $target,
+        TypeInterface $type,
+        QuantityInterface $quantity,
+        DateTime $time
+    ) {
         $this->sale = $sale;
-        $this->object = $object;
+        $this->target = $target;
         $this->type = $type;
         $this->amount = $amount;
     }
 
-    public static function createByClient(Client $client, Object $object, Type $type, double $amount)
+    public static function createByClient(ClientInterface $client, Target $target, Type $type, double $amount)
     {
-        $sale = Sale::findByClient($client, $object);
+        $sale = Sale::findByClient($client, $target);
 
-        return new static($sale, $object, $type, $amount);
+        return new static($sale, $target, $type, $amount);
     }
 
     /**
-     * Returns matching objects. See [[Type::findMatchingObjects()]]
-     * @return Object[]
+     * Returns matching entities. See [[Type::findRelatedTargets()]]
+     * @return Target[]
      */
-    public function getObjects()
+    public function getRelatedTargets()
     {
-        if ($this->objects === null) {
-            $this->objects = $this->type->findMatchingObjects($this->object);
+        if ($this->entities === null) {
+            $this->entities = $this->type->findRelatedTargets($this->target);
         }
 
-        return $this->objects;
+        return $this->entities;
     }
 
     /**

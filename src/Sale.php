@@ -30,4 +30,6 @@ class Sale
      * @var DateTime
      */
     public $time;
+
+    public function calculateChar
 }

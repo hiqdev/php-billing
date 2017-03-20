@@ -31,17 +31,12 @@ class Price
     protected $object;
 
     /**
-     * @var Unit
-     */
-    protected $unit;
-
-    /**
      * @var Currency
      */
     protected $currency;
 
     /**
-     * @var double
+     * @var Quantity prepaid quantity also implies Unit
      */
     protected $quantity;
 

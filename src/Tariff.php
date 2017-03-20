@@ -48,7 +48,7 @@ class Tariff
         $charges = [];
         foreach ($this->prices as $price) {
             $charge = $price->calculateCharge($action);
-            if ($charge) {
+            if ($charge !== null) {
                 $charges[] = $charge;
             }
         }

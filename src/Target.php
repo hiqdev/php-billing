@@ -5,35 +5,34 @@ namespace hiqdev\php\billing;
 use DateTime;
 
 /**
- * Object being charged.
- *
- * expires, initialExpires for renewal accounting
+ * Target - object being charged: domain, server
+ * Holds: expires, initialExpires for renewal accounting
  */
-class Object
+class Target
 {
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * @var DateTime
      */
-    public $expires;
+    protected $expires;
 
 
     /**
      * @var DateTime
      */
-    public $initialExpires;
+    protected $initialExpires;
 
     /**
      * @var integer
      */
-    public $renewedNum;
+    protected $renewedNum;
 }
