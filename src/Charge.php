@@ -23,17 +23,27 @@ class Charge
     public $id;
 
     /**
-     * @var Action
+     * @var ActionInterface
      */
     public $action;
 
     /**
-     * @var double
+     * @var TargetInterface
+     */
+    public $target;
+
+    /**
+     * @var TypeInterface
+     */
+    public $type;
+
+    /**
+     * @var QuantityInterface
      */
     public $quantity;
 
     /**
-     * @var int
+     * @var Money
      */
     public $sum;
 

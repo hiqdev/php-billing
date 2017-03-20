@@ -12,9 +12,9 @@ namespace hiqdev\php\billing;
 
 /**
  * Price.
- * Tariff consists of prices.
+ * @see PriceInterface
  */
-class Price
+class Price implements PriceInterface
 {
     /**
      * @var integer
@@ -32,39 +32,48 @@ class Price
     protected $tariff;
 
     /**
-     * @var object
+     * @var Target
      */
-    protected $object;
-
-    /**
-     * @var Currency
-     */
-    protected $currency;
+    protected $target;
 
     /**
      * @var Quantity prepaid quantity also implies Unit
      */
-    protected $quantity;
+    protected $prepaid;
 
     /**
-     * @var integer
+     * @var Money
      */
     protected $price;
 
+    public function __construct(
+        TariffInterface     $tariff,
+        TargetInterface     $target,
+        TypeInterface       $type,
+        MoneyInterface      $price,
+        QuantityInterface   $prepaid
+    ) {
+        $this->tariff   = $tariff;
+        $this->target   = $target;
+        $this->type     = $type;
+        $this->price    = $price;
+        $this->prepaid  = $prepaid;
+    }
+
     /**
      * Calculate action value.
-     * @param Action $action
-     * @return null|BillResource
+     * @param ActionInterface $action
+     * @return null|ChargeInterface
      */
-    public function calculateCharge(Action $action)
+    public function calculateCharge(ActionInterface $action)
     {
-        if (!$this->isApplicable($action)) {
+        if (!$action->isApplicable($this->target, $this->type)) {
             return null;
         }
 
-        $quantity = 1;
-        $sum = 1;
+        $usage = $this->calculateUsage($action->getQuantity());
+        $price = $this->calculatePrice($usage);
 
-        return Charge($action, $quantity, $sum);
+        return Charge($action, $this->target, $this->type, $usage, $price->multiply($usage));
     }
 }

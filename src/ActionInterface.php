@@ -12,8 +12,22 @@ namespace hiqdev\php\billing;
 
 /**
  * Billable Action Interface.
+ *
+ * Action knows which Prices are applicable.
  */
 interface ActionInterface
 {
+    /**
+     * Returns charges calculated for this action.
+     * @return ChargeInterface[]
+     */
     public function getCharges();
+
+    /**
+     * Returns if the given target and type relates to this action.
+     * @param TargetInterface $target
+     * @param TypeInterface $type
+     * @return bool
+     */
+    public function isApplicable(Price $price);
 }
