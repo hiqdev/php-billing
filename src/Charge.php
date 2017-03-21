@@ -40,22 +40,24 @@ class Charge
     /**
      * @var QuantityInterface
      */
-    public $quantity;
+    public $usage;
 
     /**
      * @var Money
      */
     public $sum;
 
-    /**
-     * @var Bill|null
-     */
-    public $bill;
-
-    public function __construct(Action $action, double $quantity, int $sum)
-    {
-        $this->action = $action;
-        $this->quantity = $quantity;
-        $this->sum = $sum;
+    public function __construct(
+        ActionInterface     $action,
+        TargetInterface     $target,
+        TypeInterface       $type,
+        QuantityInterface   $usage,
+        MoneyInterface      $sum
+    ) {
+        $this->action   = $action;
+        $this->target   = $target;
+        $this->type     = $type;
+        $this->usage    = $usage;
+        $this->sum      = $sum;
     }
 }

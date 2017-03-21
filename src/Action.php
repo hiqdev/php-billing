@@ -54,7 +54,7 @@ class Action implements ActionInterface
     protected $entities;
 
     /**
-     * @var Charge[]
+     * @var ChargeInterface[]
      */
     protected $charges;
 

@@ -28,7 +28,7 @@ interface PriceInterface
     /**
      * Calculate usage for given quantity.
      * @param QuantityInterface $quantity
-     * @return QuantityInterface
+     * @return null|QuantityInterface
      */
     public function calculateUsage(QuantityInterface $quantity);
 
@@ -38,6 +38,13 @@ interface PriceInterface
      * @return MoneyInterface
      */
     public function calculatePrice(QuantityInterface $usage);
+
+    /**
+     * Calculate sum for given usage.
+     * @param QuantityInterface $usage
+     * @return MoneyInterface
+     */
+    public function calculateSum(QuantityInterface $usage);
 
     /**
      * Get target.
