@@ -15,6 +15,7 @@ use DateTime;
 /**
  * Renewable Target - object being charged: domain, server
  * Holds: expires, initialExpires for renewal accounting.
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class RenewableTarget extends AbstractTarget

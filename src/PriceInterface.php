@@ -15,6 +15,8 @@ namespace hiqdev\php\billing;
  * Tariff consists of prices.
  *
  * Knows how to calculate usage, price and sum.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface PriceInterface
 {

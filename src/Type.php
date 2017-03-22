@@ -12,6 +12,8 @@ namespace hiqdev\php\billing;
 
 /**
  * Resource Type.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Type
 {

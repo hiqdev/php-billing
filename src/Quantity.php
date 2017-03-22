@@ -12,6 +12,8 @@ namespace hiqdev\php\billing;
 
 /**
  * Quantity with Unit.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Quantity
 {

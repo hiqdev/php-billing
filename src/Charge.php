@@ -14,6 +14,8 @@ namespace hiqdev\php\billing;
  * Charge.
  *
  * [[Action]] is charged with a number of [[Charge]]s.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Charge
 {

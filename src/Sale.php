@@ -14,6 +14,8 @@ use DateTime;
 
 /**
  * Sale.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Sale implements SaleInterface
 {

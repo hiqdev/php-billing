@@ -16,6 +16,8 @@ namespace hiqdev\php\billing;
  * E.g.:
  * - megabyte: factor = 10^6 = 1000000
  * - mebibyte: factor = 2^20 = 1048576.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Unit
 {

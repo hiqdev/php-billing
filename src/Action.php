@@ -14,6 +14,8 @@ use DateTime;
 
 /**
  * Billable Action.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Action implements ActionInterface
 {

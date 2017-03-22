@@ -15,7 +15,7 @@ namespace hiqdev\php\billing;
  *
  * - object being charged (domain, server, certificate)
  * - product being sold (premium product, ???)
- * 
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface TargetInterface

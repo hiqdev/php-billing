@@ -15,6 +15,8 @@ namespace hiqdev\php\billing;
  * - no charge for quantity less then prepaid
  * - same price for any quantity above prepaid
  * @see PriceInterface
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class SinglePrice extends AbstractPrice
 {

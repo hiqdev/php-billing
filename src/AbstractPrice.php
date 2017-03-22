@@ -13,6 +13,8 @@ namespace hiqdev\php\billing;
 /**
  * Price.
  * @see PriceInterface
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 abstract class Price implements PriceInterface
 {

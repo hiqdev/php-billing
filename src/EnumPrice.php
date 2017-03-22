@@ -14,6 +14,8 @@ namespace hiqdev\php\billing;
  * Enum Price:
  * - listed quantities only else exception
  * @see PriceInterface
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class EnumPrice extends AbstractPrice
 {

@@ -12,6 +12,8 @@ namespace hiqdev\php\billing;
 
 /**
  * Client.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Client
 {

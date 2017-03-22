@@ -12,6 +12,8 @@ namespace hiqdev\php\billing;
 
 /**
  * Tariff Interface.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface TariffInterface
 {

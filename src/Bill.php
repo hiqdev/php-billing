@@ -14,6 +14,8 @@ use DateTime;
 
 /**
  * Bill.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Bill
 {

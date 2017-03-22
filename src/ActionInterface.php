@@ -14,6 +14,8 @@ namespace hiqdev\php\billing;
  * Billable Action Interface.
  *
  * Action knows which Prices are applicable.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface ActionInterface
 {

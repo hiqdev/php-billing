@@ -14,6 +14,8 @@ use DateTime;
 
 /**
  * @see TargetInterface
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 abstract class AbstractTarget implements TargetInterface
 {
