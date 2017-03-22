@@ -17,7 +17,7 @@ use DateTime;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Action implements ActionInterface
+abstract class AbstractAction implements ActionInterface
 {
     /**
      * @var int
@@ -72,19 +72,6 @@ class Action implements ActionInterface
         $this->type = $type;
         $this->quantity = $quantity;
         $this->time = $time;
-    }
-
-    /**
-     * Returns matching entities. See [[Type::findRelatedTargets()]].
-     * @return Target[]
-     */
-    public function getRelatedTargets()
-    {
-        if ($this->entities === null) {
-            $this->entities = $this->type->findRelatedTargets($this->target);
-        }
-
-        return $this->entities;
     }
 
     /**

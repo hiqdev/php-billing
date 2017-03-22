@@ -57,7 +57,7 @@ class Unit implements UnitInterface
     public function getFactor(UnitInterface $other)
     {
         if (!$this->isComparable($other)) {
-            throw new InvalidUnitConversion('');
+            throw new InvalidUnitConversionException('');
         }
 
         return $other->factor / $this->factor;
@@ -84,10 +84,11 @@ class Unit implements UnitInterface
      */
     public function convertFrom(UnitInterface $other, $quantity)
     {
-        if (!$this->isComparable($other)) {
-            throw new InvalidUnitConversion('');
-        }
-
         return $quantity * $this->getFactor($other);
+    }
+
+    public static function __callStatic($name)
+    {
+        return new Unit();
     }
 }

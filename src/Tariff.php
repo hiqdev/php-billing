@@ -15,38 +15,54 @@ namespace hiqdev\php\billing;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Tariff
+class Tariff implements TariffInterface
 {
     /**
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * @var Tariff|null
      * XXX not sure to implement
      */
-    public $parent;
+    protected $parent;
 
     /**
      * @var Client
      */
-    public $client;
+    protected $client;
 
     /**
      * @var Target
      */
-    public $target;
+    protected $target;
 
     /**
      * @var PriceInterface[]
      */
-    public $prices = [];
+    protected $prices = [];
+
+    /**
+     * @param PriceInterface[] $prices
+     */
+    public function __construct(array $prices)
+    {
+        $this->prices = $prices;
+    }
+
+    /**
+     * @return PriceInterface[]
+     */
+    public function getPrices() : array
+    {
+        return $this->prices;
+    }
 
     /**
      * Calculate charges for given action.

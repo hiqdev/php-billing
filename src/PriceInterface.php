@@ -28,25 +28,25 @@ interface PriceInterface
     public function calculateCharge(ActionInterface $action);
 
     /**
-     * Calculate sum for given usage.
-     * @param QuantityInterface $usage
+     * Calculate sum for given action.
+     * @param ActionInterface $action
      * @return MoneyInterface|null null when must not be charged
      */
-    public function calculateSum(QuantityInterface $quantity);
+    public function calculateSum(ActionInterface $action);
 
     /**
-     * Calculate usage for given quantity.
-     * @param QuantityInterface $quantity
+     * Calculate usage for given action.
+     * @param ActionInterface $action
      * @return QuantityInterface|null null when must not be charged
      */
-    public function calculateUsage(QuantityInterface $quantity);
+    public function calculateUsage(ActionInterface $action);
 
     /**
-     * Calculate price for given usage.
-     * @param QuantityInterface $usage
+     * Calculate price for given action.
+     * @param ActionInterface $action
      * @return MoneyInterface|null null when must not be charged
      */
-    public function calculatePrice(QuantityInterface $usage);
+    public function calculatePrice(ActionInterface $action);
 
     /**
      * Get target.

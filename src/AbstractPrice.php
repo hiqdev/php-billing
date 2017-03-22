@@ -53,12 +53,12 @@ abstract class Price implements PriceInterface
             return null;
         }
 
-        $usage = $this->calculateUsage($action->getQuantity());
+        $usage = $this->calculateUsage($action);
         if ($usage === null) {
             return null;
         }
 
-        $sum = $this->calculateSum($usage);
+        $sum = $this->calculateSum($action);
         if ($sum === null) {
             return null;
         }
@@ -70,9 +70,14 @@ abstract class Price implements PriceInterface
      * @inheritdoc
      * Default sum calculation method: sum = price * usage
      */
-    public function calculateSum(QuantityInterface $usage)
+    public function calculateSum(ActionInterface $action)
     {
-        $price = $this->calculatePrice($usage);
+        $usage = $this->calculateUsage($action);
+        if ($usage === null) {
+            return null;
+        }
+
+        $price = $this->calculatePrice($action);
         if ($price === null) {
             return null;
         }
@@ -83,12 +88,12 @@ abstract class Price implements PriceInterface
     /**
      * @inheritdoc
      */
-    abstract public function calculateUsage(QuantityInterface $quantity);
+    abstract public function calculateUsage(ActionInterface $action);
 
     /**
      * @inheritdoc
      */
-    abstract public function calculatePrice(QuantityInterface $usage);
+    abstract public function calculatePrice(ActionInterface $action);
 
     /**
      * @inheritdoc
