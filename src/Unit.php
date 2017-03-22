@@ -11,15 +11,16 @@
 namespace hiqdev\php\billing;
 
 /**
- * Unit of measurement.
- * For converting raw amount to unit quantity and back.
+ * Unit of measure.
+ *
  * E.g.:
- * - megabyte: factor = 10^6 = 1000000
- * - mebibyte: factor = 2^20 = 1048576.
+ * - byte:     matter=byte factor = 1
+ * - megabyte: matter=byte factor = 10^6 = 1000000
+ * - mebibyte: matter=byte factor = 2^20 = 1048576.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Unit
+class Unit implements UnitInterface
 {
     /**
      * @var integer
@@ -32,28 +33,61 @@ class Unit
     protected $name;
 
     /**
+     * @var Unit
+     */
+    protected $base;
+
+    /**
      * @var double
      * XXX we need some big number
      */
     protected $factor;
 
     /**
-     * Converts raw amount to unit quantity.
-     * @param double $amount raw amount
-     * @return double unit quantity
+     * @inheritdoc
      */
-    public function convertTo($amount)
+    public function getMatter()
     {
-        return $amount / $this->factor;
+        return $this->base->getName();
     }
 
     /**
-     * Converts unit quantity to raw amount.
-     * @param double unit quantity
-     * @return double $amount raw amount
+     * @inheritdoc
      */
-    public function convertFrom($quantity)
+    public function getFactor(UnitInterface $other)
     {
-        return $quantity * $this->factor;
+        if (!$this->isComparable($other)) {
+            throw new InvalidUnitConversion('');
+        }
+
+        return $other->factor / $this->factor;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isComparable(UnitInterface $other)
+    {
+        return $this->getMatter() === $other->getMatter();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function convertTo(UnitInterface $other, double $quantity)
+    {
+        return $quantity * $other->getFactor($this);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function convertFrom(UnitInterface $other, $quantity)
+    {
+        if (!$this->isComparable($other)) {
+            throw new InvalidUnitConversion('');
+        }
+
+        return $quantity * $this->getFactor($other);
     }
 }
