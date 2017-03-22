@@ -46,9 +46,9 @@ class SinglePrice extends AbstractPrice
      */
     public function calculateUsage(QuantityInterface $quantity)
     {
-        $diff = $quantity->convert($this->prepaid)->subtract($this->prepaid);
+        $usage = $quantity->convert($this->prepaid)->subtract($this->prepaid);
 
-        return $diff->isPositive() ? $diff : null;
+        return $usage->isPositive() ? $usage : null;
     }
 
     /**

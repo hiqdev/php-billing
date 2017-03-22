@@ -37,21 +37,21 @@ class Tariff
     public $client;
 
     /**
-     * @var object
+     * @var Target
      */
-    public $object;
+    public $target;
 
     /**
-     * @var Price[]
+     * @var PriceInterface[]
      */
     public $prices = [];
 
     /**
      * Calculate charges for given action.
-     * @param Action $action
-     * @return Charges[]
+     * @param ActionInterface $action
+     * @return Charge[]
      */
-    public function calculateCharges(Action $action)
+    public function calculateCharges(ActionInterface $action)
     {
         $charges = [];
         foreach ($this->prices as $price) {

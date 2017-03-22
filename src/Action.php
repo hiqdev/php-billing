@@ -68,14 +68,8 @@ class Action implements ActionInterface
         $this->sale = $sale;
         $this->target = $target;
         $this->type = $type;
-        $this->amount = $amount;
-    }
-
-    public static function createByClient(ClientInterface $client, Target $target, Type $type, double $amount)
-    {
-        $sale = Sale::findByClient($client, $target);
-
-        return new static($sale, $target, $type, $amount);
+        $this->quantity = $quantity;
+        $this->time = $time;
     }
 
     /**

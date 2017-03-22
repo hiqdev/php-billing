@@ -44,11 +44,10 @@ abstract class Price implements PriceInterface
 
     /**
      * @inheritdoc
-     * Default and only sum calculation method: sum = price * usage
      */
     public function calculateCharge(ActionInterface $action)
     {
-        if (!$action->isApplicable($this->target, $this->type)) {
+        if (!$action->isApplicable($this)) {
             return null;
         }
 
@@ -57,14 +56,26 @@ abstract class Price implements PriceInterface
             return null;
         }
 
+        $sum = $this->calculateSum($usage);
+        if ($sum === null) {
+            return null;
+        }
+
+        return new Charge($action, $this->target, $this->type, $usage, $sum);
+    }
+
+    /**
+     * @inheritdoc
+     * Default sum calculation method: sum = price * usage
+     */
+    public function calculateSum(QuantityInterface $usage)
+    {
         $price = $this->calculatePrice($usage);
         if ($price === null) {
             return null;
         }
 
         $sum = $price->multiply($usage->getQuantity());
-
-        return new Charge($action, $this->target, $this->type, $usage, $sum);
     }
 
     /**
