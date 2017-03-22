@@ -13,21 +13,12 @@ namespace hiqdev\php\billing;
 use DateTime;
 
 /**
- * Target - object being charged: domain, server
+ * Renewable Target - object being charged: domain, server
  * Holds: expires, initialExpires for renewal accounting.
+ * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Target
+class RenewableTarget extends AbstractTarget
 {
-    /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
     /**
      * @var DateTime
      */
