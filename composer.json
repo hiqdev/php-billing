@@ -43,12 +43,31 @@
         }
     ],
     "require-dev": {
+        "symfony/yaml": "^3.0 | ^2.0",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
     },
     "autoload": {
         "psr-4": {
-            "hiqdev\\php\\billing\\": "src"
+            "hiqdev\\php\\billing\\": "src",
+            "hiqdev\\php\\billing\\res\\": "res"
         }
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "hiqdev\\php\\billing\\tests\\": "tests",
+            "hiqdev\\php\\billing\\tools\\": "tools"
+        }
+    },
+    "extra": {
+        "config-plugin": {
+            "hidev": "tools/config/hidev.php"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }
