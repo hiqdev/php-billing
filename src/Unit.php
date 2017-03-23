@@ -14,9 +14,9 @@ namespace hiqdev\php\billing;
  * Unit of measure.
  *
  * E.g.:
- * - byte:     matter=byte factor = 1
- * - megabyte: matter=byte factor = 10^6 = 1000000
- * - mebibyte: matter=byte factor = 2^20 = 1048576.
+ * - byte:     parent=byte factor = 1
+ * - megabyte: parent=byte factor = 10^6 = 1000000
+ * - mebibyte: parent=byte factor = 2^20 = 1048576.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -35,7 +35,7 @@ class Unit implements UnitInterface
     /**
      * @var Unit
      */
-    protected $base;
+    protected $parent;
 
     /**
      * @var double
@@ -48,7 +48,7 @@ class Unit implements UnitInterface
      */
     public function getMatter()
     {
-        return $this->base->getName();
+        return $this->parent->getName();
     }
 
     /**
