@@ -11,25 +11,56 @@
 namespace hiqdev\php\billing;
 
 /**
- * Billable Action Interface.
+ * Chargeable Action Interface.
  *
  * Action knows which Prices are applicable.
+ * Actions form hierarchy.
+ * Action implies type.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface ActionInterface
 {
     /**
-     * Returns charges calculated for this action.
-     * @return ChargeInterface[]
-     */
-    public function getCharges();
-
-    /**
-     * Returns if the given target and type relates to this action.
-     * @param TargetInterface $target
-     * @param TypeInterface $type
+     * Returns if the given price applicable to this action.
+     * @param PriceInterface $price
      * @return bool
      */
-    public function isApplicable(Price $price);
+    public function isApplicable(PriceInterface $price);
+
+    /**
+     * Returns client ot this action.
+     * @return ClientInterface
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * Returns target ot this action.
+     * @return TargetInterface
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * Returns quantity ot this action.
+     * @return QuantityInterface
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Returns time ot this action.
+     * @return DateTime
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
 }

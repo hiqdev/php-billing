@@ -13,7 +13,9 @@ namespace hiqdev\php\billing;
 use DateTime;
 
 /**
- * Billable Action.
+ * Chargable Action.
+ *
+ * @see ActionInterface
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -25,25 +27,19 @@ abstract class AbstractAction implements ActionInterface
     protected $id;
 
     /**
-     * @var SaleInterface
+     * @var ClientInterface
      */
-    protected $sale;
-
-    /**
-     * @var TypeInterface main action type
-     */
-    protected $type;
+    protected $client;
 
     /**
      * @var TargetInterface
-     * Action.target MAY differ from Sale.target e.g. for domain: Action.target=domain Sale.target=class(zone)
      */
     protected $target;
 
     /**
      * @var QuantityInterface
      */
-    protected $amount;
+    protected $quantity;
 
     /**
      * @var DateTime
@@ -51,39 +47,52 @@ abstract class AbstractAction implements ActionInterface
     protected $time;
 
     /**
-     * @var TargetInterface[]
+     * @param ClientInterface $client
+     * @param TargetInterface $target
+     * @param QuantityInterface $quantity
+     * @param DateTime $time
      */
-    protected $entities;
-
-    /**
-     * @var ChargeInterface[]
-     */
-    protected $charges;
-
     public function __construct(
-        SaleInterface $sale,
+        ClientInterface $client,
         TargetInterface $target,
-        TypeInterface $type,
         QuantityInterface $quantity,
         DateTime $time
     ) {
-        $this->sale = $sale;
+        $this->client = $client;
         $this->target = $target;
-        $this->type = $type;
         $this->quantity = $quantity;
         $this->time = $time;
     }
 
     /**
-     * Returns calculated charges.
-     * @return Charge[]
+     * @inheritdoc
      */
-    public function getCharges()
+    public function getClient()
     {
-        if ($this->charges === null) {
-            $this->charges = $this->sale->getTariff()->calculateCharges($this);
-        }
+        return $this->client;
+    }
 
-        return $this->charges;
+    /**
+     * @inheritdoc
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTime()
+    {
+        return $this->time;
     }
 }
