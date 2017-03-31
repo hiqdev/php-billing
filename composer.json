@@ -42,8 +42,11 @@
             "homepage": "http://hiqdev.com/"
         }
     ],
+    "require": {
+        "moneyphp/money": "^3.0",
+        "hiqdev/php-units": "dev-master"
+    },
     "require-dev": {
-        "symfony/yaml": "^3.0 | ^2.0",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
     },
