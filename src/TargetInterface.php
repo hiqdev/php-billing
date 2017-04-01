@@ -21,9 +21,22 @@ namespace hiqdev\php\billing;
 interface TargetInterface
 {
     /**
-     * Get target globally unique ID. Used for comparison.
-     * E.g.: 1, 2, client:login, client:1, server:T1, server:9
-     * @return string
+     * Get target ID, unique between targets of the same type.
+     * @return int|string
      */
     public function getId();
+
+    /**
+     * Get target type.
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * Get target full ID, globally unique. Used for comparison.
+     * Must be formed as $type:$id.
+     * E.g.: client:login, client:1, server:T1, server:9
+     * @return string
+     */
+    public function getFullId();
 }
