@@ -10,11 +10,14 @@
 
 namespace hiqdev\php\billing;
 
+use hiqdev\php\units\QuantityInterface;
+use Money\Money;
+
 /**
  * Price Interface.
  * Tariff consists of prices.
  *
- * Knows how to calculate usage, price and sum.
+ * Knows how to calculate usage, price and sum for given quantity.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -25,28 +28,28 @@ interface PriceInterface
      * @param ActionInterface $action
      * @return ChargeInterface
      */
-    public function calculateCharge(ActionInterface $action);
+    public function calculateCharge(ActionInterface $quantity);
 
     /**
-     * Calculate sum for given action.
-     * @param ActionInterface $action
-     * @return MoneyInterface|null null when must not be charged
+     * Calculate sum for given quantity.
+     * @param QuantityInterface $quantity
+     * @return Money|null null when must not be charged
      */
-    public function calculateSum(ActionInterface $action);
+    public function calculateSum(QuantityInterface $quantity);
 
     /**
-     * Calculate usage for given action.
-     * @param ActionInterface $action
+     * Calculate usage for given quantity.
+     * @param QuantityInterface $quantity
      * @return QuantityInterface|null null when must not be charged
      */
-    public function calculateUsage(ActionInterface $action);
+    public function calculateUsage(QuantityInterface $quantity);
 
     /**
-     * Calculate price for given action.
-     * @param ActionInterface $action
-     * @return MoneyInterface|null null when must not be charged
+     * Calculate price for given quantity.
+     * @param QuantityInterface $quantity
+     * @return Money|null null when must not be charged
      */
-    public function calculatePrice(ActionInterface $action);
+    public function calculatePrice(QuantityInterface $quantity);
 
     /**
      * Get target.

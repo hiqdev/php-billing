@@ -10,10 +10,15 @@
 
 namespace hiqdev\php\billing;
 
+use hiqdev\php\units\QuantityInterface;
+use Money\Money;
+
 /**
  * Single Price:
+ *
  * - no charge for quantity less then prepaid
  * - same price for any quantity above prepaid
+ *
  * @see PriceInterface
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -34,7 +39,7 @@ class SinglePrice extends AbstractPrice
         TargetInterface     $target,
         TypeInterface       $type,
         QuantityInterface   $prepaid,
-        MoneyInterface      $price
+        Money               $price
     ) {
         parent::__construct($target, $type);
         $this->prepaid  = $prepaid;
@@ -42,21 +47,18 @@ class SinglePrice extends AbstractPrice
     }
 
     /**
-     * Calculate usage for given quantity.
-     * @param QuantityInterface $quantity
-     * @return QuantityInterface|null quantity in proper unit, null when not chargable
+     * {@inheritdoc}
      */
     public function calculateUsage(QuantityInterface $quantity)
     {
-        $usage = $quantity->convert($this->prepaid)->subtract($this->prepaid);
+        $usage = $quantity->convert($this->prepaid->getUnit())->subtract($this->prepaid);
 
         return $usage->isPositive() ? $usage : null;
     }
 
     /**
-     * Calculate price for given usage.
-     * @param QuantityInterface $usage
-     * @return MoneyInterface|null null when not chargable
+     * {@inheritdoc}
+     * Same price for any usage.
      */
     public function calculatePrice(QuantityInterface $usage)
     {

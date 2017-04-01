@@ -95,4 +95,9 @@ abstract class AbstractAction implements ActionInterface
     {
         return $this->time;
     }
+
+    /**
+     * @inheritdoc
+     */
+    abstract public function isApplicable(PriceInterface $price);
 }

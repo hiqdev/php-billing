@@ -10,13 +10,15 @@
 
 namespace hiqdev\php\billing;
 
+use hiqdev\php\units\QuantityInterface;
+
 /**
  * Price.
  * @see PriceInterface
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class Price implements PriceInterface
+abstract class AbstractPrice implements PriceInterface
 {
     /**
      * @var integer
@@ -47,57 +49,6 @@ abstract class Price implements PriceInterface
     /**
      * @inheritdoc
      */
-    public function calculateCharge(ActionInterface $action)
-    {
-        if (!$action->isApplicable($this)) {
-            return null;
-        }
-
-        $usage = $this->calculateUsage($action);
-        if ($usage === null) {
-            return null;
-        }
-
-        $sum = $this->calculateSum($action);
-        if ($sum === null) {
-            return null;
-        }
-
-        return new Charge($action, $this->target, $this->type, $usage, $sum);
-    }
-
-    /**
-     * @inheritdoc
-     * Default sum calculation method: sum = price * usage
-     */
-    public function calculateSum(ActionInterface $action)
-    {
-        $usage = $this->calculateUsage($action);
-        if ($usage === null) {
-            return null;
-        }
-
-        $price = $this->calculatePrice($action);
-        if ($price === null) {
-            return null;
-        }
-
-        $sum = $price->multiply($usage->getQuantity());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    abstract public function calculateUsage(ActionInterface $action);
-
-    /**
-     * @inheritdoc
-     */
-    abstract public function calculatePrice(ActionInterface $action);
-
-    /**
-     * @inheritdoc
-     */
     public function getTarget()
     {
         return $this->target;
@@ -110,4 +61,55 @@ abstract class Price implements PriceInterface
     {
         return $this->type;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function calculateCharge(ActionInterface $action)
+    {
+        if (!$action->isApplicable($this)) {
+            return null;
+        }
+
+        $usage = $this->calculateUsage($action->getQuantity());
+        if ($usage === null) {
+            return null;
+        }
+
+        $sum = $this->calculateSum($action->getQuantity());
+        if ($sum === null) {
+            return null;
+        }
+
+        return new Charge($action, $this->target, $this->type, $usage, $sum);
+    }
+
+    /**
+     * @inheritdoc
+     * Default sum calculation method: sum = price * usage
+     */
+    public function calculateSum(QuantityInterface $quantity)
+    {
+        $usage = $this->calculateUsage($quantity);
+        if ($usage === null) {
+            return null;
+        }
+
+        $price = $this->calculatePrice($quantity);
+        if ($price === null) {
+            return null;
+        }
+
+        return $price->multiply($usage->getQuantity());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    abstract public function calculateUsage(QuantityInterface $quantity);
+
+    /**
+     * @inheritdoc
+     */
+    abstract public function calculatePrice(QuantityInterface $action);
 }
