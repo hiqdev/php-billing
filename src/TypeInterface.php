@@ -11,32 +11,15 @@
 namespace hiqdev\php\billing;
 
 /**
- * Resource Type.
+ * Resource Type interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Type implements TypeInterface
+interface TypeInterface
 {
     /**
-     * @var integer
-     */
-    public $id;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
+     * Returns type name.
      * @return string
      */
-    public function getName()
-    {
-        return $this->name;
-    }
+    public function getName();
 }
