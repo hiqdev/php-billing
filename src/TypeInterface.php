@@ -22,4 +22,9 @@ interface TypeInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * @return bool
+     */
+    public function equals(TypeInterface $other);
 }

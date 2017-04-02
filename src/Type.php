@@ -33,10 +33,18 @@ class Type implements TypeInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function equals(TypeInterface $other)
+    {
+        return $this->name === $other->getName();
     }
 }
