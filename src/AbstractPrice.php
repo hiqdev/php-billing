@@ -64,28 +64,6 @@ abstract class AbstractPrice implements PriceInterface
 
     /**
      * @inheritdoc
-     */
-    public function calculateCharge(ActionInterface $action)
-    {
-        if (!$action->isApplicable($this)) {
-            return null;
-        }
-
-        $usage = $this->calculateUsage($action->getQuantity());
-        if ($usage === null) {
-            return null;
-        }
-
-        $sum = $this->calculateSum($action->getQuantity());
-        if ($sum === null) {
-            return null;
-        }
-
-        return new Charge($action, $this->target, $this->type, $usage, $sum);
-    }
-
-    /**
-     * @inheritdoc
      * Default sum calculation method: sum = price * usage
      */
     public function calculateSum(QuantityInterface $quantity)

@@ -16,6 +16,12 @@ namespace hiqdev\php\billing;
  * - object being charged (domain, server, certificate)
  * - product being sold (premium product, ???)
  *
+ * Provides target's:
+ *
+ * - ID
+ * - type
+ * - unique ID
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface TargetInterface
@@ -33,10 +39,10 @@ interface TargetInterface
     public function getType();
 
     /**
-     * Get target full ID, globally unique. Used for comparison.
+     * Get target unique ID, globally unique. Used for comparison.
      * Must be formed as $type:$id.
      * E.g.: client:login, client:1, server:T1, server:9
      * @return string
      */
-    public function getFullId();
+    public function getUniqId();
 }

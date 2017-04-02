@@ -24,13 +24,6 @@ use Money\Money;
 interface PriceInterface
 {
     /**
-     * Calculate charge for given action.
-     * @param ActionInterface $action
-     * @return ChargeInterface
-     */
-    public function calculateCharge(ActionInterface $quantity);
-
-    /**
      * Calculate sum for given quantity.
      * @param QuantityInterface $quantity
      * @return Money|null null when must not be charged

@@ -29,6 +29,13 @@ interface ActionInterface
     public function isApplicable(PriceInterface $price);
 
     /**
+     * Calculate charge for given price.
+     * @param PriceInterface $action
+     * @return ChargeInterface
+     */
+    public function calculateCharge(PriceInterface $quantity);
+
+    /**
      * Returns client ot this action.
      * @return ClientInterface
      */

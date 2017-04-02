@@ -20,17 +20,23 @@ class Target implements TargetInterface
     /**
      * @var int|string
      */
-    public $id;
+    private $id;
 
     /**
      * @var string
      */
-    public $type;
+    private $type;
+
+    /**
+     * @var string
+     */
+    private $uniqId;
 
     public function __construct($type, $id)
     {
         $this->id = $id;
         $this->type = $type;
+        $this->uniqId = $type . ':' . $id;
     }
 
     /**
@@ -52,8 +58,16 @@ class Target implements TargetInterface
     /**
      * @return string
      */
-    public function getFullId()
+    public function getUniqId()
     {
-        return $this->type . ':' . $this->id;
+        return $this->uniqId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function equals(TargetInterface $other)
+    {
+        return $this->uniqId === $other->getUniqId();
     }
 }

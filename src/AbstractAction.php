@@ -97,6 +97,29 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function calculateCharge(PriceInterface $price)
+    {
+        if (!$this->isApplicable($price)) {
+            return null;
+        }
+
+        $usage = $price->calculateUsage($this->getQuantity());
+        if ($usage === null) {
+            return null;
+        }
+
+        $sum = $this->calculateSum($this->getQuantity());
+        if ($sum === null) {
+            return null;
+        }
+
+        return new Charge($this, $price->getTarget(), $price->getType(), $usage, $sum);
+    }
+
+
+    /**
      * @inheritdoc
      */
     abstract public function isApplicable(PriceInterface $price);
