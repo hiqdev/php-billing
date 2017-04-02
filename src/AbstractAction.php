@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing;
 
 use DateTime;
+use hiqdev\php\units\QuantityInterface;
 
 /**
  * Chargable Action.
@@ -110,7 +111,7 @@ abstract class AbstractAction implements ActionInterface
             return null;
         }
 
-        $sum = $this->calculateSum($this->getQuantity());
+        $sum = $price->calculateSum($this->getQuantity());
         if ($sum === null) {
             return null;
         }

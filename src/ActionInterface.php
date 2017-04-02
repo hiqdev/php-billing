@@ -39,35 +39,23 @@ interface ActionInterface
      * Returns client ot this action.
      * @return ClientInterface
      */
-    public function getClient()
-    {
-        return $this->client;
-    }
+    public function getClient();
 
     /**
      * Returns target ot this action.
      * @return TargetInterface
      */
-    public function getTarget()
-    {
-        return $this->target;
-    }
+    public function getTarget();
 
     /**
      * Returns quantity ot this action.
      * @return QuantityInterface
      */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
+    public function getQuantity();
 
     /**
      * Returns time ot this action.
      * @return DateTime
      */
-    public function getTime()
-    {
-        return $this->time;
-    }
+    public function getTime();
 }

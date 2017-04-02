@@ -10,6 +10,9 @@
 
 namespace hiqdev\php\billing;
 
+use Money\Money;
+use hiqdev\php\units\QuantityInterface;
+
 /**
  * Charge.
  *
@@ -54,12 +57,37 @@ class Charge
         TargetInterface     $target,
         TypeInterface       $type,
         QuantityInterface   $usage,
-        MoneyInterface      $sum
+        Money               $sum
     ) {
         $this->action   = $action;
         $this->target   = $target;
         $this->type     = $type;
         $this->usage    = $usage;
         $this->sum      = $sum;
+    }
+
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getUsage()
+    {
+        return $this->usage;
+    }
+
+    public function getSum()
+    {
+        return $this->sum;
     }
 }

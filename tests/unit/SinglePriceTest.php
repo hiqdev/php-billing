@@ -52,5 +52,6 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
     public function testCalculateUsage()
     {
         $this->assertNull($this->price->calculateUsage(Quantity::byte(1)));
+        $this->assertEquals(Quantity::gigabyte(90), $this->price->calculateUsage(Quantity::gigabyte(100)));
     }
 }
