@@ -65,7 +65,7 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getClient()
     {
@@ -73,7 +73,7 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTarget()
     {
@@ -81,7 +81,7 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getQuantity()
     {
@@ -89,7 +89,7 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTime()
     {
@@ -118,9 +118,8 @@ abstract class AbstractAction implements ActionInterface
         return new Charge($this, $price->getTarget(), $price->getType(), $usage, $sum);
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     abstract public function isApplicable(PriceInterface $price);
 }

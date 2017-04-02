@@ -11,7 +11,7 @@
 namespace hiqdev\php\billing;
 
 /**
- * Target - any thing participating in billing as:
+ * Target - any thing participating in billing as:.
  *
  * - object being charged (domain, server, certificate)
  * - product being sold (premium product, ???)
@@ -41,7 +41,7 @@ interface TargetInterface
     /**
      * Get target unique ID, globally unique. Used for comparison.
      * Must be formed as $type:$id.
-     * E.g.: client:login, client:1, server:T1, server:9
+     * E.g.: client:login, client:1, server:T1, server:9.
      * @return string
      */
     public function getUniqId();

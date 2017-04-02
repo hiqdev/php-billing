@@ -12,7 +12,7 @@ namespace hiqdev\php\billing;
 
 /**
  * Enum Price:
- * - listed quantities only else exception
+ * - listed quantities only else exception.
  * @see PriceInterface
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -41,7 +41,7 @@ class EnumPrice extends AbstractPrice
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function calculateUsage(QuantityInterface $quantity)
     {
@@ -49,7 +49,7 @@ class EnumPrice extends AbstractPrice
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function calculatePrice(QuantityInterface $usage)
     {

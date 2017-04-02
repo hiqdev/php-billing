@@ -7,6 +7,7 @@
 [![Build Status](https://img.shields.io/travis/hiqdev/php-billing.svg)](https://travis-ci.org/hiqdev/php-billing)
 [![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/php-billing.svg)](https://scrutinizer-ci.com/g/hiqdev/php-billing/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/php-billing.svg)](https://scrutinizer-ci.com/g/hiqdev/php-billing/)
+[![Dependency Status](https://www.versioneye.com/php/hiqdev:php-billing/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:php-billing/dev-master)
 
 Billing library providing:
 

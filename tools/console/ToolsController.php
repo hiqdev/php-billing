@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHP Billing Library
+ *
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\billing\tools\console;
 
@@ -7,14 +15,13 @@ use Yii;
 
 class ToolsController extends \hidev\controllers\CommonController
 {
-
     public function actionRes()
     {
         $src  = Yii::getAlias('@hiqdev/php/billing/res/units.yml');
         $tree = Yaml::parse(file_get_contents($src));
         $this->prepareUnits('', $tree);
         $dump = var_export($this->units, true);
-        
+
         $dst  = Yii::getAlias('@hiqdev/php/billing/res/units.php');
         file_put_contents($dst, "<?php\n\nreturn $dump;\n");
     }

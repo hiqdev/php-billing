@@ -14,7 +14,7 @@ use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
 /**
- * Single Price:
+ * Single Price:.
  *
  * - no charge for quantity less then prepaid
  * - same price for any quantity above prepaid

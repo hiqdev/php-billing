@@ -59,7 +59,7 @@ class Tariff implements TariffInterface
     /**
      * @return PriceInterface[]
      */
-    public function getPrices() : array
+    public function getPrices(): array
     {
         return $this->prices;
     }

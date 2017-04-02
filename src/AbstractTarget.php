@@ -10,8 +10,6 @@
 
 namespace hiqdev\php\billing;
 
-use DateTime;
-
 /**
  * @see TargetInterface
  *
@@ -25,7 +23,7 @@ abstract class AbstractTarget implements TargetInterface
     protected $id;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getId()
     {

@@ -47,7 +47,7 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTarget()
     {
@@ -55,7 +55,7 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -63,8 +63,8 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
-     * @inheritdoc
-     * Default sum calculation method: sum = price * usage
+     * {@inheritdoc}
+     * Default sum calculation method: sum = price * usage.
      */
     public function calculateSum(QuantityInterface $quantity)
     {
@@ -82,12 +82,12 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     abstract public function calculateUsage(QuantityInterface $quantity);
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     abstract public function calculatePrice(QuantityInterface $action);
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * PHPUnit plugin for HiDev.
+ * PHP Billing Library
  *
- * @link      https://github.com/hiqdev/hidev-phpunit
- * @package   hidev-phpunit
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
 error_reporting(E_ALL & ~E_NOTICE);

@@ -17,7 +17,6 @@ namespace hiqdev\php\billing;
  */
 class Calculator implements TariffInterface
 {
-
     /**
      * Calculate charges for given action.
      * @param ActionInterface $action
