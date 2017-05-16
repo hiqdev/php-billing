@@ -52,19 +52,12 @@
     },
     "autoload": {
         "psr-4": {
-            "hiqdev\\php\\billing\\": "src",
-            "hiqdev\\php\\billing\\res\\": "res"
+            "hiqdev\\php\\billing\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "hiqdev\\php\\billing\\tests\\": "tests",
-            "hiqdev\\php\\billing\\tools\\": "tools"
-        }
-    },
-    "extra": {
-        "config-plugin": {
-            "hidev": "tools/config/hidev.php"
+            "hiqdev\\php\\billing\\tests\\": "tests"
         }
     },
     "repositories": [
