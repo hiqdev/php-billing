@@ -26,9 +26,9 @@ abstract class AbstractPrice implements PriceInterface
     protected $id;
 
     /**
-     * @var Tariff
+     * @var Plan
      */
-    protected $tariff;
+    protected $plan;
 
     /**
      * @var Target

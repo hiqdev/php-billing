@@ -40,9 +40,9 @@ class Bill
     public $object;
 
     /**
-     * @var Tariff
+     * @var Plan
      */
-    public $tariff;
+    public $plan;
 
     /**
      * @var DateTime

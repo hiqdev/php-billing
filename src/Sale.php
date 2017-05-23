@@ -35,9 +35,9 @@ class Sale implements SaleInterface
     public $client;
 
     /**
-     * @var TariffInterface
+     * @var PlanInterface
      */
-    public $tariff;
+    public $plan;
 
     /**
      * @var DateTime

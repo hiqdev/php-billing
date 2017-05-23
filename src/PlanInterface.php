@@ -11,11 +11,11 @@
 namespace hiqdev\php\billing;
 
 /**
- * Tariff Interface.
+ * Plan Interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TariffInterface
+interface PlanInterface
 {
     /**
      * Calculates charges for given action.

@@ -15,7 +15,7 @@ namespace hiqdev\php\billing;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Tariff implements TariffInterface
+class Plan
 {
     /**
      * @var int
@@ -28,7 +28,7 @@ class Tariff implements TariffInterface
     protected $name;
 
     /**
-     * @var Tariff|null
+     * @var Plan|null
      * XXX not sure to implement
      */
     protected $parent;
