@@ -11,36 +11,37 @@
 namespace hiqdev\php\billing;
 
 /**
- * Client.
+ * Customer.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Client extends AbstractTarget implements ClientInterface
+class Customer extends AbstractTarget implements CustomerInterface
 {
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
      */
-    public $login;
+    protected $login;
 
     /**
-     * @var ClientInterface
+     * @var CustomerInterface
      */
-    public $seller;
+    protected $seller;
 
     /**
      * @var Client[]
      */
-    public $sellers = [];
+    protected $sellers = [];
 
-    public function __construct($id, $login = null)
+    public function __construct($id, $login, $seller = null)
     {
-        parent::__construct('client', $id);
+        $this->id = $id;
         $this->login = $login;
+        $this->seller = $seller;
     }
 
     /**
@@ -49,5 +50,10 @@ class Client extends AbstractTarget implements ClientInterface
     public function getLogin()
     {
         return $this->login;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

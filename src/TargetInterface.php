@@ -24,7 +24,7 @@ namespace hiqdev\php\billing;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TargetInterface
+interface TargetInterface extends EntityInterface
 {
     /**
      * Get target ID, unique between targets of the same type.

@@ -14,7 +14,7 @@ use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
 /**
- * Single Price:.
+ * Single Price.
  *
  * - no charge for quantity less then prepaid
  * - same price for any quantity above prepaid
@@ -36,15 +36,26 @@ class SinglePrice extends AbstractPrice
     protected $price;
 
     public function __construct(
+                            $id,
         TargetInterface     $target,
         TypeInterface       $type,
         QuantityInterface   $prepaid,
         Money               $price
     ) {
-        parent::__construct($target, $type);
+        parent::__construct($id, $target, $type);
         $this->prepaid  = $prepaid;
         $this->price    = $price;
     }
+
+/*
+    protected $properties = [
+        'id'        => '',
+        'target'    => [AbstractTarget::class, 'create'],
+        'type'      => [Type::class, 'create'],
+        'prepaid'   => [Quantity::class, 'create'],
+        'price'     => [MoneyFactory::class, 'create'],
+    ];
+*/
 
     /**
      * {@inheritdoc}

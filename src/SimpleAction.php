@@ -22,14 +22,15 @@ use hiqdev\php\units\QuantityInterface;
 class SimpleAction extends AbstractAction
 {
     /**
-     * @param ClientInterface $client
+     * @param mixed $id
+     * @param CustomerInterface $client
      * @param TargetInterface $target
      * @param QuantityInterface $quantity
      * @param DateTime $time
      * @param TypeInterface $type
      */
     public function __construct(
-        ClientInterface $client,
+        CustomerInterface $client,
         TargetInterface $target,
         QuantityInterface $quantity,
         DateTime $time,

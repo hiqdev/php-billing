@@ -11,15 +11,10 @@
 namespace hiqdev\php\billing;
 
 /**
- * Client interface.
+ * Basic interface for all entities.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface ClientInterface extends TargetInterface
+interface EntityInterface extends \JsonSerializable
 {
-    /**
-     * Returns client login.
-     * @return string
-     */
-    public function getLogin();
 }

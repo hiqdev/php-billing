@@ -15,8 +15,13 @@ namespace hiqdev\php\billing;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Plan
+class Plan implements EntityInterface
 {
+    //  public static function instantiate($row)
+    //  {
+    //      return new static;
+    //  }
+
     /**
      * @var int
      */
@@ -34,9 +39,9 @@ class Plan
     protected $parent;
 
     /**
-     * @var Client
+     * @var CustomerInterface
      */
-    protected $client;
+    protected $seller;
 
     /**
      * @var Target
@@ -51,8 +56,11 @@ class Plan
     /**
      * @param PriceInterface[] $prices
      */
-    public function __construct(array $prices)
+    public function __construct($id, $name, CustomerInterface $seller, array $prices = [])
     {
+        $this->id = $id;
+        $this->name = $name;
+        $this->seller = $seller;
         $this->prices = $prices;
     }
 
@@ -80,5 +88,10 @@ class Plan
         }
 
         return $charges;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

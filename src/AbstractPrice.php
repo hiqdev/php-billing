@@ -40,8 +40,9 @@ abstract class AbstractPrice implements PriceInterface
      */
     protected $type;
 
-    public function __construct(TargetInterface $target, TypeInterface $type)
+    public function __construct($id, TargetInterface $target, TypeInterface $type)
     {
+        $this->id = $id;
         $this->target = $target;
         $this->type = $type;
     }
@@ -79,6 +80,11 @@ abstract class AbstractPrice implements PriceInterface
         }
 
         return $price->multiply($usage->getQuantity());
+    }
+
+    public static function create(array $data)
+    {
+        return new SinglePrice($data['id'], $data['target']);
     }
 
     /**
