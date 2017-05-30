@@ -30,9 +30,9 @@ class Sale implements SaleInterface
     public $target;
 
     /**
-     * @var ClientInterface
+     * @var CustomerInterface
      */
-    public $client;
+    public $customer;
 
     /**
      * @var PlanInterface

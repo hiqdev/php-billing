@@ -37,9 +37,9 @@ interface ActionInterface
 
     /**
      * Returns client ot this action.
-     * @return ClientInterface
+     * @return CustomerInterface
      */
-    public function getClient();
+    public function getCustomer();
 
     /**
      * Returns target ot this action.

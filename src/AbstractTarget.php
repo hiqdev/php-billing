@@ -62,4 +62,9 @@ abstract class AbstractTarget implements TargetInterface
     {
         return $this->uniqId === $other->getUniqId();
     }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

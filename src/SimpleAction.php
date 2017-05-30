@@ -23,20 +23,20 @@ class SimpleAction extends AbstractAction
 {
     /**
      * @param mixed $id
-     * @param CustomerInterface $client
+     * @param CustomerInterface $customer
      * @param TargetInterface $target
      * @param QuantityInterface $quantity
      * @param DateTime $time
      * @param TypeInterface $type
      */
     public function __construct(
-        CustomerInterface $client,
+        CustomerInterface $customer,
         TargetInterface $target,
         QuantityInterface $quantity,
         DateTime $time,
         TypeInterface $type
     ) {
-        parent::__construct($client, $target, $quantity, $time);
+        parent::__construct($customer, $target, $quantity, $time);
         $this->type = $type;
     }
 

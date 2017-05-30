@@ -28,9 +28,9 @@ abstract class AbstractAction implements ActionInterface
     protected $id;
 
     /**
-     * @var ClientInterface
+     * @var CustomerInterface
      */
-    protected $client;
+    protected $customer;
 
     /**
      * @var TargetInterface
@@ -48,18 +48,18 @@ abstract class AbstractAction implements ActionInterface
     protected $time;
 
     /**
-     * @param ClientInterface $client
+     * @param CustomerInterface $customer
      * @param TargetInterface $target
      * @param QuantityInterface $quantity
      * @param DateTime $time
      */
     public function __construct(
-        ClientInterface $client,
+        CustomerInterface $customer,
         TargetInterface $target,
         QuantityInterface $quantity,
         DateTime $time
     ) {
-        $this->client = $client;
+        $this->customer = $customer;
         $this->target = $target;
         $this->quantity = $quantity;
         $this->time = $time;
@@ -68,9 +68,9 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function getClient()
+    public function getCustomer()
     {
-        return $this->client;
+        return $this->customer;
     }
 
     /**

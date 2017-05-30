@@ -33,7 +33,7 @@ class Customer extends AbstractTarget implements CustomerInterface
     protected $seller;
 
     /**
-     * @var Client[]
+     * @var Customer[]
      */
     protected $sellers = [];
 
