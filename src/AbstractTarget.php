@@ -23,6 +23,10 @@ abstract class AbstractTarget implements TargetInterface
      * @var TypeInterface
      */
     protected $type;
+    /**
+     * @var string
+     */
+    protected $uniqId;
 
     public function __construct($id, TypeInterface $type)
     {

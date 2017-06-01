@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing;
 
+use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 

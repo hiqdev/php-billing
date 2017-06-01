@@ -18,17 +18,12 @@ use hiqdev\php\units\QuantityInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class AbstractPrice implements PriceInterface
+abstract class AbstractPrice implements PriceInterface, EntityInterface
 {
     /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var Plan
-     */
-    protected $plan;
 
     /**
      * @var Target
@@ -85,6 +80,15 @@ abstract class AbstractPrice implements PriceInterface
     public static function create(array $data)
     {
         return new SinglePrice($data['id'], $data['target']);
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'target' => $this->target,
+        ];
     }
 
     /**
