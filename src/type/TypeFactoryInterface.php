@@ -8,23 +8,17 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\type;
 
 /**
- * Resource Type interface.
+ * Type factory interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+interface TypeFactoryInterface
 {
     /**
-     * Returns type name.
-     * @return string
+     * @return Type
      */
-    public function getName();
-
-    /**
-     * @return bool
-     */
-    public function equals(TypeInterface $other);
+    public function create(TypeCreationDto $dto);
 }

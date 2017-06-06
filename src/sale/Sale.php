@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\sale;
 
 use DateTime;
 
@@ -22,25 +22,39 @@ class Sale implements SaleInterface
     /**
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * @var TargetInterface
      */
-    public $target;
+    protected $target;
 
     /**
      * @var CustomerInterface
      */
-    public $customer;
+    protected $customer;
 
     /**
      * @var PlanInterface
      */
-    public $plan;
+    protected $plan;
 
     /**
      * @var DateTime
      */
-    public $time;
+    protected $time;
+
+    public function __construct(
+                            $id
+        TargetInterface     $target,
+        CustomerInterface   $customer,
+        PlanInterface       $plan,
+        DateTime            $time
+    ) {
+        $this->id = $id;
+        $this->target = $target;
+        $this->customer = $customer;
+        $this->plan = $plan;
+        $this->time = $time;
+    }
 }

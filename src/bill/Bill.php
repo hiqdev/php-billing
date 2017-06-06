@@ -8,11 +8,13 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\bill;
 
 use DateTime;
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Money;
 

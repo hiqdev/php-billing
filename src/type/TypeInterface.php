@@ -8,18 +8,23 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\type;
 
 /**
- * Bill factory interface.
+ * Type interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface BillFactoryInterface
+interface TypeInterface extends \JsonSerializable
 {
     /**
-     * Creates bill object.
-     * @return Bill
+     * Returns type name.
+     * @return string
      */
-    public function create(BillCreationDto $dto);
+    public function getName();
+
+    /**
+     * @return bool
+     */
+    public function equals(TypeInterface $other);
 }

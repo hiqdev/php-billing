@@ -8,7 +8,9 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\plan;
+
+use hiqdev\php\billing\action\ActionInterface;
 
 /**
  * Plan Interface.

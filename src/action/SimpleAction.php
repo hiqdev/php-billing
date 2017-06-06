@@ -8,9 +8,13 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\action;
 
 use DateTime;
+use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 
 /**

@@ -1,6 +1,8 @@
 <?php
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\order;
+
+use hiqdev\php\billing\customer\CustomerInterface;
 
 class Order
 {

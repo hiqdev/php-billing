@@ -8,19 +8,26 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\bill;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class TypeFactory implements TypeFactoryInterface
+class BillCreationDto
 {
-    /**
-     * Creates bill object.
-     * @return Type
-     */
-    public function create(TypeCreationDto $dto)
-    {
-        return new Type($dto->id, $dto->name);
-    }
+    public $id;
+
+    public $type;
+
+    public $time;
+
+    public $sum;
+
+    public $quantity;
+
+    public $customer;
+
+    public $target;
+
+    public $plan;
 }

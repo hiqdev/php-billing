@@ -8,7 +8,12 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\plan;
+
+use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\target\TargetInterface;
 
 /**
  * Tariff Plan.
@@ -44,7 +49,7 @@ class Plan implements EntityInterface
     protected $seller;
 
     /**
-     * @var Target
+     * @var TargetInterface
      */
     protected $target;
 

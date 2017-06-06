@@ -8,14 +8,18 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\bill;
 
 /**
+ * Bill factory interface.
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class TypeCreationDto
+interface BillFactoryInterface
 {
-    public $id;
-
-    public $name;
+    /**
+     * Creates bill object.
+     * @return Bill
+     */
+    public function create(BillCreationDto $dto);
 }
