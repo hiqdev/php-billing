@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\action;
 
+use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use DateTime;

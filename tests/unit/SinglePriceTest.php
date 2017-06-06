@@ -10,9 +10,9 @@
 
 namespace hiqdev\php\billing\tests\unit;
 
-use hiqdev\php\billing\SinglePrice;
-use hiqdev\php\billing\Target;
-use hiqdev\php\billing\Type;
+use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Money;
 
@@ -38,7 +38,7 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->target   = new Target(1, new Type(2, 'server'));
+        $this->target   = new Target(1, 'server');
         $this->type     = new Type(3, 'server_traf');
         $this->quantity = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);

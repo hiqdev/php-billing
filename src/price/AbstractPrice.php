@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
