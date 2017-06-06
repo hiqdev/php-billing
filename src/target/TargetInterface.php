@@ -8,7 +8,9 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\target;
+
+use hiqdev\php\billing\EntityInterface;
 
 /**
  * Target - any thing participating in billing as:.

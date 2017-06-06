@@ -8,23 +8,20 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\target;
 
 /**
- * Resource Type interface.
+ * Default target factory.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+class TargetFactory implements TargetFactoryInterface
 {
     /**
-     * Returns type name.
-     * @return string
+     * @return Target
      */
-    public function getName();
-
-    /**
-     * @return bool
-     */
-    public function equals(TypeInterface $other);
+    public function create(TargetCreationDto $dto)
+    {
+        return new Target($dto->id, $dto->type);
+    }
 }

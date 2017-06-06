@@ -11,20 +11,16 @@
 namespace hiqdev\php\billing;
 
 /**
- * Resource Type interface.
- *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+class PurseFactory implements PurseFactoryInterface
 {
     /**
-     * Returns type name.
-     * @return string
+     * Creates customer object.
+     * @return Purse
      */
-    public function getName();
-
-    /**
-     * @return bool
-     */
-    public function equals(TypeInterface $other);
+    public function create(PurseCreationDto $dto)
+    {
+        return new Purse($dto->id, $dto->currency, $dto->customer);
+    }
 }

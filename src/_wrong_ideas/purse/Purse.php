@@ -10,12 +10,14 @@
 
 namespace hiqdev\php\billing;
 
+use Money\Currency;
+
 /**
- * Customer.
+ * Purse.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Customer extends AbstractTarget implements CustomerInterface
+class Purse implements PurseInterface
 {
     /**
      * @var integer
@@ -25,31 +27,34 @@ class Customer extends AbstractTarget implements CustomerInterface
     /**
      * @var string
      */
-    protected $login;
+    protected $currency;
 
     /**
-     * @var CustomerInterface
+     * @var PurseInterface
      */
-    protected $seller;
+    protected $customer;
 
-    /**
-     * @var Customer[]
-     */
-    protected $sellers = [];
-
-    public function __construct($id, $login, $seller = null)
+    public function __construct($id, $currency, $customer)
     {
         $this->id = $id;
-        $this->login = $login;
-        $this->seller = $seller;
+        $this->currency = $currency;
+        $this->customer = $customer;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLogin()
+    public function getCurrency()
     {
-        return $this->login;
+        return $this->currency;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
     public function jsonSerialize()

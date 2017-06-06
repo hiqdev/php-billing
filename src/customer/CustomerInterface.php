@@ -8,23 +8,20 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\customer;
+
+use hiqdev\php\billing\target\TargetInterface;
 
 /**
- * Resource Type interface.
+ * Customer interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+interface CustomerInterface extends TargetInterface
 {
     /**
-     * Returns type name.
+     * Returns client login.
      * @return string
      */
-    public function getName();
-
-    /**
-     * @return bool
-     */
-    public function equals(TypeInterface $other);
+    public function getLogin();
 }

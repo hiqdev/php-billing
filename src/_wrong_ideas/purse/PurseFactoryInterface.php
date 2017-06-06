@@ -11,15 +11,14 @@
 namespace hiqdev\php\billing;
 
 /**
- * Customer interface.
+ * Purse factory interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface CustomerInterface extends TargetInterface
+interface PurseFactoryInterface
 {
     /**
-     * Returns client login.
-     * @return string
+     * @return Purse
      */
-    public function getLogin();
+    public function create(PurseCreationDto $dto);
 }

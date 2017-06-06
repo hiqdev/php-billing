@@ -11,61 +11,90 @@
 namespace hiqdev\php\billing;
 
 use DateTime;
+use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\target\Target;
+use hiqdev\php\units\Quantity;
+use Money\Money;
 
 /**
  * Bill.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Bill
+class Bill implements EntityInterface
 {
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var Type
      */
-    public $type;
-
-    /**
-     * @var Purse
-     */
-    public $purse;
-
-    /**
-     * @var object
-     */
-    public $object;
-
-    /**
-     * @var Plan
-     */
-    public $plan;
+    protected $type;
 
     /**
      * @var DateTime
      */
-    public $time;
+    protected $time;
 
     /**
-     * @var double
+     * @var Money
      */
-    public $quantity;
+    protected $sum;
 
     /**
-     * @var integer
+     * @var Quantity
      */
-    public $sum;
+    protected $quantity;
+
+    /**
+     * @var Customer
+     */
+    protected $customer;
+
+    /**
+     * @var Target
+     */
+    protected $target;
+
+    /**
+     * @var Plan
+     */
+    protected $plan;
 
     /**
      * @var bool
      */
-    public $isFinished;
+    protected $isFinished;
 
     /**
-     * @var resource[]
+     * @var Charge[]
      */
-    public $resources = [];
+    protected $charges = [];
+
+    public function __construct(
+                    $id,
+        Type        $type,
+        DateTime    $time,
+        Money       $sum,
+        Quantity    $quantity,
+        Customer    $customer = null,
+        Target      $target = null,
+        Plan        $plan = null
+    ) {
+        $this->id       = $id;
+        $this->type     = $type;
+        $this->time     = $time;
+        $this->sum      = $sum;
+        $this->quantity = $quantity;
+        $this->customer = $customer;
+        $this->target   = $target;
+        $this->plan     = $plan;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

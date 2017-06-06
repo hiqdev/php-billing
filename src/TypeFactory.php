@@ -11,20 +11,16 @@
 namespace hiqdev\php\billing;
 
 /**
- * Resource Type interface.
- *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+class TypeFactory implements TypeFactoryInterface
 {
     /**
-     * Returns type name.
-     * @return string
+     * Creates bill object.
+     * @return Type
      */
-    public function getName();
-
-    /**
-     * @return bool
-     */
-    public function equals(TypeInterface $other);
+    public function create(TypeCreationDto $dto)
+    {
+        return new Type($dto->id, $dto->name);
+    }
 }

@@ -11,7 +11,7 @@
 namespace hiqdev\php\billing;
 
 /**
- * Resource Type.
+ * General Type.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -20,12 +20,12 @@ class Type implements TypeInterface
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
      */
-    public $name;
+    protected $name;
 
     public function __construct($id, $name)
     {
@@ -47,5 +47,10 @@ class Type implements TypeInterface
     public function equals(TypeInterface $other)
     {
         return $this->name === $other->getName();
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

@@ -11,15 +11,13 @@
 namespace hiqdev\php\billing;
 
 /**
- * Customer factory interface.
- *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface CustomerFactoryInterface
+class PurseCreationDto
 {
-    /**
-     * Creates customer object.
-     * @return Customer
-     */
-    public function create(CustomerCreationDto $dto);
+    public $id;
+
+    public $currency;
+
+    public $customer;
 }

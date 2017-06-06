@@ -11,20 +11,19 @@
 namespace hiqdev\php\billing;
 
 /**
- * Resource Type interface.
+ * Purse interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+interface PurseInterface extends EntityInterface
 {
     /**
-     * Returns type name.
-     * @return string
+     * @return Currency
      */
-    public function getName();
+    public function getCurrency();
 
     /**
-     * @return bool
+     * @return Customer
      */
-    public function equals(TypeInterface $other);
+    public function getCustomer();
 }

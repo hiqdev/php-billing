@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\target;
 
 /**
  * @see TargetInterface
@@ -17,22 +17,20 @@ namespace hiqdev\php\billing;
  */
 abstract class AbstractTarget implements TargetInterface
 {
+    /**
+     * @var int|string
+     */
     protected $id;
 
     /**
-     * @var TypeInterface
-     */
-    protected $type;
-    /**
      * @var string
      */
-    protected $uniqId;
+    protected $type;
 
-    public function __construct($id, TypeInterface $type)
+    public function __construct($id, $type)
     {
         $this->id = $id;
         $this->type = $type;
-        $this->uniqId = $type->getName() . ':' . $id;
     }
 
     /**
@@ -56,7 +54,7 @@ abstract class AbstractTarget implements TargetInterface
      */
     public function getUniqId()
     {
-        return $this->uniqId;
+        return $this->type . ':' . $this->id;
     }
 
     /**
@@ -64,7 +62,7 @@ abstract class AbstractTarget implements TargetInterface
      */
     public function equals(TargetInterface $other)
     {
-        return $this->uniqId === $other->getUniqId();
+        return $this->getUniqId() === $other->getUniqId();
     }
 
     public function jsonSerialize()

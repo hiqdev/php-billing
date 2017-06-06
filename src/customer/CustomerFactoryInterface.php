@@ -8,16 +8,18 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing;
+namespace hiqdev\php\billing\customer;
 
 /**
+ * Customer factory interface.
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class CustomerCreationDto
+interface CustomerFactoryInterface
 {
-    public $id;
-
-    public $login;
-
-    public $seller;
+    /**
+     * Creates customer object.
+     * @return Customer
+     */
+    public function create(CustomerCreationDto $dto);
 }

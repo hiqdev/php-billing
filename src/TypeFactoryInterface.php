@@ -11,8 +11,15 @@
 namespace hiqdev\php\billing;
 
 /**
+ * Type factory interface.
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Target extends AbstractTarget
+interface TypeFactoryInterface
 {
+    /**
+     * Creates bill object.
+     * @return Type
+     */
+    public function create(TypeCreationDto $dto);
 }

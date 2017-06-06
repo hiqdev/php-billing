@@ -11,20 +11,11 @@
 namespace hiqdev\php\billing;
 
 /**
- * Resource Type interface.
- *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface TypeInterface extends \JsonSerializable
+class TypeCreationDto
 {
-    /**
-     * Returns type name.
-     * @return string
-     */
-    public function getName();
+    public $id;
 
-    /**
-     * @return bool
-     */
-    public function equals(TypeInterface $other);
+    public $name;
 }
