@@ -10,8 +10,6 @@
 
 namespace hiqdev\php\billing;
 
-use Money\Currency;
-
 /**
  * Purse.
  *

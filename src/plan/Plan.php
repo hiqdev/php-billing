@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\plan;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\billing\target\TargetInterface;
 
 /**
  * Tariff Plan.

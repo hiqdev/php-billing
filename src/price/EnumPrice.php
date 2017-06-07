@@ -12,8 +12,8 @@ namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
-use hiqdev\php\units\UnitInterface;
 use hiqdev\php\units\QuantityInterface;
+use hiqdev\php\units\UnitInterface;
 
 /**
  * Enum Price:
@@ -61,7 +61,7 @@ class EnumPrice extends AbstractPrice
     {
         $usage = (string) $this->calculateUsage($quantity)->getQuantity();
         foreach ($this->prices as $value => $price) {
-            if ((string)$value === (string)$usage) {
+            if ((string) $value === (string) $usage) {
                 return $price;
             }
         }

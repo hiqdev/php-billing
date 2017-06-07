@@ -10,9 +10,8 @@
 
 namespace hiqdev\php\billing\tests\unit;
 
-use DateTime;
-use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\action\SimpleAction;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;

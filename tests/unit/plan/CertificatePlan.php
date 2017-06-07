@@ -10,22 +10,19 @@
 
 namespace hiqdev\php\billing\tests\unit\plan;
 
-use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;
-use hiqdev\php\billing\action\SimpleAction;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
-use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Money;
 
 class CertificatePlan extends Plan
 {
-    static protected $instance;
+    protected static $instance;
 
-    static public function get()
+    public static function get()
     {
         if (static::$instance === null) {
             new static();
@@ -84,7 +81,8 @@ class CertificatePlan extends Plan
         parent::__construct(null, 'Test Certificate Plan', $this->seller, $prices);
     }
 
-    public function getRawPrices($typeName, $targetName) {
+    public function getRawPrices($typeName, $targetName)
+    {
         return $this->rawPrices[$typeName . '_' . $targetName];
     }
 }

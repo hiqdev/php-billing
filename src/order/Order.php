@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHP Billing Library
+ *
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\billing\order;
 
@@ -24,7 +32,7 @@ class Order implements OrderInterface
      */
     protected $actions = [];
 
-    function __construct($id, CustomerInterface $customer, array $actions = [])
+    public function __construct($id, CustomerInterface $customer, array $actions = [])
     {
         $this->id = $id;
         $this->customer = $customer;

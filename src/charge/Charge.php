@@ -100,6 +100,7 @@ class Charge implements \JsonSerializable
     {
         return $this->sum;
     }
+
     public function jsonSerialize()
     {
         return get_object_vars($this);

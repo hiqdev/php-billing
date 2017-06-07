@@ -10,16 +10,9 @@
 
 namespace hiqdev\php\billing\tests\unit\plan;
 
-use hiqdev\php\billing\charge\Charge;
-use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\action\SimpleAction;
-use hiqdev\php\billing\plan\Plan;
-use hiqdev\php\billing\price\EnumPrice;
-use hiqdev\php\billing\target\Target;
-use hiqdev\php\billing\type\Type;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
-use Money\Money;
 
 class PlanTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,7 +35,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
 
     public function checkCharge($type, $target, $years, $sum)
     {
-        $usage = Quantity::month($years*12);
+        $usage = Quantity::month($years * 12);
         $action = new SimpleAction(null, $type, $target, $usage);
         $charges = $this->plan->calculateCharges($action);
         $this->assertTrue(is_array($charges));

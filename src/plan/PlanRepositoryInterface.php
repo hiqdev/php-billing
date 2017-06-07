@@ -25,7 +25,7 @@ interface PlanRepositoryInterface
     public function findByAction(ActionInterface $action);
 
     /**
-     * Finds suitable plans for given order: customer + actions
+     * Finds suitable plans for given order: customer + actions.
      * @param ActionInterface $action
      * @return PlanInterface[] array: actionKey => plan
      */
