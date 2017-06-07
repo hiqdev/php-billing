@@ -82,6 +82,14 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCustomer()
     {
         return $this->customer;

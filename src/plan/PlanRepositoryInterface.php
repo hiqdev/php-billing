@@ -18,9 +18,16 @@ use hiqdev\php\billing\action\ActionInterface;
 interface PlanRepositoryInterface
 {
     /**
-     * Finds suitable plan(s?) for given action: customer + type + target.
+     * Finds suitable plan for given action: customer + type + target.
      * @param ActionInterface $action
-     * @return PlanInterface[]
+     * @return PlanInterface
      */
     public function findByAction(ActionInterface $action);
+
+    /**
+     * Finds suitable plans for given order: customer + actions
+     * @param ActionInterface $action
+     * @return PlanInterface[] array: actionKey => plan
+     */
+    public function findByOrder(OrderInterface $order);
 }
