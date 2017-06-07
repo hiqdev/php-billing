@@ -18,19 +18,19 @@ namespace hiqdev\php\billing\type;
 class Type implements TypeInterface
 {
     /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
      * @var string
      */
     protected $name;
 
-    public function __construct($id, $name)
+    /**
+     * @var integer
+     */
+    protected $id;
+
+    public function __construct($name, $id = null)
     {
-        $this->id = $id;
         $this->name = $name;
+        $this->id = $id;
     }
 
     /**
@@ -51,6 +51,9 @@ class Type implements TypeInterface
 
     public function jsonSerialize()
     {
-        return get_object_vars($this);
+        return array_filter([
+            'name' => $this->name,
+            'id' => $this->id,
+        ]);
     }
 }

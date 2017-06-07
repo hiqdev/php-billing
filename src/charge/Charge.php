@@ -23,50 +23,57 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Charge
+class Charge implements \JsonSerializable
 {
     /**
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * @var ActionInterface
      */
-    public $action;
-
-    /**
-     * @var TargetInterface
-     */
-    public $target;
+    protected $action;
 
     /**
      * @var TypeInterface
      */
-    public $type;
+    protected $type;
+
+    /**
+     * @var TargetInterface
+     */
+    protected $target;
 
     /**
      * @var QuantityInterface
      */
-    public $usage;
+    protected $usage;
 
     /**
      * @var Money
      */
-    public $sum;
+    protected $sum;
 
     public function __construct(
+                            $id,
         ActionInterface     $action,
-        TargetInterface     $target,
         TypeInterface       $type,
+        TargetInterface     $target,
         QuantityInterface   $usage,
         Money               $sum
     ) {
+        $this->id       = $id;
         $this->action   = $action;
-        $this->target   = $target;
         $this->type     = $type;
+        $this->target   = $target;
         $this->usage    = $usage;
         $this->sum      = $sum;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getAction()
@@ -92,5 +99,9 @@ class Charge
     public function getSum()
     {
         return $this->sum;
+    }
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

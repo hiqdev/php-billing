@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\price;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\UnitInterface;
+use hiqdev\php\units\QuantityInterface;
 
 /**
  * Enum Price:
@@ -34,14 +35,38 @@ class EnumPrice extends AbstractPrice
     protected $enum;
 
     public function __construct(
-        TargetInterface     $target,
+                            $id,
         TypeInterface       $type,
+        TargetInterface     $target,
         UnitInterface       $unit,
         array               $enum
     ) {
-        parent::__construct($target, $type);
+        parent::__construct($id, $type, $target);
         $this->unit = $unit;
         $this->enum = $enum;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function calculateSum(QuantityInterface $quantity)
+    {
+        return $this->calculatePrice($quantity);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function calculatePrice(QuantityInterface $quantity)
+    {
+        $usage = (string) $this->calculateUsage($quantity)->getQuantity();
+        foreach ($this->enum as $value => $price) {
+            if ((string)$value === (string)$usage) {
+                return $price;
+            }
+        }
+
+        throw new FailedCalculatePriceException('not enumed quantity');
     }
 
     /**
@@ -50,19 +75,5 @@ class EnumPrice extends AbstractPrice
     public function calculateUsage(QuantityInterface $quantity)
     {
         return $quantity->convert($this->unit);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function calculatePrice(QuantityInterface $usage)
-    {
-        foreach ($this->enum as $quantity => $price) {
-            if ($usage->equals($quantity)) {
-                return $price;
-            }
-        }
-
-        throw new InvalidQuantityException('');
     }
 }

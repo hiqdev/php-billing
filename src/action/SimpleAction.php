@@ -11,11 +11,7 @@
 namespace hiqdev\php\billing\action;
 
 use DateTime;
-use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\type\TypeInterface;
-use hiqdev\php\units\QuantityInterface;
 
 /**
  * Simple Action.
@@ -25,30 +21,6 @@ use hiqdev\php\units\QuantityInterface;
  */
 class SimpleAction extends AbstractAction
 {
-    /**
-     * @param mixed $id
-     * @param CustomerInterface $customer
-     * @param TargetInterface $target
-     * @param QuantityInterface $quantity
-     * @param DateTime $time
-     * @param TypeInterface $type
-     */
-    public function __construct(
-        CustomerInterface $customer,
-        TargetInterface $target,
-        QuantityInterface $quantity,
-        DateTime $time,
-        TypeInterface $type
-    ) {
-        parent::__construct($customer, $target, $quantity, $time);
-        $this->type = $type;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
     /**
      * {@inheritdoc}
      */

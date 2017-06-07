@@ -29,28 +29,20 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     protected $id;
 
     /**
-     * @var Target
-     */
-    protected $target;
-
-    /**
      * @var Type
      */
     protected $type;
 
-    public function __construct($id, TargetInterface $target, TypeInterface $type)
+    /**
+     * @var Target
+     */
+    protected $target;
+
+    public function __construct($id, TypeInterface $type, TargetInterface $target)
     {
         $this->id = $id;
-        $this->target = $target;
         $this->type = $type;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTarget()
-    {
-        return $this->target;
+        $this->target = $target;
     }
 
     /**
@@ -59,6 +51,14 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTarget()
+    {
+        return $this->target;
     }
 
     /**

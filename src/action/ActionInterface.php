@@ -23,7 +23,7 @@ use hiqdev\php\billing\target\TargetInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface ActionInterface
+interface ActionInterface extends \JsonSerializable
 {
     /**
      * Returns if the given price applicable to this action.

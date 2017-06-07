@@ -39,7 +39,7 @@ class Customer extends AbstractTarget implements CustomerInterface
      */
     protected $sellers = [];
 
-    public function __construct($id, $login, $seller = null)
+    public function __construct($id, $login, CustomerInterface $seller = null)
     {
         $this->id = $id;
         $this->login = $login;

@@ -20,8 +20,8 @@ use hiqdev\php\billing\EntityInterface;
  *
  * Provides target's:
  *
- * - ID
  * - type
+ * - ID, unique only between targets of same type
  * - unique ID
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -29,7 +29,7 @@ use hiqdev\php\billing\EntityInterface;
 interface TargetInterface extends EntityInterface
 {
     /**
-     * Get target ID, unique between targets of the same type.
+     * Get target ID, unique only between targets of the same type.
      * @return int|string
      */
     public function getId();

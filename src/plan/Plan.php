@@ -20,7 +20,7 @@ use hiqdev\php\billing\target\TargetInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Plan implements EntityInterface
+class Plan implements PlanInterface
 {
     //  public static function instantiate($row)
     //  {
@@ -49,11 +49,6 @@ class Plan implements EntityInterface
     protected $seller;
 
     /**
-     * @var TargetInterface
-     */
-    protected $target;
-
-    /**
      * @var PriceInterface[]
      */
     protected $prices = [];
@@ -61,8 +56,12 @@ class Plan implements EntityInterface
     /**
      * @param PriceInterface[] $prices
      */
-    public function __construct($id, $name, CustomerInterface $seller, array $prices = [])
-    {
+    public function __construct(
+                            $id,
+                            $name,
+        CustomerInterface   $seller = null,
+        array               $prices = []
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->seller = $seller;
@@ -86,7 +85,7 @@ class Plan implements EntityInterface
     {
         $charges = [];
         foreach ($this->prices as $price) {
-            $charge = $price->calculateCharge($action);
+            $charge = $action->calculateCharge($price);
             if ($charge !== null) {
                 $charges[] = $charge;
             }

@@ -40,25 +40,15 @@ class SinglePrice extends AbstractPrice
 
     public function __construct(
                             $id,
-        TargetInterface     $target,
         TypeInterface       $type,
+        TargetInterface     $target,
         QuantityInterface   $prepaid,
         Money               $price
     ) {
-        parent::__construct($id, $target, $type);
+        parent::__construct($id, $type, $target);
         $this->prepaid  = $prepaid;
         $this->price    = $price;
     }
-
-/*
-    protected $properties = [
-        'id'        => '',
-        'target'    => [AbstractTarget::class, 'create'],
-        'type'      => [Type::class, 'create'],
-        'prepaid'   => [Quantity::class, 'create'],
-        'price'     => [MoneyFactory::class, 'create'],
-    ];
-*/
 
     /**
      * {@inheritdoc}

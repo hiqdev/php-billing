@@ -18,19 +18,19 @@ namespace hiqdev\php\billing\target;
 abstract class AbstractTarget implements TargetInterface
 {
     /**
-     * @var int|string
-     */
-    protected $id;
-
-    /**
      * @var string
      */
     protected $type;
 
-    public function __construct($id, $type)
+    /**
+     * @var int|string
+     */
+    protected $id;
+
+    public function __construct($type, $id)
     {
-        $this->id = $id;
         $this->type = $type;
+        $this->id = $id;
     }
 
     /**

@@ -15,7 +15,7 @@ namespace hiqdev\php\billing\type;
  */
 class TypeCreationDto
 {
-    public $id;
-
     public $name;
+
+    public $id;
 }

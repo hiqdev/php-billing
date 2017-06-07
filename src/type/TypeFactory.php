@@ -20,6 +20,6 @@ class TypeFactory implements TypeFactoryInterface
      */
     public function create(TypeCreationDto $dto)
     {
-        return new Type($dto->id, $dto->name);
+        return new Type($dto->name, $dto->id);
     }
 }
