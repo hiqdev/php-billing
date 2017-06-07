@@ -22,11 +22,6 @@ use hiqdev\php\billing\target\TargetInterface;
  */
 class Plan implements PlanInterface
 {
-    //  public static function instantiate($row)
-    //  {
-    //      return new static;
-    //  }
-
     /**
      * @var int
      */

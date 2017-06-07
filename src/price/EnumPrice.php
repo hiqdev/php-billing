@@ -30,20 +30,20 @@ class EnumPrice extends AbstractPrice
     protected $unit;
 
     /**
-     * @var MoneyInterface[]
+     * @var MoneyInterface[] amount => price
      */
-    protected $enum;
+    protected $prices;
 
     public function __construct(
                             $id,
         TypeInterface       $type,
         TargetInterface     $target,
         UnitInterface       $unit,
-        array               $enum
+        array               $prices
     ) {
         parent::__construct($id, $type, $target);
         $this->unit = $unit;
-        $this->enum = $enum;
+        $this->prices = $prices;
     }
 
     /**
@@ -60,13 +60,13 @@ class EnumPrice extends AbstractPrice
     public function calculatePrice(QuantityInterface $quantity)
     {
         $usage = (string) $this->calculateUsage($quantity)->getQuantity();
-        foreach ($this->enum as $value => $price) {
+        foreach ($this->prices as $value => $price) {
             if ((string)$value === (string)$usage) {
                 return $price;
             }
         }
 
-        throw new FailedCalculatePriceException('not enumed quantity');
+        throw new FailedCalculatePriceException('not enumed quantity: ' . $usage);
     }
 
     /**

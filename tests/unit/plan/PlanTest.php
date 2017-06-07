@@ -25,62 +25,15 @@ class PlanTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
-        $this->seller   = new Customer(1, 'seller');
-        $this->customer = new Customer(2, 'client', $this->seller);
-        $this->purchase = new Type('certificate_purchase');
-        $this->renewal  = new Type('certificate_renewal');
-        $this->rapidssl = new Target('certificate_type', 'rapidssl_standard');
-        $this->verisign = new Target('certificate_type', 'verisign_standard');
-        $this->money    = Money::USD(15);
-        $this->types = [
-            'purchase'  => $this->purchase,
-            'renewal'   => $this->renewal,
-        ];
-        $this->targets = [
-            'rapidssl'  => $this->rapidssl,
-            'verisign'  => $this->verisign,
-        ];
-        $this->prices   = [
-            'purchase_rapidssl' => [
-                1 => Money::USD(1129),
-                2 => Money::USD(1219),
-                3 => Money::USD(1309),
-            ],
-            'renewal_rapidssl' => [
-                1 => Money::USD(1125),
-                2 => Money::USD(1215),
-                3 => Money::USD(1305),
-            ],
-            'purchase_verisign' => [
-                1 => Money::USD(2129),
-                2 => Money::USD(2219),
-                3 => Money::USD(2309),
-            ],
-            'renewal_verisign' => [
-                1 => Money::USD(2125),
-                2 => Money::USD(2215),
-                3 => Money::USD(2305),
-            ],
-        ];
-        $prices = [];
-        foreach ($this->types as $typeName => $type) {
-            foreach ($this->targets as $targetName => $target) {
-                $prices[] = new EnumPrice(null, $type, $target, Unit::year(), $this->getPrices($typeName, $targetName));
-            }
-        }
-        $this->plan = new Plan(null, 'Test Certificate Plan', $this->seller, $prices);
-    }
-
-    public function getPrices($typeName, $targetName) {
-        return $this->prices[$typeName . '_' . $targetName];
+        $this->plan = CertificatePlan::get();
     }
 
     public function testCalculateCharge()
     {
-        foreach ($this->types as $typeName => $type) {
-            foreach ($this->targets as $targetName => $target) {
+        foreach ($this->plan->types as $typeName => $type) {
+            foreach ($this->plan->targets as $targetName => $target) {
                 foreach ([1, 2, 3] as $years) {
-                    $price = $this->getPrices($typeName, $targetName)[$years];
+                    $price = $this->plan->getRawPrices($typeName, $targetName)[$years];
                     $this->checkCharge($type, $target, $years, $price);
                 }
             }
