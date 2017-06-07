@@ -38,11 +38,11 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->target   = new Target(1, 'server');
-        $this->type     = new Type(3, 'server_traf');
+        $this->target   = new Target('server', 1);
+        $this->type     = new Type('server_traf');
         $this->quantity = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
-        $this->price    = new SinglePrice(5, $this->target, $this->type, $this->quantity, $this->money);
+        $this->price    = new SinglePrice(null, $this->type, $this->target, $this->quantity, $this->money);
     }
 
     protected function tearDown()

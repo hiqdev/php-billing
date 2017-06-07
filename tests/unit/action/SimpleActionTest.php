@@ -12,7 +12,6 @@ namespace hiqdev\php\billing\tests\unit;
 
 use DateTime;
 use hiqdev\php\billing\charge\Charge;
-use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\action\SimpleAction;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -42,18 +41,16 @@ class SimpleActionTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->customer = new Customer(1, 'test', 'seller');
-        $this->target   = new Target(2, 'server');
-        $this->type     = new Type(4, 'server_traf');
+        $this->type     = new Type('server_traf');
+        $this->target   = new Target('server', 2);
         $this->prepaid  = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
-        $this->now      = new DateTime('now');
-        $this->price    = new SinglePrice(5, $this->target, $this->type, $this->prepaid, $this->money);
+        $this->price    = new SinglePrice(5, $this->type, $this->target, $this->prepaid, $this->money);
     }
 
     protected function createAction($quantity)
     {
-        return new SimpleAction($this->customer, $this->target, $quantity, $this->now, $this->type);
+        return new SimpleAction(null, $this->type, $this->target, $quantity);
     }
 
     protected function tearDown()
