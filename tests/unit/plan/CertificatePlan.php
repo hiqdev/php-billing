@@ -51,38 +51,49 @@ class CertificatePlan extends Plan
             'verisign'  => $this->verisign,
         ];
         $this->rawPrices = [
-            'purchase_rapidssl' => [
+            $this->getRawPriceKey($this->purchase, $this->rapidssl) => [
                 1 => Money::USD(1129),
                 2 => Money::USD(1219),
                 3 => Money::USD(1309),
             ],
-            'renewal_rapidssl' => [
+            $this->getRawPriceKey($this->renewal, $this->rapidssl) => [
                 1 => Money::USD(1125),
                 2 => Money::USD(1215),
                 3 => Money::USD(1305),
             ],
-            'purchase_verisign' => [
+            $this->getRawPriceKey($this->purchase, $this->verisign) => [
                 1 => Money::USD(2129),
                 2 => Money::USD(2219),
                 3 => Money::USD(2309),
             ],
-            'renewal_verisign' => [
+            $this->getRawPriceKey($this->renewal, $this->verisign) => [
                 1 => Money::USD(2125),
                 2 => Money::USD(2215),
                 3 => Money::USD(2305),
             ],
         ];
         $prices = [];
-        foreach ($this->types as $typeName => $type) {
-            foreach ($this->targets as $targetName => $target) {
-                $prices[] = new EnumPrice(null, $type, $target, Unit::year(), $this->getRawPrices($typeName, $targetName));
+        foreach ($this->types as $type) {
+            foreach ($this->targets as $target) {
+                $prices[] = new EnumPrice(null, $type, $target, Unit::year(), $this->getRawPrices($type, $target));
             }
         }
         parent::__construct(null, 'Test Certificate Plan', $this->seller, $prices);
     }
 
-    public function getRawPrices($typeName, $targetName)
+    public function getRawPrice($action)
     {
-        return $this->rawPrices[$typeName . '_' . $targetName];
+        $years = $action->getQuantity()->convert(Unit::year())->getQuantity();
+        return $this->getRawPrices($action->getType(), $action->getTarget())[$years];
+    }
+
+    public function getRawPrices($type, $target)
+    {
+        return $this->rawPrices[$this->getRawPriceKey($type, $target)];
+    }
+
+    public function getRawPriceKey($type, $target)
+    {
+        return $type->getName() . '-' . $target->getUniqId();
     }
 }

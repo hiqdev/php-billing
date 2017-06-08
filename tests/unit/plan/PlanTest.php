@@ -23,29 +23,30 @@ class PlanTest extends \PHPUnit\Framework\TestCase
 
     public function testCalculateCharge()
     {
-        foreach ($this->plan->types as $typeName => $type) {
-            foreach ($this->plan->targets as $targetName => $target) {
+        foreach ($this->plan->types as $type) {
+            foreach ($this->plan->targets as $target) {
                 foreach ([1, 2, 3] as $years) {
-                    $price = $this->plan->getRawPrices($typeName, $targetName)[$years];
-                    $this->checkCharge($type, $target, $years, $price);
+                    $usage = Quantity::month($years * 12);
+                    $action = new SimpleAction(null, $type, $target, $usage);
+                    $charges = $this->plan->calculateCharges($action);
+                    $this->checkCharges($action, $charges);
                 }
             }
         }
     }
 
-    public function checkCharge($type, $target, $years, $sum)
+    public function checkCharges($action, $charges)
     {
-        $usage = Quantity::month($years * 12);
-        $action = new SimpleAction(null, $type, $target, $usage);
-        $charges = $this->plan->calculateCharges($action);
         $this->assertTrue(is_array($charges));
         $this->assertSame(1, count($charges));
         $charge = reset($charges);
+        $price = $this->plan->getRawPrice($action);
+        $usage = $action->getQuantity();
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
-        $this->assertSame($type, $charge->getType());
-        $this->assertSame($target, $charge->getTarget());
-        $this->assertTrue($sum->equals($charge->getSum()));
+        $this->assertSame($action->getType(), $charge->getType());
+        $this->assertSame($action->getTarget(), $charge->getTarget());
+        $this->assertTrue($price->equals($charge->getSum()));
         $this->assertTrue($usage->equals($charge->getUsage()));
     }
 }
