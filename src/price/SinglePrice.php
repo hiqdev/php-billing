@@ -50,6 +50,16 @@ class SinglePrice extends AbstractPrice
         $this->price    = $price;
     }
 
+    public function getPrepaid()
+    {
+        return $this->prepaid;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -48,6 +48,14 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return $this->type;

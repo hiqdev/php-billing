@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\tests\unit;
+namespace hiqdev\php\billing\tests\unit\price;
 
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;

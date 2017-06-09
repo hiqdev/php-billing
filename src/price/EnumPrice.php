@@ -46,6 +46,16 @@ class EnumPrice extends AbstractPrice
         $this->prices = $prices;
     }
 
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
     /**
      * {@inheritdoc}
      */
