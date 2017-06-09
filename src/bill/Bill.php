@@ -11,8 +11,10 @@
 namespace hiqdev\php\billing\bill;
 
 use DateTime;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
