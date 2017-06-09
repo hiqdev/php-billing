@@ -10,9 +10,9 @@
 
 namespace hiqdev\php\billing\tests\unit;
 
+use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\PriceCreationDto;
 use hiqdev\php\billing\price\PriceFactory;
-use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -77,7 +77,7 @@ class PriceFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function createDto(array $data)
     {
-        $dto = new PriceCreationDto;
+        $dto = new PriceCreationDto();
         foreach ($data as $key => $value) {
             $dto->{$key} = $value;
         }

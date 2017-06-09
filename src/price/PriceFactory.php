@@ -27,7 +27,8 @@ class PriceFactory implements PriceFactoryInterface
         'single'    => SinglePrice::class,
     ];
 
-    public function __construct(array $types = []) {
+    public function __construct(array $types = [])
+    {
         $this->types = $types;
     }
 

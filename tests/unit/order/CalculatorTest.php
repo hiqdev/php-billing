@@ -10,12 +10,11 @@
 
 namespace hiqdev\php\billing\tests\unit\order;
 
-use hiqdev\php\billing\tests\unit\plan\PlanTest;
-use hiqdev\php\billing\tests\unit\plan\SimplePlanRepository;
 use hiqdev\php\billing\action\SimpleAction;
-use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\Order;
+use hiqdev\php\billing\tests\unit\plan\PlanTest;
+use hiqdev\php\billing\tests\unit\plan\SimplePlanRepository;
 use hiqdev\php\units\Quantity;
 
 class CalculatorTest extends PlanTest

@@ -11,6 +11,9 @@
 namespace hiqdev\php\billing\sale;
 
 use DateTime;
+use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\target\TargetInterface;
 
 /**
  * Sale.
@@ -45,7 +48,7 @@ class Sale implements SaleInterface
     protected $time;
 
     public function __construct(
-                            $id
+                            $id,
         TargetInterface     $target,
         CustomerInterface   $customer,
         PlanInterface       $plan,
