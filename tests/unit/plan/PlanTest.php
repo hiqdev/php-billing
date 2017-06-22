@@ -21,7 +21,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->plan = CertificatePlan::get();
     }
 
-    public function testCalculateCharge()
+    public function testCalculateCharges()
     {
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
