@@ -101,6 +101,11 @@ class Charge implements \JsonSerializable
         return $this->sum;
     }
 
+    public function getPrice()
+    {
+        return $this->sum->divide($this->usage);
+    }
+
     public function jsonSerialize()
     {
         return get_object_vars($this);
