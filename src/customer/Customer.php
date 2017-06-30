@@ -54,6 +54,11 @@ class Customer extends AbstractTarget implements CustomerInterface
         return $this->login;
     }
 
+    public function getSeller()
+    {
+        return $this->seller;
+    }
+
     public function jsonSerialize()
     {
         return get_object_vars($this);
