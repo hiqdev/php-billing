@@ -80,7 +80,7 @@ class Charge implements \JsonSerializable
     public static function sumUp(array $charges)
     {
         if (empty($charges)) {
-            return new Charge(null, null, null, null, Quantity::item(0), Money::USD(0));
+            return new self(null, null, null, null, Quantity::item(0), Money::USD(0));
         }
 
         $first = array_unshift($charges);
@@ -90,6 +90,7 @@ class Charge implements \JsonSerializable
 
         throw new \Exception('Not implemented Charge::sumUp');
     }
+
     public function getId()
     {
         return $this->id;
@@ -124,7 +125,7 @@ class Charge implements \JsonSerializable
     {
         $usage = $this->usage->getQuantity();
 
-        return $usage ? $this->sum->divide($usage) : $this->sum ;
+        return $usage ? $this->sum->divide($usage) : $this->sum;
     }
 
     public function jsonSerialize()
