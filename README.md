@@ -14,6 +14,8 @@ Billing library providing:
 - tariff plans management
 - one-time, metered and recurring charging
 
+[Additional doccumentation is available in Russian](docs/ru.md)
+
 ## Installation
 
 The preferred way to install this library is through [composer](http://getcomposer.org/download/).
