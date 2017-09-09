@@ -11,10 +11,15 @@
 
 Billing library providing:
 
-- tariff plans management
+- customers with subscriptions
+- orders with actions
+- tariff plans with prices
+- bills with charges
+- calculator and aggregator
+
 - one-time, metered and recurring charging
 
-[Additional doccumentation is available in Russian](docs/ru.md)
+Please see [additional doccumentation in russian](docs/ru.md).
 
 ## Installation
 
