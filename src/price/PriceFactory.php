@@ -52,7 +52,7 @@ class PriceFactory implements PriceFactoryInterface
 
     public function createEnumPrice(PriceCreationDto $dto)
     {
-        return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->unit, $dto->prices);
+        return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->unit, $dto->currency, $dto->prices);
     }
 
     public function createSinglePrice(PriceCreationDto $dto)

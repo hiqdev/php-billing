@@ -14,6 +14,8 @@ use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 use hiqdev\php\units\UnitInterface;
+use Money\Currency;
+use Money\Money;
 
 /**
  * Enum Price:
@@ -30,6 +32,11 @@ class EnumPrice extends AbstractPrice
     protected $unit;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @var MoneyInterface[] amount => price
      */
     protected $prices;
@@ -39,10 +46,12 @@ class EnumPrice extends AbstractPrice
         TypeInterface       $type,
         TargetInterface     $target,
         UnitInterface       $unit,
+        Currency            $currency,
         array               $prices
     ) {
         parent::__construct($id, $type, $target);
         $this->unit = $unit;
+        $this->currency = $currency;
         $this->prices = $prices;
     }
 
@@ -59,20 +68,12 @@ class EnumPrice extends AbstractPrice
     /**
      * {@inheritdoc}
      */
-    public function calculateSum(QuantityInterface $quantity)
-    {
-        return $this->calculatePrice($quantity);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function calculatePrice(QuantityInterface $quantity)
     {
         $usage = (string) $this->calculateUsage($quantity)->getQuantity();
         foreach ($this->prices as $value => $price) {
             if ((string) $value === (string) $usage) {
-                return $price;
+                return new Money($price, $this->currency);
             }
         }
 

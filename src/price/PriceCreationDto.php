@@ -32,5 +32,7 @@ class PriceCreationDto
 
     public $unit;
 
+    public $currency;
+
     public $prices;
 }
