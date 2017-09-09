@@ -18,19 +18,19 @@ namespace hiqdev\php\billing\target;
 abstract class AbstractTarget implements TargetInterface
 {
     /**
-     * @var string
-     */
-    protected $type;
-
-    /**
      * @var int|string
      */
     protected $id;
 
-    public function __construct($type, $id)
+    /**
+     * @var string
+     */
+    protected $type;
+
+    public function __construct($id, $type)
     {
-        $this->type = $type;
         $this->id = $id;
+        $this->type = $type;
     }
 
     /**
@@ -62,7 +62,9 @@ abstract class AbstractTarget implements TargetInterface
      */
     public function equals(TargetInterface $other)
     {
-        return $this->getUniqId() === $other->getUniqId();
+        return $this->id === null && $other->id === null
+            ? (string)$this->type === (string)$other->type
+            : (string)$this->id   === (string)$other->id;
     }
 
     public function jsonSerialize()
