@@ -26,6 +26,6 @@ class SimpleAction extends AbstractAction
     public function isApplicable(PriceInterface $price)
     {
         return $this->target->equals($price->getTarget()) &&
-            $this->getType()->equals($price->getType());
+            $this->type->equals($price->getType());
     }
 }
