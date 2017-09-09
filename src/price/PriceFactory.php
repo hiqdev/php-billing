@@ -47,6 +47,7 @@ class PriceFactory implements PriceFactoryInterface
             throw new FailedCreatePriceException("unknown class: $class");
         }
         $method = $this->creators[$class];
+
         return $this->{$method}($dto);
     }
 

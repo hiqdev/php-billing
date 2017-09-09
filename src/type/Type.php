@@ -47,8 +47,8 @@ class Type implements TypeInterface
     public function equals(TypeInterface $other)
     {
         return $this->id === null && $other->id === null
-            ? (string)$this->name === (string)$other->name
-            : (string)$this->id   === (string)$other->id;
+            ? (string) $this->name === (string) $other->name
+            : (string) $this->id === (string) $other->id;
     }
 
     public function jsonSerialize()

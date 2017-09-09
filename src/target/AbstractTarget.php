@@ -63,8 +63,8 @@ abstract class AbstractTarget implements TargetInterface
     public function equals(TargetInterface $other)
     {
         return $this->id === null && $other->id === null
-            ? (string)$this->type === (string)$other->type
-            : (string)$this->id   === (string)$other->id;
+            ? (string) $this->type === (string) $other->type
+            : (string) $this->id === (string) $other->id;
     }
 
     public function jsonSerialize()

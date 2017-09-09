@@ -84,6 +84,7 @@ class CertificatePlan extends Plan
     public function getRawPrice($action)
     {
         $years = $action->getQuantity()->convert(Unit::year())->getQuantity();
+
         return $this->getRawPrices($action->getType(), $action->getTarget())[$years];
     }
 
