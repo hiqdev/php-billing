@@ -13,6 +13,8 @@ namespace hiqdev\php\billing\tests\unit\plan;
 use hiqdev\php\billing\action\SimpleAction;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\Unit;
+use Money\Money;
 
 class PlanTest extends \PHPUnit\Framework\TestCase
 {
@@ -40,13 +42,14 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_array($charges));
         $this->assertSame(1, count($charges));
         $charge = reset($charges);
-        $price = $this->plan->getRawPrice($action);
-        $usage = $action->getQuantity();
+        $price = Money::USD($this->plan->getRawPrice($action));
+        $usage = $action->getQuantity()->convert(Unit::year());
+        $sum = $price->multiply($usage->getQuantity());
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
         $this->assertSame($action->getType(), $charge->getType());
         $this->assertSame($action->getTarget(), $charge->getTarget());
-        $this->assertTrue($price->equals($charge->getSum()));
         $this->assertTrue($usage->equals($charge->getUsage()));
+        $this->assertTrue($sum->equals($charge->getSum()));
     }
 }

@@ -16,7 +16,7 @@ use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Unit;
-use Money\Money;
+use Money\Currency;
 
 class CertificatePlan extends Plan
 {
@@ -38,10 +38,10 @@ class CertificatePlan extends Plan
         }
         $this->seller   = new Customer(1, 'seller');
         $this->customer = new Customer(2, 'client', $this->seller);
-        $this->purchase = new Type('certificate_purchase');
-        $this->renewal  = new Type('certificate_renewal');
-        $this->rapidssl = new Target('certificate_type', 'rapidssl_standard');
-        $this->verisign = new Target('certificate_type', 'verisign_standard');
+        $this->purchase = new Type(1, 'certificate_purchase');
+        $this->renewal  = new Type(2, 'certificate_renewal');
+        $this->rapidssl = new Target('rapidssl_standard', 'certificate_type');
+        $this->verisign = new Target('verisign_standard', 'certificate_type');
         $this->types = [
             'purchase'  => $this->purchase,
             'renewal'   => $this->renewal,
@@ -52,30 +52,30 @@ class CertificatePlan extends Plan
         ];
         $this->rawPrices = [
             $this->getRawPriceKey($this->purchase, $this->rapidssl) => [
-                1 => Money::USD(1129),
-                2 => Money::USD(1219),
-                3 => Money::USD(1309),
+                1 => 1129,
+                2 => 1219,
+                3 => 1309,
             ],
             $this->getRawPriceKey($this->renewal, $this->rapidssl) => [
-                1 => Money::USD(1125),
-                2 => Money::USD(1215),
-                3 => Money::USD(1305),
+                1 => 1125,
+                2 => 1215,
+                3 => 1305,
             ],
             $this->getRawPriceKey($this->purchase, $this->verisign) => [
-                1 => Money::USD(2129),
-                2 => Money::USD(2219),
-                3 => Money::USD(2309),
+                1 => 2129,
+                2 => 2219,
+                3 => 2309,
             ],
             $this->getRawPriceKey($this->renewal, $this->verisign) => [
-                1 => Money::USD(2125),
-                2 => Money::USD(2215),
-                3 => Money::USD(2305),
+                1 => 2125,
+                2 => 2215,
+                3 => 2305,
             ],
         ];
         $prices = [];
         foreach ($this->types as $type) {
             foreach ($this->targets as $target) {
-                $prices[] = new EnumPrice(null, $type, $target, Unit::year(), $this->getRawPrices($type, $target));
+                $prices[] = new EnumPrice(null, $type, $target, Unit::year(), new Currency('USD'), $this->getRawPrices($type, $target));
             }
         }
         parent::__construct(null, 'Test Certificate Plan', $this->seller, $prices);

@@ -48,6 +48,7 @@ class PriceFactoryTest extends \PHPUnit\Framework\TestCase
             'type'      => $this->enum,
             'target'    => $this->target,
             'unit'      => $this->unit,
+            'currency'  => $this->price->getCurrency(),
             'prices'    => $this->prices,
         ]));
         $this->assertInstanceOf(EnumPrice::class, $price);
