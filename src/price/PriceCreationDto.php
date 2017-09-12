@@ -34,5 +34,5 @@ class PriceCreationDto
 
     public $currency;
 
-    public $prices;
+    public $sums;
 }

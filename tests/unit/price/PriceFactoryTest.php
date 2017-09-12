@@ -18,6 +18,7 @@ use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
+use Money\Currency;
 use Money\Money;
 
 /**
@@ -34,7 +35,7 @@ class PriceFactoryTest extends \PHPUnit\Framework\TestCase
         $this->prepaid  = Quantity::gigabyte(10);
         $this->price    = Money::USD(15);
         $this->unit     = Unit::gigabyte();
-        $this->prices   = [];
+        $this->sums     = [];
         $this->factory  = new PriceFactory([
             $this->single->getName()    => SinglePrice::class,
             $this->enum->getName()      => EnumPrice::class,
@@ -49,14 +50,15 @@ class PriceFactoryTest extends \PHPUnit\Framework\TestCase
             'target'    => $this->target,
             'unit'      => $this->unit,
             'currency'  => $this->price->getCurrency(),
-            'prices'    => $this->prices,
+            'sums'      => $this->sums,
         ]));
         $this->assertInstanceOf(EnumPrice::class, $price);
         $this->assertSame($this->id,        $price->getId());
         $this->assertSame($this->enum,      $price->getType());
         $this->assertSame($this->target,    $price->getTarget());
         $this->assertSame($this->unit,      $price->getUnit());
-        $this->assertSame($this->prices,    $price->getPrices());
+        $this->assertSame($this->sums,      $price->getSums());
+        $this->assertSame($this->price->getCurrency(),  $price->getCurrency());
     }
 
     public function testSinglePrice()

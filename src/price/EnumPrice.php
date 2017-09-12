@@ -19,6 +19,7 @@ use Money\Money;
 
 /**
  * Enum Price:
+ * - holds sums list: amount => total sum for the quantity NOT price per unit
  * - listed quantities only else exception.
  * @see PriceInterface
  *
@@ -37,9 +38,9 @@ class EnumPrice extends AbstractPrice
     protected $currency;
 
     /**
-     * @var MoneyInterface[] amount => price
+     * @var array quantity => total sum for the quantity
      */
-    protected $prices;
+    protected $sums;
 
     public function __construct(
                             $id,
@@ -47,12 +48,12 @@ class EnumPrice extends AbstractPrice
         TargetInterface     $target,
         UnitInterface       $unit,
         Currency            $currency,
-        array               $prices
+        array               $sums
     ) {
         parent::__construct($id, $type, $target);
         $this->unit = $unit;
         $this->currency = $currency;
-        $this->prices = $prices;
+        $this->sums = $sums;
     }
 
     public function getUnit()
@@ -60,9 +61,30 @@ class EnumPrice extends AbstractPrice
         return $this->unit;
     }
 
-    public function getPrices()
+    public function getCurrency()
     {
-        return $this->prices;
+        return $this->currency;
+    }
+
+    public function getSums()
+    {
+        return $this->sums;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function calculateSum(QuantityInterface $quantity)
+    {
+        $usage = $this->calculateUsage($quantity)->getQuantity();
+
+        foreach ($this->sums as $value => $price) {
+            if ((string) $value === (string) $usage) {
+                return new Money($price, $this->currency);
+            }
+        }
+
+        throw new FailedCalculatePriceException('not enumed quantity: ' . $usage);
     }
 
     /**
@@ -70,14 +92,17 @@ class EnumPrice extends AbstractPrice
      */
     public function calculatePrice(QuantityInterface $quantity)
     {
-        $usage = (string) $this->calculateUsage($quantity)->getQuantity();
-        foreach ($this->prices as $value => $price) {
-            if ((string) $value === (string) $usage) {
-                return new Money($price, $this->currency);
-            }
+        $sum = $this->calculateSum($quantity);
+        if ($sum === null) {
+            return null;
         }
 
-        throw new FailedCalculatePriceException('not enumed quantity: ' . $usage);
+        $usage = $this->calculateUsage($quantity);
+        if ($usage === null) {
+            return null;
+        }
+
+        return $sum->divide($usage->getQuantity());
     }
 
     /**
