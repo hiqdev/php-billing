@@ -52,12 +52,32 @@ class Sale implements SaleInterface
         TargetInterface     $target,
         CustomerInterface   $customer,
         PlanInterface       $plan,
-        DateTime            $time
+        DateTime            $time = null
     ) {
         $this->id = $id;
         $this->target = $target;
         $this->customer = $customer;
         $this->plan = $plan;
         $this->time = $time;
+    }
+
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    public function getPlan()
+    {
+        return $this->plan;
+    }
+
+    public function getTime()
+    {
+        return $this->time;
     }
 }
