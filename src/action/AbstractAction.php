@@ -14,6 +14,7 @@ use DateTime;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -53,14 +54,21 @@ abstract class AbstractAction implements ActionInterface
     protected $customer;
 
     /**
+     * @var SaleInterface
+     */
+    protected $sale;
+
+    /**
      * @var DateTime
      */
     protected $time;
 
     /**
-     * @param CustomerInterface $customer
+     * @param TypeInterface $type
      * @param TargetInterface $target
      * @param QuantityInterface $quantity
+     * @param CustomerInterface $customer
+     * @param SaleInterface $sale
      * @param DateTime $time
      */
     public function __construct(
@@ -69,6 +77,7 @@ abstract class AbstractAction implements ActionInterface
         TargetInterface     $target,
         QuantityInterface   $quantity,
         CustomerInterface   $customer = null,
+        SaleInterface       $sale = null,
         DateTime            $time = null
     ) {
         $this->id       = $id;
@@ -76,6 +85,7 @@ abstract class AbstractAction implements ActionInterface
         $this->target   = $target;
         $this->quantity = $quantity;
         $this->customer = $customer;
+        $this->sale     = $sale;
         $this->time     = $time;
     }
 
@@ -122,9 +132,36 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
+    public function getSale()
+    {
+        return $this->sale;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTime()
     {
         return $this->time;
+    }
+
+    public function setId($id)
+    {
+        if ($this->id === $id) {
+            return;
+        }
+        if ($this->id !== null) {
+            throw new \Exception('cannot reassign action id');
+        }
+        $this->id = $id;
+    }
+
+    public function setSale(SaleInterface $sale)
+    {
+        if ($this->sale !== null) {
+            throw new \Exception('cannot reassign sale for action');
+        }
+        $this->sale = $sale;
     }
 
     /**
@@ -154,7 +191,7 @@ abstract class AbstractAction implements ActionInterface
             return null;
         }
 
-        return new Charge(null, $this, $price->getType(), $price->getTarget(), $usage, $sum);
+        return new Charge(null, $this, $price, $this->getTarget(), $usage, $sum);
     }
 
     /**
