@@ -10,9 +10,10 @@
 
 namespace hiqdev\php\billing\charge;
 
+use DateTime;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
@@ -37,9 +38,9 @@ class Charge implements \JsonSerializable
     protected $action;
 
     /**
-     * @var TypeInterface
+     * @var PriceInterface
      */
-    protected $type;
+    protected $price;
 
     /**
      * @var TargetInterface
@@ -56,20 +57,27 @@ class Charge implements \JsonSerializable
      */
     protected $sum;
 
+    /**
+     * @var DateTime
+     */
+    protected $time;
+
     public function __construct(
                             $id,
         ActionInterface     $action = null,
-        TypeInterface       $type = null,
+        PriceInterface      $price = null,
         TargetInterface     $target = null,
         QuantityInterface   $usage,
-        Money               $sum
+        Money               $sum,
+        DateTime            $time = null
     ) {
         $this->id       = $id;
         $this->action   = $action;
-        $this->type     = $type;
+        $this->price    = $price;
         $this->target   = $target;
         $this->usage    = $usage;
         $this->sum      = $sum;
+        $this->time     = $time;
     }
 
     /**
@@ -106,9 +114,12 @@ class Charge implements \JsonSerializable
         return $this->target;
     }
 
-    public function getType()
+    /**
+     * @return PriceInterface
+     */
+    public function getPrice()
     {
-        return $this->type;
+        return $this->price;
     }
 
     public function getUsage()
@@ -121,11 +132,16 @@ class Charge implements \JsonSerializable
         return $this->sum;
     }
 
-    public function getPrice()
+    public function calculatePrice()
     {
         $usage = $this->usage->getQuantity();
 
         return $usage ? $this->sum->divide($usage) : $this->sum;
+    }
+
+    public function getTime()
+    {
+        return $this->time;
     }
 
     public function jsonSerialize()
