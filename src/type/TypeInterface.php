@@ -18,6 +18,12 @@ namespace hiqdev\php\billing\type;
 interface TypeInterface extends \JsonSerializable
 {
     /**
+     * Returns type id.
+     * @return int|string
+     */
+    public function getId();
+
+    /**
      * Returns type name.
      * @return string
      */

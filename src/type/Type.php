@@ -36,6 +36,14 @@ class Type implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return $this->name;
