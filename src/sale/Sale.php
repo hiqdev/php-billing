@@ -61,6 +61,11 @@ class Sale implements SaleInterface
         $this->time = $time;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getTarget()
     {
         return $this->target;
@@ -79,5 +84,16 @@ class Sale implements SaleInterface
     public function getTime()
     {
         return $this->time;
+    }
+
+    public function setId($id)
+    {
+        if ($this->id === $id) {
+            return;
+        }
+        if ($this->id !== null) {
+            throw new \Exception('cannot reassign sale id');
+        }
+        $this->id = $id;
     }
 }
