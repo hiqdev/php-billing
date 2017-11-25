@@ -63,11 +63,30 @@ class Plan implements PlanInterface
     }
 
     /**
+     * @return int|string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return PriceInterface[]
      */
     public function getPrices()
     {
         return $this->prices;
+    }
+
+    /**
+     * @param PriceInterface[] $prices
+     */
+    public function setPrices(array $prices)
+    {
+        if ($this->prices !== []) {
+            throw new \Exception('cannot reassign prices for plan');
+        }
+        $this->prices = $prices;
     }
 
     /**
