@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -29,20 +30,30 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     protected $id;
 
     /**
-     * @var Type
+     * @var TypeInterface
      */
     protected $type;
 
     /**
-     * @var Target
+     * @var TargetInterface
      */
     protected $target;
 
-    public function __construct($id, TypeInterface $type, TargetInterface $target)
-    {
+    /**
+     * @var PlanInterface
+     */
+    protected $plan;
+
+    public function __construct(
+                            $id,
+        TypeInterface       $type,
+        TargetInterface     $target,
+        PlanInterface       $plan = null
+    ) {
         $this->id = $id;
         $this->type = $type;
         $this->target = $target;
+        $this->plan = $plan;
     }
 
     /**
@@ -67,6 +78,14 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     public function getTarget()
     {
         return $this->target;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPlan()
+    {
+        return $this->plan;
     }
 
     /**

@@ -26,6 +26,8 @@ class PriceCreationDto
 
     public $target;
 
+    public $plan;
+
     public $prepaid;
 
     public $price;

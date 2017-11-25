@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Quantity;
@@ -42,10 +43,11 @@ class SinglePrice extends AbstractPrice
                             $id,
         TypeInterface       $type,
         TargetInterface     $target,
+        PlanInterface       $plan = null,
         QuantityInterface   $prepaid,
         Money               $price
     ) {
-        parent::__construct($id, $type, $target);
+        parent::__construct($id, $type, $target, $plan);
         $this->prepaid  = $prepaid;
         $this->price    = $price;
     }

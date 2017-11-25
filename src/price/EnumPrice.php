@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -46,11 +47,12 @@ class EnumPrice extends AbstractPrice
                             $id,
         TypeInterface       $type,
         TargetInterface     $target,
+        PlanInterface       $plan = null,
         UnitInterface       $unit,
         Currency            $currency,
         array               $sums
     ) {
-        parent::__construct($id, $type, $target);
+        parent::__construct($id, $type, $target, $plan);
         $this->unit = $unit;
         $this->currency = $currency;
         $this->sums = $sums;
