@@ -42,7 +42,7 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
         $this->type     = new Type('server_traf');
         $this->quantity = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
-        $this->price    = new SinglePrice(null, $this->type, $this->target, $this->quantity, $this->money);
+        $this->price    = new SinglePrice(null, $this->type, $this->target, null, $this->quantity, $this->money);
     }
 
     protected function tearDown()

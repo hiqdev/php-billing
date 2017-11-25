@@ -44,7 +44,7 @@ class SimpleActionTest extends \PHPUnit\Framework\TestCase
         $this->target   = new Target('server', 2);
         $this->prepaid  = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
-        $this->price    = new SinglePrice(5, $this->type, $this->target, $this->prepaid, $this->money);
+        $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
     }
 
     protected function createAction($quantity)
@@ -63,7 +63,7 @@ class SimpleActionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
         $this->assertSame($this->target, $charge->getTarget());
-        $this->assertSame($this->type, $charge->getType());
+        $this->assertSame($this->type, $charge->getPrice()->getType());
         $this->assertEquals($this->prepaid, $charge->getUsage());
         $this->assertEquals($this->money->multiply($this->prepaid->getQuantity()), $charge->getSum());
     }

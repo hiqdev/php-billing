@@ -46,7 +46,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $usage = $action->getQuantity()->convert(Unit::year());
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
-        $this->assertSame($action->getType(), $charge->getType());
+        $this->assertSame($action->getType(), $charge->getPrice()->getType());
         $this->assertSame($action->getTarget(), $charge->getTarget());
         $this->assertTrue($usage->equals($charge->getUsage()));
         $this->assertTrue($sum->equals($charge->getSum()));

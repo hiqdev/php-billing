@@ -75,7 +75,7 @@ class CertificatePlan extends Plan
         $prices = [];
         foreach ($this->types as $type) {
             foreach ($this->targets as $target) {
-                $prices[] = new EnumPrice(null, $type, $target, Unit::year(), new Currency('USD'), $this->getRawPrices($type, $target));
+                $prices[] = new EnumPrice(null, $type, $target, null, Unit::year(), new Currency('USD'), $this->getRawPrices($type, $target));
             }
         }
         parent::__construct(null, 'Test Certificate Plan', $this->seller, $prices);
