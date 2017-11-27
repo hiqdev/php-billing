@@ -144,6 +144,17 @@ class Charge implements \JsonSerializable
         return $this->time;
     }
 
+    public function setId($id)
+    {
+        if ($this->id === $id) {
+            return;
+        }
+        if ($this->id !== null) {
+            throw new \Exception('cannot reassign sale id');
+        }
+        $this->id = $id;
+    }
+
     public function jsonSerialize()
     {
         return get_object_vars($this);
