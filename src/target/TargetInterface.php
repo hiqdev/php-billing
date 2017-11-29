@@ -46,5 +46,5 @@ interface TargetInterface extends EntityInterface
      * E.g.: client:login, client:1, server:T1, server:9.
      * @return string
      */
-    public function getUniqId();
+    public function getUniqueId();
 }

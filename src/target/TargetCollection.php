@@ -73,9 +73,9 @@ class TargetCollection implements TargetInterface
     /**
      * @return string
      */
-    public function getUniqId()
+    public function getUniqueId()
     {
-        return $this->getType() . ':' . $this->getId();
+        return implode(':', array_filter([$this->getType(), $this->getId()]));
     }
 
     /**

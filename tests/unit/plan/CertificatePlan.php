@@ -95,6 +95,6 @@ class CertificatePlan extends Plan
 
     public function getRawPriceKey($type, $target)
     {
-        return $type->getName() . '-' . $target->getUniqId();
+        return $type->getName() . '-' . $target->getUniqueId();
     }
 }
