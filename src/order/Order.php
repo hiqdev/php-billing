@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 
 /**
@@ -37,6 +38,11 @@ class Order implements OrderInterface
         $this->id = $id;
         $this->customer = $customer;
         $this->actions = $actions;
+    }
+
+    public static function fromAction(ActionInterface $action)
+    {
+        return new static(null, $action->getCustomer(), [$action]);
     }
 
     public function getId()
