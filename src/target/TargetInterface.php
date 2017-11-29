@@ -16,7 +16,7 @@ use hiqdev\php\billing\EntityInterface;
  * Target - any thing participating in billing as:.
  *
  * - object being charged (domain, server, certificate)
- * - product being sold (premium product, ???)
+ * - product being sold (premium product, domain zone, certificate type)
  *
  * Provides target's:
  *
@@ -41,8 +41,8 @@ interface TargetInterface extends EntityInterface
     public function getType();
 
     /**
-     * Get target unique ID, globally unique. Used for comparison.
-     * Must be formed as $type:$id.
+     * Get target unique ID, unique among all targets. Used for comparison.
+     * Could be formed like $type:$id.
      * E.g.: client:login, client:1, server:T1, server:9.
      * @return string
      */
