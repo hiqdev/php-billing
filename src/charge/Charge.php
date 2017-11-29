@@ -25,7 +25,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Charge implements \JsonSerializable
+class Charge implements ChargeInterface
 {
     /**
      * @var int
