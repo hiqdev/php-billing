@@ -49,6 +49,11 @@ class Type implements TypeInterface
         return $this->name;
     }
 
+    public function getUniqueId()
+    {
+        return $this->getId() ?: $this->getName();
+    }
+
     /**
      * @return string
      */

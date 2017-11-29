@@ -83,7 +83,7 @@ class Bill implements EntityInterface
         DateTime    $time,
         Money       $sum,
         Quantity    $quantity,
-        Customer    $customer = null,
+        Customer    $customer,
         Target      $target = null,
         Plan        $plan = null
     ) {
@@ -95,6 +95,20 @@ class Bill implements EntityInterface
         $this->customer = $customer;
         $this->target   = $target;
         $this->plan     = $plan;
+    }
+
+    public function getUniqueId()
+    {
+        $parts = [
+            $this->customer->getUniqueId(),
+            $this->sum->getCurrency()->getCode(),
+            $this->target ? $this->target->getUniqueId() : null,
+            $this->type->getUniqueId(),
+            $this->time->format('c'),
+            $this->plan ? $this->plan->getUniqueId() : null,
+        ];
+
+        return implode('-', array_filter($parts));
     }
 
     public function jsonSerialize()

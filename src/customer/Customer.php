@@ -49,6 +49,14 @@ class Customer extends AbstractTarget implements CustomerInterface
     /**
      * {@inheritdoc}
      */
+    public function getUniqueId()
+    {
+        return $this->getId() ?: $this->getLogin();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLogin()
     {
         return $this->login;

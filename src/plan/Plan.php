@@ -62,6 +62,11 @@ class Plan implements PlanInterface
         $this->prices = $prices;
     }
 
+    public function getUniqueId()
+    {
+        return $this->getId();
+    }
+
     /**
      * @return int|string
      */
