@@ -33,7 +33,7 @@ class Aggregator implements AggregatorInterface
             if (is_array($charge)) {
                 $others = $this->aggregateCharges($charge);
                 $bills = $this->aggregateBills($bills, $others);
-            } else if ($charge instanceof ChargeInterface) {
+            } elseif ($charge instanceof ChargeInterface) {
                 $bill = $this->createBill($charge);
                 $bills = $this->aggregateBills($bills, [$bill]);
             } else {

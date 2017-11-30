@@ -22,11 +22,23 @@ use hiqdev\php\billing\target\TargetInterface;
  */
 interface SaleInterface
 {
+    /**
+     * @return TargetInterface
+     */
     public function getTarget();
 
+    /**
+     * @return CustomerInterface
+     */
     public function getCustomer();
 
+    /**
+     * @return PlanInterface
+     */
     public function getPlan();
 
+    /**
+     * @return DateTime
+     */
     public function getTime();
 }

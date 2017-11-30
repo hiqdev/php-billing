@@ -12,8 +12,8 @@ namespace hiqdev\php\billing\charge;
 
 use DateTime;
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
