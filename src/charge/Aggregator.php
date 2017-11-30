@@ -74,7 +74,8 @@ class Aggregator implements AggregatorInterface
             $this->aggregateQuantity($first->getQuantity(), $other->getQuantity()),
             $first->getCustomer(),
             $first->getTarget(),
-            $first->getPlan()
+            $first->getPlan(),
+            array_merge($first->getCharges(), $other->getCharges())
         );
     }
 
@@ -98,7 +99,8 @@ class Aggregator implements AggregatorInterface
             $this->generalizeQuantity($charge),
             $this->generalizeCustomer($charge),
             $this->generalizeTarget($charge),
-            $this->generalizePlan($charge)
+            $this->generalizePlan($charge),
+            [$charge]
         );
     }
 

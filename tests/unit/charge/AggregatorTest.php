@@ -49,6 +49,10 @@ class AggregatorTest extends PlanTest
             $this->assertTrue($sum->equals($bill->getSum()));
             $this->assertEquals(6, $bill->getQuantity()->getQuantity());
             $this->assertEquals(3, count($bill->getCharges()));
+            foreach ($bill->getCharges() as $charge) {
+                $this->assertTrue($bill->getType()->equals($charge->getPrice()->getType()));
+                $this->assertTrue($bill->getTarget()->equals($charge->getTarget()));
+            }
         }
     }
 }
