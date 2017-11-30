@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\bill;
 
-use DateTime;
+use DateTimeImmutable;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
@@ -37,7 +37,7 @@ class Bill implements BillInterface
     protected $type;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      */
     protected $time;
 
@@ -79,7 +79,7 @@ class Bill implements BillInterface
     public function __construct(
                             $id,
         TypeInterface       $type,
-        DateTime            $time,
+        DateTimeImmutable   $time,
         Money               $sum,
         QuantityInterface   $quantity,
         CustomerInterface   $customer,
@@ -136,7 +136,7 @@ class Bill implements BillInterface
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
     public function getTime()
     {

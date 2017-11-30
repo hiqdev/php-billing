@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\target;
 
-use DateTime;
+use DateTimeImmutable;
 
 /**
  * Renewable Target - object being charged: domain, server
@@ -21,12 +21,12 @@ use DateTime;
 class RenewableTarget extends AbstractTarget
 {
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      */
     protected $expires;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      */
     protected $initialExpires;
 

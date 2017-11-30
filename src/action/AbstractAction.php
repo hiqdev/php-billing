@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\action;
 
-use DateTime;
+use DateTimeImmutable;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
@@ -59,7 +59,7 @@ abstract class AbstractAction implements ActionInterface
     protected $sale;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      */
     protected $time;
 
@@ -69,7 +69,7 @@ abstract class AbstractAction implements ActionInterface
      * @param QuantityInterface $quantity
      * @param CustomerInterface $customer
      * @param SaleInterface $sale
-     * @param DateTime $time
+     * @param DateTimeImmutable $time
      */
     public function __construct(
                             $id,
@@ -78,7 +78,7 @@ abstract class AbstractAction implements ActionInterface
         QuantityInterface   $quantity,
         CustomerInterface   $customer = null,
         SaleInterface       $sale = null,
-        DateTime            $time = null
+        DateTimeImmutable   $time = null
     ) {
         $this->id       = $id;
         $this->type     = $type;

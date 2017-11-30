@@ -59,7 +59,7 @@ interface ActionInterface extends \JsonSerializable
 
     /**
      * Returns time ot this action.
-     * @return DateTime
+     * @return DateTimeImmutable
      */
     public function getTime();
 }

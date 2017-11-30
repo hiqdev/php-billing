@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\sale;
 
-use DateTime;
+use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -43,7 +43,7 @@ class Sale implements SaleInterface
     protected $plan;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      */
     protected $time;
 
@@ -52,7 +52,7 @@ class Sale implements SaleInterface
         TargetInterface     $target,
         CustomerInterface   $customer,
         PlanInterface       $plan,
-        DateTime            $time = null
+        DateTimeImmutable   $time = null
     ) {
         $this->id = $id;
         $this->target = $target;

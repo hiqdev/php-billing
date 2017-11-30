@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\sale;
 
-use DateTime;
+use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -38,7 +38,7 @@ interface SaleInterface
     public function getPlan();
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
     public function getTime();
 }

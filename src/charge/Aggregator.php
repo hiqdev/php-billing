@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\charge;
 
-use DateTime;
+use DateTimeImmutable;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -111,7 +111,7 @@ class Aggregator implements AggregatorInterface
 
     public function generalizeTime(ChargeInterface $charge)
     {
-        $date = new DateTime($charge->getTime());
+        $date = new DateTimeImmutable($charge->getTime());
 
         return $date->modify('first day of this month midnight');
     }
