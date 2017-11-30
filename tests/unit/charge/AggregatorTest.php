@@ -35,6 +35,7 @@ class AggregatorTest extends PlanTest
                 }
             }
         }
+        shuffle($actions);
         $this->order = new Order(null, $this->plan->customer, $actions);
     }
 
