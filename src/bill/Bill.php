@@ -15,7 +15,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\type\Type;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -119,6 +119,9 @@ class Bill implements BillInterface
         return $quantity ? $this->sum->divide($quantity) : $this->sum;
     }
 
+    /**
+     * @return int|string
+     */
     public function getId()
     {
         return $this->id;
@@ -133,6 +136,14 @@ class Bill implements BillInterface
     }
 
     /**
+     * @return DateTime
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
      * @return TargetInterface
      */
     public function getTarget()
@@ -141,11 +152,11 @@ class Bill implements BillInterface
     }
 
     /**
-     * @return PriceInterface
+     * @return CustomerInterface
      */
-    public function getPrice()
+    public function getCustomer()
     {
-        return $this->price;
+        return $this->customer;
     }
 
     /**
@@ -162,6 +173,22 @@ class Bill implements BillInterface
     public function getSum()
     {
         return $this->sum;
+    }
+
+    /**
+     * @return PlanInterface
+     */
+    public function getPlan()
+    {
+        return $this->plan;
+    }
+
+    /**
+     * @return ChargeInterface[]
+     */
+    public function getCharges()
+    {
+        return $this->charges;
     }
 
     public function jsonSerialize()

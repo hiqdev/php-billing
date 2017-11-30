@@ -10,7 +10,15 @@
 
 namespace hiqdev\php\billing\bill;
 
+use DateTime;
+use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\units\QuantityInterface;
+use Money\Money;
 
 /**
  * Bill Interface.
@@ -20,9 +28,37 @@ use hiqdev\php\billing\EntityInterface;
 interface BillInterface extends EntityInterface
 {
     /**
-     * Calculates charges for given action.
-     * @param ActionInterface $action
+     * @return TypeInterface
+     */
+    public function getType();
+
+    /**
+     * @return TargetInterface
+     */
+    public function getTarget();
+
+    /**
+     * @return CustomerInterface
+     */
+    public function getCustomer();
+
+    /**
+     * @return QuantityInterface
+     */
+    public function getQuantity();
+
+    /**
+     * @return Money
+     */
+    public function getSum();
+
+    /**
+     * @return PlanInterface
+     */
+    public function getPlan();
+
+    /**
      * @return ChargeInterface[]
      */
-    public function calculateCharges(ActionInterface $action);
+    public function getCharges();
 }
