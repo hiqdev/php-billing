@@ -25,7 +25,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Bill implements EntityInterface
+class Bill implements BillInterface
 {
     /**
      * @var integer
