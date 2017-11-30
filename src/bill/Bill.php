@@ -11,13 +11,12 @@
 namespace hiqdev\php\billing\bill;
 
 use DateTime;
-use hiqdev\php\billing\charge\Charge;
-use hiqdev\php\billing\customer\Customer;
-use hiqdev\php\billing\EntityInterface;
-use hiqdev\php\billing\plan\Plan;
-use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\Type;
-use hiqdev\php\units\Quantity;
+use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
 /**
@@ -28,12 +27,12 @@ use Money\Money;
 class Bill implements BillInterface
 {
     /**
-     * @var integer
+     * @var int|string
      */
     protected $id;
 
     /**
-     * @var Type
+     * @var TypeInterface
      */
     protected $type;
 
@@ -48,22 +47,22 @@ class Bill implements BillInterface
     protected $sum;
 
     /**
-     * @var Quantity
+     * @var QuantityInterface
      */
     protected $quantity;
 
     /**
-     * @var Customer
+     * @var CustomerInterface
      */
     protected $customer;
 
     /**
-     * @var Target
+     * @var TargetInterface
      */
     protected $target;
 
     /**
-     * @var Plan
+     * @var PlanInterface
      */
     protected $plan;
 
@@ -73,19 +72,20 @@ class Bill implements BillInterface
     protected $isFinished;
 
     /**
-     * @var Charge[]
+     * @var ChargeInterface[]
      */
     protected $charges = [];
 
     public function __construct(
-                    $id,
-        Type        $type,
-        DateTime    $time,
-        Money       $sum,
-        Quantity    $quantity,
-        Customer    $customer,
-        Target      $target = null,
-        Plan        $plan = null
+                            $id,
+        TypeInterface       $type,
+        DateTime            $time,
+        Money               $sum,
+        QuantityInterface   $quantity,
+        CustomerInterface   $customer,
+        TargetInterface     $target = null,
+        PlanInterface       $plan = null,
+        array               $charges = []
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -95,6 +95,7 @@ class Bill implements BillInterface
         $this->customer = $customer;
         $this->target   = $target;
         $this->plan     = $plan;
+        $this->charges  = $charges;
     }
 
     public function getUniqueId()
@@ -109,6 +110,58 @@ class Bill implements BillInterface
         ];
 
         return implode('-', array_filter($parts));
+    }
+
+    public function calculatePrice()
+    {
+        $quantity = $this->quantity->getQuantity();
+
+        return $quantity ? $this->sum->divide($quantity) : $this->sum;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return TypeInterface
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return TargetInterface
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @return PriceInterface
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return QuantityInterface
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getSum()
+    {
+        return $this->sum;
     }
 
     public function jsonSerialize()
