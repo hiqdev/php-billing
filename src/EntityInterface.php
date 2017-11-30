@@ -17,4 +17,8 @@ namespace hiqdev\php\billing;
  */
 interface EntityInterface extends \JsonSerializable
 {
+    /**
+     * @return int|string
+     */
+    public function getId();
 }
