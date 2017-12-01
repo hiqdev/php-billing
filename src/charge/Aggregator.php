@@ -53,7 +53,7 @@ class Aggregator implements AggregatorInterface
     public function aggregateBills(array $bills, array $others)
     {
         foreach ($others as $bill) {
-            $uid = $bill->getUniqueId();
+            $uid = $bill->getUniqueString();
             if (empty($bills[$uid])) {
                 $bills[$uid] = $bill;
             } else {

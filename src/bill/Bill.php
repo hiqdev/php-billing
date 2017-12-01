@@ -98,7 +98,7 @@ class Bill implements BillInterface
         $this->charges  = $charges;
     }
 
-    public function getUniqueId()
+    public function getUniqueString()
     {
         $parts = [
             $this->customer->getUniqueId(),
