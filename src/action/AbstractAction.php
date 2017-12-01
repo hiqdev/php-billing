@@ -20,7 +20,7 @@ use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 
 /**
- * Chargable Action.
+ * Chargeable Action.
  *
  * @see ActionInterface
  *

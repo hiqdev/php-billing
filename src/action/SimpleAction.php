@@ -14,7 +14,7 @@ use hiqdev\php\billing\price\PriceInterface;
 
 /**
  * Simple Action.
- * Charges only same target and same type.
+ * Applicable when same target and same type.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
