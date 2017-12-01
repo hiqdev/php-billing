@@ -88,15 +88,15 @@ class Bill implements BillInterface
         array               $charges = [],
         bool                $isFinished = false
     ) {
-        $this->id       = $id;
-        $this->type     = $type;
-        $this->time     = $time;
-        $this->sum      = $sum;
-        $this->quantity = $quantity;
-        $this->customer = $customer;
-        $this->target   = $target;
-        $this->plan     = $plan;
-        $this->charges  = $charges;
+        $this->id           = $id;
+        $this->type         = $type;
+        $this->time         = $time;
+        $this->sum          = $sum;
+        $this->quantity     = $quantity;
+        $this->customer     = $customer;
+        $this->target       = $target;
+        $this->plan         = $plan;
+        $this->charges      = $charges;
         $this->isFinished   = $isFinished;
     }
 
