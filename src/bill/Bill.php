@@ -69,7 +69,7 @@ class Bill implements BillInterface
     /**
      * @var bool
      */
-    protected $isFinished;
+    protected $isFinished = false;
 
     /**
      * @var ChargeInterface[]
@@ -85,7 +85,8 @@ class Bill implements BillInterface
         CustomerInterface   $customer,
         TargetInterface     $target = null,
         PlanInterface       $plan = null,
-        array               $charges = []
+        array               $charges = [],
+        bool                $isFinished = false
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -96,6 +97,7 @@ class Bill implements BillInterface
         $this->target   = $target;
         $this->plan     = $plan;
         $this->charges  = $charges;
+        $this->isFinished   = $isFinished;
     }
 
     public function getUniqueString()
@@ -189,6 +191,14 @@ class Bill implements BillInterface
     public function getCharges()
     {
         return $this->charges;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsFinished()
+    {
+        return $this->isFinished;
     }
 
     public function jsonSerialize()
