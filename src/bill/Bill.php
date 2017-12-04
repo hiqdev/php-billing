@@ -129,6 +129,17 @@ class Bill implements BillInterface
         return $this->id;
     }
 
+    public function setId($id)
+    {
+        if ($this->id === $id) {
+            return;
+        }
+        if ($this->id !== null) {
+            throw new \Exception('cannot reassign bill id');
+        }
+        $this->id = $id;
+    }
+
     /**
      * @return TypeInterface
      */
