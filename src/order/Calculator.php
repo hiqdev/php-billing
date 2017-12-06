@@ -30,7 +30,10 @@ class Calculator implements CalculatorInterface
         $charges = [];
         foreach ($order->getActions() as $actionKey => $action) {
             if (empty($plans[$actionKey])) {
+                /* XXX not sure... think more
                 throw new FailedFindPlan();
+                 */
+                continue;
             }
             $charges[$actionKey] = $plans[$actionKey]->calculateCharges($action);
         }
