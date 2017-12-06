@@ -64,12 +64,18 @@ abstract class AbstractAction implements ActionInterface
     protected $time;
 
     /**
+     * @var ActionInterface
+     */
+    protected $parent;
+
+    /**
      * @param TypeInterface $type
      * @param TargetInterface $target
      * @param QuantityInterface $quantity
      * @param CustomerInterface $customer
      * @param SaleInterface $sale
      * @param DateTimeImmutable $time
+     * @param ActionInterface $parent
      */
     public function __construct(
                             $id,
@@ -78,7 +84,8 @@ abstract class AbstractAction implements ActionInterface
         QuantityInterface   $quantity,
         CustomerInterface   $customer = null,
         SaleInterface       $sale = null,
-        DateTimeImmutable   $time = null
+        DateTimeImmutable   $time = null,
+        ActionInterface     $parent = null
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -87,6 +94,12 @@ abstract class AbstractAction implements ActionInterface
         $this->customer = $customer;
         $this->sale     = $sale;
         $this->time     = $time;
+        $this->parent   = $parent;
+    }
+
+    public function createSubaction(CustomerInterface $customer)
+    {
+        return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->sale, $this->time, $this);
     }
 
     /**
@@ -145,6 +158,22 @@ abstract class AbstractAction implements ActionInterface
         return $this->time;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasParent()
+    {
+        return $this->parent !== null;
+    }
+
     public function setId($id)
     {
         if ($this->id === $id) {
@@ -171,6 +200,7 @@ abstract class AbstractAction implements ActionInterface
     {
         return get_object_vars($this);
     }
+
 
     /**
      * {@inheritdoc}
