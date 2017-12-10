@@ -18,7 +18,7 @@ use hiqdev\php\billing\price\PriceInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SimpleAction extends AbstractAction
+class Action extends AbstractAction
 {
     /**
      * {@inheritdoc}

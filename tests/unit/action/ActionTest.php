@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit;
 
-use hiqdev\php\billing\action\SimpleAction;
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -21,7 +21,7 @@ use Money\Money;
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SimpleActionTest extends \PHPUnit\Framework\TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SinglePrice
@@ -29,7 +29,7 @@ class SimpleActionTest extends \PHPUnit\Framework\TestCase
     protected $price;
 
     /**
-     * @var SimpleAction
+     * @var Action
      */
     protected $action;
 
@@ -49,7 +49,7 @@ class SimpleActionTest extends \PHPUnit\Framework\TestCase
 
     protected function createAction($quantity)
     {
-        return new SimpleAction(null, $this->type, $this->target, $quantity);
+        return new Action(null, $this->type, $this->target, $quantity);
     }
 
     protected function tearDown()

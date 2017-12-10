@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\order;
 
-use hiqdev\php\billing\action\SimpleAction;
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Aggregator;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\Order;
@@ -31,7 +31,7 @@ class AggregatorTest extends PlanTest
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
                 foreach ([1, 2, 3] as $years) {
-                    $actions[] = new SimpleAction(null, $type, $target, Quantity::year($years), $this->plan->customer);
+                    $actions[] = new Action(null, $type, $target, Quantity::year($years), $this->plan->customer);
                 }
             }
         }

@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\plan;
 
-use hiqdev\php\billing\action\SimpleAction;
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
@@ -29,7 +29,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
             foreach ($this->plan->targets as $target) {
                 foreach ([1, 2, 3] as $years) {
                     $usage = Quantity::month($years * 12);
-                    $action = new SimpleAction(null, $type, $target, $usage);
+                    $action = new Action(null, $type, $target, $usage);
                     $charges = $this->plan->calculateCharges($action);
                     $this->checkCharges($action, $charges);
                 }

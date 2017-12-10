@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\price;
 
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -27,7 +28,7 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
     protected $price;
 
     /**
-     * @var SimpleAction
+     * @var Action
      */
     protected $action;
 
