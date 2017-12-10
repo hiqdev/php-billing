@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -19,6 +20,8 @@ use hiqdev\php\units\QuantityInterface;
 /**
  * Price.
  * @see PriceInterface
+ * By default Price is applicable when same target and same type as Action.
+ * But it can be different e.g. same price for all targets when certain type.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -119,6 +122,15 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
             'type' => $this->type,
             'target' => $this->target,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isApplicable(ActionInterface $action)
+    {
+        return $this->target->equals($action->getTarget()) &&
+               $this->type->equals($action->getType());
     }
 
     /**

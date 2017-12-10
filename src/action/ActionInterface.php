@@ -18,8 +18,7 @@ use hiqdev\php\billing\target\TargetInterface;
  * Chargeable Action Interface.
  *
  * Action knows which Prices are applicable.
- * Actions form hierarchy.
- * Action implies type.
+ * Action calculates charges.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -50,6 +49,12 @@ interface ActionInterface extends \JsonSerializable
      * @return TargetInterface
      */
     public function getTarget();
+
+    /**
+     * Returns type ot this action.
+     * @return TypeInterface
+     */
+    public function getType();
 
     /**
      * Returns quantity ot this action.

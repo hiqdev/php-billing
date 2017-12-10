@@ -14,7 +14,8 @@ use hiqdev\php\billing\price\PriceInterface;
 
 /**
  * Simple Action.
- * Applicable when same target and same type.
+ * It is applicable when price is applicable.
+ * But it can be different see Coupon.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -25,7 +26,6 @@ class Action extends AbstractAction
      */
     public function isApplicable(PriceInterface $price)
     {
-        return $this->target->equals($price->getTarget()) &&
-            $this->type->equals($price->getType());
+        return $price->isApplicable($this);
     }
 }
