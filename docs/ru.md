@@ -43,7 +43,7 @@ Action - действие, подлежащее оплате.
 Продажа (или подписка) представляет привязку клиента к купленной услуге/объекту ([Target]) по такому-то тарифу.
 Также может хранить другие данные описывающие конкрентную продажу: например дату окончания услуги.
 
-[Action]:       /src/action/SimpleAction.php
+[Action]:       /src/action/Action.php
 [Bill]:         /src/bill/Bill.php
 [Calculator]:   /src/order/Calculator.php
 [Charge]:       /src/charge/Charge.php
@@ -53,3 +53,4 @@ Action - действие, подлежащее оплате.
 [SinglePrice]:  /src/price/SinglePrice.php
 [EnumPrice]:    /src/price/EnumPrice.php
 [Sale]:         /src/sale/Sale.php
+[Target]:       /src/target/Target.php
