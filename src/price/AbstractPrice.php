@@ -129,8 +129,8 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
      */
     public function isApplicable(ActionInterface $action)
     {
-        return $this->target->equals($action->getTarget()) &&
-               $this->type->equals($action->getType());
+        return $action->getTarget()->equals($this->getTarget()) &&
+               $action->getType()->equals($this->getType());
     }
 
     /**
