@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\plan;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
 
 /**
  * Plan Interface.

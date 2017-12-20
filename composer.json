@@ -43,6 +43,7 @@
         }
     ],
     "require": {
+        "php": "^7.1",
         "moneyphp/money": "^3.0",
         "hiqdev/php-units": "dev-master"
     },

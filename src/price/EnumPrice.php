@@ -76,7 +76,7 @@ class EnumPrice extends AbstractPrice
     /**
      * {@inheritdoc}
      */
-    public function calculateSum(QuantityInterface $quantity)
+    public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $usage = $this->calculateUsage($quantity)->getQuantity();
 
@@ -92,7 +92,7 @@ class EnumPrice extends AbstractPrice
     /**
      * {@inheritdoc}
      */
-    public function calculatePrice(QuantityInterface $quantity)
+    public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         $sum = $this->calculateSum($quantity);
         if ($sum === null) {
@@ -110,7 +110,7 @@ class EnumPrice extends AbstractPrice
     /**
      * {@inheritdoc}
      */
-    public function calculateUsage(QuantityInterface $quantity)
+    public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface
     {
         return $quantity->convert($this->unit);
     }

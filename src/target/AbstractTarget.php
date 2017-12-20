@@ -60,7 +60,7 @@ abstract class AbstractTarget implements TargetInterface
     /**
      * @return bool
      */
-    public function equals(TargetInterface $other)
+    public function equals(TargetInterface $other): bool
     {
         return $this->id === null && $other->id === null
             ? (string) $this->type === (string) $other->type

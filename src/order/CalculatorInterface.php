@@ -10,10 +10,16 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\charge\Charge;
+
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface CalculatorInterface
 {
+    /**
+     * @param OrderInterface $order
+     * @return Charge[]
+     */
     public function calculateCharges(OrderInterface $order);
 }

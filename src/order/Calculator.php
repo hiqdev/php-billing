@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\billing\hiapi\plan\PlanRepository;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
 
 /**
@@ -17,16 +18,25 @@ use hiqdev\php\billing\plan\PlanRepositoryInterface;
  */
 class Calculator implements CalculatorInterface
 {
-    public $repository;
+    /**
+     * @var PlanRepositoryInterface|PlanRepository
+     */
+    private $planRepository;
 
-    public function __construct(PlanRepositoryInterface $repository)
+    /**
+     * @param PlanRepositoryInterface $planRepository
+     */
+    public function __construct(PlanRepositoryInterface $planRepository)
     {
-        $this->repository = $repository;
+        $this->planRepository = $planRepository;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function calculateCharges(OrderInterface $order)
     {
-        $plans = $this->repository->findByOrder($order);
+        $plans = $this->planRepository->findByOrder($order);
         $charges = [];
         foreach ($order->getActions() as $actionKey => $action) {
             if (empty($plans[$actionKey])) {

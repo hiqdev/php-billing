@@ -24,4 +24,9 @@ interface CustomerInterface extends TargetInterface
      * @return string
      */
     public function getLogin();
+
+    /**
+     * @return static
+     */
+    public function getSeller();
 }

@@ -16,6 +16,7 @@ use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
+use Money\Money;
 
 /**
  * Price.
@@ -95,7 +96,7 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
      * {@inheritdoc}
      * Default sum calculation method: sum = price * usage.
      */
-    public function calculateSum(QuantityInterface $quantity)
+    public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $usage = $this->calculateUsage($quantity);
         if ($usage === null) {
@@ -127,19 +128,9 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function isApplicable(ActionInterface $action)
+    public function isApplicable(ActionInterface $action): bool
     {
         return $action->getTarget()->equals($this->getTarget()) &&
                $action->getType()->equals($this->getType());
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function calculateUsage(QuantityInterface $quantity);
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function calculatePrice(QuantityInterface $action);
 }

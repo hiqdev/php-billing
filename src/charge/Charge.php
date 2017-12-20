@@ -14,7 +14,6 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -78,25 +77,6 @@ class Charge implements ChargeInterface
         $this->usage    = $usage;
         $this->sum      = $sum;
         $this->time     = $time;
-    }
-
-    /**
-     * Returns charge that is sum of given charges.
-     * @param Charge[] $charges
-     * @return Charge
-     */
-    public static function sumUp(array $charges)
-    {
-        if (empty($charges)) {
-            return new self(null, null, null, null, Quantity::item(0), Money::USD(0));
-        }
-
-        $first = array_unshift($charges);
-        if (empty($charges)) {
-            return $first;
-        }
-
-        throw new \Exception('Not implemented Charge::sumUp');
     }
 
     public function getId()

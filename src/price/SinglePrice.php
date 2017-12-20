@@ -65,7 +65,7 @@ class SinglePrice extends AbstractPrice
     /**
      * {@inheritdoc}
      */
-    public function calculateUsage(QuantityInterface $quantity)
+    public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface
     {
         $usage = $quantity->convert($this->prepaid->getUnit())->subtract($this->prepaid);
 
@@ -76,7 +76,7 @@ class SinglePrice extends AbstractPrice
      * {@inheritdoc}
      * Same price for any usage.
      */
-    public function calculatePrice(QuantityInterface $usage)
+    public function calculatePrice(QuantityInterface $usage): ?Money
     {
         return $this->price;
     }

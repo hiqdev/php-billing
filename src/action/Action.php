@@ -24,7 +24,7 @@ class Action extends AbstractAction
     /**
      * {@inheritdoc}
      */
-    public function isApplicable(PriceInterface $price)
+    public function isApplicable(PriceInterface $price): bool
     {
         return $price->isApplicable($this);
     }

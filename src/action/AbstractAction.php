@@ -12,7 +12,9 @@ namespace hiqdev\php\billing\action;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -26,7 +28,7 @@ use hiqdev\php\units\QuantityInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class AbstractAction implements ActionInterface
+abstract class AbstractAction implements ActionInterface, EntityInterface
 {
     /**
      * @var int
@@ -78,14 +80,14 @@ abstract class AbstractAction implements ActionInterface
      * @param ActionInterface $parent
      */
     public function __construct(
-                            $id,
-        TypeInterface       $type,
-        TargetInterface     $target,
-        QuantityInterface   $quantity,
-        CustomerInterface   $customer = null,
-        SaleInterface       $sale = null,
-        DateTimeImmutable   $time = null,
-        ActionInterface     $parent = null
+        $id,
+        TypeInterface $type,
+        TargetInterface $target,
+        QuantityInterface $quantity,
+        CustomerInterface $customer = null,
+        SaleInterface $sale = null,
+        DateTimeImmutable $time = null,
+        ActionInterface $parent = null
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -113,7 +115,7 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function getCustomer()
+    public function getCustomer(): CustomerInterface
     {
         return $this->customer;
     }
@@ -121,7 +123,7 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function getTarget()
+    public function getTarget(): TargetInterface
     {
         return $this->target;
     }
@@ -129,7 +131,7 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): TypeInterface
     {
         return $this->type;
     }
@@ -137,7 +139,7 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function getQuantity()
+    public function getQuantity(): QuantityInterface
     {
         return $this->quantity;
     }
@@ -153,7 +155,7 @@ abstract class AbstractAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function getTime()
+    public function getTime(): DateTimeImmutable
     {
         return $this->time;
     }
@@ -201,11 +203,11 @@ abstract class AbstractAction implements ActionInterface
         return get_object_vars($this);
     }
 
-
     /**
-     * {@inheritdoc}
+     * @param PriceInterface $price
+     * @return ChargeInterface|Charge|null
      */
-    public function calculateCharge(PriceInterface $price)
+    public function calculateCharge(PriceInterface $price): ?ChargeInterface
     {
         if (!$this->isApplicable($price)) {
             return null;
@@ -223,9 +225,4 @@ abstract class AbstractAction implements ActionInterface
 
         return new Charge(null, $this, $price, $this->getTarget(), $usage, $sum);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function isApplicable(PriceInterface $price);
 }
