@@ -17,7 +17,7 @@ interface AggregatorInterface
 {
     /**
      * Aggregates given charges to Bills.
-     * @param Charge[] $charge array (can be nested) of charges
+     * @param Charge[] $charges array (can be nested) of charges
      * @return Bill[]
      */
     public function aggregateCharges(array $charges);

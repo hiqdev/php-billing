@@ -81,7 +81,7 @@ class TargetCollection implements TargetInterface
     /**
      * @return bool
      */
-    public function equals(TargetInterface $other)
+    public function equals(TargetInterface $other): bool
     {
         return $this->getId() === null && $other->getId() === null
             ? !empty(array_intersect($this->types, static::takeTypes($other)))
