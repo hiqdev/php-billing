@@ -7,22 +7,24 @@ Then [charge]s can be aggregated to [bill]s with [aggregator].
 Billing operates such ideas:
 
 - [Action] - [customer]'s action of a [type] to a [target]
-- [Order]
+- [Order] - collection of [action]s
 - [Charge]
 - [Bill]
 - [Plan]
 - [Price]
 - [Customer]
-- [Sale]
-- [Target]
+- [Sale] - binds [customer] to [target] and [plan]
+- [Target] - object being charged in billing
 - [Type]
 - [Calculator]
 - [Aggregator]
 
 [Action]:       /src/action/Action.php
+[Aggregator]:   /src/charge/Aggregator.php
 [Bill]:         /src/bill/Bill.php
 [Calculator]:   /src/order/Calculator.php
 [Charge]:       /src/charge/Charge.php
+[Customer]:     /src/customer/Customer.php
 [Order]:        /src/order/Order.php
 [Plan]:         /src/plan/Plan.php
 [Price]:        /src/price/AbstractPrice.php
