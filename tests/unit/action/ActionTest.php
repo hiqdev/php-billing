@@ -41,7 +41,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->type     = new Type('server_traf');
-        $this->target   = new Target('server', 2);
+        $this->target   = new Target(2, 'server');
         $this->prepaid  = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
         $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
