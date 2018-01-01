@@ -124,11 +124,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($targets as $k => $v) {
             foreach ($targets as $j => $w) {
-                if ($k === $j) {
-                    $this->assertTrue($v->matches($w));
-                } else {
-                    $this->checkSingleMatch($expect, $v, $w);
-                }
+                $this->checkSingleMatch($k === $j || $expect, $v, $w);
             }
         }
     }
