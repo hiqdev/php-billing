@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\unit\target;
 
 use hiqdev\php\billing\target\TargetCollection;
+use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\target\Target;
 
 /**
@@ -49,6 +50,36 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('server:',    $this->aserver->getUniqueId());
         $this->assertSame('server:1',   $this->server1->getUniqueId());
         $this->assertSame('server:2',   $this->server2->getUniqueId());
+    }
+
+    public function testEquals()
+    {
+        $all = [
+            $this->atarget, $this->target1, $this->target2,
+            $this->aserver, $this->server1, $this->server2,
+            $this->adomain, $this->domain1, $this->domain2,
+
+        ];
+        $copies = [];
+        foreach ($all as $k => $v) {
+            $copies[$k] = $this->copyTarget($v);
+        }
+
+        foreach ($all as $k => $v) {
+            foreach ($copies as $j => $w) {
+                $this->assertSame($j === $k, $v->equals($w));
+                $this->assertSame($j === $k, $w->equals($v));
+            }
+        }
+    }
+
+    protected function copyTarget(TargetInterface $target)
+    {
+        if ($target instanceof TargetCollection) {
+            return new TargetCollection($target->getTargets());
+        } else {
+            return new Target($target->getId(), $target->getType());
+        }
     }
 
     public function testMatches()
