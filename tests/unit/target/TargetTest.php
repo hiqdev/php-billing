@@ -25,6 +25,8 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->atarget = new Target(null,       null);
+        $this->target1 = new Target($this->id1, null);
+        $this->target2 = new Target($this->id2, null);
         $this->aserver = new Target(null,       'server');
         $this->server1 = new Target($this->id1, 'server');
         $this->server2 = new Target($this->id2, 'server');
@@ -37,6 +39,16 @@ class TargetTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
+    }
+
+    public function testGetUniqueId()
+    {
+        $this->assertSame(':',          $this->atarget->getUniqueId());
+        $this->assertSame(':1',         $this->target1->getUniqueId());
+        $this->assertSame(':2',         $this->target2->getUniqueId());
+        $this->assertSame('server:',    $this->aserver->getUniqueId());
+        $this->assertSame('server:1',   $this->server1->getUniqueId());
+        $this->assertSame('server:2',   $this->server2->getUniqueId());
     }
 
     public function testMatches()
