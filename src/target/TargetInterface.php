@@ -49,10 +49,17 @@ interface TargetInterface extends EntityInterface
     public function getUniqueId();
 
     /**
-     * Checks, whether current target is the same as $other
-     *
+     * Checks, whether this target mathes $other
      * @param TargetInterface $other
      * @return bool
      */
-    public function equals(TargetInterface $other): bool;
+    public function matches(TargetInterface $other): bool;
+
+    /**
+     * One way check matches. For internal use only.
+     * Use `matches`.
+     * @param TargetInterface $other
+     * @return bool
+     */
+    public function checkMatches(TargetInterface $other): bool;
 }

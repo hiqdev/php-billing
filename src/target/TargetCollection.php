@@ -81,11 +81,20 @@ class TargetCollection implements TargetInterface
     /**
      * @return bool
      */
-    public function equals(TargetInterface $other): bool
+    public function matches(TargetInterface $other): bool
     {
-        return $this->getId() === null && $other->getId() === null
-            ? !empty(array_intersect($this->types, static::takeTypes($other)))
-            : !empty(array_intersect($this->ids, static::takeIds($other)));
+        return $this->checkMatches($other);
+    }
+
+    public function checkMatches(TargetInterface $other): bool
+    {
+        foreach ($this->targets as $target) {
+            if ($target->checkMatches($other) || $other->checkMatches($target)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static function takeIds(TargetInterface $other)
