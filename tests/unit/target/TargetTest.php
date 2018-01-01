@@ -39,7 +39,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     {
     }
 
-    public function testEquals()
+    public function testMatches()
     {
         $atarget = new Target(null,       null);
         $aserver = new Target(null,       'server');
@@ -51,33 +51,52 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $domain2 = new Target($this->id2, 'domain');
         $domains = new TargetCollection([$this->domain1, $this->domain2]);
 
-        $this->checkEquals([
+        $this->checkMatches([
             $this->atarget, $atarget,
             $this->aserver, $aserver,
             $this->server1, $server1,
+            $this->servers, $servers,
         ]);
-        $this->checkEquals([
+        $this->checkMatches([
             $this->atarget, $atarget,
             $this->aserver, $aserver,
             $this->server2, $server2,
+            $this->servers, $servers,
         ]);
 
-        $this->assertFalse($this->server1->equals($this->server2));
-        $this->assertFalse($this->server2->equals($this->server1));
+        $this->checkDoesntMatch([
+            $this->server1, $this->server2, $this->adomain,
+        ]);
 
-        $this->assertFalse($this->server1->equals($this->domain1));
-        $this->assertFalse($this->server2->equals($this->domain2));
+        $this->checkDoesntMatch([
+            $this->domain1, $this->domain2, $this->servers,
+        ]);
     }
 
-    protected function checkEquals(array $targets, bool $equals = true) {
+    protected function checkDoesntMatch(array $targets)
+    {
+        $this->checkMatches($targets, false);
+    }
+
+    protected function checkMatches(array $targets, bool $expect = true)
+    {
         foreach ($targets as $k => $v) {
             foreach ($targets as $j => $w) {
                 if ($k === $j) {
-                    $this->assertTrue($v->equals($w));
+                    $this->assertTrue($v->matches($w));
                 } else {
-                    $this->assertSame($equals, $v->equals($w));
+                    $this->checkSingleMatch($expect, $v, $w);
                 }
             }
         }
+    }
+
+    protected function checkSingleMatch(bool $expect, $lhs, $rhs)
+    {
+        $check = $lhs->matches($rhs);
+        if ($check !== $expect) {
+            var_dump('no match', $expect, $lhs, $rhs);
+        }
+        $this->assertSame($expect, $check);
     }
 }
