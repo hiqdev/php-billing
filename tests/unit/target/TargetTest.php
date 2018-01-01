@@ -5,14 +5,14 @@
  * @link      https://github.com/hiqdev/php-billing
  * @package   php-billing
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\billing\tests\unit\target;
 
+use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\target\TargetCollection;
 use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\target\Target;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -58,7 +58,6 @@ class TargetTest extends \PHPUnit\Framework\TestCase
             $this->atarget, $this->target1, $this->target2,
             $this->aserver, $this->server1, $this->server2,
             $this->adomain, $this->domain1, $this->domain2,
-
         ];
         $copies = [];
         foreach ($all as $k => $v) {

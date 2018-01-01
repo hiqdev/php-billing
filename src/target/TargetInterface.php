@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/php-billing
  * @package   php-billing
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\billing\target;
@@ -49,7 +49,7 @@ interface TargetInterface extends EntityInterface
     public function getUniqueId();
 
     /**
-     * Checks, whether this target mathes $other
+     * Checks, whether this target mathes $other.
      * @param TargetInterface $other
      * @return bool
      */

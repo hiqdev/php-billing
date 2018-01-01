@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/php-billing
  * @package   php-billing
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\billing\action;
@@ -35,7 +35,7 @@ interface ActionInterface extends \JsonSerializable
      * @param PriceInterface $price
      * @return bool
      */
-    public function isApplicable(PriceInterface $price) : bool;
+    public function isApplicable(PriceInterface $price): bool;
 
     /**
      * Calculate charge for the given $price.
@@ -44,7 +44,7 @@ interface ActionInterface extends \JsonSerializable
      * @param PriceInterface $price
      * @return ChargeInterface|null
      */
-    public function calculateCharge(PriceInterface $price) : ?ChargeInterface;
+    public function calculateCharge(PriceInterface $price): ?ChargeInterface;
 
     /**
      * Returns client ot this action.
