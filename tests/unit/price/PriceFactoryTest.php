@@ -29,9 +29,9 @@ class PriceFactoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->id       = 'foo:bar';
-        $this->single   = new Type('server_traf');
-        $this->enum     = new Type('certificate_purchase');
-        $this->target   = new Target('server', 1);
+        $this->single   = new Type(null, 'server_traf');
+        $this->enum     = new Type(null, 'certificate_purchase');
+        $this->target   = new Target(1, 'server');
         $this->prepaid  = Quantity::gigabyte(10);
         $this->price    = Money::USD(15);
         $this->unit     = Unit::gigabyte();
