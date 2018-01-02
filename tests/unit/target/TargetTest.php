@@ -61,7 +61,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         ];
         $copies = [];
         foreach ($all as $k => $v) {
-            $copies[$k] = $this->copyTarget($v);
+            $copies[$k] = $this->copy($v);
         }
 
         foreach ($all as $k => $v) {
@@ -72,7 +72,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function copyTarget(TargetInterface $target)
+    protected function copy(TargetInterface $target)
     {
         if ($target instanceof TargetCollection) {
             return new TargetCollection($target->getTargets());
@@ -83,27 +83,17 @@ class TargetTest extends \PHPUnit\Framework\TestCase
 
     public function testMatches()
     {
-        $atarget = new Target(null,       null);
-        $aserver = new Target(null,       'server');
-        $server1 = new Target($this->id1, 'server');
-        $server2 = new Target($this->id2, 'server');
-        $servers = new TargetCollection([$this->server1, $this->server2]);
-        $adomain = new Target(null,       'domain');
-        $domain1 = new Target($this->id1, 'domain');
-        $domain2 = new Target($this->id2, 'domain');
-        $domains = new TargetCollection([$this->domain1, $this->domain2]);
-
         $this->checkMatches([
-            $this->atarget, $atarget,
-            $this->aserver, $aserver,
-            $this->server1, $server1,
-            $this->servers, $servers,
+            $this->atarget, $this->copy($this->atarget),
+            $this->aserver, $this->copy($this->aserver),
+            $this->server1, $this->copy($this->server1),
+            $this->servers, $this->copy($this->servers),
         ]);
         $this->checkMatches([
-            $this->atarget, $atarget,
-            $this->aserver, $aserver,
-            $this->server2, $server2,
-            $this->servers, $servers,
+            $this->atarget, $this->copy($this->atarget),
+            $this->aserver, $this->copy($this->aserver),
+            $this->server2, $this->copy($this->server2),
+            $this->servers, $this->copy($this->servers),
         ]);
 
         $this->checkDoesntMatch([
