@@ -18,19 +18,19 @@ namespace hiqdev\php\billing\type;
 class Type implements TypeInterface
 {
     /**
+     * @var int|string
+     */
+    protected $id;
+
+    /**
      * @var string
      */
     protected $name;
 
-    /**
-     * @var integer
-     */
-    protected $id;
-
-    public function __construct($name, $id = null)
+    public function __construct($id, $name = null)
     {
-        $this->name = $name;
         $this->id = $id;
+        $this->name = $name;
     }
 
     /**
