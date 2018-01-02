@@ -70,6 +70,11 @@ class TargetCollection implements TargetInterface
         return reset($this->targets);
     }
 
+    public function getTargets()
+    {
+        return $this->targets;
+    }
+
     /**
      * @return string
      */
