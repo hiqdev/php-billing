@@ -59,7 +59,13 @@ class Type implements TypeInterface
      */
     public function equals(TypeInterface $other)
     {
-        return $this->id === null && $other->id === null
+        return $this->id === $other->getId() &&
+            $this->name === $other->getName();
+    }
+
+    public function matches(TypeInterface $other)
+    {
+        return $this->id === null || $other->id === null
             ? (string) $this->name === (string) $other->name
             : (string) $this->id === (string) $other->id;
     }
