@@ -40,6 +40,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->server1_ = new Type($this->sid1,  Type::ANY);
         $this->serverN1 = new Type(Type::NONE,   $this->sop1);
         $this->server1N = new Type($this->sid1,  Type::NONE);
+        $this->serverN_ = new Type(Type::NONE,   Type::ANY);
+        $this->server_N = new Type(Type::ANY,    Type::NONE);
         $this->server22 = new Type($this->sid2,  $this->sop2);
         $this->server21 = new Type($this->sid2,  $this->sop1);
         $this->server_2 = new Type(Type::ANY,    $this->sop2);
@@ -103,6 +105,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     {
         $this->checkMatches([$this->server11, $this->server_1]);
         $this->checkMatches([$this->server11, $this->server1_, $this->server12, $this->server1N]);
+
+        $this->checkDoesntMatch([
+            $this->server1N, $this->server2N, $this->serverN_,
+            $this->serverN1, $this->serverN2, $this->server_N,
+        ]);
 
         $this->checkDoesntMatch([$this->server11, $this->server_2, $this->serverN1]);
 
