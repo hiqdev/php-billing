@@ -33,18 +33,18 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->server11 = new Type($this->sid1,  $this->sop1);
-        $this->server_1 = new Type(null,         $this->sop1);
-        $this->server1_ = new Type($this->sid1,  null);
+        $this->server_1 = new Type(Type::ANY,    $this->sop1);
+        $this->server1_ = new Type($this->sid1,  Type::ANY);
         $this->server22 = new Type($this->sid2,  $this->sop2);
-        $this->server_2 = new Type(null,         $this->sop2);
-        $this->server2_ = new Type($this->sid2,  null);
+        $this->server_2 = new Type(Type::ANY,    $this->sop2);
+        $this->server2_ = new Type($this->sid2,  Type::ANY);
 
         $this->domain11 = new Type($this->did1,  $this->dop1);
-        $this->domain_1 = new Type(null,         $this->dop1);
-        $this->domain1_ = new Type($this->did1,  null);
+        $this->domain_1 = new Type(Type::ANY,    $this->dop1);
+        $this->domain1_ = new Type($this->did1,  Type::ANY);
         $this->domain22 = new Type($this->did2,  $this->dop2);
-        $this->domain_2 = new Type(null,         $this->dop2);
-        $this->domain2_ = new Type($this->did2,  null);
+        $this->domain_2 = new Type(Type::ANY,    $this->dop2);
+        $this->domain2_ = new Type($this->did2,  Type::ANY);
     }
 
     protected function tearDown()
