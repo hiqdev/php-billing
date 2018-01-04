@@ -84,16 +84,10 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     public function testMatches()
     {
         $this->checkMatches([
-            $this->atarget, $this->copy($this->atarget),
-            $this->aserver, $this->copy($this->aserver),
-            $this->server1, $this->copy($this->server1),
-            $this->servers, $this->copy($this->servers),
+            $this->atarget, $this->aserver, $this->server1, $this->servers,
         ]);
         $this->checkMatches([
-            $this->atarget, $this->copy($this->atarget),
-            $this->aserver, $this->copy($this->aserver),
-            $this->server2, $this->copy($this->server2),
-            $this->servers, $this->copy($this->servers),
+            $this->atarget, $this->aserver, $this->server2, $this->servers,
         ]);
 
         $this->checkDoesntMatch([
@@ -105,16 +99,26 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    protected function checkDoesntMatch(array $targets)
+    protected function checkMatches(array $targets)
     {
-        $this->checkMatches($targets, false);
+        $all = $targets;
+        foreach ($targets as $target) {
+            $all[] = $this->copy($target);
+        }
+        foreach ($all as $k => $v) {
+            foreach ($all as $j => $w) {
+                $this->checkSingleMatch(true, $v, $w);
+            }
+        }
     }
 
-    protected function checkMatches(array $targets, bool $expect = true)
+    protected function checkDoesntMatch(array $targets)
     {
         foreach ($targets as $k => $v) {
             foreach ($targets as $j => $w) {
-                $this->checkSingleMatch($k === $j || $expect, $v, $w);
+                if ($k !== $j) {
+                    $this->checkSingleMatch(false, $v, $w);
+                }
             }
         }
     }
