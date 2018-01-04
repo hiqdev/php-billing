@@ -18,16 +18,20 @@ use hiqdev\php\billing\EntityInterface;
  * - object being charged (domain, server, certificate)
  * - product being sold (premium product, domain zone, certificate type)
  *
- * Provides target's:
+ * Provides:
  *
  * - type
  * - ID, unique only between targets of same type
  * - unique ID
+ * - target matching with ANY and NONE features
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface TargetInterface extends EntityInterface
 {
+    const ANY = null;
+    const NONE =  -1;
+
     /**
      * Get target ID, unique only between targets of the same type.
      * @return int|string

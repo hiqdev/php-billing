@@ -75,15 +75,15 @@ abstract class AbstractTarget implements TargetInterface
 
     public function checkMatches(TargetInterface $other): bool
     {
-        if ($this->id === null) {
-            if ($this->type === null) {
+        if ($this->id === self::ANY) {
+            if ($this->type === self::ANY) {
                 return true;
             }
 
             return (string) $this->type === (string) $other->getType();
         }
 
-        if ($this->type === null) {
+        if ($this->type === self::ANY) {
             return (string) $this->id === (string) $other->id;
         }
 

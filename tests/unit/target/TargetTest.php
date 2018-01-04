@@ -25,16 +25,16 @@ class TargetTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->atarget = new Target(null,       null);
-        $this->target1 = new Target($this->id1, null);
-        $this->target2 = new Target($this->id2, null);
-        $this->aserver = new Target(null,       'server');
-        $this->server1 = new Target($this->id1, 'server');
-        $this->server2 = new Target($this->id2, 'server');
+        $this->atarget = new Target(Target::ANY,    Target::ANY);
+        $this->target1 = new Target($this->id1,     Target::ANY);
+        $this->target2 = new Target($this->id2,     Target::ANY);
+        $this->aserver = new Target(Target::ANY,    'server');
+        $this->server1 = new Target($this->id1,     'server');
+        $this->server2 = new Target($this->id2,     'server');
         $this->servers = new TargetCollection([$this->server1, $this->server2]);
-        $this->adomain = new Target(null,       'domain');
-        $this->domain1 = new Target($this->id1, 'domain');
-        $this->domain2 = new Target($this->id2, 'domain');
+        $this->adomain = new Target(Target::ANY,    'domain');
+        $this->domain1 = new Target($this->id1,     'domain');
+        $this->domain2 = new Target($this->id2,     'domain');
         $this->domains = new TargetCollection([$this->domain1, $this->domain2]);
     }
 
