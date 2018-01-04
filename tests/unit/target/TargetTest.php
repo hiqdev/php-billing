@@ -25,7 +25,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->atarget = new Target(Target::ANY,    Target::ANY);
+        $this->target_ = new Target(Target::ANY,    Target::ANY);
         $this->target1 = new Target($this->id1,     Target::ANY);
         $this->target2 = new Target($this->id2,     Target::ANY);
         $this->server_ = new Target(Target::ANY,    'server');
@@ -46,7 +46,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUniqueId()
     {
-        $this->assertSame(':',          $this->atarget->getUniqueId());
+        $this->assertSame(':',          $this->target_->getUniqueId());
         $this->assertSame(':1',         $this->target1->getUniqueId());
         $this->assertSame(':2',         $this->target2->getUniqueId());
         $this->assertSame('server:',    $this->server_->getUniqueId());
@@ -57,7 +57,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     public function testEquals()
     {
         $all = [
-            $this->atarget, $this->target1, $this->target2,
+            $this->target_, $this->target1, $this->target2,
             $this->server_, $this->server1, $this->server2,
             $this->domain_, $this->domain1, $this->domain2,
         ];
@@ -86,22 +86,25 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     public function testMatches()
     {
         $this->checkMatches([
-            $this->atarget, $this->serverN, $this->server_,
+            $this->target_, $this->server_, $this->serverN,
         ], false);
 
         $this->checkMatches([
-            $this->atarget, $this->server_, $this->server1, $this->servers,
+            $this->target_, $this->server_, $this->server1, $this->servers,
         ]);
         $this->checkMatches([
-            $this->atarget, $this->server_, $this->server2, $this->servers,
+            $this->target_, $this->server_, $this->server2, $this->servers,
         ]);
 
         $this->checkDoesntMatch([
             $this->server1, $this->server2, $this->serverN, $this->domain_,
         ]);
-
         $this->checkDoesntMatch([
             $this->domain1, $this->domain2, $this->domainN, $this->servers,
+        ]);
+
+        $this->checkDoesntMatch([
+            $this->server_, $this->domains, $this->domainN, $this->domainN,
         ]);
     }
 
