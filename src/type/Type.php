@@ -17,9 +17,6 @@ namespace hiqdev\php\billing\type;
  */
 class Type implements TypeInterface
 {
-    const ANY = null;
-    const NONE =  -1;
-
     /**
      * @var int|string
      */
