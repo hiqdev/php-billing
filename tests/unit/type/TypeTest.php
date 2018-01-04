@@ -93,14 +93,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     public function testMatches()
     {
-        $this->checkMatches([
-            $this->server11, $this->copy($this->server11),
-            $this->server_1, $this->copy($this->server_1),
-        ]);
-        $this->checkMatches([
-            $this->server11, $this->copy($this->server11),
-            $this->server1_, $this->copy($this->server1_),
-        ]);
+        $this->checkMatches([$this->server11, $this->server_1]);
+        $this->checkMatches([$this->server11, $this->server1_]);
         $this->checkDoesntMatch([
             $this->server_1, $this->server1_, $this->server_2, $this->server2_,
             $this->domain_1, $this->domain1_, $this->domain_2, $this->domain2_,
@@ -114,8 +108,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     protected function checkMatches(array $types, bool $expect = true)
     {
-        foreach ($types as $k => $v) {
-            foreach ($types as $j => $w) {
+        $all = $types;
+        if ($expect) { /// copies must match also
+            foreach ($types as $type) {
+                $all[] = $this->copy($type);
+            }
+        }
+        foreach ($all as $k => $v) {
+            foreach ($all as $j => $w) {
                 $this->checkSingleMatch($k === $j || $expect, $v, $w);
             }
         }
