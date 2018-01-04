@@ -80,15 +80,35 @@ abstract class AbstractTarget implements TargetInterface
                 return true;
             }
 
-            return (string) $this->type === (string) $other->getType();
+            return $this->matchTypes($other);
         }
 
         if ($this->type === self::ANY) {
-            return (string) $this->id === (string) $other->id;
+            return $this->matchIds($other);
         }
 
-        return $this->equals($other);
+        return $this->matchIds($other) && $this->matchTypes($other);
     }
+
+    protected function matchIds(TargetInterface $other)
+    {
+        return $this->matchStrings($this->id, $other->getId());
+    }
+
+    protected function matchTypes(TargetInterface $other)
+    {
+        return $this->matchStrings($this->type, $other->getType());
+    }
+
+    protected function matchStrings($lhs, $rhs)
+    {
+        if ($lhs === self::NONE || $rhs === self::NONE) {
+            return false;
+        }
+
+        return (string) $lhs === (string) $rhs;
+    }
+
 
     public function jsonSerialize()
     {

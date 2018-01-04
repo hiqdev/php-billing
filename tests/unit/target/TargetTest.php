@@ -28,13 +28,15 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->atarget = new Target(Target::ANY,    Target::ANY);
         $this->target1 = new Target($this->id1,     Target::ANY);
         $this->target2 = new Target($this->id2,     Target::ANY);
-        $this->aserver = new Target(Target::ANY,    'server');
+        $this->server_ = new Target(Target::ANY,    'server');
         $this->server1 = new Target($this->id1,     'server');
         $this->server2 = new Target($this->id2,     'server');
+        $this->serverN = new Target(Target::NONE,   'server');
         $this->servers = new TargetCollection([$this->server1, $this->server2]);
-        $this->adomain = new Target(Target::ANY,    'domain');
+        $this->domain_ = new Target(Target::ANY,    'domain');
         $this->domain1 = new Target($this->id1,     'domain');
         $this->domain2 = new Target($this->id2,     'domain');
+        $this->domainN = new Target(Target::NONE,   'domain');
         $this->domains = new TargetCollection([$this->domain1, $this->domain2]);
     }
 
@@ -47,7 +49,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(':',          $this->atarget->getUniqueId());
         $this->assertSame(':1',         $this->target1->getUniqueId());
         $this->assertSame(':2',         $this->target2->getUniqueId());
-        $this->assertSame('server:',    $this->aserver->getUniqueId());
+        $this->assertSame('server:',    $this->server_->getUniqueId());
         $this->assertSame('server:1',   $this->server1->getUniqueId());
         $this->assertSame('server:2',   $this->server2->getUniqueId());
     }
@@ -56,8 +58,8 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     {
         $all = [
             $this->atarget, $this->target1, $this->target2,
-            $this->aserver, $this->server1, $this->server2,
-            $this->adomain, $this->domain1, $this->domain2,
+            $this->server_, $this->server1, $this->server2,
+            $this->domain_, $this->domain1, $this->domain2,
         ];
         $copies = [];
         foreach ($all as $k => $v) {
@@ -84,30 +86,38 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     public function testMatches()
     {
         $this->checkMatches([
-            $this->atarget, $this->aserver, $this->server1, $this->servers,
+            $this->atarget, $this->serverN, $this->server_,
+        ], false);
+
+        $this->checkMatches([
+            $this->atarget, $this->server_, $this->server1, $this->servers,
         ]);
         $this->checkMatches([
-            $this->atarget, $this->aserver, $this->server2, $this->servers,
+            $this->atarget, $this->server_, $this->server2, $this->servers,
         ]);
 
         $this->checkDoesntMatch([
-            $this->server1, $this->server2, $this->adomain,
+            $this->server1, $this->server2, $this->serverN, $this->domain_,
         ]);
 
         $this->checkDoesntMatch([
-            $this->domain1, $this->domain2, $this->servers,
+            $this->domain1, $this->domain2, $this->domainN, $this->servers,
         ]);
     }
 
-    protected function checkMatches(array $targets)
+    protected function checkMatches(array $targets, $self = true)
     {
         $all = $targets;
-        foreach ($targets as $target) {
-            $all[] = $this->copy($target);
+        if ($self) {
+            foreach ($targets as $target) {
+                $all[] = $this->copy($target);
+            }
         }
         foreach ($all as $k => $v) {
             foreach ($all as $j => $w) {
-                $this->checkSingleMatch(true, $v, $w);
+                if ($self || $k !== $j) {
+                    $this->checkSingleMatch(true, $v, $w);
+                }
             }
         }
     }
