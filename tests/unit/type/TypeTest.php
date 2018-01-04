@@ -104,6 +104,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     public function testMatches()
     {
         $this->checkMatches([$this->server11, $this->server_1]);
+        $this->checkMatches([$this->server_1, $this->serverN1], false);
         $this->checkMatches([$this->server11, $this->server1_, $this->server12, $this->server1N]);
 
         $this->checkDoesntMatch([
@@ -121,23 +122,28 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     protected function checkDoesntMatch(array $types)
     {
-        $this->checkMatches($types, false);
+        foreach ($types as $k => $v) {
+            foreach ($types as $j => $w) {
+                if ($k !== $j) {
+                    $this->checkSingleMatch(false, $v, $w);
+                }
+            }
+        }
     }
 
-    protected function checkMatches(array $types, bool $expect = true)
+    protected function checkMatches(array $types, bool $self = true)
     {
         $all = $types;
-        if ($expect) { /// copies must match also
+        if ($self) {
             foreach ($types as $type) {
                 $all[] = $this->copy($type);
             }
         }
         foreach ($all as $k => $v) {
             foreach ($all as $j => $w) {
-                if ($k === $j && !$expect) { /// nones doesn't match
-                    continue;
+                if ($self || $k !== $j) {
+                    $this->checkSingleMatch(true, $v, $w);
                 }
-                $this->checkSingleMatch($expect, $v, $w);
             }
         }
     }
