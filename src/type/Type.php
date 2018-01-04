@@ -68,9 +68,18 @@ class Type implements TypeInterface
 
     public function matches(TypeInterface $other)
     {
-        return $this->id === null || $other->id === null
-            ? (string) $this->name === (string) $other->name
-            : (string) $this->id === (string) $other->id;
+        return $this->id === self::ANY || $other->id === self::ANY
+            ? $this->checkMatches($this->name, $other->getName())
+            : $this->checkMatches($this->id, $other->getId());
+    }
+
+    protected function checkMatches($lhs, $rhs)
+    {
+        if ($lhs === self::NONE || $rhs === self::NONE) {
+            return false;
+        }
+
+        return (string) $lhs === (string) $rhs;
     }
 
     public function jsonSerialize()

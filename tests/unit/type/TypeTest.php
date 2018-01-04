@@ -32,12 +32,20 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->nonenone = new Type(Type::NONE,   Type::NONE);
+
         $this->server11 = new Type($this->sid1,  $this->sop1);
+        $this->server12 = new Type($this->sid1,  $this->sop2);
         $this->server_1 = new Type(Type::ANY,    $this->sop1);
         $this->server1_ = new Type($this->sid1,  Type::ANY);
+        $this->serverN1 = new Type(Type::NONE,   $this->sop1);
+        $this->server1N = new Type($this->sid1,  Type::NONE);
         $this->server22 = new Type($this->sid2,  $this->sop2);
+        $this->server21 = new Type($this->sid2,  $this->sop1);
         $this->server_2 = new Type(Type::ANY,    $this->sop2);
         $this->server2_ = new Type($this->sid2,  Type::ANY);
+        $this->serverN2 = new Type(Type::NONE,   $this->sop2);
+        $this->server2N = new Type($this->sid2,  Type::NONE);
 
         $this->domain11 = new Type($this->did1,  $this->dop1);
         $this->domain_1 = new Type(Type::ANY,    $this->dop1);
@@ -94,7 +102,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     public function testMatches()
     {
         $this->checkMatches([$this->server11, $this->server_1]);
-        $this->checkMatches([$this->server11, $this->server1_]);
+        $this->checkMatches([$this->server11, $this->server1_, $this->server12, $this->server1N]);
+
+        $this->checkDoesntMatch([$this->server11, $this->server_2, $this->serverN1]);
+
         $this->checkDoesntMatch([
             $this->server_1, $this->server1_, $this->server_2, $this->server2_,
             $this->domain_1, $this->domain1_, $this->domain_2, $this->domain2_,
@@ -116,7 +127,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
         foreach ($all as $k => $v) {
             foreach ($all as $j => $w) {
-                $this->checkSingleMatch($k === $j || $expect, $v, $w);
+                if ($k === $j && !$expect) { /// nones doesn't match
+                    continue;
+                }
+                $this->checkSingleMatch($expect, $v, $w);
             }
         }
     }
