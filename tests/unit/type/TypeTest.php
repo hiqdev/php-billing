@@ -52,6 +52,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->domain11 = new Type($this->did1,  $this->dop1);
         $this->domain_1 = new Type(Type::ANY,    $this->dop1);
         $this->domain1_ = new Type($this->did1,  Type::ANY);
+        $this->domainN1 = new Type(Type::NONE,   $this->dop1);
+        $this->domain1N = new Type($this->did1,  Type::NONE);
         $this->domain22 = new Type($this->did2,  $this->dop2);
         $this->domain_2 = new Type(Type::ANY,    $this->dop2);
         $this->domain2_ = new Type($this->did2,  Type::ANY);
@@ -112,7 +114,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             $this->serverN1, $this->serverN2, $this->server_N,
         ]);
 
-        $this->checkDoesntMatch([$this->server11, $this->server_2, $this->serverN1]);
+        $this->checkDoesntMatch([
+            $this->server11, $this->server_2, $this->serverN1,
+            $this->domain11, $this->domain_2, $this->domainN1,
+        ]);
+
 
         $this->checkDoesntMatch([
             $this->server_1, $this->server1_, $this->server_2, $this->server2_,
