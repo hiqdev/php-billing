@@ -17,8 +17,8 @@ namespace hiqdev\php\billing\type;
  */
 interface TypeInterface extends \JsonSerializable
 {
-    const ANY = null;
-    const NONE =  -1;
+    const ANY  = -1.111;
+    const NONE = -2.222;
 
     /**
      * Returns type id.

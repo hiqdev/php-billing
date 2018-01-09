@@ -54,7 +54,10 @@ abstract class AbstractTarget implements TargetInterface
      */
     public function getUniqueId()
     {
-        return $this->type . ':' . $this->id;
+        $id = $this->getId();
+        $type = $this->getType();
+
+        return ($type === self::ANY ? '' : $type) . ':' . ($id === self::ANY ? '' : $id);
     }
 
     /**

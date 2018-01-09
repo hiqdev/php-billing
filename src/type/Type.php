@@ -51,7 +51,7 @@ class Type implements TypeInterface
 
     public function getUniqueId()
     {
-        return $this->getId() ?: $this->getName();
+        return $this->getId() !== self::ANY ? $this->getId() : $this->getName();
     }
 
     /**
