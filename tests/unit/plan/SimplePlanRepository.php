@@ -38,4 +38,9 @@ class SimplePlanRepository implements PlanRepositoryInterface
 
         return $plans;
     }
+
+    public function findByIds(array $ids)
+    {
+        throw new \Exception('not implemented');
+    }
 }

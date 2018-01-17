@@ -31,4 +31,11 @@ interface PlanRepositoryInterface
      * @return PlanInterface[] array: actionKey => plan
      */
     public function findByOrder(OrderInterface $order);
+
+    /**
+     * Finds plans by given ids.
+     * @param int[] $ids
+     * @return PlanInterface[] array
+     */
+    public function findByIds(array $ids);
 }
