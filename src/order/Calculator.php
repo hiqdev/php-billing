@@ -10,8 +10,8 @@
 
 namespace hiqdev\php\billing\order;
 
-use hiqdev\billing\hiapi\plan\PlanRepository;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
+use hiqdev\php\billing\sale\SaleRepositoryInterface;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -19,16 +19,24 @@ use hiqdev\php\billing\plan\PlanRepositoryInterface;
 class Calculator implements CalculatorInterface
 {
     /**
-     * @var PlanRepositoryInterface|PlanRepository
+     * @var PlanRepositoryInterface
      */
     private $planRepository;
 
     /**
+     * @var SaleRepositoryInterface
+     */
+    private $saleRepository;
+
+    /**
      * @param PlanRepositoryInterface $planRepository
      */
-    public function __construct(PlanRepositoryInterface $planRepository)
-    {
+    public function __construct(
+        PlanRepositoryInterface $planRepository,
+        SaleRepositoryInterface $saleRepository
+    ) {
         $this->planRepository = $planRepository;
+        $this->saleRepository = $saleRepository;
     }
 
     /**
@@ -36,7 +44,7 @@ class Calculator implements CalculatorInterface
      */
     public function calculateCharges(OrderInterface $order)
     {
-        $plans = $this->planRepository->findByOrder($order);
+        $plans = $this->findPlans($order);
         $charges = [];
         foreach ($order->getActions() as $actionKey => $action) {
             if (empty($plans[$actionKey])) {
@@ -49,5 +57,63 @@ class Calculator implements CalculatorInterface
         }
 
         return $charges;
+    }
+
+    public function findPlans(OrderInterface $order)
+    {
+        $sales = $this->findSales($order);
+        $plans = [];
+        $lookPlans = [];
+        foreach ($order->getActions() as $actionKey => $action) {
+            if (empty($sales[$actionKey])) {
+                throw new \Exception('not found sale');
+            }
+            $sale = $sales[$actionKey];
+            $plan = $sale->getPlan();
+            if ($plan->hasPrices()) {
+                $plans[$actionKey] = $plan;
+            } else {
+                $lookPlanIds[$actionKey] = $plan->getId();
+            }
+        }
+
+        if ($lookPlanIds) {
+            $foundPlans = $this->planRepository->findByIds($lookPlanIds);
+            foreach ($foundPlans as $actionKey => $plan) {
+                $foundPlans[$plan->getId()] = $plan;
+            }
+            foreach ($lookPlanIds as $actionKey => $planId) {
+                if (empty($foundPlans[$planId])) {
+                    throw new \Exception('not found plan');
+                }
+                $plans[$actionKey] = $foundPlans[$planId];
+            }
+        }
+
+        return $plans;
+    }
+
+    public function findSales(OrderInterface $order)
+    {
+        $sales = [];
+        $lookActions = [];
+        foreach ($order->getActions() as $actionKey => $action) {
+            $sale = $action->getSale();
+            if ($sale) {
+                $sales[$actionKey] = $sale;
+            } else {
+                $lookActions[$actionKey] = $action;
+            }
+        }
+
+        if ($lookActions) {
+            $lookOrder = new Order(null, $order->getCustomer(), $lookActions);
+            $foundSales = $this->saleRepository->findByOrder($lookOrder);
+            foreach ($foundSales as $actionKey => $plan) {
+                $sales[$actionKey] = $plan;
+            }
+        }
+
+        return $sales;
     }
 }
