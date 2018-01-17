@@ -103,15 +103,15 @@ class Bill implements BillInterface
     public function getUniqueString()
     {
         $parts = [
-            $this->customer->getUniqueId(),
-            $this->sum->getCurrency()->getCode(),
-            $this->target ? $this->target->getUniqueId() : null,
-            $this->type->getUniqueId(),
-            $this->time->format('c'),
-            $this->plan ? $this->plan->getUniqueId() : null,
+            'buyer'     => $this->customer->getUniqueId(),
+            'currency'  => $this->sum->getCurrency()->getCode(),
+            'target'    => $this->target ? $this->target->getUniqueId() : null,
+            'type'      => $this->type->getUniqueId(),
+            'time'      => $this->time->format('c'),
+            'plan'      => $this->plan ? $this->plan->getUniqueId() : null,
         ];
 
-        return implode('-', array_filter($parts));
+        return implode('-', $parts);
     }
 
     public function calculatePrice()
