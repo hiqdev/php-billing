@@ -23,6 +23,6 @@ class PlanFactory implements PlanFactoryInterface
      */
     public function create(PlanCreationDto $dto)
     {
-        return new Plan($dto->id, $dto->name, $dto->seller, $dto->prices ?: []);
+        return new Plan($dto->id, $dto->name, $dto->seller, $dto->prices ?: null);
     }
 }
