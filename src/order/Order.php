@@ -45,6 +45,16 @@ class Order implements OrderInterface
         return new static(null, $action->getCustomer(), [$action]);
     }
 
+    public static function fromActions(array $actions)
+    {
+        $action = reset($actions);
+        if (! $action instanceof ActionInterface) {
+            throw new \Exception('wrong actions given in ' . __METHOD__);
+        }
+
+        return new static(null, $action->getCustomer(), $actions);
+    }
+
     public function getId()
     {
         return $this->id;
