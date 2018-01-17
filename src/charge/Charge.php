@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\charge;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -61,6 +62,11 @@ class Charge implements ChargeInterface
      */
     protected $time;
 
+    /**
+     * @var BillInterface
+     */
+    protected $bill;
+
     public function __construct(
                             $id,
         ActionInterface     $action = null,
@@ -68,7 +74,8 @@ class Charge implements ChargeInterface
         TargetInterface     $target = null,
         QuantityInterface   $usage,
         Money               $sum,
-        DateTimeImmutable   $time = null
+        DateTimeImmutable   $time = null,
+        BillInterface       $bill = null
     ) {
         $this->id       = $id;
         $this->action   = $action;
@@ -77,6 +84,7 @@ class Charge implements ChargeInterface
         $this->usage    = $usage;
         $this->sum      = $sum;
         $this->time     = $time;
+        $this->bill     = $bill;
     }
 
     public function getId()
@@ -122,6 +130,24 @@ class Charge implements ChargeInterface
     public function getTime()
     {
         return $this->time;
+    }
+
+    public function getBill()
+    {
+        return $this->bill;
+    }
+
+    public function hasBill()
+    {
+        return $this->bill !== null;
+    }
+
+    public function setBill(BillInterface $bill)
+    {
+        if ($this->hasBill()) {
+            throw new \Exception('cannot reassign sale bill');
+        }
+        $this->bill = $bill;
     }
 
     public function setId($id)
