@@ -56,7 +56,7 @@ class Plan implements PlanInterface
                             $id,
                             $name,
         CustomerInterface   $seller = null,
-        array               $prices = []
+                            $prices = null
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -78,6 +78,14 @@ class Plan implements PlanInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasPrices()
+    {
+        return $this->prices !== null;
+    }
+
+    /**
      * @return PriceInterface[]
      */
     public function getPrices()
@@ -90,7 +98,7 @@ class Plan implements PlanInterface
      */
     public function setPrices(array $prices)
     {
-        if ($this->prices !== []) {
+        if ($this->hasPrices()) {
             throw new \Exception('cannot reassign prices for plan');
         }
         $this->prices = $prices;
