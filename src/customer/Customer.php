@@ -67,6 +67,17 @@ class Customer extends AbstractTarget implements CustomerInterface
         return $this->seller;
     }
 
+    public static function fromArray(array $info)
+    {
+        if (!empty($info['seller_id']) && !empty($info['seller'])) {
+            $seller = new static($info['seller_id'], $info['seller']);
+        } else {
+            $seller = null;
+        }
+
+        return new static($info['id'], $info['login'], $seller);
+    }
+
     public function jsonSerialize()
     {
         return get_object_vars($this);
