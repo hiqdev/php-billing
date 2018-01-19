@@ -108,6 +108,7 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
             return null;
         }
 
+        /// TODO add configurable rounding mode later
         return $price->multiply($usage->getQuantity(), Money::ROUND_UP);
     }
 
@@ -130,13 +131,14 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
      */
     public function isApplicable(ActionInterface $action): bool
     {
-        /*var_dump([
-            'action.target' => $action->getTarget(),
-            'this.target'   => $this->getTarget(),
-            'action.type'   => $action->getType(),
-            'this.type'     => $this->getType(),
-            'target matches' => $action->getTarget()->matches($this->getTarget()),
-            'type matches'  => $action->getType()->matches($this->getType()),
+        /* sorry, debugging facility
+         * var_dump([
+            'action.target'     => $action->getTarget(),
+            'this.target'       => $this->getTarget(),
+            'action.type'       => $action->getType(),
+            'this.type'         => $this->getType(),
+            'target matches'    => $action->getTarget()->matches($this->getTarget()),
+            'type matches'      => $action->getType()->matches($this->getType()),
         ]);*/
         return $action->getTarget()->matches($this->getTarget()) &&
                $action->getType()->matches($this->getType());

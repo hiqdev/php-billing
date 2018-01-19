@@ -228,6 +228,14 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
             return null;
         }
 
+        /* sorry, debugging facility
+         * var_dump([
+            'unit'      => $usage->getUnit()->getName(),
+            'quantity'  => $usage->getQuantity(),
+            'price'     => $price->calculatePrice($usage)->getAmount(),
+            'sum'       => $sum->getAmount(),
+        ]);*/
+
         return new Charge(null, $this, $price, $this->getTarget(), $usage, $sum);
     }
 }
