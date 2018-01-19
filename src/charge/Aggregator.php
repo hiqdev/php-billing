@@ -133,7 +133,12 @@ class Aggregator implements AggregatorInterface
 
     public function generalizeTarget(ChargeInterface $charge)
     {
-        return $charge->getPrice()->getTarget();
+        $priceTarget = $charge->getPrice()->getTarget();
+
+        return $priceTarget->getId() ? $priceTarget : $charge->getTarget();
+
+        /// think of this way
+        /// return $priceTarget->getId() ? $priceTarget : new Target($charge->getSale()->getPlan()->getId(), 'plan');
     }
 
     public function generalizePlan(ChargeInterface $charge)
