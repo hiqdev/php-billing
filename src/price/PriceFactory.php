@@ -27,9 +27,15 @@ class PriceFactory implements PriceFactoryInterface
         'single'    => SinglePrice::class,
     ];
 
-    public function __construct(array $types = [])
+    /**
+     * @var string default price class, when given will be used for not found types
+     */
+    protected $defaultClass = null;
+
+    public function __construct(array $types = [], $defaultClass = null)
     {
         $this->types = $types;
+        $this->defaultClass = $defaultClass;
     }
 
     /**
@@ -39,16 +45,29 @@ class PriceFactory implements PriceFactoryInterface
     public function create(PriceCreationDto $dto)
     {
         $type = $dto->type->getName();
-        if (!isset($this->types[$type])) {
-            throw new FailedCreatePriceException("unknown type: $type");
-        }
-        $class = $this->types[$type];
-        if (!isset($this->creators[$class])) {
-            throw new FailedCreatePriceException("unknown class: $class");
-        }
-        $method = $this->creators[$class];
+        $class = $this->findClassForType($type);
+        $method = $this->findMethodForClass($class);
 
         return $this->{$method}($dto);
+    }
+
+    public function findClassForType($type)
+    {
+        if (isset($this->types[$type])) {
+            return $this->types[$type];
+        }
+        if ($this->defaultClass) {
+            return $this->defaultClass;
+        }
+        throw new FailedCreatePriceException("unknown type: $type");
+    }
+
+    public function findMethodForClass($class)
+    {
+        if (isset($this->creators[$class])) {
+            return $this->creators[$class];
+        }
+        throw new FailedCreatePriceException("unknown class: $class");
     }
 
     public function createEnumPrice(PriceCreationDto $dto)
