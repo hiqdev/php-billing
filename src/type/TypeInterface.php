@@ -33,7 +33,14 @@ interface TypeInterface extends \JsonSerializable
     public function getName();
 
     /**
+     * @param TypeInterface $other other type to match against
      * @return bool
      */
     public function equals(TypeInterface $other);
+
+    /**
+     * @param TypeInterface $other other type to match against
+     * @return bool
+     */
+    public function matches(TypeInterface $other);
 }

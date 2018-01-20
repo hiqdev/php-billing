@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\billing\hiapi\models\Price;
+
 /**
  * Price factory interface.
  *
@@ -19,6 +21,8 @@ interface PriceFactoryInterface
 {
     /**
      * Creates price object.
+     *
+     * @param PriceCreationDto $dto
      * @return Price
      */
     public function create(PriceCreationDto $dto);
