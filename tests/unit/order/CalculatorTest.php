@@ -13,16 +13,14 @@ namespace hiqdev\php\billing\tests\unit\order;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\Order;
-use hiqdev\php\billing\tests\unit\plan\PlanTest;
-use hiqdev\php\billing\tests\unit\plan\SimplePlanRepository;
+use hiqdev\php\billing\tests\unit\sale\SaleTest;
 use hiqdev\php\units\Quantity;
 
-class CalculatorTest extends PlanTest
+class CalculatorTest extends SaleTest
 {
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = new SimplePlanRepository($this->plan);
         $this->calculator = new Calculator($this->repository);
         $actions = [];
         foreach ($this->plan->types as $type) {

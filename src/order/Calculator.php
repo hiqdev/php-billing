@@ -19,24 +19,24 @@ use hiqdev\php\billing\sale\SaleRepositoryInterface;
 class Calculator implements CalculatorInterface
 {
     /**
-     * @var PlanRepositoryInterface
-     */
-    private $planRepository;
-
-    /**
      * @var SaleRepositoryInterface
      */
     private $saleRepository;
 
     /**
+     * @var PlanRepositoryInterface
+     */
+    private $planRepository;
+
+    /**
      * @param PlanRepositoryInterface $planRepository
      */
     public function __construct(
-        PlanRepositoryInterface $planRepository,
-        SaleRepositoryInterface $saleRepository
+        SaleRepositoryInterface $saleRepository,
+        PlanRepositoryInterface $planRepository = null
     ) {
-        $this->planRepository = $planRepository;
         $this->saleRepository = $saleRepository;
+        $this->planRepository = $planRepository;
     }
 
     /**
@@ -63,7 +63,7 @@ class Calculator implements CalculatorInterface
     {
         $sales = $this->findSales($order);
         $plans = [];
-        $lookPlans = [];
+        $lookPlanIds = [];
         foreach ($order->getActions() as $actionKey => $action) {
             if (empty($sales[$actionKey])) {
                 throw new \Exception('not found sale');
