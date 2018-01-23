@@ -84,7 +84,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         TypeInterface $type,
         TargetInterface $target,
         QuantityInterface $quantity,
-        CustomerInterface $customer = null,
+        CustomerInterface $customer,
         SaleInterface $sale = null,
         DateTimeImmutable $time = null,
         ActionInterface $parent = null
