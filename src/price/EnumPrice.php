@@ -114,4 +114,13 @@ class EnumPrice extends AbstractPrice
     {
         return $quantity->convert($this->unit);
     }
+
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'currency' => $this->currency,
+            'sums' => $this->sums,
+            'unit' => $this->unit
+        ]);
+    }
 }

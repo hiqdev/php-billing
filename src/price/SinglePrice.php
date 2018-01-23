@@ -80,4 +80,12 @@ class SinglePrice extends AbstractPrice
     {
         return $this->price;
     }
+
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'prepaid' => $this->prepaid,
+            'price' => $this->price
+        ]);
+    }
 }
