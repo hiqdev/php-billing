@@ -29,8 +29,8 @@ use hiqdev\php\billing\EntityInterface;
  */
 interface TargetInterface extends EntityInterface
 {
-    const ANY =  -1.111;
-    const NONE = -2.222;
+    const ANY =  null;
+    const NONE = INF;
 
     /**
      * Get target ID, unique only between targets of the same type.
