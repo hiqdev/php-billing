@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tests\unit;
 
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -45,11 +46,12 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->prepaid  = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
         $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+        $this->customer = new Customer(2, 'client');
     }
 
     protected function createAction($quantity)
     {
-        return new Action(null, $this->type, $this->target, $quantity);
+        return new Action(null, $this->type, $this->target, $quantity, $this->customer);
     }
 
     protected function tearDown()

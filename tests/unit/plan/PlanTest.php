@@ -29,7 +29,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
             foreach ($this->plan->targets as $target) {
                 foreach ([1, 2, 3] as $years) {
                     $usage = Quantity::month($years * 12);
-                    $action = new Action(null, $type, $target, $usage);
+                    $action = new Action(null, $type, $target, $usage, $this->plan->customer);
                     $charges = $this->plan->calculateCharges($action);
                     $this->checkCharges($action, $charges);
                 }
