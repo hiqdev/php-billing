@@ -120,7 +120,7 @@ class EnumPrice extends AbstractPrice
         return array_merge(parent::jsonSerialize(), [
             'currency' => $this->currency,
             'sums' => $this->sums,
-            'unit' => $this->unit
+            'unit' => $this->unit,
         ]);
     }
 }

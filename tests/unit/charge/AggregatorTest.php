@@ -14,7 +14,6 @@ use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Aggregator;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\Order;
-use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
 use hiqdev\php\units\Quantity;
 use Money\Money;

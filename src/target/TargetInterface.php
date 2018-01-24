@@ -57,7 +57,7 @@ interface TargetInterface extends EntityInterface
      * @param TargetInterface $other
      * @return bool
      */
-    public function matches(TargetInterface $other): bool;
+    public function matches(self $other): bool;
 
     /**
      * One way check matches. For internal use only.
@@ -65,5 +65,5 @@ interface TargetInterface extends EntityInterface
      * @param TargetInterface $other
      * @return bool
      */
-    public function checkMatches(TargetInterface $other): bool;
+    public function checkMatches(self $other): bool;
 }

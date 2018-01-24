@@ -10,13 +10,8 @@
 
 namespace hiqdev\php\billing\tests\unit\sale;
 
-use hiqdev\php\billing\action\Action;
-use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\tests\unit\plan\PlanTest;
-use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
-use Money\Money;
 
 class SaleTest extends PlanTest
 {

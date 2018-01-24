@@ -48,7 +48,7 @@ class Order implements OrderInterface
     public static function fromActions(array $actions)
     {
         $action = reset($actions);
-        if (! $action instanceof ActionInterface) {
+        if (!$action instanceof ActionInterface) {
             throw new \Exception('wrong actions given in ' . __METHOD__);
         }
 

@@ -119,7 +119,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             $this->domain11, $this->domain_2, $this->domainN1,
         ]);
 
-
         $this->checkDoesntMatch([
             $this->server_1, $this->server1_, $this->server_2, $this->server2_,
             $this->domain_1, $this->domain1_, $this->domain_2, $this->domain2_,
