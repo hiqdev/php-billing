@@ -66,14 +66,17 @@ class Calculator implements CalculatorInterface
         $lookPlanIds = [];
         foreach ($order->getActions() as $actionKey => $action) {
             if (empty($sales[$actionKey])) {
-                throw new \Exception('not found sale');
-            }
-            $sale = $sales[$actionKey];
-            $plan = $sale->getPlan();
-            if ($plan->hasPrices()) {
-                $plans[$actionKey] = $plan;
+                /// it is ok when no sale found for upper resellers
+                /// throw new \Exception('not found sale');
+                $plans[$actionKey] = null;
             } else {
-                $lookPlanIds[$actionKey] = $plan->getId();
+                $sale = $sales[$actionKey];
+                $plan = $sale->getPlan();
+                if ($plan->hasPrices()) {
+                    $plans[$actionKey] = $plan;
+                } else {
+                    $lookPlanIds[$actionKey] = $plan->getId();
+                }
             }
         }
 
