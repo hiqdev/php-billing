@@ -176,12 +176,17 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         return $this->parent !== null;
     }
 
+    public function hasId()
+    {
+        return $this->id !== null;
+    }
+
     public function setId($id)
     {
         if ($this->id === $id) {
             return;
         }
-        if ($this->id !== null) {
+        if ($this->hasId()) {
             throw new \Exception('cannot reassign action id');
         }
         $this->id = $id;
