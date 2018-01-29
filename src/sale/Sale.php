@@ -86,12 +86,17 @@ class Sale implements SaleInterface
         return $this->time;
     }
 
+    public function hasId()
+    {
+        return $this->id !== null;
+    }
+
     public function setId($id)
     {
         if ((string)$this->id === (string)$id) {
             return;
         }
-        if ($this->id !== null) {
+        if ($this->hasId()) {
             throw new \Exception('cannot reassign sale id');
         }
         $this->id = $id;
