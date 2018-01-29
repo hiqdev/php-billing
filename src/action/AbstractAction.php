@@ -183,7 +183,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
 
     public function setId($id)
     {
-        if ($this->id === $id) {
+        if ((string)$this->id === (string)$id) {
             return;
         }
         if ($this->hasId()) {
