@@ -15,7 +15,12 @@ namespace hiqdev\php\billing\target;
  */
 class TargetCreationDto
 {
+    /** @var string|int|null */
     public $id;
 
+    /** @var string */
     public $type;
+
+    /** @var string */
+    public $name;
 }

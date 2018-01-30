@@ -27,10 +27,16 @@ abstract class AbstractTarget implements TargetInterface
      */
     protected $type;
 
-    public function __construct($id, $type)
+    /**
+     * @var string
+     */
+    protected $name;
+
+    public function __construct($id, $type, $name)
     {
         $this->id = $id;
         $this->type = $type;
+        $this->name = $name;
     }
 
     /**
@@ -47,6 +53,14 @@ abstract class AbstractTarget implements TargetInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
