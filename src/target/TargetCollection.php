@@ -74,6 +74,14 @@ class TargetCollection implements TargetInterface
         return $this->types;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getTarget()->getName();
+    }
+
     public function getTarget()
     {
         return reset($this->targets);
