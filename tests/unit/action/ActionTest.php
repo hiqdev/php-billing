@@ -64,7 +64,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $charge = $action->calculateCharge($this->price);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
-        $this->assertSame($this->target, $charge->getTarget());
+        //$this->assertSame($this->target, $charge->getTarget());
         $this->assertSame($this->type, $charge->getPrice()->getType());
         $this->assertEquals($this->prepaid, $charge->getUsage());
         $this->assertEquals($this->money->multiply($this->prepaid->getQuantity()), $charge->getSum());

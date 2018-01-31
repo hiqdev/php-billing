@@ -241,6 +241,6 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
             'sum'       => $sum->getAmount(),
         ]);*/
 
-        return new Charge(null, $this, $price, $this->getTarget(), $usage, $sum);
+        return new Charge(null, $this, $price, $usage, $sum);
     }
 }

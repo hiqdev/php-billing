@@ -50,7 +50,7 @@ class AggregatorTest extends SaleTest
             $this->assertEquals(3, count($bill->getCharges()));
             foreach ($bill->getCharges() as $charge) {
                 $this->assertTrue($bill->getType()->equals($charge->getPrice()->getType()));
-                $this->assertTrue($bill->getTarget()->equals($charge->getTarget()));
+                $this->assertTrue($bill->getTarget()->equals($charge->getAction()->getTarget()));
             }
         }
     }

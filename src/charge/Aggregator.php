@@ -18,6 +18,7 @@ use Money\Money;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
+ * TODO: Split out generalizations to Generalizer class.
  */
 class Aggregator implements AggregatorInterface
 {
@@ -133,12 +134,7 @@ class Aggregator implements AggregatorInterface
 
     public function generalizeTarget(ChargeInterface $charge)
     {
-        $priceTarget = $charge->getPrice()->getTarget();
-
-        return $priceTarget->getId() ? $priceTarget : $charge->getTarget();
-
-        /// think of this way
-        /// return $priceTarget->getId() ? $priceTarget : new Target($charge->getSale()->getPlan()->getId(), 'plan');
+        return $charge->getAction()->getTarget();
     }
 
     public function generalizePlan(ChargeInterface $charge)

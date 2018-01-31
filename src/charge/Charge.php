@@ -43,11 +43,6 @@ class Charge implements ChargeInterface
     protected $price;
 
     /**
-     * @var TargetInterface
-     */
-    protected $target;
-
-    /**
      * @var QuantityInterface
      */
     protected $usage;
@@ -69,9 +64,8 @@ class Charge implements ChargeInterface
 
     public function __construct(
                             $id,
-        ActionInterface     $action = null,
-        PriceInterface      $price = null,
-        TargetInterface     $target = null,
+        ActionInterface     $action,
+        PriceInterface      $price,
         QuantityInterface   $usage,
         Money               $sum,
         DateTimeImmutable   $time = null,
@@ -80,7 +74,6 @@ class Charge implements ChargeInterface
         $this->id       = $id;
         $this->action   = $action;
         $this->price    = $price;
-        $this->target   = $target;
         $this->usage    = $usage;
         $this->sum      = $sum;
         $this->time     = $time;
@@ -95,11 +88,6 @@ class Charge implements ChargeInterface
     public function getAction()
     {
         return $this->action;
-    }
-
-    public function getTarget()
-    {
-        return $this->target;
     }
 
     /**
