@@ -39,6 +39,15 @@ class TargetCollection implements TargetInterface
         $this->types = array_unique(array_filter($types));
     }
 
+    public function add(TargetInterface $target)
+    {
+        $this->targets[] = $target;
+        $this->ids[] = $target->getId();
+        $this->types[] = $target->getType();
+        $this->ids = array_unique(array_filter($this->ids));
+        $this->types = array_unique(array_filter($this->types));
+    }
+
     /**
      * @return int
      */
