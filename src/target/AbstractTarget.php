@@ -32,7 +32,7 @@ abstract class AbstractTarget implements TargetInterface
      */
     protected $name;
 
-    public function __construct($id, $type, $name)
+    public function __construct($id, $type, $name = null)
     {
         $this->id = $id;
         $this->type = $type;
