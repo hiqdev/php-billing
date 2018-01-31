@@ -27,6 +27,16 @@ class Aggregator implements AggregatorInterface
      */
     protected $bills = [];
 
+    /**
+     * @var GeneralizerInterface
+     */
+    protected $generalizer;
+
+    public function __construct(GeneralizerInterface $generalizer)
+    {
+        $this->generalizer = $generalizer;
+    }
+
     public function aggregateCharges(array $charges)
     {
         $bills = [];
@@ -35,7 +45,7 @@ class Aggregator implements AggregatorInterface
                 $others = $this->aggregateCharges($charge);
                 $bills = $this->aggregateBills($bills, $others);
             } elseif ($charge instanceof ChargeInterface) {
-                $bill = $this->createBill($charge);
+                $bill = $this->generalizer->createBill($charge);
                 $bills = $this->aggregateBills($bills, [$bill]);
             } else {
                 throw new \Exception('not a Charge given to Aggregator');
@@ -88,57 +98,5 @@ class Aggregator implements AggregatorInterface
     public function aggregateQuantity(QuantityInterface $first, QuantityInterface $other)
     {
         return $first->add($other);
-    }
-
-    public function createBill(ChargeInterface $charge)
-    {
-        return new Bill(
-            null,
-            $this->generalizeType($charge),
-            $this->generalizeTime($charge),
-            $this->generalizeSum($charge),
-            $this->generalizeQuantity($charge),
-            $this->generalizeCustomer($charge),
-            $this->generalizeTarget($charge),
-            $this->generalizePlan($charge),
-            [$charge]
-        );
-    }
-
-    public function generalizeType(ChargeInterface $charge)
-    {
-        return $charge->getPrice()->getType();
-    }
-
-    public function generalizeTime(ChargeInterface $charge)
-    {
-        $date = new DateTimeImmutable($charge->getTime());
-
-        return $date->modify('first day of this month midnight');
-    }
-
-    public function generalizeSum(ChargeInterface $charge)
-    {
-        return $charge->getSum();
-    }
-
-    public function generalizeQuantity(ChargeInterface $charge)
-    {
-        return $charge->getUsage();
-    }
-
-    public function generalizeCustomer(ChargeInterface $charge)
-    {
-        return $charge->getAction()->getCustomer();
-    }
-
-    public function generalizeTarget(ChargeInterface $charge)
-    {
-        return $charge->getAction()->getTarget();
-    }
-
-    public function generalizePlan(ChargeInterface $charge)
-    {
-        return $charge->getPrice()->getPlan();
     }
 }

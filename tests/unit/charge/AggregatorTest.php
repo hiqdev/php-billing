@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tests\unit\order;
 
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Aggregator;
+use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
@@ -24,7 +25,7 @@ class AggregatorTest extends SaleTest
     {
         parent::setUp();
         $this->calculator = new Calculator($this->repository);
-        $this->aggregator = new Aggregator();
+        $this->aggregator = new Aggregator(new Generalizer());
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
