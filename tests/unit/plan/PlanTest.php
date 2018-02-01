@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\plan;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\units\Quantity;
@@ -21,6 +22,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->plan = CertificatePlan::get();
+        $this->time = new DateTimeImmutable('now');
     }
 
     public function testCalculateCharges()
@@ -29,7 +31,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
             foreach ($this->plan->targets as $target) {
                 foreach ([1, 2, 3] as $years) {
                     $usage = Quantity::month($years * 12);
-                    $action = new Action(null, $type, $target, $usage, $this->plan->customer);
+                    $action = new Action(null, $type, $target, $usage, $this->plan->customer, $this->time);
                     $charges = $this->plan->calculateCharges($action);
                     $this->checkCharges($action, $charges);
                 }

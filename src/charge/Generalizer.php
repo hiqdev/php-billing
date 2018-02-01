@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\charge;
 
-use DateTimeImmutable;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -44,9 +43,7 @@ class Generalizer implements GeneralizerInterface
 
     public function generalizeTime(ChargeInterface $charge)
     {
-        $date = new DateTimeImmutable($charge->getTime());
-
-        return $date->modify('first day of this month midnight');
+        return $charge->getAction()->getTime()->modify('first day of this month midnight');
     }
 
     public function generalizeSum(ChargeInterface $charge)

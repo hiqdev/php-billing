@@ -85,8 +85,8 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         TargetInterface $target,
         QuantityInterface $quantity,
         CustomerInterface $customer,
+        DateTimeImmutable $time,
         SaleInterface $sale = null,
-        DateTimeImmutable $time = null,
         ActionInterface $parent = null
     ) {
         $this->id       = $id;
@@ -94,8 +94,8 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         $this->target   = $target;
         $this->quantity = $quantity;
         $this->customer = $customer;
-        $this->sale     = $sale;
         $this->time     = $time;
+        $this->sale     = $sale;
         $this->parent   = $parent;
     }
 

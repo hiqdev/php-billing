@@ -17,6 +17,7 @@ use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
+use DateTimeImmutable;
 use Money\Money;
 
 /**
@@ -47,11 +48,12 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->money    = Money::USD(15);
         $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
         $this->customer = new Customer(2, 'client');
+        $this->time     = new DateTimeImmutable('now');
     }
 
     protected function createAction($quantity)
     {
-        return new Action(null, $this->type, $this->target, $quantity, $this->customer);
+        return new Action(null, $this->type, $this->target, $quantity, $this->customer, $this->time);
     }
 
     protected function tearDown()

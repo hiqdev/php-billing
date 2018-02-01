@@ -30,7 +30,7 @@ class AggregatorTest extends SaleTest
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
                 foreach ([1, 2, 3] as $years) {
-                    $actions[] = new Action(null, $type, $target, Quantity::year($years), $this->plan->customer);
+                    $actions[] = new Action(null, $type, $target, Quantity::year($years), $this->plan->customer, $this->time);
                 }
             }
         }

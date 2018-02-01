@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\charge;
 
-use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\price\PriceInterface;
@@ -53,11 +52,6 @@ class Charge implements ChargeInterface
     protected $sum;
 
     /**
-     * @var DateTimeImmutable
-     */
-    protected $time;
-
-    /**
      * @var BillInterface
      */
     protected $bill;
@@ -68,7 +62,6 @@ class Charge implements ChargeInterface
         PriceInterface      $price,
         QuantityInterface   $usage,
         Money               $sum,
-        DateTimeImmutable   $time = null,
         BillInterface       $bill = null
     ) {
         $this->id       = $id;
@@ -76,7 +69,6 @@ class Charge implements ChargeInterface
         $this->price    = $price;
         $this->usage    = $usage;
         $this->sum      = $sum;
-        $this->time     = $time;
         $this->bill     = $bill;
     }
 
@@ -113,11 +105,6 @@ class Charge implements ChargeInterface
         $usage = $this->usage->getQuantity();
 
         return $usage ? $this->sum->divide($usage) : $this->sum;
-    }
-
-    public function getTime()
-    {
-        return $this->time;
     }
 
     public function getBill()
