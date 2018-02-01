@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\charge;
 
-use DateTimeImmutable;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\units\QuantityInterface;

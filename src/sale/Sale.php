@@ -93,7 +93,7 @@ class Sale implements SaleInterface
 
     public function setId($id)
     {
-        if ((string)$this->id === (string)$id) {
+        if ((string) $this->id === (string) $id) {
             return;
         }
         if ($this->hasId()) {

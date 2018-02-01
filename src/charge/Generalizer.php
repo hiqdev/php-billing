@@ -11,16 +11,12 @@
 namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\bill\Bill;
-use hiqdev\php\billing\bill\BillInterface;
-use hiqdev\php\units\QuantityInterface;
-use Money\Money;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class Generalizer implements GeneralizerInterface
 {
-
     public function createBill(ChargeInterface $charge)
     {
         return new Bill(

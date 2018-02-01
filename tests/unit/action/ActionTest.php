@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;
@@ -17,7 +18,6 @@ use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
-use DateTimeImmutable;
 use Money\Money;
 
 /**
