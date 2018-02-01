@@ -101,7 +101,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
 
     public function createSubaction(CustomerInterface $customer)
     {
-        return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->sale, $this->time, $this);
+        return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->time, $this->sale, $this);
     }
 
     /**
