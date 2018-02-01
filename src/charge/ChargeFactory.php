@@ -23,6 +23,6 @@ class ChargeFactory implements ChargeFactoryInterface
      */
     public function create(ChargeCreationDto $dto)
     {
-        return new Charge($dto->id, $dto->name, $dto->seller, $dto->prices ?: []);
+        return new Charge($dto->id, $dto->action, $dto->price, $dto->usage, $dto->sum, $dto->bill);
     }
 }
