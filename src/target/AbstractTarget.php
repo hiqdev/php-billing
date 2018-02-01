@@ -48,6 +48,14 @@ abstract class AbstractTarget implements TargetInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasId()
+    {
+        return $this->id !== null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getType()

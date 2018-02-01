@@ -56,6 +56,14 @@ class TargetCollection implements TargetInterface
         return $this->getTarget()->getId();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasId()
+    {
+        return $this->getId() !== null;
+    }
+
     public function getIds()
     {
         return $this->ids;
