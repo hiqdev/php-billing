@@ -48,8 +48,17 @@ class PriceFactory implements PriceFactoryInterface
      */
     public function create(PriceCreationDto $dto)
     {
-        $type = $dto->type->getName();
-        $class = $this->findClassForType($type);
+        try {
+            $class = $this->findClassForType(get_class($dto));
+        } catch (FailedCreatePriceException $failedForClass) {
+            try {
+                $type = $dto->type->getName();
+                $class = $this->findClassForType($type);
+            } catch (FailedCreatePriceException $failedForType) {
+                throw $failedForType;
+            }
+        }
+
         $method = $this->findMethodForClass($class);
 
         return $this->{$method}($dto);
