@@ -50,6 +50,9 @@ class Plan implements PlanInterface
     protected $prices = [];
 
     /**
+     * @param int $id
+     * @param string $name
+     * @param CustomerInterface|null $seller
      * @param PriceInterface[] $prices
      */
     public function __construct(
@@ -125,5 +128,13 @@ class Plan implements PlanInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return CustomerInterface
+     */
+    public function getSeller(): ?CustomerInterface
+    {
+        return $this->seller;
     }
 }
