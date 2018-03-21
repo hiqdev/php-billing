@@ -39,7 +39,8 @@ class PriceFactoryTest extends \PHPUnit\Framework\TestCase
         $this->factory  = new PriceFactory([
             $this->single->getName()    => SinglePrice::class,
             $this->enum->getName()      => EnumPrice::class,
-        ]);
+            'other'                     => 'other',
+        ], SinglePrice::class);
     }
 
     public function testEnumPrice()
