@@ -47,7 +47,7 @@ class Plan implements PlanInterface
     /**
      * @var PriceInterface[]
      */
-    protected $prices = [];
+    protected $prices;
 
     /**
      * @param int $id
