@@ -11,10 +11,9 @@
 namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\charge\ChargeInterface;
 
 /**
- * ChargeModifier interface
+ * ChargeModifier interface.
  * @see FormulaChargeModifierTrait
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>

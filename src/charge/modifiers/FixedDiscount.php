@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
-use hiqdev\php\billing\action\ActionInterface;
 use Money\Money;
 
 /**

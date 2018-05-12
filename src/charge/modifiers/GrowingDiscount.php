@@ -10,10 +10,6 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
-use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\bill\BillInterface;
-use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
 /**
