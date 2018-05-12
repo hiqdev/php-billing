@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\plan;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
 
@@ -114,15 +115,20 @@ class Plan implements PlanInterface
      */
     public function calculateCharges(ActionInterface $action)
     {
-        $charges = [];
+        $result = [];
         foreach ($this->prices as $price) {
             $charge = $action->calculateCharge($price);
-            if ($charge !== null) {
-                $charges[] = $charge;
+            if ($price instanceof ChargeModifier) {
+                $charges = $price->modifyCharge($charge, $action);
+                if ($charges) {
+                    $result = array_merge($result, $charges);
+                }
+            } elseif ($charge !== null) {
+                $result[] = $charge;
             }
         }
 
-        return $charges;
+        return $result;
     }
 
     public function jsonSerialize()
