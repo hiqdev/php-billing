@@ -10,6 +10,9 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use hiqdev\php\billing\charge\modifiers\addons\Reason;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
+use hiqdev\php\billing\charge\modifiers\addons\Till;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
@@ -21,6 +24,10 @@ use hiqdev\php\billing\charge\ChargeModifier;
  */
 class Modifier implements ChargeModifier
 {
+    const REASON = 'reason';
+    const SINCE = 'since';
+    const TILL = 'till';
+
     /**
      * @var AddonInterface[]
      */
@@ -38,17 +45,17 @@ class Modifier implements ChargeModifier
 
     public function reason($text)
     {
-        return $this->addAddon('reason', new Reason($text));
+        return $this->addAddon(self::REASON, new Reason($text));
     }
 
     public function since($time)
     {
-        return $this->addAddon('since', new Since($time));
+        return $this->addAddon(self::SINCE, new Since($time));
     }
 
     public function till($time)
     {
-        return $this->addAddon('till', new Till($time));
+        return $this->addAddon(self::TILL, new Till($time));
     }
 
     public function addAddon($name, $addon)
@@ -59,5 +66,25 @@ class Modifier implements ChargeModifier
         $this->addons[$name] = $addon;
 
         return $this;
+    }
+
+    public function getAddon($name)
+    {
+        return empty($this->addons[$name]) ? null : $this->addons[$name];
+    }
+
+    public function getReason()
+    {
+        return $this->getAddon(self::REASON);
+    }
+
+    public function getSince()
+    {
+        return $this->getAddon(self::SINCE);
+    }
+
+    public function getTill()
+    {
+        return $this->getAddon(self::TILL);
     }
 }
