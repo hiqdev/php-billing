@@ -30,7 +30,6 @@ class ModifierFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $discount = $this->factory->discount();
         $this->assertInstanceOf(Discount::class, $discount);
-
     }
 
     public function testNewEveryTime()

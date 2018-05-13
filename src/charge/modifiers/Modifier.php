@@ -10,12 +10,12 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
-use hiqdev\php\billing\charge\modifiers\addons\Reason;
-use hiqdev\php\billing\charge\modifiers\addons\Since;
-use hiqdev\php\billing\charge\modifiers\addons\Till;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\charge\modifiers\addons\Reason;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
+use hiqdev\php\billing\charge\modifiers\addons\Till;
 
 /**
  * Fixed discount.

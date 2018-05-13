@@ -11,7 +11,7 @@
 namespace hiqdev\php\billing\charge\modifiers;
 
 /**
- * Modifier Factory
+ * Modifier Factory.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */

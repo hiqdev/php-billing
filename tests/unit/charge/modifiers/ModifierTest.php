@@ -10,12 +10,12 @@
 
 namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 
-use hiqdev\php\billing\charge\modifiers\Discount;
-use hiqdev\php\billing\charge\modifiers\Modifier;
+use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\addons\Till;
-use DateTimeImmutable;
+use hiqdev\php\billing\charge\modifiers\Discount;
+use hiqdev\php\billing\charge\modifiers\Modifier;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

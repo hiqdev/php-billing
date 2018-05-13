@@ -34,6 +34,6 @@ class Reason
 
     public static function ensureValidValue($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 }
