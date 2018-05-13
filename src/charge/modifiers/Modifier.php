@@ -43,6 +43,11 @@ class Modifier implements ChargeModifier
         throw new \Exception('not finished modifier');
     }
 
+    public function discount()
+    {
+        return new Discount($this->addons);
+    }
+
     public function reason($text)
     {
         return $this->addAddon(self::REASON, new Reason($text));
