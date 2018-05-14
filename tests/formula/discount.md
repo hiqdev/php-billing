@@ -33,6 +33,6 @@ discount.since('08.2018').till('10.2019').grows('1%').everyMonth().from('5%')
 
 # Multiline discounts
 
-discount.since('01.2018').fixed('5%')
+discount.since('01.2018').fixed('5%')<br>
 discount.since('04.2018').fixed('15 USD')
 -----------------------------------------
