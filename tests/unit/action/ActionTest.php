@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\tests\unit;
+namespace hiqdev\php\billing\tests\unit\action;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
@@ -44,8 +44,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->type     = new Type(null, 'server_traf');
         $this->target   = new Target(2, 'server');
-        $this->prepaid  = Quantity::gigabyte(10);
-        $this->money    = Money::USD(15);
+        $this->prepaid  = Quantity::gigabyte(1);
+        $this->money    = Money::USD(10000);
         $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
         $this->customer = new Customer(2, 'client');
         $this->time     = new DateTimeImmutable('now');
