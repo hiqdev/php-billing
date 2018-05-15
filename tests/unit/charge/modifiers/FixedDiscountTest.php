@@ -25,7 +25,7 @@ class FixedDiscountTest extends ActionTest
     {
         parent::setUp();
         $this->value = Money::USD(1000);
-        $this->rate = 10;
+        $this->rate = '10';
     }
 
     public function testCreateAbsolute()
@@ -39,7 +39,14 @@ class FixedDiscountTest extends ActionTest
     public function testCreateRelative()
     {
         $rel = new FixedDiscount($this->rate);
-        $this->assertSame($this->rate, $rel->getValue());
+        $this->assertRelative($this->rate, $rel);
+        $rel = new FixedDiscount($this->rate . '%');
+        $this->assertRelative($this->rate, $rel);
+    }
+
+    protected function assertRelative($rate, $rel)
+    {
+        $this->assertSame($rate, $rel->getValue());
         $this->assertTrue($rel->isRelative());
         $this->assertFalse($rel->isAbsolute());
     }

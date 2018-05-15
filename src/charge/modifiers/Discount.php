@@ -31,11 +31,17 @@ class Discount extends Modifier
 
     public static function ensureValidValue($value)
     {
-        if (is_numeric($value) || $value instanceof Money) {
+        if ($value instanceof Money) {
             return $value;
         }
 
-        /// TODO: add convertion from string
+        if (is_numeric($value)) {
+            return (string) $value;
+        }
+
+        if (is_string($value) && preg_match('/(\d{1,5}(\.\d+)?)%/', $value, $matches)) {
+            return $matches[1];
+        }
 
         /// TODO: add special exception
         var_dump($value);
