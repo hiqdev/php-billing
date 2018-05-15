@@ -44,13 +44,13 @@ class FixedDiscountTest extends ActionTest
         $this->assertFalse($rel->isAbsolute());
     }
 
-    public function testAbsModifyCharge()
+    public function testAbsoluteModifyCharge()
     {
         $abs = new FixedDiscount($this->value);
         $this->assertFixedDiscountCharges($abs, $this->value);
     }
 
-    public function testRelModifyCharge()
+    public function testRelativeModifyCharge()
     {
         $rel = new FixedDiscount($this->rate);
         $this->assertFixedDiscountCharges($rel, $this->value);
