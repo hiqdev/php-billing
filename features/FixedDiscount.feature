@@ -8,7 +8,6 @@ Feature: Fixed discount
         When date is <date>
         Then first charge is <first>
          And second charge is <second>
-
         Examples:
             | date       | first           | second          |
             | 2018-07-01 | monthly 100 USD |                 |
@@ -23,7 +22,6 @@ Feature: Fixed discount
         When date is <date>
         Then first charge is <first>
          And second charge is <second>
-
         Examples:
             | date       | first           | second          |
             | 2018-07-31 | monthly 100 USD |                 |

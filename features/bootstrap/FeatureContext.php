@@ -35,7 +35,7 @@ class FeatureContext implements Context
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $amount);
-        $sum = new Money($sum, new Currency($currency));
+        $sum = new Money($sum*100, new Currency($currency));
         $this->price = new SinglePrice(null, $type, $target, null, $quantity, $sum);
     }
 
@@ -68,30 +68,30 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /first charge is (\S+) ([0-9.]+)? ?([A-Z]{3})?/
+     * @Then /first charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
      */
-    public function firstCharge($type, $sum = null, $currency = null)
+    public function firstCharge($type = null, $sum = null, $currency = null)
     {
         $this->charge(1, $type, $sum, $currency);
     }
 
     /**
-     * @Then /second charge is (\S+) ([0-9.]+)? ?([A-Z]{3})?/
+     * @Then /second charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
      */
-    public function secondCharge($type, $sum = null, $currency = null)
+    public function secondCharge($type = null, $sum = null, $currency = null)
     {
         $this->charge(2, $type, $sum, $currency);
     }
 
     /**
-     * @Then /third charge is (\S+) ([0-9.]+)? ?([A-Z]{3})?/
+     * @Then /third charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
      */
-    public function thirdCharge($type, $sum = null, $currency = null)
+    public function thirdCharge($type = null, $sum = null, $currency = null)
     {
         $this->charge(3, $type, $sum, $currency);
     }
 
-    public function charge($no, $type, $sum = null, $curency = null)
+    public function charge($no, $type, $sum = null, $currency = null)
     {
         var_dump($this->formula);
         var_dump($this->date);
