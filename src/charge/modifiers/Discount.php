@@ -39,7 +39,7 @@ class Discount extends Modifier
             return (string) $value;
         }
 
-        if (is_string($value) && preg_match('/(\d{1,5}(\.\d+)?)%/', $value, $matches)) {
+        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $matches)) {
             return $matches[1];
         }
 
