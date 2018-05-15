@@ -4,7 +4,7 @@ Feature: Fixed discount
           And action is server monthly 2 units
 
     Scenario Outline: absolute fixed discount with since date
-        Given formula discount.since('08.2018').fixed('50 USD')
+        Given formula "discount.since('08.2018').fixed('50 USD')"
         When date is <date>
         Then first charge is <first>
          And second charge is <second>
