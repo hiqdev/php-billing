@@ -48,6 +48,7 @@
         "hiqdev/php-units": "dev-master"
     },
     "require-dev": {
+        "behat/behat": "^3.4.3",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
     },
