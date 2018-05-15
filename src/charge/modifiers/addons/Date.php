@@ -17,7 +17,7 @@ use DateTimeImmutable;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Date
+abstract class Date
 {
     /**
      * @var DateTimeImmutable
@@ -38,6 +38,22 @@ class Date
     {
         if ($value instanceof DateTimeImmutable) {
             return $value;
+        }
+
+        if (preg_match('/^(\d{4})-(\d{2})$/', $value, $ms)) {
+            return new DateTimeImmutable("$ms[1]-$ms[2]-01");
+        }
+
+        if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})$/', $value, $ms)) {
+            return new DateTimeImmutable("$ms[1]-$ms[2]-$ms[3]");
+        }
+
+        if (preg_match('/^(\d{2})\.(\d{4})$/', $value, $ms)) {
+            return new DateTimeImmutable("$ms[2]-$ms[1]-01");
+        }
+
+        if (preg_match('/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/', $value, $ms)) {
+            return new DateTimeImmutable("$ms[3]-$ms[2]-$ms[1]");
         }
 
         throw new \Exception('invalid date given');
