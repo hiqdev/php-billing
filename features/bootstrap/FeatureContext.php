@@ -3,7 +3,6 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;
@@ -30,7 +29,7 @@ class FeatureContext implements Context
     /**
      * @Given /(\S+) (\S+) price is ([0-9.]+) (\w+) per ([0-9.]+) (\w+)/
      */
-    public function price($target, $type, $sum, $currency, $amount, $unit)
+    public function priceIs($target, $type, $sum, $currency, $amount, $unit)
     {
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
@@ -42,7 +41,7 @@ class FeatureContext implements Context
     /**
      * @Given /action is (\S+) (\w+) ([0-9.]+) (\S+)/
      */
-    public function action($target, $type, $amount, $unit)
+    public function actionIs($target, $type, $amount, $unit)
     {
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
@@ -52,9 +51,9 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /formula (.+)/
+     * @Given /formula is (.+)/
      */
-    public function formula($formula)
+    public function formulaIs($formula)
     {
         $this->formula = $formula;
     }
@@ -68,35 +67,30 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /first charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
+     * @Then /(\w+) charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
      */
-    public function firstCharge($type = null, $sum = null, $currency = null)
+    public function chargeIs($numeral, $type = null, $sum = null, $currency = null)
     {
-        $this->charge(1, $type, $sum, $currency);
+        $no = $this->ensureNo($numeral);
+        //var_dump($this->formula);
+        //var_dump($this->date);
+        //var_dump("$no $type $sum $currency");
     }
 
-    /**
-     * @Then /second charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
-     */
-    public function secondCharge($type = null, $sum = null, $currency = null)
-    {
-        $this->charge(2, $type, $sum, $currency);
-    }
+    protected $numerals = [
+        'first'     => 1,
+        'second'    => 2,
+        'third'     => 3,
+        'fourth'    => 4,
+        'fifth'     => 5,
+    ];
 
-    /**
-     * @Then /third charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
-     */
-    public function thirdCharge($type = null, $sum = null, $currency = null)
+    public function ensureNo($numeral)
     {
-        $this->charge(3, $type, $sum, $currency);
-    }
+        if (empty($this->numerals[$numeral])) {
+            throw new Exception("wrong numeral '$numeral'");
+        }
 
-    public function charge($no, $type, $sum = null, $currency = null)
-    {
-        var_dump($this->formula);
-        var_dump($this->date);
-        var_dump($type);
-        var_dump($sum);
-        var_dump($currency);
+        return $this->numerals[$numeral] - 1;
     }
 }
