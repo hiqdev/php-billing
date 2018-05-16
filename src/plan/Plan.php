@@ -117,14 +117,9 @@ class Plan implements PlanInterface
     {
         $result = [];
         foreach ($this->prices as $price) {
-            $charge = $action->calculateCharge($price);
-            if ($price instanceof ChargeModifier) {
-                $charges = $price->modifyCharge($charge, $action);
-                if ($charges) {
-                    $result = array_merge($result, $charges);
-                }
-            } elseif ($charge !== null) {
-                $result[] = $charge;
+            $charges = $price->calculateCharges($action);
+            if ($charges) {
+                $result = array_merge($result, $charges);
             }
         }
 
