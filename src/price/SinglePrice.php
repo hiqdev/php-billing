@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\charge\FormulaChargeModifierTrait;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
@@ -27,8 +29,10 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SinglePrice extends AbstractPrice
+class SinglePrice extends AbstractPrice implements ChargeModifier
 {
+    use FormulaChargeModifierTrait;
+
     /**
      * @var Quantity prepaid quantity also implies Unit
      */
