@@ -11,18 +11,28 @@ use Behat\Behat\Context\Context;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Currency;
 use Money\Money;
+use PHPUnit\Framework\Assert;
 
 /**
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context
 {
+    protected $engine;
+
+    protected $customer;
+    protected $price;
+    protected $action;
+    protected $charges;
+    protected $date;
+
     /**
      * Initializes context.
      */
@@ -60,7 +70,16 @@ class FeatureContext implements Context
      */
     public function formulaIs($formula)
     {
-        $this->formula = $formula;
+        $this->price->setFormula($this->getFormulaEngine()->build($formula));
+    }
+
+    protected function getFormulaEngine()
+    {
+        if ($this->engine === null) {
+            $this->engine = new FormulaEngine();
+        }
+
+        return $this->engine;
     }
 
     /**
@@ -78,10 +97,24 @@ class FeatureContext implements Context
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
+            $this->charges = $this->price->calculateCharges($this->action);
         }
+        //var_dump($this->charges); die;
+        $this->assertCharge($type, $sum, $currency, $this->charges[$no]);
+    }
+
+    public function assertCharge($type, $sum, $currency, $charge)
+    {
+        if (empty($type) && empty($sum) && empty($currency)) {
+            return;
+        }
+        //var_dump($charge);die;
+        Assert::assertInstanceOf(Charge::class, $charge);
+        Assert::assertSame($type, $charge->getPrice()->getType()->getName());
+        $money = new Money($sum*100, new Currency($currency));
+        //Assert::assertEquals($money, $charge->getSum());
         //var_dump($this->formula);
         //var_dump($this->date);
-        //var_dump("$no $type $sum $currency");
     }
 
     protected $numerals = [
