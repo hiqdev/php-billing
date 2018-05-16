@@ -72,6 +72,8 @@ class FeatureContext implements Context
     public function chargeIs($numeral, $type = null, $sum = null, $currency = null)
     {
         $no = $this->ensureNo($numeral);
+        if ($no === 0) {
+        }
         //var_dump($this->formula);
         //var_dump($this->date);
         //var_dump("$no $type $sum $currency");
