@@ -49,6 +49,7 @@
     },
     "require-dev": {
         "behat/behat": "^3.4.3",
+        "phpunit/phpunit": "^7.1",
         "hoa/ruler": "^2.17",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
