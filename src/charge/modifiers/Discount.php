@@ -25,31 +25,8 @@ class Discount extends Modifier
         return new FixedDiscount($value, $this->addons);
     }
 
-    public function grows($step, $start = null)
+    public function grows($step, $min = null)
     {
-        return new GrowingDiscount($step, $start, $this->addons);
-    }
-
-    public static function ensureValidValue($value)
-    {
-        if ($value instanceof Money) {
-            return $value;
-        }
-
-        if (is_numeric($value)) {
-            return (string) $value;
-        }
-
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $ms)) {
-            return $ms[1];
-        }
-
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?) ([A-Z]{3})$/', $value, $ms)) {
-            return new Money($ms[1]*100, new Currency($ms[3]));
-        }
-
-        /// TODO: add special exception
-        var_dump($value);
-        throw new \Exception('invalid discount value');
+        return new GrowingDiscount($step, $min, $this->addons);
     }
 }

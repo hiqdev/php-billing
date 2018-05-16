@@ -106,6 +106,7 @@ class FeatureContext implements Context
     public function assertCharge($type, $sum, $currency, $charge)
     {
         if (empty($type) && empty($sum) && empty($currency)) {
+            Assert::assertNull($charge);
             return;
         }
         //var_dump($charge);die;
