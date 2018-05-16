@@ -10,9 +10,7 @@
 
 namespace hiqdev\php\billing\formula;
 
-use Hoa\Ruler\Context;
 use Hoa\Ruler\Model;
-use Hoa\Ruler\Ruler;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

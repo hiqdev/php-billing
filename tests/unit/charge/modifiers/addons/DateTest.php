@@ -10,8 +10,8 @@
 
 namespace hiqdev\php\billing\tests\unit\charge\modifiers\addons\DateTestCase;
 
-use hiqdev\php\billing\charge\modifiers\addons\Date;
 use DateTimeImmutable;
+use hiqdev\php\billing\charge\modifiers\addons\Date;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

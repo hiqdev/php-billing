@@ -1,8 +1,13 @@
 <?php
-
+/**
+ * PHP Billing Library
+ *
+ * @link      https://github.com/hiqdev/php-billing
+ * @package   php-billing
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
+ */
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;

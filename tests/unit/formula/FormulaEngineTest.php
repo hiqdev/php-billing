@@ -11,11 +11,10 @@
 namespace hiqdev\php\billing\tests\unit\formula;
 
 use DateTimeImmutable;
-use hiqdev\php\billing\formula\FormulaEngine;
-use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
-use Money\Money;
+use hiqdev\php\billing\charge\modifiers\FixedDiscount;
+use hiqdev\php\billing\formula\FormulaEngine;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
