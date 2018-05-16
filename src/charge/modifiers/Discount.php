@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use Money\Currency;
 use Money\Money;
 
 /**
@@ -39,8 +40,12 @@ class Discount extends Modifier
             return (string) $value;
         }
 
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $matches)) {
-            return $matches[1];
+        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $ms)) {
+            return $ms[1];
+        }
+
+        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?) ([A-Z]{3})$/', $value, $ms)) {
+            return new Money($ms[1]*100, new Currency($ms[3]));
         }
 
         /// TODO: add special exception

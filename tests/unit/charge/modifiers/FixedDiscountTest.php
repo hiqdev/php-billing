@@ -14,6 +14,7 @@ use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
 use hiqdev\php\units\Quantity;
+use Money\Currency;
 use Money\Money;
 
 /**
@@ -31,7 +32,16 @@ class FixedDiscountTest extends ActionTest
     public function testCreateAbsolute()
     {
         $abs = new FixedDiscount($this->value);
-        $this->assertSame($this->value, $abs->getValue());
+        $this->assertAbsolute($this->value, $abs);
+        $abs = new FixedDiscount('10 USD');
+        $this->assertAbsolute($this->value, $abs);
+        $abs = new FixedDiscount('10.00 USD');
+        $this->assertAbsolute($this->value, $abs);
+    }
+
+    public function assertAbsolute($value, $abs)
+    {
+        $this->assertEquals($value, $abs->getValue());
         $this->assertTrue($abs->isAbsolute());
         $this->assertFalse($abs->isRelative());
     }
