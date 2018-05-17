@@ -160,6 +160,11 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         return $this->time;
     }
 
+    public function setTime(DateTimeImmutable $time)
+    {
+        $this->time = $time;
+    }
+
     /**
      * {@inheritdoc}
      */
