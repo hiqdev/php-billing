@@ -14,6 +14,7 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\context\ContextInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
 
@@ -113,11 +114,11 @@ class Plan implements PlanInterface
      * @param ActionInterface $action
      * @return Charge[]|ChargeInterface[]
      */
-    public function calculateCharges(ActionInterface $action)
+    public function calculateCharges(ActionInterface $action, ContextInterface $context)
     {
         $result = [];
         foreach ($this->prices as $price) {
-            $charges = $price->calculateCharges($action);
+            $charges = $price->calculateCharges($action, $context);
             if ($charges) {
                 $result = array_merge($result, $charges);
             }

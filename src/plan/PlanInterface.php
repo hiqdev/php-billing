@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\plan;
 
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\context\ContextInterface;
 
 /**
  * Plan Interface.
@@ -25,5 +26,5 @@ interface PlanInterface
      * @param ActionInterface $action
      * @return ChargeInterface[]
      */
-    public function calculateCharges(ActionInterface $action);
+    public function calculateCharges(ActionInterface $action, ContextInterface $context);
 }

@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\charge\modifiers;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\context\ContextInterface;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -77,11 +78,16 @@ class FixedDiscount extends Modifier
         return new Target(Target::ANY, Target::ANY);
     }
 
-    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
+    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action, ContextInterface $context): array
     {
         if ($charge === null) {
             return [];
         }
+        $month = $context->getTime()->modify('first day of this month midnight');
+        if (!$this->checkPeriod($month)) {
+            return [$charge];
+        }
+
         $sum = $this->calculateSum($charge->getSum());
         $usage  = Quantity::items(1);
         $price = $this->buildPrice($sum);

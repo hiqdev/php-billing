@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\tests\unit\action;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\context\Context;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -36,6 +37,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
+     * @var Context
+     */
+    protected $context;
+
+    /**
      * @var Money
      */
     protected $money;
@@ -47,6 +53,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->prepaid  = Quantity::gigabyte(1);
         $this->money    = Money::USD(10000);
         $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+        $this->context  = new Context();
         $this->customer = new Customer(2, 'client');
         $this->time     = new DateTimeImmutable('now');
     }

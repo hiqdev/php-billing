@@ -75,12 +75,13 @@ class FixedDiscountTest extends ActionTest
 
     public function assertFixedDiscountCharges($fd, $sum)
     {
+        $this->price->setFormula($fd);
         $action = $this->createAction($this->prepaid->multiply(2));
         $charge = $action->calculateCharge($this->price);
-        $charges = $fd->modifyCharge($charge, $action);
+        $charges = $this->price->calculateCharges($action, $this->context);
         $this->assertInternalType('array', $charges);
         $this->assertSame(2, count($charges));
-        $this->assertSame($charge, $charges[0]);
+        $this->assertEquals($charge, $charges[0]);
         $discount = $charges[1];
         $this->assertInstanceOf(Charge::class, $discount);
         $this->assertEquals(Quantity::items(1), $discount->getUsage());

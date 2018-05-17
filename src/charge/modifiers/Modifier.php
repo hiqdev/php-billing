@@ -10,9 +10,11 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\context\ContextInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\addons\Till;
@@ -38,7 +40,7 @@ class Modifier implements ChargeModifier
         $this->addons = $addons;
     }
 
-    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
+    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action, ContextInterface $context): array
     {
         throw new \Exception('not finished modifier');
     }
@@ -91,5 +93,20 @@ class Modifier implements ChargeModifier
     public function getTill()
     {
         return $this->getAddon(self::TILL);
+    }
+
+    public function checkPeriod(DateTimeImmutable $time)
+    {
+        $since = $this->getSince();
+        if ($since && $since->getValue() > $time) {
+            return false;
+        }
+
+        $till = $this->getTill();
+        if ($till && $till->getValue() <= $time) {
+            return false;
+        }
+
+        return true;
     }
 }

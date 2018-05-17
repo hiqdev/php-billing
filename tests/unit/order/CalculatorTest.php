@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\unit\order;
 
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\context\Context;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
@@ -21,7 +22,7 @@ class CalculatorTest extends SaleTest
     protected function setUp()
     {
         parent::setUp();
-        $this->calculator = new Calculator($this->repository);
+        $this->calculator = new Calculator(new Context(), $this->repository);
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {

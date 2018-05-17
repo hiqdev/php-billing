@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\context\ContextInterface;
 
 /**
  * Price with formula
@@ -32,9 +33,9 @@ trait FormulaChargeModifierTrait
      * @param ChargeInterface $charge
      * @return ChargeInterface[] calculated charges
      */
-    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
+    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action, ContextInterface $context): array
     {
-        return $this->formula ? $this->formula->modifyCharge($charge, $action) : [];
+        return $this->formula ? $this->formula->modifyCharge($charge, $action, $context) : [];
     }
 
     public function setFormula(ChargeModifier $formula)

@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\context\ContextInterface;
 use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -145,11 +146,11 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
                $action->getType()->matches($this->getType());
     }
 
-    public function calculateCharges(ActionInterface $action)
+    public function calculateCharges(ActionInterface $action, ContextInterface $context)
     {
-        $charge = $action->calculateCharge($this);
+        $charge = $action->calculateCharge($this, $context);
         if ($this instanceof ChargeModifier) {
-            return $this->modifyCharge($charge, $action);
+            return $this->modifyCharge($charge, $action, $context);
         }
 
         return $charge ? [$charge] : [];

@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\context\ContextInterface;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
 
@@ -18,6 +19,11 @@ use hiqdev\php\billing\sale\SaleRepositoryInterface;
  */
 class Calculator implements CalculatorInterface
 {
+    /**
+     * @var ContextInterface
+     */
+    protected $context;
+
     /**
      * @var SaleRepositoryInterface
      */
@@ -32,9 +38,11 @@ class Calculator implements CalculatorInterface
      * @param PlanRepositoryInterface $planRepository
      */
     public function __construct(
+        ContextInterface $context,
         SaleRepositoryInterface $saleRepository,
         PlanRepositoryInterface $planRepository = null
     ) {
+        $this->context = $context;
         $this->saleRepository = $saleRepository;
         $this->planRepository = $planRepository;
     }
@@ -42,8 +50,11 @@ class Calculator implements CalculatorInterface
     /**
      * {@inheritdoc}
      */
-    public function calculateCharges(OrderInterface $order)
+    public function calculateCharges(OrderInterface $order, ContextInterface $context = null)
     {
+        if ($context === null) {
+            $context = $this->context;
+        }
         $plans = $this->findPlans($order);
         $charges = [];
         foreach ($order->getActions() as $actionKey => $action) {
@@ -53,7 +64,7 @@ class Calculator implements CalculatorInterface
                  */
                 continue;
             }
-            $charges[$actionKey] = $plans[$actionKey]->calculateCharges($action);
+            $charges[$actionKey] = $plans[$actionKey]->calculateCharges($action, $context);
         }
 
         return $charges;
