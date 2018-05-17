@@ -82,6 +82,12 @@ class FixedDiscount extends Modifier
         if ($charge === null) {
             return [];
         }
+
+        $month = $action->getTime()->modify('first day of this month midnight');
+        if (!$this->checkPeriod($month)) {
+            return [$charge];
+        }
+
         $sum = $this->calculateSum($charge->getSum());
         $usage  = Quantity::items(1);
         $price = $this->buildPrice($sum);
