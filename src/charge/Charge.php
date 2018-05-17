@@ -55,6 +55,11 @@ class Charge implements ChargeInterface
      */
     protected $bill;
 
+    /**
+     * @var string
+     */
+    protected $comment;
+
     public function __construct(
                             $id,
         ActionInterface     $action,
@@ -122,6 +127,16 @@ class Charge implements ChargeInterface
             throw new \Exception('cannot reassign sale bill');
         }
         $this->bill = $bill;
+    }
+
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment)
+    {
+        $this->comment = $comment;
     }
 
     public function setId($id)

@@ -92,6 +92,10 @@ class FixedDiscount extends Modifier
         $usage  = Quantity::items(1);
         $price = $this->buildPrice($sum);
         $discount = new Charge(null, $action, $price, $usage, $sum);
+        $reason = $this->getReason();
+        if ($reason) {
+            $discount->setComment($reason->getValue());
+        }
 
         return [$charge, $discount];
     }

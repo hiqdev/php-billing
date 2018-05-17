@@ -88,22 +88,42 @@ class FeatureContext implements Context
     public function actionDateIs($date)
     {
         $this->action->setTime(new DateTimeImmutable($date));
-
     }
 
     /**
-     * @Then /(\w+) charge is (\S+)? ?([0-9.]+)? ?([A-Z]{3})?/
+     * @Then /(\w+) charge is $/
      */
-    public function chargeIs($numeral, $type = null, $sum = null, $currency = null)
+    public function emptyCharge($numeral)
+    {
+        $this->chargeIs($numeral);
+    }
+
+    /**
+     * @Then /(\w+) charge is (\S+) ([0-9.]+) ([A-Z]{3})$/
+     */
+    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null)
+    {
+        $this->chargeIs($numeral, $type, $sum, $currency);
+    }
+
+    /**
+     * @Then /(\w+) charge is (\S+) ([0-9.]+) ([A-Z]{3}) reason (.+)/
+     */
+    public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null)
+    {
+        $this->chargeIs($numeral, $type, $sum, $currency, $reason);
+    }
+
+    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null)
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
             $this->charges = $this->price->calculateCharges($this->action);
         }
-        $this->assertCharge($type, $sum, $currency, $this->charges[$no]);
+        $this->assertCharge($this->charges[$no], $type, $sum, $currency, $reason);
     }
 
-    public function assertCharge($type, $sum, $currency, $charge)
+    public function assertCharge($charge, $type, $sum, $currency, $reason)
     {
         if (empty($type) && empty($sum) && empty($currency)) {
             Assert::assertNull($charge);
@@ -113,6 +133,9 @@ class FeatureContext implements Context
         Assert::assertSame($type, $charge->getPrice()->getType()->getName());
         $money = new Money($sum*100, new Currency($currency));
         Assert::assertEquals($money, $charge->getSum());
+        if ($reason !== null) {
+            Assert::assertSame($reason, $charge->getComment());
+        }
     }
 
     protected $numerals = [
