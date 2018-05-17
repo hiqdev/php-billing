@@ -38,7 +38,7 @@ class Modifier implements ChargeModifier
         $this->addons = $addons;
     }
 
-    public function modifyCharge(ChargeInterface $charge, ActionInterface $action): array
+    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         throw new \Exception('not finished modifier');
     }

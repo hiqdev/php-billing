@@ -77,7 +77,7 @@ class FixedDiscount extends Modifier
         return new Target(Target::ANY, Target::ANY);
     }
 
-    public function modifyCharge(ChargeInterface $charge, ActionInterface $action): array
+    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         if ($charge === null) {
             return [];

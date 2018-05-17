@@ -32,7 +32,7 @@ trait FormulaChargeModifierTrait
      * @param ChargeInterface $charge
      * @return ChargeInterface[] calculated charges
      */
-    public function modifyCharge(ChargeInterface $charge, ActionInterface $action): array
+    public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         return $this->formula ? $this->formula->modifyCharge($charge, $action) : [];
     }
