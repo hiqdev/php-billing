@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\formula;
 
+use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Ruler;
@@ -34,7 +35,11 @@ class FormulaEngine
         }
     }
 
-    public function build(string $formula)
+    /**
+     * @param string $formula
+     * @return ChargeModifier
+     */
+    public function build(string $formula): ChargeModifier
     {
         return $this->getRuler()->assert($formula, $this->getContext());
     }

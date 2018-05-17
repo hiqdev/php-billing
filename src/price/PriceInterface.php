@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -69,4 +70,12 @@ interface PriceInterface
      * @return TypeInterface
      */
     public function getType();
+
+    /**
+     * Calculates charges of this price for $action
+     *
+     * @param ActionInterface $action
+     * @return ChargeInterface[]
+     */
+    public function calculateCharges(ActionInterface $action): array;
 }

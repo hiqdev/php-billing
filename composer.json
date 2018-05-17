@@ -59,12 +59,13 @@
     },
     "autoload": {
         "psr-4": {
-            "hiqdev\\php\\billing\\": "src"
+            "hiqdev\\php\\billing\\": "src",
+            "hiqdev\\php\\billing\\tests\\behat\\": "features"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "hiqdev\\php\\billing\\tests\\": "tests"
+            "hiqdev\\php\\billing\\tests\\": "tests",
         }
     },
     "repositories": [

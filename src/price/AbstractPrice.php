@@ -145,7 +145,8 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
                $action->getType()->matches($this->getType());
     }
 
-    public function calculateCharges(ActionInterface $action)
+    /** {@inheritdoc} */
+    public function calculateCharges(ActionInterface $action): array
     {
         $charge = $action->calculateCharge($this);
         if ($this instanceof ChargeModifier) {
