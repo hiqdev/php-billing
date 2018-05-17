@@ -34,7 +34,7 @@ trait FormulaChargeModifierTrait
      */
     public function modifyCharge(ChargeInterface $charge, ActionInterface $action): array
     {
-        return $formula ? $formula->modifyCharge($charge, $action) : [];
+        return $this->formula ? $this->formula->modifyCharge($charge, $action) : [];
     }
 
     public function setFormula(ChargeModifier $formula)

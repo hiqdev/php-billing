@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
