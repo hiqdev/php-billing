@@ -55,7 +55,7 @@ class FixedDiscount extends Modifier
 
     public function calculateSum(Money $sum)
     {
-        return $this->isAbsolute() ? $this->value : $sum->multiply($this->value*0.01);
+        return $this->isAbsolute() ? $this->getValue() : $sum->multiply($this->getValue()*0.01);
     }
 
     public function buildPrice(Money $sum)
