@@ -42,13 +42,13 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /(\S+) (\S+) price is ([0-9.]+) (\w+) per ([0-9.]+) (\w+)/
+     * @Given /(\S+) (\S+) price is ([0-9.]+) (\w+) per (\w+)/
      */
-    public function priceIs($target, $type, $sum, $currency, $amount, $unit)
+    public function priceIs($target, $type, $sum, $currency, $unit)
     {
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
-        $quantity = Quantity::create($unit, $amount);
+        $quantity = Quantity::create($unit, 0);
         $sum = new Money($sum*100, new Currency($currency));
         $this->price = new SinglePrice(null, $type, $target, null, $quantity, $sum);
     }
@@ -85,9 +85,10 @@ class FeatureContext implements Context
     /**
      * @When /action date is ([0-9.-]+)/
      */
-    public function dateIs($date)
+    public function actionDateIs($date)
     {
-        $this->date = $date;
+        $this->action->setTime(new DateTimeImmutable($date));
+
     }
 
     /**
@@ -99,7 +100,6 @@ class FeatureContext implements Context
         if ($no === 0) {
             $this->charges = $this->price->calculateCharges($this->action);
         }
-        //var_dump($this->charges); die;
         $this->assertCharge($type, $sum, $currency, $this->charges[$no]);
     }
 
@@ -109,13 +109,10 @@ class FeatureContext implements Context
             Assert::assertNull($charge);
             return;
         }
-        //var_dump($charge);die;
         Assert::assertInstanceOf(Charge::class, $charge);
         Assert::assertSame($type, $charge->getPrice()->getType()->getName());
         $money = new Money($sum*100, new Currency($currency));
-        //Assert::assertEquals($money, $charge->getSum());
-        //var_dump($this->formula);
-        //var_dump($this->date);
+        Assert::assertEquals($money, $charge->getSum());
     }
 
     protected $numerals = [

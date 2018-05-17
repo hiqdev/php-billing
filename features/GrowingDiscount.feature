@@ -1,6 +1,6 @@
 Feature: Growing discount
     Background:
-        Given server monthly price is 50 USD per 1 unit
+        Given server monthly price is 50 USD per unit
           And action is server monthly 2 units
 
     Scenario Outline: relative discount growing 1% every month from 5% up to 10%
