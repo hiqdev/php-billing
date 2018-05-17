@@ -83,7 +83,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @When /date is ([0-9.-]+)/
+     * @When /action date is ([0-9.-]+)/
      */
     public function dateIs($date)
     {

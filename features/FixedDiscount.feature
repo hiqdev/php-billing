@@ -5,7 +5,7 @@ Feature: Fixed discount
 
     Scenario Outline: absolute fixed discount with since date
         Given formula is discount.since('08.2018').fixed('50 USD')
-        When date is <date>
+        When action date is <date>
         Then first charge is <first>
          And second charge is <second>
         Examples:
@@ -19,7 +19,7 @@ Feature: Fixed discount
 
     Scenario Outline: relative fixed discount with since date
         Given formula is discount.since('08.2018').fixed('20%')
-        When date is <date>
+        When action date is <date>
         Then first charge is <first>
          And second charge is <second>
         Examples:

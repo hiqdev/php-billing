@@ -5,7 +5,7 @@ Feature: Growing discount
 
     Scenario Outline: relative discount growing 1% every month from 5% up to 10%
         Given formula is discount.since('08.2018').grows('1%').everyMonth().min('5%').max('10%')
-        When date is <date>
+        When action date is <date>
         Then first charge is <first>
          And second charge is <second>
         Examples:
@@ -14,7 +14,7 @@ Feature: Growing discount
 
     Scenario Outline: relative discount growing 1% every month from 5% since 08.2018 till 08.2019
         Given formula is discount.since('08.2018').till('08.2019').grows('1%').everyMonth().min('5%')
-        When date is <date>
+        When action date is <date>
         Then first charge is <first>
          And second charge is <second>
         Examples:
