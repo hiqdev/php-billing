@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use hiqdev\php\billing\charge\ChargeInterface;
 use DateInterval;
 use Money\Money;
 
@@ -71,6 +72,14 @@ class GrowingDiscount extends FixedDiscount
         $this->max = $this->ensureValidLimit($max, 'max');
 
         return $this;
+    }
+
+    public function getValue(ChargeInterface $charge = null)
+    {
+        $time = $charge->getAction()->getTime();
+        var_dump($time);
+        die;
+
     }
 
     public function ensureValidLimit($limit, $name)

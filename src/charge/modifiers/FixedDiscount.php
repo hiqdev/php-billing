@@ -38,7 +38,7 @@ class FixedDiscount extends Modifier
         $this->value = static::ensureValidValue($value);
     }
 
-    public function getValue()
+    public function getValue(ChargeInterface $charge = null)
     {
         return $this->value;
     }
@@ -53,9 +53,9 @@ class FixedDiscount extends Modifier
         return !$this->isAbsolute();
     }
 
-    public function calculateSum(Money $sum)
+    public function calculateSum(ChargeInterface $charge)
     {
-        return $this->isAbsolute() ? $this->getValue() : $sum->multiply($this->getValue()*0.01);
+        return $this->isAbsolute() ? $this->getValue($charge) : $charge->getSum()->multiply($this->getValue($charge)*0.01);
     }
 
     public function buildPrice(Money $sum)
@@ -88,7 +88,7 @@ class FixedDiscount extends Modifier
             return [$charge];
         }
 
-        $sum = $this->calculateSum($charge->getSum());
+        $sum = $this->calculateSum($charge);
         $usage  = Quantity::items(1);
         $price = $this->buildPrice($sum);
         $discount = new Charge(null, $action, $price, $usage, $sum);
