@@ -10,9 +10,6 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
-use Money\Currency;
-use Money\Money;
-
 /**
  * General discount.
  *

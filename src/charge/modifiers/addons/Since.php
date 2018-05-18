@@ -10,11 +10,13 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
+use hiqdev\php\billing\charge\modifiers\AddonInterface;
+
 /**
  * Since addon.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Since extends Date
+class Since extends Date implements AddonInterface
 {
 }

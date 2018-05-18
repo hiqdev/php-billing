@@ -10,12 +10,14 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
+use hiqdev\php\billing\charge\modifiers\AddonInterface;
+
 /**
  * Reason addon.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Reason
+class Reason implements AddonInterface
 {
     /**
      * @var string

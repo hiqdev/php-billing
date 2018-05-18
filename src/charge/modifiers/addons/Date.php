@@ -11,13 +11,14 @@
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\charge\modifiers\AddonInterface;
 
 /**
  * Date addon.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class Date
+abstract class Date implements AddonInterface
 {
     /**
      * @var DateTimeImmutable
