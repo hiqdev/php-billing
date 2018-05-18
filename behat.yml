@@ -2,6 +2,6 @@ default:
     suites:
         php-billing:
             paths:
-                - "%paths.base%/features"
+                - "%paths.base%/tests/behat"
             contexts:
                 - hiqdev\php\billing\tests\behat\bootstrap\FeatureContext
