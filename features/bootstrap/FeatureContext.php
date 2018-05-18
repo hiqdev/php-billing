@@ -7,7 +7,11 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
+
+namespace hiqdev\php\billing\tests\behat\bootstrap;
+
 use Behat\Behat\Context\Context;
+use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
@@ -19,6 +23,7 @@ use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
+use NumberFormatter;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -28,7 +33,7 @@ class FeatureContext implements Context
 {
     protected $engine;
 
-    /** @var Customer  */
+    /** @var Customer */
     protected $customer;
     /**
      * @var \hiqdev\php\billing\price\PriceInterface|\hiqdev\php\billing\charge\FormulaChargeModifierTrait
@@ -164,20 +169,14 @@ class FeatureContext implements Context
         }
     }
 
-    protected $numerals = [
-        'first'     => 1,
-        'second'    => 2,
-        'third'     => 3,
-        'fourth'    => 4,
-        'fifth'     => 5,
-    ];
-
-    public function ensureNo($numeral)
+    private function ensureNo(string $numeral): int
     {
-        if (empty($this->numerals[$numeral])) {
-            throw new Exception("wrong numeral '$numeral'");
+        $formatter = new NumberFormatter('en_EN', NumberFormatter::SPELLOUT);
+        $result = $formatter->parse($numeral);
+        if ($result === false) {
+            throw new \Exception("Wrong numeral '$numeral'");
         }
 
-        return $this->numerals[$numeral] - 1;
+        return --$result;
     }
 }
