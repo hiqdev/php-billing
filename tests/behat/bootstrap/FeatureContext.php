@@ -91,8 +91,9 @@ class FeatureContext implements Context
 
     /**
      * @Given /formula is (.+)/
+     * @param string $formula
      */
-    public function formulaIs($formula)
+    public function formulaIs(string $formula): void
     {
         $this->price->setFormula($this->getFormulaEngine()->build($formula));
     }
@@ -108,16 +109,19 @@ class FeatureContext implements Context
 
     /**
      * @When /action date is ([0-9.-]+)/
+     * @param string $date
+     * @throws \Exception
      */
-    public function actionDateIs($date)
+    public function actionDateIs(string $date): void
     {
         $this->action->setTime(new DateTimeImmutable($date));
     }
 
     /**
      * @Then /^(\w+) charge is $/
+     * @param string $numeral
      */
-    public function emptyCharge($numeral)
+    public function emptyCharge(string $numeral): void
     {
         $this->chargeIs($numeral);
     }
@@ -125,7 +129,7 @@ class FeatureContext implements Context
     /**
      * @Then /^(\w+) charge is (\S+) ([0-9.]+) ([A-Z]{3})$/
      */
-    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null)
+    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null): void
     {
         $this->chargeIs($numeral, $type, $sum, $currency);
     }
@@ -133,12 +137,12 @@ class FeatureContext implements Context
     /**
      * @Then /^(\w+) charge is (\S+) ([0-9.]+) ([A-Z]{3}) reason (.+)/
      */
-    public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null)
+    public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null): void
     {
         $this->chargeIs($numeral, $type, $sum, $currency, $reason);
     }
 
-    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null)
+    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null): void
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
@@ -154,7 +158,7 @@ class FeatureContext implements Context
      * @param string|null $currency
      * @param string|null $reason
      */
-    public function assertCharge($charge, $type, $sum, $currency, $reason)
+    public function assertCharge($charge, $type, $sum, $currency, $reason): void
     {
         if (empty($type) && empty($sum) && empty($currency)) {
             Assert::assertNull($charge);
