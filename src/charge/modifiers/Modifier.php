@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -25,18 +27,37 @@ use hiqdev\php\billing\charge\modifiers\addons\Till;
  */
 class Modifier implements ChargeModifier
 {
-    const REASON = 'reason';
-    const SINCE = 'since';
-    const TILL = 'till';
-
     /**
      * @var AddonInterface[]
      */
     protected $addons;
 
+    /**
+     * @var string[]|AddonInterface[]
+     */
+    protected $supportedAddons = [];
+
     public function __construct(array $addons = [])
     {
         $this->addons = $addons;
+
+        $this->supportedAddons = [
+            'reason' => Reason::class,
+            'since' => Since::class,
+            'till' => Till::class
+        ];
+    }
+
+    public function __call($name, $params)
+    {
+        if (strncmp($name, 'get', 3) === 0) {
+            return $this->getAddon(strtolower(substr($name, 3)));
+        }
+        if (isset($this->supportedAddons[$name])) {
+            return $this->addAddon($name, new $this->supportedAddons[$name](...$params));
+        }
+
+        throw new \BadMethodCallException("Method \"$name\" is not supported");
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
@@ -44,55 +65,35 @@ class Modifier implements ChargeModifier
         throw new \Exception('not finished modifier');
     }
 
-    public function discount()
-    {
-        return new Discount($this->addons);
-    }
-
-    public function reason($text)
-    {
-        return $this->addAddon(self::REASON, new Reason($text));
-    }
-
-    public function since($time)
-    {
-        return $this->addAddon(self::SINCE, new Since($time));
-    }
-
-    public function till($time)
-    {
-        return $this->addAddon(self::TILL, new Till($time));
-    }
-
     public function addAddon($name, $addon)
     {
+        if (!isset($this->supportedAddons[$name])) {
+            throw new \Exception("Addon \"$name\" is not supported by this class");
+        }
         if (isset($this->addons[$name])) {
-            throw new \Exception("'$name' is already set");
+            throw new \Exception("Addon \"$name\" is already set");
         }
         $this->addons[$name] = $addon;
 
         return $this;
     }
 
-    public function getAddon($name)
+    public function getAddon(string $name): ?AddonInterface
     {
-        return empty($this->addons[$name]) ? null : $this->addons[$name];
+        return $this->addons[$name] ?? null;
     }
 
-    public function getReason()
+    public function hasAddon(string $name): bool
     {
-        return $this->getAddon(self::REASON);
+        return isset($this->addons[$name]);
     }
 
-    public function getSince()
+
+    public function discount()
     {
-        return $this->getAddon(self::SINCE);
+        return new Discount($this->addons);
     }
 
-    public function getTill()
-    {
-        return $this->getAddon(self::TILL);
-    }
     public function checkPeriod(DateTimeImmutable $time)
     {
         $since = $this->getSince();
