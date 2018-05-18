@@ -72,7 +72,7 @@ interface PriceInterface
     public function getType();
 
     /**
-     * Calculates charges of this price for $action
+     * Calculates charges of this price for $action.
      *
      * @param ActionInterface $action
      * @return ChargeInterface[]

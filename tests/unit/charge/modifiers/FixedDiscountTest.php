@@ -14,7 +14,6 @@ use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
 use hiqdev\php\units\Quantity;
-use Money\Currency;
 use Money\Money;
 
 /**

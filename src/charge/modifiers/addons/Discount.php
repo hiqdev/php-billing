@@ -11,11 +11,10 @@
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
-use Money\Currency;
 use Money\Currencies\ISOCurrencies;
+use Money\Currency;
 use Money\Money;
 use Money\Parser\DecimalMoneyParser;
-use NumberFormatter;
 
 /**
  * Discount addon.

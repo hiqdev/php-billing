@@ -93,6 +93,7 @@ class Modifier implements ChargeModifier
     {
         return $this->getAddon(self::TILL);
     }
+
     public function checkPeriod(DateTimeImmutable $time)
     {
         $since = $this->getSince();

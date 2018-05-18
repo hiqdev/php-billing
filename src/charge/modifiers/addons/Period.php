@@ -40,6 +40,6 @@ abstract class Period implements AddonInterface
             throw new \Exception('periodicity must be integer number');
         }
 
-        return (int)$value;
+        return (int) $value;
     }
 }

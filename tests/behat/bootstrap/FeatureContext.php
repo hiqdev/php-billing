@@ -53,9 +53,6 @@ class FeatureContext implements Context
     /** @var \Money\MoneyParser */
     protected $moneyParser;
 
-// Variable is not used. TODO: Remove?
-//    protected $date;
-
     /**
      * Initializes context.
      */
@@ -162,6 +159,7 @@ class FeatureContext implements Context
     {
         if (empty($type) && empty($sum) && empty($currency)) {
             Assert::assertNull($charge);
+
             return;
         }
         Assert::assertInstanceOf(Charge::class, $charge);

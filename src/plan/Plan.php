@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\plan;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
-use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
 
