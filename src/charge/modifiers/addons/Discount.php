@@ -24,6 +24,8 @@ use NumberFormatter;
  */
 class Discount implements AddonInterface
 {
+    protected static $name = 'discount';
+
     /**
      * @var string|Money
      */
@@ -67,6 +69,7 @@ class Discount implements AddonInterface
 
         /// TODO: add special exception
         var_dump($value);
-        throw new \Exception("invalid discount value: $value");
+        $name = static::$name;
+        throw new \Exception("invalid $name value: $value");
     }
 }

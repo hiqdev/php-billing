@@ -12,8 +12,8 @@ namespace hiqdev\php\billing\charge\modifiers;
 
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
-use hiqdev\php\billing\charge\modifiers\addons\Min;
-use hiqdev\php\billing\charge\modifiers\addons\Max;
+use hiqdev\php\billing\charge\modifiers\addons\Maximum;
+use hiqdev\php\billing\charge\modifiers\addons\Minimum;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Step;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
@@ -28,7 +28,7 @@ use Money\Money;
 class GrowingDiscount extends FixedDiscount
 {
     const PERIOD = 'period';
-    const STEP = 'min';
+    const STEP = 'step';
     const MIN = 'min';
     const MAX = 'max';
 
@@ -68,7 +68,7 @@ class GrowingDiscount extends FixedDiscount
 
     public function max($max)
     {
-        return $this->addExtremum(self::MAX, new Maximum($min));
+        return $this->addExtremum(self::MAX, new Maximum($max));
     }
 
     protected function addExtremum($name, AddonInterface $addon)

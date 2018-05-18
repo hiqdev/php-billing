@@ -10,8 +10,6 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
-use hiqdev\php\billing\charge\modifiers\AddonInterface;
-
 /**
  * Discount step addon.
  *
@@ -19,6 +17,8 @@ use hiqdev\php\billing\charge\modifiers\AddonInterface;
  */
 class Step extends Discount
 {
+    protected static $name = 'step';
+
     public function calculateFor(int $num, ?Discount $min, ?Discount $max)
     {
         return $this->getValue();
