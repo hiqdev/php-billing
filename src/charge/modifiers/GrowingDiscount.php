@@ -11,7 +11,13 @@
 namespace hiqdev\php\billing\charge\modifiers;
 
 use hiqdev\php\billing\charge\ChargeInterface;
-use DateInterval;
+use hiqdev\php\billing\charge\modifiers\AddonInterface;
+use hiqdev\php\billing\charge\modifiers\addons\Min;
+use hiqdev\php\billing\charge\modifiers\addons\Max;
+use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
+use hiqdev\php\billing\charge\modifiers\addons\Step;
+use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
+use DateTimeImmutable;
 use Money\Money;
 
 /**
@@ -21,30 +27,15 @@ use Money\Money;
  */
 class GrowingDiscount extends FixedDiscount
 {
-    /**
-     * @var int|Money
-     */
-    protected $step;
-
-    /**
-     * @var int|Money
-     */
-    protected $min;
-
-    /**
-     * @var int|Money
-     */
-    protected $max;
-
-    /**
-     * @var DateInterval
-     */
-    protected $period;
+    const PERIOD = 'period';
+    const STEP = 'min';
+    const MIN = 'min';
+    const MAX = 'max';
 
     public function __construct($step, $min = null, array $addons = [])
     {
         Modifier::__construct($addons);
-        $this->step = static::ensureValidValue($step);
+        $this->addAddon(self::STEP, new Step($step));
         if ($min) {
             $this->min($min);
         }
@@ -52,63 +43,83 @@ class GrowingDiscount extends FixedDiscount
 
     public function isAbsolute()
     {
-        return $this->step instanceof Money;
+        return $this->getStep()->isAbsolute();
     }
 
-    public function isRelative()
+    public function getStep()
     {
-        return !$this->isAbsolute();
+        return $this->getAddon(self::STEP);
+    }
+
+    public function getMin()
+    {
+        return $this->getAddon(self::MIN);
+    }
+
+    public function getMax()
+    {
+        return $this->getAddon(self::MAX);
     }
 
     public function min($min)
     {
-        $this->min = $this->ensureValidLimit($min, 'min');
-
-        return $this;
+        return $this->addExtremum(self::MIN, new Minimum($min));
     }
 
     public function max($max)
     {
-        $this->max = $this->ensureValidLimit($max, 'max');
-
-        return $this;
+        return $this->addExtremum(self::MAX, new Maximum($min));
     }
 
-    public function getValue(ChargeInterface $charge = null)
+    protected function addExtremum($name, AddonInterface $addon)
     {
-        $time = $charge->getAction()->getTime();
-        var_dump($time);
-        die;
-
-    }
-
-    public function ensureValidLimit($limit, $name)
-    {
-        $limit = static::ensureValidValue($limit);
-        if ($limit instanceof Money) {
+        $value = $addon->getValue();
+        if ($value instanceof Money) {
             if ($this->isRelative()) {
-                throw new \Exception("$name must be given as percentage because step is percentage");
+                throw new \Exception("'$name' must be given as percentage because step is percentage");
             }
         } elseif ($this->isAbsolute()) {
-            throw new \Exception("$name must be money because step is money");
+            throw new \Exception("'$name' must be money because step is money");
         }
 
-        return $limit;
+        return $this->addAddon($name, $addon);
+    }
+
+    public function getPeriod()
+    {
+        return $this->getAddon(self::PERIOD);
     }
 
     public function everyMonth($num = 1)
     {
-        if ($this->period !== null) {
-            throw new \Exception('periodicity is already set');
-        }
-        if (empty($num)) {
-            $num = 1;
-        }
-        if (filter_var($num, FILTER_VALIDATE_INT) === false) {
-            throw new \Exception('periodicity must be integer number');
-        }
-        $this->period = new DateInterval("P${num}M");
+        return $this->addAddon(self::PERIOD, new MonthPeriod($num));
+    }
 
-        return $this;
+    public function everyYear($num = 1)
+    {
+        return $this->addAddon(self::PERIOD, new YearPeriod($num));
+    }
+
+    public function getValue(ChargeInterface $charge = null)
+    {
+        $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
+        $num = $this->countPeriodsPassed($time);
+
+        return $this->getStep()->calculateFor($num, $this->getMin(), $this->getMax());
+    }
+
+    protected function countPeriodsPassed(DateTimeImmutable $time)
+    {
+        $since = $this->getSince();
+        if ($since === null) {
+            throw new \Exception('no since given for growing discount');
+        }
+
+        $period = $this->getPeriod();
+        if ($period === null) {
+            throw new \Exception('no period given for growing discount');
+        }
+
+        return $period->countPeriodsPassed($since->getValue(), $time);
     }
 }

@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\charge\modifiers;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -27,25 +28,22 @@ use Money\Money;
  */
 class FixedDiscount extends Modifier
 {
-    /**
-     * @var int|Money
-     */
-    protected $value;
+    const VALUE = 'value';
 
     public function __construct($value, array $addons = [])
     {
         parent::__construct($addons);
-        $this->value = static::ensureValidValue($value);
+        $this->addAddon(self::VALUE, new Discount($value));
     }
 
     public function getValue(ChargeInterface $charge = null)
     {
-        return $this->value;
+        return $this->getAddon(self::VALUE)->getValue();
     }
 
     public function isAbsolute()
     {
-        return $this->value instanceof Money;
+        return $this->getAddon(self::VALUE)->isAbsolute();
     }
 
     public function isRelative()
@@ -98,28 +96,5 @@ class FixedDiscount extends Modifier
         }
 
         return [$charge, $discount];
-    }
-
-    public static function ensureValidValue($value)
-    {
-        if ($value instanceof Money) {
-            return $value;
-        }
-
-        if (is_numeric($value)) {
-            return (string) $value;
-        }
-
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $ms)) {
-            return $ms[1];
-        }
-
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?) ([A-Z]{3})$/', $value, $ms)) {
-            return new Money($ms[1]*100, new Currency($ms[3]));
-        }
-
-        /// TODO: add special exception
-        var_dump($value);
-        throw new \Exception("invalid discount value: $value");
     }
 }
