@@ -14,6 +14,7 @@ Billing library providing:
 - customers with subscriptions
 - orders with actions
 - tariff plans with prices
+- smart discounts with formulas
 - bills with charges
 - calculator and aggregator
 
