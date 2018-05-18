@@ -65,7 +65,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "hiqdev\\php\\billing\\tests\\": "tests",
+            "hiqdev\\php\\billing\\tests\\": "tests"
         }
     },
     "repositories": [
