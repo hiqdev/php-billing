@@ -29,13 +29,18 @@ class FixedDiscountTest extends ActionTest
         $this->rate = '10';
     }
 
+    protected function buildDiscount($value)
+    {
+        return new FixedDiscount($value);
+    }
+
     public function testCreateAbsolute()
     {
-        $abs = new FixedDiscount($this->value);
+        $abs = $this->buildDiscount($this->value);
         $this->assertAbsolute($this->value, $abs);
-        $abs = new FixedDiscount('10 USD');
+        $abs = $this->buildDiscount('10 USD');
         $this->assertAbsolute($this->value, $abs);
-        $abs = new FixedDiscount('10.00 USD');
+        $abs = $this->buildDiscount('10.00 USD');
         $this->assertAbsolute($this->value, $abs);
     }
 
@@ -48,9 +53,9 @@ class FixedDiscountTest extends ActionTest
 
     public function testCreateRelative()
     {
-        $rel = new FixedDiscount($this->rate);
+        $rel = $this->buildDiscount($this->rate);
         $this->assertRelative($this->rate, $rel);
-        $rel = new FixedDiscount($this->rate . '%');
+        $rel = $this->buildDiscount($this->rate . '%');
         $this->assertRelative($this->rate, $rel);
     }
 
@@ -63,17 +68,17 @@ class FixedDiscountTest extends ActionTest
 
     public function testAbsoluteModifyCharge()
     {
-        $abs = new FixedDiscount($this->value);
-        $this->assertFixedDiscountCharges($abs, $this->value);
+        $abs = $this->buildDiscount($this->value);
+        $this->assertCharges($abs, $this->value);
     }
 
     public function testRelativeModifyCharge()
     {
-        $rel = new FixedDiscount($this->rate);
-        $this->assertFixedDiscountCharges($rel, $this->value);
+        $rel = $this->buildDiscount($this->rate);
+        $this->assertCharges($rel, $this->value);
     }
 
-    public function assertFixedDiscountCharges($fd, $sum)
+    public function assertCharges($fd, $sum)
     {
         $action = $this->createAction($this->prepaid->multiply(2));
         $charge = $action->calculateCharge($this->price);
