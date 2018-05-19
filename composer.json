@@ -48,6 +48,7 @@
         "hiqdev/php-units": "dev-master"
     },
     "require-dev": {
+        "ext-intl": "*",
         "behat/behat": "^3.4.3",
         "phpunit/phpunit": "^7.1",
         "hoa/ruler": "^2.17",
@@ -55,6 +56,7 @@
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
     },
     "suggest": {
+        "ext-intl": "intl extension is required for formula support",
         "hoa/ruler": "version ^2.17 required for formula support"
     },
     "autoload": {
