@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\tests\unit\charge\modifiers\addons\DateTestCase;
+namespace hiqdev\php\billing\tests\unit\charge\modifiers\addons;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\Date;
