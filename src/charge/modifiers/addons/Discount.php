@@ -89,10 +89,10 @@ class Discount implements AddonInterface
     public function add($addend)
     {
         if ($this->isRelative() && !is_numeric($addend)) {
-            throw new \Exception('addend for discount myst be numeric because discount is relative');
+            throw new \Exception('addend for discount must be numeric because discount is relative');
         }
         if ($this->isAbsolute() && !$addend instanceof Money) {
-            throw new \Exception('addend for discount myst be money because discount is absolute');
+            throw new \Exception('addend for discount must be money because discount is absolute');
         }
 
         return new static($this->isAbsolute() ? $this->value->add($addend) : $this->value+$addend);
