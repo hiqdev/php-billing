@@ -53,6 +53,9 @@ class FeatureContext implements Context
     /** @var \Money\MoneyParser */
     protected $moneyParser;
 
+    /** @var string */
+    protected $expectedError;
+
     /**
      * Initializes context.
      */
@@ -115,6 +118,15 @@ class FeatureContext implements Context
     }
 
     /**
+     * @Then /^error is (.+)$/
+     * @param string $error
+     */
+    public function errorIs(string $error): void
+    {
+        $this->expectedError = $error;
+    }
+
+    /**
      * @Then /^(\w+) charge is $/
      * @param string $numeral
      */
@@ -124,7 +136,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) ([0-9.]+) ([A-Z]{3})$/
+     * @Then /^(\w+) charge is (\S+) +([0-9.]+) ([A-Z]{3})$/
      */
     public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null): void
     {
@@ -132,7 +144,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) ([0-9.]+) ([A-Z]{3}) reason (.+)/
+     * @Then /^(\w+) charge is (\S+) +([0-9.]+) ([A-Z]{3}) reason (.+)/
      */
     public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null): void
     {
@@ -143,9 +155,36 @@ class FeatureContext implements Context
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
-            $this->charges = $this->price->calculateCharges($this->action);
+            $this->calculateCharges();
         }
         $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason);
+    }
+
+    /**
+     * @When /^calculating charges$/
+     */
+    public function calculateCharges(): void
+    {
+        try {
+            $this->charges = $this->price->calculateCharges($this->action);
+        } catch (\Exception $e) {
+            if ($this->isExpectedError($e)) {
+                $this->expectedError = null;
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    protected function isExpectedError(\Exception $e): bool
+    {
+        return $this->startsWith($e->getMessage(), $this->expectedError);
+    }
+
+    protected function startsWith(string $string, string $prefix): bool
+    {
+        return strncmp($string, $prefix, strlen($prefix)) === 0;
+
     }
 
     /**
