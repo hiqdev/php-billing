@@ -48,6 +48,11 @@ class Discount implements AddonInterface
         return $this->value instanceof Money;
     }
 
+    public function isRelative()
+    {
+        return !$this->isAbsolute();
+    }
+
     public function ensureValidValue($value)
     {
         if ($value instanceof Money) {
@@ -70,5 +75,26 @@ class Discount implements AddonInterface
         var_dump($value);
         $name = static::$name;
         throw new \Exception("invalid $name value: $value");
+    }
+
+    public function multiply($multiplier)
+    {
+        if (!is_numeric($multiplier)) {
+            throw new \Exception('multiplier for discount myst be numeric');
+        }
+
+        return new static($this->isAbsolute() ? $this->value->multiply($multiplier) : $this->value*$multiplier);
+    }
+
+    public function add($addend)
+    {
+        if ($this->isRelative() && !is_numeric($addend)) {
+            throw new \Exception('addend for discount myst be numeric because discount is relative');
+        }
+        if ($this->isAbsolute() && !$addend instanceof Money) {
+            throw new \Exception('addend for discount myst be money because discount is absolute');
+        }
+
+        return new static($this->isAbsolute() ? $this->value->add($addend) : $this->value+$addend);
     }
 }
