@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
+use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
@@ -129,5 +130,10 @@ class Discount implements AddonInterface
         if ($this->isAbsolute() && !$other->isAbsolute()) {
             throw new \Exception("argument must be absolute at $operation");
         }
+    }
+
+    public function calculateSum(ChargeInterface $charge): Money
+    {
+        return $this->isAbsolute() ? $this->value : $charge->getSum()->multiply($this->value*0.01);
     }
 }

@@ -45,7 +45,7 @@ class FixedDiscountTest extends ActionTest
 
     public function assertAbsolute($value, $abs)
     {
-        $this->assertEquals($value, $abs->getValue());
+        $this->assertEquals($value, $abs->getValue()->getValue());
         $this->assertTrue($abs->isAbsolute());
         $this->assertFalse($abs->isRelative());
     }
@@ -60,7 +60,7 @@ class FixedDiscountTest extends ActionTest
 
     protected function assertRelative($rate, $rel)
     {
-        $this->assertSame($rate, $rel->getValue());
+        $this->assertSame($rate, $rel->getValue()->getValue());
         $this->assertTrue($rel->isRelative());
         $this->assertFalse($rel->isAbsolute());
     }

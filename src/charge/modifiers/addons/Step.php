@@ -19,15 +19,10 @@ class Step extends Discount
 {
     protected static $name = 'step';
 
-    public function calculateFor(int $num, ?Discount $min, ?Discount $max)
+    public function calculateFor(int $num, ?Discount $min): Discount
     {
         $start = $min ? $min : $this;
-        $value = $this->multiply($num)->add($start);
 
-        if ($max && $value->compare($max) > 0) {
-            $value = $max;
-        }
-
-        return $value->getValue();
+        return $this->multiply($num)->add($start);
     }
 }

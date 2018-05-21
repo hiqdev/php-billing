@@ -34,7 +34,7 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
         $formula = $this->engine->build("discount.fixed('$rate%').since('$date').reason('$reason')");
 
         $this->assertInstanceOf(FixedDiscount::class, $formula);
-        $this->assertSame($rate, $formula->getValue());
+        $this->assertSame($rate, $formula->getValue()->getValue());
         $this->assertTrue($formula->isRelative());
         $this->assertInstanceOf(Since::class, $formula->getSince());
         $this->assertEquals(new DateTimeImmutable($date), $formula->getSince()->getValue());

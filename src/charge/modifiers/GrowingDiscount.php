@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\charge\modifiers;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\charge\modifiers\addons\Maximum;
 use hiqdev\php\billing\charge\modifiers\addons\Minimum;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
@@ -99,7 +100,21 @@ class GrowingDiscount extends FixedDiscount
         return $this->addAddon(self::PERIOD, new YearPeriod($num));
     }
 
-    public function getValue(ChargeInterface $charge = null)
+    public function calculateSum(ChargeInterface $charge = null): Money
+    {
+        $sum = parent::calculateSum($charge);
+
+        if ($this->getMax() !== null) {
+            $max = $this->getMax()->calculateSum($charge);
+            if ($sum->compare($max) > 0) {
+                $sum = $max;
+            }
+        }
+
+        return $sum;
+    }
+
+    public function getValue(ChargeInterface $charge = null): Discount
     {
         $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
         $num = $this->countPeriodsPassed($time);
@@ -107,7 +122,7 @@ class GrowingDiscount extends FixedDiscount
             throw new \Exception("growing discount must be limited with 'max' or 'till'");
         }
 
-        return $this->getStep()->calculateFor($num, $this->getMin(), $this->getMax());
+        return $this->getStep()->calculateFor($num, $this->getMin());
     }
 
     protected function countPeriodsPassed(DateTimeImmutable $time)
