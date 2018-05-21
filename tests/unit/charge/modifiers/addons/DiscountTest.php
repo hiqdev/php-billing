@@ -72,10 +72,10 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->setUp();
         return [
             [$this->relative, 'aasd'],
-            [$this->relative, '10%'],
+            [$this->relative, '10a'],
             [$this->relative, Money::USD(12)],
             [$this->absolute, 'aasd'],
-            [$this->absolute, '10%'],
+            [$this->absolute, '10b'],
             [$this->absolute, 10],
         ];
     }
@@ -87,6 +87,13 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
     public function testAddFailed($discount, $addend)
     {
         $discount->add($addend);
+    }
+
+    public function testCompare()
+    {
+        $money = Money::USD(1);
+        $this->assertTrue($this->absolute->compare($money) > 0);
+        $this->assertTrue($this->relative->compare(1) > 0);
     }
 
 }

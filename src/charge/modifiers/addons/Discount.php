@@ -55,6 +55,10 @@ class Discount implements AddonInterface
 
     public function ensureValidValue($value)
     {
+        if ($value instanceof static) {
+            return $value->getValue();
+        }
+
         if ($value instanceof Money) {
             return $value;
         }
@@ -71,8 +75,9 @@ class Discount implements AddonInterface
             return $this->moneyParser->parse($ms[1], new Currency($ms[3]));
         }
 
+        /// var_dump($value);
+
         /// TODO: add special exception
-        var_dump($value);
         $name = static::$name;
         throw new \Exception("invalid $name value: $value");
     }
@@ -88,13 +93,41 @@ class Discount implements AddonInterface
 
     public function add($addend)
     {
-        if ($this->isRelative() && !is_numeric($addend)) {
-            throw new \Exception('addend for discount must be numeric because discount is relative');
+        if (!$addend instanceof Discount) {
+            $addend = new Discount($addend);
         }
-        if ($this->isAbsolute() && !$addend instanceof Money) {
-            throw new \Exception('addend for discount must be money because discount is absolute');
+        $this->ensureSameType($addend, 'add');
+
+        if ($this->isAbsolute()) {
+            $sum = $this->value->add($addend->getValue());
+        } else {
+            $sum = $this->value + $addend->getValue();
         }
 
-        return new static($this->isAbsolute() ? $this->value->add($addend) : $this->value+$addend);
+        return new static($sum);
+    }
+
+    public function compare($other)
+    {
+        if (!$other instanceof Discount) {
+            $other = new Discount($other);
+        }
+        $this->ensureSameType($other, 'compare');
+
+        if ($this->isAbsolute()) {
+            return $this->value->compare($other->getValue());
+        } else {
+            return $this->value - $other->getValue();
+        }
+    }
+
+    public function ensureSameType(Discount $other, $operation)
+    {
+        if ($this->isRelative() && !$other->isRelative()) {
+            throw new \Exception("argument must be relative at $operation");
+        }
+        if ($this->isAbsolute() && !$other->isAbsolute()) {
+            throw new \Exception("argument must be absolute at $operation");
+        }
     }
 }
