@@ -21,8 +21,6 @@ class Step extends Discount
 
     public function calculateFor(int $num, ?Discount $min, ?Discount $max)
     {
-        //return $this->getValue();
-
         $start = $min ? $min : $this;
         $value = $this->multiply($num)->add($start);
 

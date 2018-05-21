@@ -93,8 +93,8 @@ class Discount implements AddonInterface
 
     public function add($addend)
     {
-        if (!$addend instanceof Discount) {
-            $addend = new Discount($addend);
+        if (!$addend instanceof self) {
+            $addend = new self($addend);
         }
         $this->ensureSameType($addend, 'add');
 
@@ -109,8 +109,8 @@ class Discount implements AddonInterface
 
     public function compare($other)
     {
-        if (!$other instanceof Discount) {
-            $other = new Discount($other);
+        if (!$other instanceof self) {
+            $other = new self($other);
         }
         $this->ensureSameType($other, 'compare');
 
@@ -121,7 +121,7 @@ class Discount implements AddonInterface
         }
     }
 
-    public function ensureSameType(Discount $other, $operation)
+    public function ensureSameType(self $other, $operation)
     {
         if ($this->isRelative() && !$other->isRelative()) {
             throw new \Exception("argument must be relative at $operation");

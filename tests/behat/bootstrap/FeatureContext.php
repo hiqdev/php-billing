@@ -184,7 +184,6 @@ class FeatureContext implements Context
     protected function startsWith(string $string, string $prefix): bool
     {
         return strncmp($string, $prefix, strlen($prefix)) === 0;
-
     }
 
     /**

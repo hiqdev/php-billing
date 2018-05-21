@@ -23,7 +23,7 @@ interface TargetFactoryInterface
     public function create(TargetCreationDto $dto);
 
     /**
-     * Returns class that represents target with $type
+     * Returns class that represents target with $type.
      *
      * @param string $type the target type
      * @return string
@@ -31,7 +31,7 @@ interface TargetFactoryInterface
     public function getClassForType(string $type): string;
 
     /**
-     * Ensures type does not contain subtype
+     * Ensures type does not contain subtype.
      *
      * @param string $type
      * @return string

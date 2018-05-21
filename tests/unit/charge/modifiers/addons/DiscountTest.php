@@ -53,7 +53,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider badMultipliers
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testMultiplyFailed($multiplier)
     {
@@ -70,6 +70,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
     public function badAddends()
     {
         $this->setUp();
+
         return [
             [$this->relative, 'aasd'],
             [$this->relative, '10a'],
@@ -82,7 +83,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider badAddends
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testAddFailed($discount, $addend)
     {
@@ -95,5 +96,4 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->absolute->compare($money) > 0);
         $this->assertTrue($this->relative->compare(1) > 0);
     }
-
 }
