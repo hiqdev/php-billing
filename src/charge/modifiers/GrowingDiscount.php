@@ -103,6 +103,9 @@ class GrowingDiscount extends FixedDiscount
     {
         $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
         $num = $this->countPeriodsPassed($time);
+        if ($this->getMax() === null && $this->getTill() === null) {
+            throw new \Exception("growing discount must be limited with 'max' or 'till'");
+        }
 
         return $this->getStep()->calculateFor($num, $this->getMin(), $this->getMax());
     }
