@@ -6,8 +6,8 @@ Feature: Growing discount
     Scenario: discount can not be unlimited
         Given formula is discount.since('08.2018').grows('1%').everyMonth().min('5%')
           And action date is 2018-08-01
-        Then error is growing discount must be limited
-        When calculating charges
+         Then error is growing discount must be limited
+         When calculating charges
 
     Scenario Outline: relative discount growing 2% every month from 5% up to 10%
         Given formula is discount.since('08.2018').grows('2%').everyMonth().min('5%').max('10%')
