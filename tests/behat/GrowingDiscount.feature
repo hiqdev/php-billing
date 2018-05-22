@@ -17,9 +17,9 @@ Feature: Growing discount
 
     Scenario Outline: relative discount growing 2% every month from 5% up to 10%
         Given formula is discount.since('08.2018').grows('2%').everyMonth().min('5%').max('10%')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2018-07-31 | monthly 100 USD |                 |
@@ -33,9 +33,9 @@ Feature: Growing discount
 
     Scenario Outline: absolute discount growing $20 every 2 month from $50 up to $80
         Given formula is discount.since('08.2018').grows('20 USD').everyMonth(2).min('50 USD').max('80 USD')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2018-07-31 | monthly 100 USD |                 |
@@ -49,9 +49,9 @@ Feature: Growing discount
 
     Scenario Outline: discount maximum may not match step: relative step but absolute max
         Given formula is discount.since('08.2018').grows('20%').everyMonth().min('30%').max('77 USD')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2018-07-31 | monthly 100 USD |                 |
@@ -64,9 +64,9 @@ Feature: Growing discount
 
     Scenario Outline: relative discount growing 2% every month from 5% since 08.2018 till 08.2019
         Given formula is discount.since('08.2018').till('08.2019').grows('1%').everyMonth().min('5%')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second    |
             | 2018-07-31 | monthly 100 USD |           |

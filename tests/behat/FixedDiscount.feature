@@ -5,9 +5,9 @@ Feature: Fixed discount
 
     Scenario Outline: absolute fixed discount without limits with reason
         Given formula is discount.fixed('50 USD').reason('TEST COMMENT')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second                              |
             | 2018-07-01 | monthly 100 USD | discount 50 USD reason TEST COMMENT |
@@ -17,9 +17,9 @@ Feature: Fixed discount
 
     Scenario Outline: absolute fixed discount with since date
         Given formula is discount.since('08.2018').fixed('50 USD')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2018-07-01 | monthly 100 USD |                 |
@@ -32,9 +32,9 @@ Feature: Fixed discount
     Scenario Outline: relative fixed discount with since date and 400$ charge
         Given formula is discount.since('08.2018').fixed('20%')
           And action is server monthly 8 units
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2018-07-31 | monthly 400 USD |                 |
@@ -44,9 +44,9 @@ Feature: Fixed discount
 
     Scenario Outline: relative fixed discount with till date
         Given formula is discount.till('09.2018').fixed('20%')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2012-02-01 | monthly 100 USD | discount 20 USD |
@@ -59,9 +59,9 @@ Feature: Fixed discount
 
     Scenario Outline: relative fixed discount with since and till date
         Given formula is discount.since('08.2018').till('09.2018').fixed('20%')
-        When action date is <date>
-        Then first charge is <first>
-         And second charge is <second>
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
         Examples:
             | date       | first           | second          |
             | 2018-07-31 | monthly 100 USD |                 |
