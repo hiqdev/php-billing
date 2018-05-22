@@ -97,7 +97,7 @@ class Discount implements AddonInterface
         if (!$addend instanceof self) {
             $addend = new self($addend);
         }
-        $this->ensureSameType($addend, 'add');
+        $this->ensureSameType($addend, 'addend');
 
         if ($this->isAbsolute()) {
             $sum = $this->value->add($addend->getValue());
@@ -113,7 +113,7 @@ class Discount implements AddonInterface
         if (!$other instanceof self) {
             $other = new self($other);
         }
-        $this->ensureSameType($other, 'compare');
+        $this->ensureSameType($other, 'comparison argument');
 
         if ($this->isAbsolute()) {
             return $this->value->compare($other->getValue());
@@ -122,13 +122,13 @@ class Discount implements AddonInterface
         }
     }
 
-    public function ensureSameType(self $other, $operation)
+    public function ensureSameType(self $other, $name)
     {
         if ($this->isRelative() && !$other->isRelative()) {
-            throw new \Exception("argument must be relative at $operation");
+            throw new \Exception("$name must be relative");
         }
         if ($this->isAbsolute() && !$other->isAbsolute()) {
-            throw new \Exception("argument must be absolute at $operation");
+            throw new \Exception("$name must be absolute");
         }
     }
 

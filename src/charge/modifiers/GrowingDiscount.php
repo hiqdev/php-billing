@@ -63,26 +63,15 @@ class GrowingDiscount extends FixedDiscount
 
     public function min($min)
     {
-        return $this->addExtremum(self::MIN, new Minimum($min));
+        $min = new Minimum($min);
+        $this->getStep()->ensureSameType($min, 'minimum');
+
+        return $this->addAddon(self::MIN, $min);
     }
 
     public function max($max)
     {
-        return $this->addExtremum(self::MAX, new Maximum($max));
-    }
-
-    protected function addExtremum($name, AddonInterface $addon)
-    {
-        $value = $addon->getValue();
-        if ($value instanceof Money) {
-            if ($this->isRelative()) {
-                throw new \Exception("'$name' must be given as percentage because step is percentage");
-            }
-        } elseif ($this->isAbsolute()) {
-            throw new \Exception("'$name' must be money because step is money");
-        }
-
-        return $this->addAddon($name, $addon);
+        return $this->addAddon(self::MAX, new Maximum($max));
     }
 
     public function getPeriod()
