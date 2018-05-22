@@ -49,6 +49,11 @@ class Modifier implements ChargeModifier
         return new Discount($this->addons);
     }
 
+    public function leasing()
+    {
+        return new Leasing($this->addons);
+    }
+
     public function reason($text)
     {
         return $this->addAddon(self::REASON, new Reason($text));

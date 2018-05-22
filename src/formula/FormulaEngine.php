@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\formula;
 
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Discount;
+use hiqdev\php\billing\charge\modifiers\Leasing;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Ruler;
 
@@ -27,6 +28,8 @@ class FormulaEngine
     protected $context;
 
     protected $discount;
+
+    protected $leasing;
 
     public function __construct()
     {
@@ -87,5 +90,14 @@ class FormulaEngine
         }
 
         return $this->discount;
+    }
+
+    public function getLeasing()
+    {
+        if ($this->leasing === null) {
+            $this->leasing = new Leasing();
+        }
+
+        return $this->leasing;
     }
 }
