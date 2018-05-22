@@ -15,7 +15,7 @@ Feature: Growing discount
          Then error is minimum must be relative
          When calculating charges
 
-    Scenario Outline: relative discount growing 2% every month from 5% up to 10%
+    Scenario Outline: relative discount growing every month from min to max
         Given formula is discount.since('08.2018').grows('2%').everyMonth().min('5%').max('10%')
          When action date is <date>
          Then first charge is <first>
@@ -31,7 +31,7 @@ Feature: Growing discount
             | 2019-01-01 | monthly 100 USD | discount 10 USD |
             | 2028-11-01 | monthly 100 USD | discount 10 USD |
 
-    Scenario Outline: absolute discount growing $20 every 2 month from $50 up to $80
+    Scenario Outline: absolute discount growing every 2 month from min to max
         Given formula is discount.since('08.2018').grows('20 USD').everyMonth(2).min('50 USD').max('80 USD')
          When action date is <date>
          Then first charge is <first>
@@ -62,11 +62,17 @@ Feature: Growing discount
             | 2018-12-01 | monthly 100 USD | discount 77 USD |
             | 2028-11-01 | monthly 100 USD | discount 77 USD |
 
-    Scenario Outline: relative discount growing 2% every month from 5% since 08.2018 till 08.2019
-        Given formula is discount.since('08.2018').till('08.2019').grows('1%').everyMonth().min('5%')
+    Scenario Outline: relative discount with since but till and without min
+        Given formula is discount.since('08.2018').till('11.2018').grows('10%').everyMonth()
          When action date is <date>
          Then first charge is <first>
           And second charge is <second>
         Examples:
-            | date       | first           | second    |
-            | 2018-07-31 | monthly 100 USD |           |
+            | date       | first           | second          |
+            | 2018-07-31 | monthly 100 USD |                 |
+            | 2018-08-01 | monthly 100 USD | discount 10 USD |
+            | 2018-09-01 | monthly 100 USD | discount 20 USD |
+            | 2018-10-01 | monthly 100 USD | discount 30 USD |
+            | 2018-11-01 | monthly 100 USD |                 |
+            | 2018-12-01 | monthly 100 USD |                 |
+            | 2028-11-01 | monthly 100 USD |                 |
