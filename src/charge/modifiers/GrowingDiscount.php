@@ -15,10 +15,8 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\charge\modifiers\addons\Maximum;
 use hiqdev\php\billing\charge\modifiers\addons\Minimum;
-use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\addons\Step;
-use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use Money\Money;
 
 /**
@@ -102,7 +100,7 @@ class GrowingDiscount extends FixedDiscount
     public function getValue(ChargeInterface $charge = null): Discount
     {
         $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
-        $num = $this->countPeriodsPassed($time);
+        $num = (int) $this->countPeriodsPassed($time);
         if ($this->getMax() === null && $this->getTill() === null) {
             throw new \Exception("growing discount must be limited with 'max' or 'till'");
         }

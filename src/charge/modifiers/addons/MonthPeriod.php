@@ -23,6 +23,6 @@ class MonthPeriod extends Period
     {
         $diff = $time->diff($since);
 
-        return (int) (($diff->m + $diff->y*12)/$this->value);
+        return ($diff->m + $diff->y*12) / $this->value;
     }
 }
