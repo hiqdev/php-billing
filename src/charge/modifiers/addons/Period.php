@@ -34,6 +34,26 @@ abstract class Period implements AddonInterface
         return $this->value;
     }
 
+    protected static $periods = [
+        'month'     => MonthPeriod::class,
+        'months'    => MonthPeriod::class,
+        'year'      => YearPeriod::class,
+        'years'     => YearPeriod::class,
+    ];
+
+    public static function fromString($string)
+    {
+        if (preg_match('/^((\d+) +)?(\w+)$/', trim($string), $ms)) {
+            if (isset(static::$periods[$ms[3]])) {
+                $class = static::$periods[$ms[3]];
+
+                return new $class($ms[1] ?: 1);
+            }
+        }
+
+        throw new \Exception("invalid period given: $string");
+    }
+
     public static function ensureValidValue($value)
     {
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {

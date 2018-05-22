@@ -24,7 +24,7 @@ class GrowingDiscountTest extends FixedDiscountTest
     {
         $month = (new DateTimeImmutable())->modify('first day of this month midnight');
 
-        return (new GrowingDiscount($value))->since($month)->everyMonth()->till('3000-01');
+        return (new GrowingDiscount($value))->since($month)->every('month')->till('3000-01');
     }
 
     public function assertCharges($fd, $sum)

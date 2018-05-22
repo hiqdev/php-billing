@@ -16,6 +16,7 @@ use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\charge\modifiers\addons\Maximum;
 use hiqdev\php\billing\charge\modifiers\addons\Minimum;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
+use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\addons\Step;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use Money\Money;
@@ -79,14 +80,9 @@ class GrowingDiscount extends FixedDiscount
         return $this->getAddon(self::PERIOD);
     }
 
-    public function everyMonth($num = 1)
+    public function every($string = 1)
     {
-        return $this->addAddon(self::PERIOD, new MonthPeriod($num));
-    }
-
-    public function everyYear($num = 1)
-    {
-        return $this->addAddon(self::PERIOD, new YearPeriod($num));
+        return $this->addAddon(self::PERIOD, Period::fromString($string));
     }
 
     public function calculateSum(ChargeInterface $charge = null): Money
