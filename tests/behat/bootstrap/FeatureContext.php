@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
+use Closure;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
@@ -41,6 +42,10 @@ class FeatureContext implements Context
      * TODO: FormulaChargeModifierTrait::setFormula() must be moved to interface
      */
     protected $price;
+
+    /** @var string */
+    protected $formula;
+
     /**
      * @var \hiqdev\php\billing\action\ActionInterface|\hiqdev\php\billing\action\AbstractAction
      */
@@ -95,7 +100,7 @@ class FeatureContext implements Context
      */
     public function formulaIs(string $formula): void
     {
-        $this->price->setFormula($this->getFormulaEngine()->build($formula));
+        $this->formula = $formula;
     }
 
     protected function getFormulaEngine()
@@ -165,8 +170,16 @@ class FeatureContext implements Context
      */
     public function calculateCharges(): void
     {
-        try {
+        $this->expectError(function () {
+            $this->price->setFormula($this->getFormulaEngine()->build($this->formula));
             $this->charges = $this->price->calculateCharges($this->action);
+        });
+    }
+
+    public function expectError(Closure $closure): void
+    {
+        try {
+            call_user_func($closure);
         } catch (\Exception $e) {
             if ($this->isExpectedError($e)) {
                 $this->expectedError = null;
@@ -181,7 +194,7 @@ class FeatureContext implements Context
         return $this->startsWith($e->getMessage(), $this->expectedError);
     }
 
-    protected function startsWith(string $string, string $prefix): bool
+    protected function startsWith(string $string, string $prefix = null): bool
     {
         return strncmp($string, $prefix, strlen($prefix)) === 0;
     }
