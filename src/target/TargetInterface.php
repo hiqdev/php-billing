@@ -59,7 +59,7 @@ interface TargetInterface extends EntityInterface
     public function getUniqueId();
 
     /**
-     * Checks, whether this target mathes $other.
+     * Checks, whether this target matches $other.
      * @param TargetInterface $other
      * @return bool
      */
