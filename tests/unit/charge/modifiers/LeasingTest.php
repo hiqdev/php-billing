@@ -11,23 +11,23 @@
 namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 
 use DateTimeImmutable;
-use hiqdev\php\billing\charge\Charge;
-use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
+use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
-use hiqdev\php\units\Quantity;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class LeasingTest extends ActionTest
 {
+    protected $reason = 'test reason string';
+
     protected function buildLeasing($term)
     {
         $month = (new DateTimeImmutable())->modify('first day of this month midnight');
 
-        return (new Leasing())->lasts($term);
+        return (new Leasing())->since($month)->lasts($term);
     }
 
     public function testCreateMonth()
@@ -57,5 +57,16 @@ class LeasingTest extends ActionTest
         $period = $leasing->getTerm();
         $this->assertInstanceOf(YearPeriod::class, $period);
         $this->assertSame(1, $period->getValue());
+    }
+
+    public function testModifyCharge()
+    {
+        $leasing = $this->buildLeasing('6 months');
+        $action = $this->createAction($this->prepaid->multiply(2));
+        $charge = $action->calculateCharge($this->price);
+        $charges = $leasing->modifyCharge($charge, $action);
+        $this->assertInternalType('array', $charges);
+        $this->assertSame(1, count($charges));
+        $this->assertEquals($charge, $charges[0]);
     }
 }

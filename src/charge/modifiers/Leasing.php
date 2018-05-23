@@ -10,8 +10,8 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\price\SinglePrice;
@@ -34,7 +34,7 @@ class Leasing extends Modifier
         return $this->addAddon(self::TERM, Period::fromString($term));
     }
 
-    public function getTerm(): Period
+    public function getTerm(): ?Period
     {
         return $this->getAddon(self::TERM);
     }
@@ -73,27 +73,43 @@ class Leasing extends Modifier
         return new Target(Target::ANY, Target::ANY);
     }
 
+    public function till($dummy)
+    {
+        throw new \Exception('till can not be defined for leasing');
+    }
+
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        die('asdfds');
         if ($charge === null) {
-            return [];
+            $charge = $this->calculateCharge($charge, $action);
         }
 
         $month = $action->getTime()->modify('first day of this month midnight');
-        if (!$this->checkPeriod($month)) {
-            return [$charge];
+        $num = $this->countPeriodsPassed($month);
+        if ($num >= 1 || !$this->checkPeriod($month)) {
+            return [];
         }
 
-        $sum = $this->calculateSum($charge);
-        $usage  = Quantity::items(1);
-        $price = $this->buildPrice($sum);
-        $discount = new Charge(null, $action, $price, $usage, $sum);
         $reason = $this->getReason();
         if ($reason) {
-            $discount->setComment($reason->getValue());
+            $charge->setComment($reason->getValue());
         }
 
-        return [$charge, $discount];
+        return [$charge];
+    }
+
+    protected function countPeriodsPassed(DateTimeImmutable $time)
+    {
+        $since = $this->getSince();
+        if ($since === null) {
+            throw new \Exception('no since given for leasing');
+        }
+
+        $term = $this->getTerm();
+        if ($term === null) {
+            throw new \Exception('no term given for leasing');
+        }
+
+        return $term->countPeriodsPassed($since->getValue(), $time);
     }
 }

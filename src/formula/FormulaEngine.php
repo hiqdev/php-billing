@@ -79,6 +79,7 @@ class FormulaEngine
     {
         $context = new Context();
         $context['discount'] = $this->getDiscount();
+        $context['leasing'] = $this->getLeasing();
 
         return $context;
     }
