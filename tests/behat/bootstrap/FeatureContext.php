@@ -132,7 +132,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is $/
+     * @Then /^(\w+) charge is ?$/
      * @param string $numeral
      */
     public function emptyCharge(string $numeral): void
@@ -187,6 +187,9 @@ class FeatureContext implements Context
                 throw $e;
             }
         }
+        if ($this->expectedError) {
+            throw new \Exception('failed receive expected exception');
+        }
     }
 
     protected function isExpectedError(\Exception $e): bool
@@ -196,7 +199,7 @@ class FeatureContext implements Context
 
     protected function startsWith(string $string, string $prefix = null): bool
     {
-        return strncmp($string, $prefix, strlen($prefix)) === 0;
+        return $prefix && strncmp($string, $prefix, strlen($prefix)) === 0;
     }
 
     /**
