@@ -99,11 +99,11 @@ class GrowingDiscount extends FixedDiscount
 
     public function getValue(ChargeInterface $charge = null): Discount
     {
-        $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
-        $num = (int) $this->countPeriodsPassed($time);
         if ($this->getMax() === null && $this->getTill() === null) {
             throw new \Exception("growing discount must be limited with 'max' or 'till'");
         }
+        $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
+        $num = (int) $this->countPeriodsPassed($time);
 
         return $this->getStep()->calculateFor($num, $this->getMin());
     }
