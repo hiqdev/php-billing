@@ -38,6 +38,12 @@ class LeasingTest extends ActionTest
         $this->assertSame(12, $period->getValue());
     }
 
+    public function testTill()
+    {
+        $this->expectException(\Exception::class);
+        $this->buildLeasing('month')->till('08.2018');
+    }
+
     public function testCreateYear()
     {
         $leasing = $this->buildLeasing('1 year');
