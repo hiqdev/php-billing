@@ -35,6 +35,11 @@ class FixedDiscount extends Modifier
         $this->addAddon(self::VALUE, new Discount($value));
     }
 
+    public function getNext()
+    {
+        return $this;
+    }
+
     public function getValue(ChargeInterface $charge = null): Discount
     {
         return $this->getAddon(self::VALUE);
