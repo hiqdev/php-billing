@@ -11,8 +11,8 @@
 namespace hiqdev\php\billing\formula;
 
 use hiqdev\php\billing\charge\modifiers\LastCombination;
-use Hoa\Ruler\Model;
 use Hoa\Ruler\Context;
+use Hoa\Ruler\Model;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -20,7 +20,7 @@ use Hoa\Ruler\Context;
 class Asserter extends \Hoa\Ruler\Visitor\Asserter
 {
     /**
-     * @param Context $context Context.
+     * @param Context $context context
      */
     public function __construct(Context $context = null)
     {
@@ -31,7 +31,8 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
         $this->setOperator('and', [$this, 'makeAnd']);
     }
 
-    public function makeAnd($lhs, $rhs) {
+    public function makeAnd($lhs, $rhs)
+    {
         return new LastCombination($lhs, $rhs);
     }
 

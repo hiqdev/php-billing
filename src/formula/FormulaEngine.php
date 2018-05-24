@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\formula;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Leasing;
-use hiqdev\php\billing\charge\modifiers\ModifierFactory;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Ruler;
 
@@ -46,6 +45,7 @@ class FormulaEngine
     public function build(string $formula): ChargeModifier
     {
         $formula = strtr(trim($formula), ["\n" => ' AND ']);
+
         return $this->getRuler()->assert($formula, $this->getContext());
     }
 

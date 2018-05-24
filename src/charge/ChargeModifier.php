@@ -31,7 +31,7 @@ interface ChargeModifier
 
     /**
      * Returns true if modifier is applicable for the given charge
-     * (due to time or other limitations)
+     * (due to time or other limitations).
      *
      * @param ChargeInterface $charge
      * @param ActionInterface $action
