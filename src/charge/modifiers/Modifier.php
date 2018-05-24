@@ -74,9 +74,14 @@ class Modifier implements ChargeModifier
         if (isset($this->addons[$name])) {
             throw new \Exception("'$name' is already set");
         }
-        $this->addons[$name] = $addon;
+        if (get_class($this) === self::class) {
+            $res = new self($this->addons);
+        } else {
+            $res = $this;
+        }
+        $res->addons[$name] = $addon;
 
-        return $this;
+        return $res;
     }
 
     public function getAddon($name)

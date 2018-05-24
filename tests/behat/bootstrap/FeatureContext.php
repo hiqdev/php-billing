@@ -103,6 +103,15 @@ class FeatureContext implements Context
         $this->formula = $formula;
     }
 
+    /**
+     * @Given /formula continues (.+)/
+     * @param string $formula
+     */
+    public function formulaContinues(string $formula): void
+    {
+        $this->formula .= "\n" . $formula;
+    }
+
     protected function getFormulaEngine()
     {
         if ($this->engine === null) {

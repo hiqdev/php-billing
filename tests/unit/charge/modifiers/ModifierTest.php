@@ -42,8 +42,8 @@ class ModifierTest extends \PHPUnit\Framework\TestCase
 
     public function testAddonsCopied()
     {
-        $this->testAddons();
-        $discount = $this->modifier->discount();
+        $modifier = $this->testAddons($this->modifier);
+        $discount = $modifier->discount();
         $this->assertReason($discount);
         $this->assertSince($discount);
         $this->assertTill($discount);
@@ -51,24 +51,27 @@ class ModifierTest extends \PHPUnit\Framework\TestCase
 
     public function testAddons()
     {
-        $this->checkReason();
-        $this->checkSince();
-        $this->checkTill();
+        $modifier = $this->checkReason($this->modifier);
+        $modifier = $this->checkSince($modifier);
+        $modifier = $this->checkTill($modifier);
+
+        return $modifier;
     }
 
     public function testReason()
     {
-        $this->checkReason();
+        $this->checkReason($this->modifier);
     }
 
-    public function checkReason()
+    public function checkReason(Modifier $modifier)
     {
-        $result = $this->modifier->reason(self::SOME_TEXT);
-        $this->assertSame($this->modifier, $result);
-        $this->assertReason($this->modifier);
+        $result = $modifier->reason(self::SOME_TEXT);
+        $this->assertReason($result);
+
+        return $result;
     }
 
-    public function assertReason($modifier)
+    public function assertReason(Modifier $modifier)
     {
         $reason = $modifier->getReason();
         $this->assertInstanceOf(Reason::class, $reason);
@@ -77,14 +80,15 @@ class ModifierTest extends \PHPUnit\Framework\TestCase
 
     public function testSince()
     {
-        $this->checkSince();
+        $this->checkSince($this->modifier);
     }
 
-    public function checkSince()
+    public function checkSince(Modifier $modifier)
     {
-        $result = $this->modifier->since($this->now);
-        $this->assertSame($this->modifier, $result);
-        $this->assertSince($this->modifier);
+        $result = $modifier->since($this->now);
+        $this->assertSince($result);
+
+        return $result;
     }
 
     public function assertSince(Modifier $modifier)
@@ -96,14 +100,15 @@ class ModifierTest extends \PHPUnit\Framework\TestCase
 
     public function testTill()
     {
-        $this->checkTill();
+        $this->checkTill($this->modifier);
     }
 
-    public function checkTill()
+    public function checkTill(Modifier $modifier)
     {
-        $result = $this->modifier->till($this->now);
-        $this->assertSame($this->modifier, $result);
-        $this->assertTill($this->modifier);
+        $result = $modifier->till($this->now);
+        $this->assertTill($result);
+
+        return $result;
     }
 
     public function assertTill(Modifier $modifier)
