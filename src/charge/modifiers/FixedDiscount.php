@@ -85,8 +85,7 @@ class FixedDiscount extends Modifier
             return [];
         }
 
-        $month = $action->getTime()->modify('first day of this month midnight');
-        if (!$this->checkPeriod($month)) {
+        if (!$this->isSuitable($charge, $action)) {
             return [$charge];
         }
 

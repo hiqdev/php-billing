@@ -44,6 +44,13 @@ class Modifier implements ChargeModifier
         throw new \Exception('not finished modifier');
     }
 
+    public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool
+    {
+        $month = $action->getTime()->modify('first day of this month midnight');
+
+        return $this->checkPeriod($month);
+    }
+
     public function discount()
     {
         return new Discount($this->addons);

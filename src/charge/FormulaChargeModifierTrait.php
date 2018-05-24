@@ -25,16 +25,16 @@ trait FormulaChargeModifierTrait
      */
     protected $formula;
 
-    /**
-     * Calculate additional charges.
-     *
-     * @param ActionInterface $action
-     * @param ChargeInterface $charge
-     * @return ChargeInterface[] calculated charges
-     */
+    /** {@inheritdoc} */
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         return $this->formula ? $this->formula->modifyCharge($charge, $action) : [];
+    }
+
+    /** {@inheritdoc} */
+    public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool
+    {
+        return $this->formula ? $this->formula->isSuitable($charge, $action) : false;
     }
 
     public function setFormula(ChargeModifier $formula)

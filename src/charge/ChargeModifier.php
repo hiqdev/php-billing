@@ -28,4 +28,14 @@ interface ChargeModifier
      * @return ChargeInterface[] calculated charges
      */
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array;
+
+    /**
+     * Returns true if modifier is applicable for the given charge
+     * (due to time or other limitations)
+     *
+     * @param ChargeInterface $charge
+     * @param ActionInterface $action
+     * @return ChargeInterface[] calculated charges
+     */
+    public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool;
 }
