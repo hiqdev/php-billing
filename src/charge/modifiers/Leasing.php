@@ -27,21 +27,9 @@ use Money\Money;
  */
 class Leasing extends Modifier
 {
-    const TERM = 'term';
-
     public function getNext()
     {
         return $this;
-    }
-
-    public function lasts($term): self
-    {
-        return $this->addAddon(self::TERM, Period::fromString($term));
-    }
-
-    public function getTerm(): ?Period
-    {
-        return $this->getAddon(self::TERM);
     }
 
     public function isAbsolute()

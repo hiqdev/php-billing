@@ -14,9 +14,6 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
-use hiqdev\php\billing\charge\modifiers\addons\Reason;
-use hiqdev\php\billing\charge\modifiers\addons\Since;
-use hiqdev\php\billing\charge\modifiers\addons\Till;
 
 /**
  * Fixed discount.
@@ -25,9 +22,10 @@ use hiqdev\php\billing\charge\modifiers\addons\Till;
  */
 class Modifier implements ChargeModifier
 {
-    const REASON = 'reason';
-    const SINCE = 'since';
-    const TILL = 'till';
+    use \hiqdev\php\billing\charge\modifiers\addons\WithReason;
+    use \hiqdev\php\billing\charge\modifiers\addons\WithSince;
+    use \hiqdev\php\billing\charge\modifiers\addons\WithTill;
+    use \hiqdev\php\billing\charge\modifiers\addons\WithTerm;
 
     /**
      * @var AddonInterface[]
@@ -61,21 +59,6 @@ class Modifier implements ChargeModifier
         return new Leasing($this->addons);
     }
 
-    public function reason($text)
-    {
-        return $this->addAddon(self::REASON, new Reason($text));
-    }
-
-    public function since($time)
-    {
-        return $this->addAddon(self::SINCE, new Since($time));
-    }
-
-    public function till($time)
-    {
-        return $this->addAddon(self::TILL, new Till($time));
-    }
-
     public function addAddon($name, $addon)
     {
         if (isset($this->addons[$name])) {
@@ -95,21 +78,6 @@ class Modifier implements ChargeModifier
     public function getAddon($name)
     {
         return empty($this->addons[$name]) ? null : $this->addons[$name];
-    }
-
-    public function getReason()
-    {
-        return $this->getAddon(self::REASON);
-    }
-
-    public function getSince()
-    {
-        return $this->getAddon(self::SINCE);
-    }
-
-    public function getTill()
-    {
-        return $this->getAddon(self::TILL);
     }
 
     public function checkPeriod(DateTimeImmutable $time)
