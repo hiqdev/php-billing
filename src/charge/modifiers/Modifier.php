@@ -46,7 +46,12 @@ class Modifier implements ChargeModifier
     {
         $month = $action->getTime()->modify('first day of this month midnight');
 
-        return $this->checkPeriod($month);
+        $since = $this->getSince();
+        if ($since && $since->getValue() > $month) {
+            return false;
+        }
+
+        return true;
     }
 
     public function discount()
@@ -90,6 +95,16 @@ class Modifier implements ChargeModifier
         $till = $this->getTill();
         if ($till && $till->getValue() <= $time) {
             return false;
+        }
+
+        $term = $this->getTerm();
+        if ($term) {
+            if (!$since) {
+                throw new \Exception('since must be set to use term');
+            }
+            if ($term->countPeriodsPassed($since->getValue(), $time) >= 1) {
+                return false;
+            }
         }
 
         return true;
