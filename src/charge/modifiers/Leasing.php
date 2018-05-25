@@ -77,9 +77,10 @@ class Leasing extends Modifier
             $charge = $this->calculateCharge($charge, $action);
         }
 
+        $this->ensureIsValid();
+
         $month = $action->getTime()->modify('first day of this month midnight');
-        $num = $this->countPeriodsPassed($month);
-        if ($num >= 1 || !$this->checkPeriod($month)) {
+        if (!$this->checkPeriod($month)) {
             return [];
         }
 
@@ -91,7 +92,7 @@ class Leasing extends Modifier
         return [$charge];
     }
 
-    protected function countPeriodsPassed(DateTimeImmutable $time)
+    protected function ensureIsValid()
     {
         $since = $this->getSince();
         if ($since === null) {
@@ -102,7 +103,5 @@ class Leasing extends Modifier
         if ($term === null) {
             throw new \Exception('no term given for leasing');
         }
-
-        return $term->countPeriodsPassed($since->getValue(), $time);
     }
 }
