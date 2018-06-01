@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
+use hiqdev\php\billing\formula\FormulaSemanticsError;
 
 /**
  * Period addon.
@@ -51,13 +52,13 @@ abstract class Period implements AddonInterface
             }
         }
 
-        throw new \Exception("invalid period given: $string");
+        throw new FormulaSemanticsError("invalid period given: $string");
     }
 
     public static function ensureValidValue($value)
     {
         if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-            throw new \Exception('periodicity must be integer number');
+            throw new FormulaSemanticsError('periodicity must be integer number');
         }
 
         return (int) $value;

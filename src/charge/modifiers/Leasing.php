@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -68,7 +69,7 @@ class Leasing extends Modifier
 
     public function till($dummy)
     {
-        throw new \Exception('till can not be defined for leasing');
+        throw new FormulaSemanticsError('till can not be defined for leasing');
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
@@ -96,12 +97,12 @@ class Leasing extends Modifier
     {
         $since = $this->getSince();
         if ($since === null) {
-            throw new \Exception('no since given for leasing');
+            throw new FormulaSemanticsError('no since given for leasing');
         }
 
         $term = $this->getTerm();
         if ($term === null) {
-            throw new \Exception('no term given for leasing');
+            throw new FormulaSemanticsError('no term given for leasing');
         }
     }
 }

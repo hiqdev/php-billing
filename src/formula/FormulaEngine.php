@@ -14,21 +14,38 @@ use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use Hoa\Ruler\Context;
+use Hoa\Ruler\Model;
 use Hoa\Ruler\Ruler;
+use Hoa\Visitor\Visit;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 class FormulaEngine
 {
+    /**
+     * @var Ruler
+     */
     protected $ruler;
 
+    /**
+     * @var Visit|Asserter
+     */
     protected $asserter;
 
+    /**
+     * @var Context
+     */
     protected $context;
 
+    /**
+     * @var ChargeModifier
+     */
     protected $discount;
 
+    /**
+     * @var ChargeModifier
+     */
     protected $leasing;
 
     public function __construct()
@@ -44,12 +61,71 @@ class FormulaEngine
      */
     public function build(string $formula): ChargeModifier
     {
-        $formula = strtr(trim($formula), ["\n" => ' AND ']);
+        try {
+            $model = $this->interpret($formula);
+            $result = $this->getRuler()->assert($model, $this->getContext());
+        } catch (FormulaEngineException $e) {
+            throw $e;
+        } catch (\Hoa\Ruler\Exception\Asserter $e) {
+            throw FormulaRuntimeError::fromException($e, $formula);
+        } catch (\Exception $exception) {
+            throw FormulaRuntimeError::create($formula, 'Formula run failed');
+        }
 
-        return $this->getRuler()->assert($formula, $this->getContext());
+        if (!$result instanceof ChargeModifier) {
+            throw FormulaRuntimeError::create($formula, 'Formula run returned unexpected result');
+        }
+
+        return $result;
     }
 
-    public function getRuler()
+    /**
+     * @param string $formula
+     * @return Model\Model
+     * @throws
+     */
+    public function interpret(string $formula): Model\Model
+    {
+        try {
+            return $this->getRuler()->interpret($this->normalize($formula));
+        } catch (\Hoa\Compiler\Exception\Exception $exception) {
+            throw FormulaSyntaxError::fromException($exception, $formula);
+        } catch (\Hoa\Ruler\Exception\Interpreter $exception) {
+            throw FormulaSyntaxError::fromException($exception, $formula);
+        } catch (\Throwable $exception) {
+            throw FormulaSyntaxError::create($formula);
+        }
+    }
+
+    public function normalize(string $formula): string
+    {
+        return implode(' AND ', array_filter(array_map(function ($value) {
+            $value = trim($value);
+            if (strlen($value) === 0) {
+                return null;
+            }
+
+            return $value;
+        }, explode("\n", $formula))));
+    }
+
+    /**
+     * Validates $formula
+     *
+     * @param string $formula
+     * @return null|string `null` when formula has no errors or string error message
+     */
+    public function validate(string $formula): ?string
+    {
+        try {
+            $this->build($formula);
+            return null;
+        } catch (FormulaEngineException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getRuler(): Ruler
     {
         if ($this->ruler === null) {
             $this->ruler = new Ruler();
@@ -59,7 +135,7 @@ class FormulaEngine
         return $this->ruler;
     }
 
-    public function getAsserter()
+    public function getAsserter(): Visit
     {
         if ($this->asserter === null) {
             $this->asserter = new Asserter();
@@ -68,7 +144,7 @@ class FormulaEngine
         return $this->asserter;
     }
 
-    public function getContext()
+    public function getContext(): Context
     {
         if ($this->context === null) {
             $this->context = $this->buildContext();
@@ -77,7 +153,7 @@ class FormulaEngine
         return $this->context;
     }
 
-    protected function buildContext()
+    protected function buildContext(): Context
     {
         $context = new Context();
         $context['discount'] = $this->getDiscount();
@@ -86,7 +162,7 @@ class FormulaEngine
         return $context;
     }
 
-    public function getDiscount()
+    public function getDiscount(): ChargeModifier
     {
         if ($this->discount === null) {
             $this->discount = new Discount();
@@ -95,7 +171,7 @@ class FormulaEngine
         return $this->discount;
     }
 
-    public function getLeasing()
+    public function getLeasing(): ChargeModifier
     {
         if ($this->leasing === null) {
             $this->leasing = new Leasing();

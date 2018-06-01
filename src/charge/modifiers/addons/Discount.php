@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
+use hiqdev\php\billing\formula\FormulaSemanticsError;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -80,13 +81,13 @@ class Discount implements AddonInterface
 
         /// TODO: add special exception
         $name = static::$name;
-        throw new \Exception("invalid $name value: $value");
+        throw new FormulaSemanticsError("invalid $name value: $value");
     }
 
     public function multiply($multiplier)
     {
         if (!is_numeric($multiplier)) {
-            throw new \Exception('multiplier for discount myst be numeric');
+            throw new FormulaSemanticsError('multiplier for discount must be numeric');
         }
 
         return new static($this->isAbsolute() ? $this->value->multiply($multiplier) : $this->value*$multiplier);
@@ -125,10 +126,10 @@ class Discount implements AddonInterface
     public function ensureSameType(self $other, $name)
     {
         if ($this->isRelative() && !$other->isRelative()) {
-            throw new \Exception("$name must be relative");
+            throw new FormulaSemanticsError("$name must be relative");
         }
         if ($this->isAbsolute() && !$other->isAbsolute()) {
-            throw new \Exception("$name must be absolute");
+            throw new FormulaSemanticsError("$name must be absolute");
         }
     }
 

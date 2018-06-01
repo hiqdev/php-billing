@@ -132,10 +132,19 @@ class FeatureContext implements Context
     }
 
     /**
+     * @Then /^error is$/m
+     */
+    public function multilineErrorIs(\Behat\Gherkin\Node\PyStringNode $value)
+    {
+        $this->expectedError = $value->getRaw();
+    }
+
+    /**
      * @Then /^error is (.+)$/
+     *
      * @param string $error
      */
-    public function errorIs(string $error): void
+    public function errorIs($error): void
     {
         $this->expectedError = $error;
     }

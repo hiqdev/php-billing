@@ -23,6 +23,11 @@ use hiqdev\php\billing\formula\FormulaEngine;
  */
 class FormulaEngineTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var FormulaEngine
+     */
+    protected $engine;
+
     public function setUp()
     {
         $this->engine = new FormulaEngine();
@@ -60,5 +65,45 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Reason::class, $formula->getReason());
         $this->assertSame($reason, $formula->getReason()->getValue());
         $this->assertNull($formula->getTill());
+    }
+
+    public function normalizeDataProvider()
+    {
+        return [
+            ["ab\ncd", "ab AND cd"],
+            [" ab  \n  \n cd", "ab AND cd"],
+            ["\n\n\n", ''],
+            ["", ''],
+            [" ", ''],
+            ['ab', 'ab'],
+            ['ab and cd', 'ab and cd'],
+            [true, '1'],
+        ];
+    }
+
+    /**
+     * @dataProvider normalizeDataProvider
+     */
+    public function testNormalize($formula, $expected)
+    {
+        return $this->assertSame($expected, $this->engine->normalize($formula));
+    }
+
+    /**
+     * @dataProvider validateDataProvider
+     */
+    public function testValidate($formula, $error)
+    {
+        return $this->assertSame($error, $this->engine->validate($formula));
+    }
+
+    public function validateDataProvider()
+    {
+        return [
+            ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑"],
+            ['true', "Formula run returned unexpected result"],
+            ['discount.fixed("50%")', null],
+            ["discount.fixed(\"50%\")\ndiscount.fixed(\"5 USD\")", null],
+        ];
     }
 }

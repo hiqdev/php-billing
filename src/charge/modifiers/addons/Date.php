@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
+use hiqdev\php\billing\formula\FormulaSemanticsError;
 
 /**
  * Date addon.
@@ -57,6 +58,6 @@ abstract class Date implements AddonInterface
             return new DateTimeImmutable("$ms[3]-$ms[2]-$ms[1]");
         }
 
-        throw new \Exception('invalid date given');
+        throw new FormulaSemanticsError('invalid date given');
     }
 }
