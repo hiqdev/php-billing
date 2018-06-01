@@ -21,12 +21,24 @@ use hiqdev\php\billing\charge\ChargeModifier;
  */
 class LastCombination implements ChargeModifier
 {
+    /**
+     * @var ChargeModifier
+     */
+    protected $left;
+    /**
+     * @var ChargeModifier
+     */
+    protected $right;
+
     public function __construct(ChargeModifier $left, ChargeModifier $right)
     {
         $this->left = $left;
         $this->right = $right;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         if ($this->right->isSuitable($charge, $action)) {
@@ -36,6 +48,9 @@ class LastCombination implements ChargeModifier
         return $this->left->modifyCharge($charge, $action);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool
     {
         return $this->left->isSuitable($charge, $action) || $this->right->isSuitable($charge, $action);
