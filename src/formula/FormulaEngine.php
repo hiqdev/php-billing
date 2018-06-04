@@ -21,7 +21,7 @@ use Hoa\Visitor\Visit;
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class FormulaEngine
+class FormulaEngine implements FormulaEngineInterface
 {
     /**
      * @var Ruler
