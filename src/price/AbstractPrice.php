@@ -95,6 +95,25 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
 
     /**
      * {@inheritdoc}
+     */
+    public function hasPlan()
+    {
+        return $this->plan !== null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPlan(PlanInterface $plan)
+    {
+        if ($this->hasPlan()) {
+            throw new \Exception('cannot reassign plan for price');
+        }
+        $this->plan = $plan;
+    }
+
+    /**
+     * {@inheritdoc}
      * Default sum calculation method: sum = price * usage.
      */
     public function calculateSum(QuantityInterface $quantity): ?Money

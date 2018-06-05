@@ -81,6 +81,30 @@ class Plan implements PlanInterface
     }
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return CustomerInterface
+     */
+    public function getSeller(): ?CustomerInterface
+    {
+        return $this->seller;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParent(): ?PlanInterface
+    {
+        return $this->parent;
+    }
+
+    /**
      * @return bool
      */
     public function hasPrices()
@@ -130,11 +154,4 @@ class Plan implements PlanInterface
         return get_object_vars($this);
     }
 
-    /**
-     * @return CustomerInterface
-     */
-    public function getSeller(): ?CustomerInterface
-    {
-        return $this->seller;
-    }
 }
