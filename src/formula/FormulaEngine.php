@@ -81,13 +81,14 @@ class FormulaEngine implements FormulaEngineInterface
 
     /**
      * @param string $formula
-     * @return Model\Model
      * @throws
+     * @return Model\Model
      */
     public function interpret(string $formula): Model\Model
     {
         try {
             $rule = str_replace("\n", ' AND ', $this->normalize($formula));
+
             return $this->getRuler()->interpret($rule);
         } catch (\Hoa\Compiler\Exception\Exception $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
@@ -115,7 +116,7 @@ class FormulaEngine implements FormulaEngineInterface
     }
 
     /**
-     * Validates $formula
+     * Validates $formula.
      *
      * @param string $formula
      * @return null|string `null` when formula has no errors or string error message
@@ -124,6 +125,7 @@ class FormulaEngine implements FormulaEngineInterface
     {
         try {
             $this->build($formula);
+
             return null;
         } catch (FormulaEngineException $e) {
             return $e->getMessage();

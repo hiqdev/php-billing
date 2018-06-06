@@ -24,7 +24,7 @@ interface FormulaEngineInterface
     public function build(string $formula): ChargeModifier;
 
     /**
-     * Validates $formula
+     * Validates $formula.
      *
      * @param string $formula
      * @return null|string `null` when formula has no errors or string error message

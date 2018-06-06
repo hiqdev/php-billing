@@ -153,5 +153,4 @@ class Plan implements PlanInterface
     {
         return get_object_vars($this);
     }
-
 }

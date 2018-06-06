@@ -18,7 +18,6 @@ use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
-use Money\Currency;
 use Money\Money;
 
 /**

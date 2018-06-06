@@ -72,8 +72,8 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
         return [
             ["ab\ncd", "ab\ncd"],
             [" ab  \n  \n cd", "ab\ncd"],
-            ["", null],
-            [" ", null],
+            ['', null],
+            [' ', null],
             ["\n\n\n", null],
             ['ab', 'ab'],
             ["ab\ncd", "ab\ncd"],
@@ -101,7 +101,7 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑"],
-            ['true', "Formula run returned unexpected result"],
+            ['true', 'Formula run returned unexpected result'],
             ['discount.fixed("50%")', null],
             ["discount.fixed(\"50%\")\ndiscount.fixed(\"5 USD\")", null],
         ];
