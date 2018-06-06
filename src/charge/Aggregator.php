@@ -17,7 +17,6 @@ use Money\Money;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
- * TODO: Split out generalizations to Generalizer class.
  */
 class Aggregator implements AggregatorInterface
 {

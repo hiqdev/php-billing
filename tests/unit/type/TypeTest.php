@@ -97,9 +97,9 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected function checkEquals(bool $expect, $lhs, $rhs)
     {
         $check = $lhs->equals($rhs);
-        if ($check !== $expect) {
+        /*if ($check !== $expect) {
             var_dump('no equality', $expect, $lhs, $rhs);
-        }
+        }*/
         $this->assertSame($expect, $check);
     }
 
@@ -156,9 +156,9 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected function checkSingleMatch(bool $expect, $lhs, $rhs)
     {
         $check = $lhs->matches($rhs);
-        if ($check !== $expect) {
+        /*if ($check !== $expect) {
             var_dump('no match', $expect, $lhs, $rhs);
-        }
+        }*/
         $this->assertSame($expect, $check);
     }
 }

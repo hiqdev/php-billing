@@ -77,9 +77,6 @@ class Discount implements AddonInterface
             return $this->moneyParser->parse($ms[1], new Currency($ms[3]));
         }
 
-        /// var_dump($value);
-
-        /// TODO: add special exception
         $name = static::$name;
         throw new FormulaSemanticsError("invalid $name value: $value");
     }
