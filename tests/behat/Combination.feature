@@ -11,15 +11,15 @@ Feature: Combination
          Then first charge is <first>
           And second charge is <second>
         Examples:
-            | date       | first           | second                       |
-            | 2018-07-31 | monthly 100 USD |                              |
-            | 2018-08-01 | monthly 100 USD | discount 30 USD reason ONE   |
-            | 2018-09-01 | monthly 100 USD | discount 30 USD reason ONE   |
-            | 2018-10-01 | monthly 100 USD | discount 11 USD reason TWO   |
-            | 2018-11-01 | monthly 100 USD | discount 11 USD reason TWO   |
-            | 2018-12-01 | monthly 100 USD | discount 55 USD reason THREE |
-            | 2019-01-01 | monthly 100 USD | discount 55 USD reason THREE |
-            | 2028-11-01 | monthly 100 USD | discount 55 USD reason THREE |
+            | date       | first           | second                        |
+            | 2018-07-31 | monthly 100 USD |                               |
+            | 2018-08-01 | monthly 100 USD | discount -30 USD reason ONE   |
+            | 2018-09-01 | monthly 100 USD | discount -30 USD reason ONE   |
+            | 2018-10-01 | monthly 100 USD | discount -11 USD reason TWO   |
+            | 2018-11-01 | monthly 100 USD | discount -11 USD reason TWO   |
+            | 2018-12-01 | monthly 100 USD | discount -55 USD reason THREE |
+            | 2019-01-01 | monthly 100 USD | discount -55 USD reason THREE |
+            | 2028-11-01 | monthly 100 USD | discount -55 USD reason THREE |
 
     Scenario Outline: discounts then leasing
         Given formula is            discount.since('08.2018').grows('10%').every('month').max('100%').reason('ONE')
@@ -30,9 +30,9 @@ Feature: Combination
         Examples:
             | date       | first                      | second                      |
             | 2018-07-31 | monthly 100 USD            |                             |
-            | 2018-08-01 | monthly 100 USD            | discount  10 USD reason ONE |
-            | 2018-09-01 | monthly 100 USD            | discount  20 USD reason ONE |
-            | 2018-10-01 | monthly 100 USD            | discount  30 USD reason ONE |
+            | 2018-08-01 | monthly 100 USD            | discount -10 USD reason ONE |
+            | 2018-09-01 | monthly 100 USD            | discount -20 USD reason ONE |
+            | 2018-10-01 | monthly 100 USD            | discount -30 USD reason ONE |
             | 2018-11-01 | monthly 100 USD reason TWO |                             |
             | 2018-12-01 | monthly 100 USD reason TWO |                             |
             | 2019-01-01 |                            |                             |

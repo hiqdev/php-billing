@@ -38,6 +38,6 @@ class GrowingDiscountTest extends FixedDiscountTest
         $discount = $charges[1];
         $this->assertInstanceOf(Charge::class, $discount);
         $this->assertEquals(Quantity::items(1), $discount->getUsage());
-        $this->assertEquals($sum, $discount->getSum());
+        $this->assertEquals($sum->multiply(-1), $discount->getSum());
     }
 }
