@@ -72,9 +72,9 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
         return [
             ["ab\ncd", "ab\ncd"],
             [" ab  \n  \n cd", "ab\ncd"],
-            ["\n\n\n", ''],
-            ["", ''],
-            [" ", ''],
+            ["", null],
+            [" ", null],
+            ["\n\n\n", null],
             ['ab', 'ab'],
             ["ab\ncd", "ab\ncd"],
             [true, '1'],
