@@ -159,7 +159,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) +([0-9.]+) ([A-Z]{3})$/
+     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})$/
      */
     public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null): void
     {
@@ -167,7 +167,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) +([0-9.]+) ([A-Z]{3}) reason (.+)/
+     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3}) reason (.+)/
      */
     public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null): void
     {
