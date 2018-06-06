@@ -87,26 +87,31 @@ class FormulaEngine implements FormulaEngineInterface
     public function interpret(string $formula): Model\Model
     {
         try {
-            return $this->getRuler()->interpret($this->normalize($formula));
+            $rule = str_replace("\n", ' AND ', $this->normalize($formula));
+            return $this->getRuler()->interpret($rule);
         } catch (\Hoa\Compiler\Exception\Exception $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
         } catch (\Hoa\Ruler\Exception\Interpreter $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
         } catch (\Throwable $exception) {
-            throw FormulaSyntaxError::create($formula);
+            throw FormulaSyntaxError::create($formula, 'Failed to interpret formula');
         }
     }
 
-    public function normalize(string $formula): string
+    public function normalize(string $formula): ?string
     {
-        return implode(' AND ', array_filter(array_map(function ($value) {
+        $lines = explode("\n", $formula);
+        $normalized = array_map(function ($value) {
             $value = trim($value);
             if (strlen($value) === 0) {
                 return null;
             }
 
             return $value;
-        }, explode("\n", $formula))));
+        }, $lines);
+        $cleared = array_filter($normalized);
+
+        return empty($cleared) ? null : implode("\n", $cleared);
     }
 
     /**

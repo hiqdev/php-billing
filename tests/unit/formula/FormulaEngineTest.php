@@ -70,13 +70,13 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
     public function normalizeDataProvider()
     {
         return [
-            ["ab\ncd", "ab AND cd"],
-            [" ab  \n  \n cd", "ab AND cd"],
+            ["ab\ncd", "ab\ncd"],
+            [" ab  \n  \n cd", "ab\ncd"],
             ["\n\n\n", ''],
             ["", ''],
             [" ", ''],
             ['ab', 'ab'],
-            ['ab and cd', 'ab and cd'],
+            ["ab\ncd", "ab\ncd"],
             [true, '1'],
         ];
     }
