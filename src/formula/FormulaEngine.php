@@ -64,6 +64,8 @@ class FormulaEngine implements FormulaEngineInterface
         try {
             $model = $this->interpret($formula);
             $result = $this->getRuler()->assert($model, $this->getContext());
+        } catch (FormulaSemanticsError $e) {
+            throw FormulaSemanticsError::fromException($e, $formula);
         } catch (FormulaEngineException $e) {
             throw $e;
         } catch (\Hoa\Ruler\Exception\Asserter $e) {
