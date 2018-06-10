@@ -24,7 +24,7 @@ class AggregatorTest extends SaleTest
     protected function setUp()
     {
         parent::setUp();
-        $this->calculator = new Calculator($this->repository);
+        $this->calculator = new Calculator($this->repository, null);
         $this->aggregator = new Aggregator(new Generalizer());
         $actions = [];
         foreach ($this->plan->types as $type) {

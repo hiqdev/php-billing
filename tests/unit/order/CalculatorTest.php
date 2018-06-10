@@ -21,7 +21,7 @@ class CalculatorTest extends SaleTest
     protected function setUp()
     {
         parent::setUp();
-        $this->calculator = new Calculator($this->repository);
+        $this->calculator = new Calculator($this->repository, null);
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {

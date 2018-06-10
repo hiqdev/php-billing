@@ -32,8 +32,8 @@ class Calculator implements CalculatorInterface
      * @param PlanRepositoryInterface $planRepository
      */
     public function __construct(
-        SaleRepositoryInterface $saleRepository,
-        PlanRepositoryInterface $planRepository
+        ?SaleRepositoryInterface $saleRepository,
+        ?PlanRepositoryInterface $planRepository
     ) {
         $this->saleRepository = $saleRepository;
         $this->planRepository = $planRepository;
