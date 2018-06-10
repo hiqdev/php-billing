@@ -24,4 +24,14 @@ class TargetFactory implements TargetFactoryInterface
     {
         return new Target($dto->id, $dto->type);
     }
+
+    public function getClassForType(string $type): string
+    {
+        return Target::class;
+    }
+
+    public function shortenType(string $type): string
+    {
+        return $type;
+    }
 }

@@ -32,6 +32,7 @@ interface TargetFactoryInterface
 
     /**
      * Ensures type does not contain subtype.
+     * XXX should be removed
      *
      * @param string $type
      * @return string
