@@ -64,7 +64,7 @@ class FixedDiscount extends Modifier
     {
         $type = $this->getType();
         $target = $this->getTarget();
-        $prepaid = Quantity::items(0);
+        $prepaid = Quantity::create('items', 0);
 
         return new SinglePrice(null, $type, $target, null, $prepaid, $sum);
     }
@@ -91,7 +91,7 @@ class FixedDiscount extends Modifier
         }
 
         $sum = $this->calculateSum($charge);
-        $usage  = Quantity::items(1);
+        $usage  = Quantity::create('items', 1);
         $price = $this->buildPrice($sum);
         $discount = new Charge(null, $action, $price, $usage, $sum->multiply(-1));
         $reason = $this->getReason();

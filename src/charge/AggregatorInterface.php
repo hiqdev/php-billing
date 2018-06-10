@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\charge;
 
+use hiqdev\php\billing\bill\Bill;
+
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
