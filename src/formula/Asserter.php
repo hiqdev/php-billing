@@ -24,10 +24,7 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
      */
     public function __construct(Context $context = null)
     {
-        if (null !== $context) {
-            $this->setContext($context);
-        }
-
+        parent::__construct($context);
         $this->setOperator('and', [$this, 'makeAnd']);
     }
 
