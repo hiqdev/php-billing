@@ -10,8 +10,6 @@
 
 namespace hiqdev\php\billing\price;
 
-use hiqdev\billing\hiapi\models\Price;
-
 /**
  * Default price factory.
  *
@@ -44,9 +42,9 @@ class PriceFactory implements PriceFactoryInterface
      * Creates price object.
      *
      * @param PriceCreationDto $dto
-     * @return Price
+     * @return PriceInterface
      */
-    public function create(PriceCreationDto $dto)
+    public function create(PriceCreationDto $dto): PriceInterface
     {
         $class = $this->findClassForTypes([
             get_class($dto),
@@ -67,7 +65,10 @@ class PriceFactory implements PriceFactoryInterface
         if ($this->defaultClass) {
             return $this->defaultClass;
         }
-        throw new FailedCreatePriceException("unknown type: $type");
+        throw new FailedCreatePriceException(sprintf(
+            'unknown types: "%s"',
+            implode(',', $types)
+        ));
     }
 
     public function findMethodForClass($class)

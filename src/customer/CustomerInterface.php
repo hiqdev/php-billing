@@ -10,15 +10,19 @@
 
 namespace hiqdev\php\billing\customer;
 
-use hiqdev\php\billing\target\TargetInterface;
-
 /**
  * Customer interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface CustomerInterface extends TargetInterface
+interface CustomerInterface
 {
+    /**
+     * Get ID.
+     * @return int|string
+     */
+    public function getId();
+
     /**
      * Returns client login.
      * @return string

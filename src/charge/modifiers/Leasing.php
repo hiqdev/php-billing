@@ -31,26 +31,11 @@ class Leasing extends Modifier
         return $this;
     }
 
-    public function isAbsolute()
-    {
-        return $this->getAddon(self::VALUE)->isAbsolute();
-    }
-
-    public function isRelative()
-    {
-        return !$this->isAbsolute();
-    }
-
-    public function calculateSum(ChargeInterface $charge = null): Money
-    {
-        return $this->getValue($charge)->calculateSum($charge);
-    }
-
     public function buildPrice(Money $sum)
     {
         $type = $this->getType();
         $target = $this->getTarget();
-        $prepaid = Quantity::items(0);
+        $prepaid = Quantity::create('items', 0);
 
         return new SinglePrice(null, $type, $target, null, $prepaid, $sum);
     }
@@ -73,7 +58,7 @@ class Leasing extends Modifier
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         if ($charge === null) {
-            $charge = $this->calculateCharge($charge, $action);
+            throw new \Exception('unexpected null charge in Leasing, to be implemented');
         }
 
         $this->ensureIsValid();

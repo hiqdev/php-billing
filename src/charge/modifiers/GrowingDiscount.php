@@ -33,7 +33,7 @@ class GrowingDiscount extends FixedDiscount
 
     public function __construct($step, $min = null, array $addons = [])
     {
-        Modifier::__construct($addons);
+        parent::__construct($step, $addons);
         $this->addAddon(self::STEP, new Step($step));
         if ($min) {
             $this->min($min);

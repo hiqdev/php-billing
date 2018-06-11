@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\action\ActionInterface;
+
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */

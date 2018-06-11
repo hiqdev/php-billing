@@ -10,14 +10,12 @@
 
 namespace hiqdev\php\billing\customer;
 
-use hiqdev\php\billing\target\AbstractTarget;
-
 /**
  * Customer.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Customer extends AbstractTarget implements CustomerInterface
+class Customer implements CustomerInterface
 {
     /**
      * @var integer
@@ -44,6 +42,11 @@ class Customer extends AbstractTarget implements CustomerInterface
         $this->id = $id;
         $this->login = $login;
         $this->seller = $seller;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

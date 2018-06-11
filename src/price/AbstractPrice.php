@@ -132,11 +132,6 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
         return $price->multiply($usage->getQuantity(), Money::ROUND_UP);
     }
 
-    public static function create(array $data)
-    {
-        return new SinglePrice($data['id'], $data['target']);
-    }
-
     public function jsonSerialize()
     {
         return [
