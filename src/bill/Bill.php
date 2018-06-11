@@ -76,6 +76,11 @@ class Bill implements BillInterface
      */
     protected $charges = [];
 
+    /**
+     * @var string
+     */
+    protected $comment;
+
     public function __construct(
                             $id,
         TypeInterface       $type,
@@ -210,6 +215,16 @@ class Bill implements BillInterface
     public function getIsFinished()
     {
         return $this->isFinished;
+    }
+
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment)
+    {
+        $this->comment = $comment;
     }
 
     public function jsonSerialize()
