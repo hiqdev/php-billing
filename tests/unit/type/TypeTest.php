@@ -23,12 +23,16 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     protected $sop1 = 'server1';
     protected $sop2 = 'server2';
+    protected $sfo1 = 'monthly,server1';
+    protected $sfo2 = 'monthly,server2';
 
     protected $did1 = 201;
     protected $did2 = 202;
 
     protected $dop1 = 'domain1';
     protected $dop2 = 'domain2';
+    protected $dfo1 = 'domain,domain1';
+    protected $dfo2 = 'domain,domain2';
 
     protected function setUp()
     {
@@ -160,5 +164,30 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             var_dump('no match', $expect, $lhs, $rhs);
         }
         $this->assertSame($expect, $check);
+    }
+
+    public function testSubstrMatch()
+    {
+        $this->server_1p = new Type(Type::ANY, $this->sfo1);
+        $this->server_2p = new Type(Type::ANY, $this->sfo2);
+        $this->domain_1p = new Type(Type::ANY, $this->dfo1);
+        $this->domain_2p = new Type(Type::ANY, $this->dfo2);
+
+        $this->assertTrue($this->server11->matches($this->server_1p));
+        $this->assertTrue($this->server21->matches($this->server_1p));
+        $this->assertTrue($this->server_1->matches($this->server_1p));
+        $this->assertTrue($this->serverN1->matches($this->server_1p));
+        $this->assertTrue($this->server_1p->matches($this->server_1p));
+
+        $this->assertFalse($this->server_1p->matches($this->server_1));
+        $this->assertFalse($this->server_1p->matches($this->server11));
+        $this->assertFalse($this->server_2p->matches($this->server_2));
+        $this->assertFalse($this->server_2p->matches($this->server22));
+        $this->assertFalse($this->server_1->matches($this->server_2p));
+        $this->assertFalse($this->server_2->matches($this->server_1p));
+        $this->assertFalse($this->server_1->matches($this->domain_1p));
+        $this->assertFalse($this->server_2->matches($this->domain_2p));
+        $this->assertFalse($this->domain_1->matches($this->server_1p));
+        $this->assertFalse($this->domain_2->matches($this->server_2p));
     }
 }

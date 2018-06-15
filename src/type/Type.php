@@ -70,13 +70,22 @@ class Type implements TypeInterface
             : $this->checkMatches($this->id, $other->getId());
     }
 
-    protected function checkMatches($lhs, $rhs)
+    protected static function checkMatches($arg, $pattern)
     {
-        if ($lhs === self::NONE || $rhs === self::NONE) {
+        if ($arg === self::NONE || $pattern === self::NONE) {
             return false;
         }
 
-        return (string) $lhs === (string) $rhs;
+        return (string) $arg === (string) $pattern || static::endsWith($pattern, ",$arg");
+    }
+
+    protected static function endsWith(string $string = null, string $postfix = null): bool
+    {
+        $strlen = strlen($string);
+        $fixlen = strlen($postfix);
+        if (!$strlen || $fixlen > $strlen) return false;
+
+        return substr_compare($string, $postfix, $strlen - $fixlen, $fixlen) === 0;
     }
 
     public function jsonSerialize()
