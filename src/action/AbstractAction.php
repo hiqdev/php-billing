@@ -54,6 +54,9 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     /** @var ActionInterface */
     protected $parent;
 
+    /** @var ActionState */
+    protected $state;
+
     /**
      * @param TypeInterface $type
      * @param TargetInterface $target
@@ -147,6 +150,21 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     public function setTime(DateTimeImmutable $time)
     {
         $this->time = $time;
+    }
+
+    public function getState(): ?ActionState
+    {
+        return $this->state;
+    }
+
+    public function setFinished(): void
+    {
+        $this->state = ActionState::finished();
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->state === null ? null : $this->state->isFinished();
     }
 
     /**
