@@ -50,11 +50,11 @@ class Bill implements BillInterface
     /** @var PlanInterface */
     protected $plan;
 
-    /** @var bool */
-    protected $isFinished = false;
-
     /** @var ChargeInterface[] */
     protected $charges = [];
+
+    /** @var BillState */
+    protected $state;
 
     /** @var string */
     protected $comment;
@@ -69,7 +69,7 @@ class Bill implements BillInterface
         TargetInterface     $target = null,
         PlanInterface       $plan = null,
         array               $charges = [],
-        bool                $isFinished = false
+        BillState           $state = null
     ) {
         $this->id           = $id;
         $this->type         = $type;
@@ -80,7 +80,7 @@ class Bill implements BillInterface
         $this->target       = $target;
         $this->plan         = $plan;
         $this->charges      = $charges;
-        $this->isFinished   = $isFinished;
+        $this->state        = $state;
     }
 
     public function getUniqueString()
@@ -187,12 +187,19 @@ class Bill implements BillInterface
         return $this->charges;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsFinished()
+    public function getState(): ?BillState
     {
-        return $this->isFinished;
+        return $this->state;
+    }
+
+    public function setFinished(): void
+    {
+        $this->state = BillState::finished();
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->state === null ? null : $this->state->isFinished();
     }
 
     public function getComment()
