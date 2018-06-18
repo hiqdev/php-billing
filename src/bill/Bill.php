@@ -26,59 +26,37 @@ use Money\Money;
  */
 class Bill implements BillInterface
 {
-    /**
-     * @var int|string
-     */
+    /** @var int|string */
     protected $id;
 
-    /**
-     * @var TypeInterface
-     */
+    /** @var TypeInterface */
     protected $type;
 
-    /**
-     * @var DateTimeImmutable
-     */
+    /** @var DateTimeImmutable */
     protected $time;
 
-    /**
-     * @var Money
-     */
+    /** @var Money */
     protected $sum;
 
-    /**
-     * @var QuantityInterface
-     */
+    /** @var QuantityInterface */
     protected $quantity;
 
-    /**
-     * @var CustomerInterface
-     */
+    /** @var CustomerInterface */
     protected $customer;
 
-    /**
-     * @var TargetInterface
-     */
+    /** @var TargetInterface */
     protected $target;
 
-    /**
-     * @var PlanInterface
-     */
+    /** @var PlanInterface */
     protected $plan;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $isFinished = false;
 
-    /**
-     * @var ChargeInterface[]
-     */
+    /** @var ChargeInterface[] */
     protected $charges = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $comment;
 
     public function __construct(
