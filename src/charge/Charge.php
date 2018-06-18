@@ -43,6 +43,9 @@ class Charge implements ChargeInterface
     /** @var BillInterface */
     protected $bill;
 
+    /** @var ChargeState */
+    protected $state;
+
     /** @var string */
     protected $comment;
 
@@ -113,6 +116,21 @@ class Charge implements ChargeInterface
             throw new \Exception('cannot reassign sale bill');
         }
         $this->bill = $bill;
+    }
+
+    public function getState(): ?ChargeState
+    {
+        return $this->state;
+    }
+
+    public function setFinished(): void
+    {
+        $this->state = ChargeState::finished();
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->state === null ? null : $this->state->isFinished();
     }
 
     public function getComment()
