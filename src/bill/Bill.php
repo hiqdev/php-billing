@@ -197,7 +197,7 @@ class Bill implements BillInterface
         $this->state = BillState::finished();
     }
 
-    public function isFinished(): bool
+    public function isFinished(): ?bool
     {
         return $this->state === null ? null : $this->state->isFinished();
     }

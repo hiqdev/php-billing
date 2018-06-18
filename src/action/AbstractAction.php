@@ -162,7 +162,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         $this->state = ActionState::finished();
     }
 
-    public function isFinished(): bool
+    public function isFinished(): ?bool
     {
         return $this->state === null ? null : $this->state->isFinished();
     }

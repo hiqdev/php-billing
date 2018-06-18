@@ -128,7 +128,7 @@ class Charge implements ChargeInterface
         $this->state = ChargeState::finished();
     }
 
-    public function isFinished(): bool
+    public function isFinished(): ?bool
     {
         return $this->state === null ? null : $this->state->isFinished();
     }
