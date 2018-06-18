@@ -25,39 +25,25 @@ use Money\Money;
  */
 class Charge implements ChargeInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $id;
 
-    /**
-     * @var ActionInterface
-     */
+    /** @var ActionInterface */
     protected $action;
 
-    /**
-     * @var PriceInterface
-     */
+    /** @var PriceInterface */
     protected $price;
 
-    /**
-     * @var QuantityInterface
-     */
+    /** @var QuantityInterface */
     protected $usage;
 
-    /**
-     * @var Money
-     */
+    /** @var Money */
     protected $sum;
 
-    /**
-     * @var BillInterface
-     */
+    /** @var BillInterface */
     protected $bill;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $comment;
 
     public function __construct(
