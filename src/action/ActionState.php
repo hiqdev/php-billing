@@ -39,6 +39,11 @@ class ActionState
         return $this->state === self::STATE_NEW;
     }
 
+    public function isFinished()
+    {
+        return $this->state === self::STATE_FINISHED;
+    }
+
     public static function new()
     {
         return new self(self::STATE_NEW);
