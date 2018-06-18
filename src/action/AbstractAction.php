@@ -30,44 +30,28 @@ use hiqdev\php\units\QuantityInterface;
  */
 abstract class AbstractAction implements ActionInterface, EntityInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $id;
 
-    /**
-     * @var TypeInterface
-     */
+    /** @var TypeInterface */
     protected $type;
 
-    /**
-     * @var TargetInterface
-     */
+    /** @var TargetInterface */
     protected $target;
 
-    /**
-     * @var QuantityInterface
-     */
+    /** @var QuantityInterface */
     protected $quantity;
 
-    /**
-     * @var CustomerInterface
-     */
+    /** @var CustomerInterface */
     protected $customer;
 
-    /**
-     * @var SaleInterface
-     */
+    /** @var SaleInterface */
     protected $sale;
 
-    /**
-     * @var DateTimeImmutable
-     */
+    /** @var DateTimeImmutable */
     protected $time;
 
-    /**
-     * @var ActionInterface
-     */
+    /** @var ActionInterface */
     protected $parent;
 
     /**
