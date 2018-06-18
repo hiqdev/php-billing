@@ -20,4 +20,4 @@ package:
         Please see [additional doccumentation in russian](docs/ru.md).
 
 phpstan:
-    level: 2
+    level: 3

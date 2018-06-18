@@ -18,7 +18,7 @@ namespace hiqdev\php\billing\target;
 class TargetCollection implements TargetInterface
 {
     /**
-     * @var Target[]
+     * @var TargetInterface[]
      */
     protected $targets;
 

@@ -44,7 +44,7 @@ class Type implements TypeInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -55,15 +55,15 @@ class Type implements TypeInterface
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function equals(TypeInterface $other)
+    public function equals(TypeInterface $other): bool
     {
         return $this->id === $other->getId() &&
             $this->name === $other->getName();
     }
 
-    public function matches(TypeInterface $other)
+    public function matches(TypeInterface $other): bool
     {
         return $this->id === self::ANY || $other->getId() === self::ANY
             ? $this->checkMatches($this->name, $other->getName())

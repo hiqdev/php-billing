@@ -40,7 +40,7 @@ abstract class AbstractTarget implements TargetInterface
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getId()
     {

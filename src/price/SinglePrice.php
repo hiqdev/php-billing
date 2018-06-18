@@ -34,7 +34,7 @@ class SinglePrice extends AbstractPrice implements ChargeModifier
     use FormulaChargeModifierTrait;
 
     /**
-     * @var Quantity prepaid quantity also implies Unit
+     * @var QuantityInterface prepaid quantity also implies Unit
      */
     protected $prepaid;
 
