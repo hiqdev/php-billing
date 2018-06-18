@@ -26,4 +26,15 @@ interface PlanInterface
      * @return ChargeInterface[]
      */
     public function calculateCharges(ActionInterface $action);
+
+    /**
+     * @return int|string
+     */
+    public function getId();
+
+    /**
+     * Globally unique ID.
+     * @return int|string
+     */
+    public function getUniqueId();
 }

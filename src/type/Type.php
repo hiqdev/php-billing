@@ -65,7 +65,7 @@ class Type implements TypeInterface
 
     public function matches(TypeInterface $other)
     {
-        return $this->id === self::ANY || $other->id === self::ANY
+        return $this->id === self::ANY || $other->getId() === self::ANY
             ? $this->checkMatches($this->name, $other->getName())
             : $this->checkMatches($this->id, $other->getId());
     }

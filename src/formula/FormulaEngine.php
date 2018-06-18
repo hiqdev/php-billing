@@ -83,7 +83,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     /**
      * @param string $formula
-     * @throws
+     * @throws FormulaSyntaxError
      * @return Model\Model
      */
     public function interpret(string $formula): Model\Model

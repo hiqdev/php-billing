@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 
@@ -29,6 +30,8 @@ abstract class Period implements AddonInterface
     {
         $this->value = static::ensureValidValue($value);
     }
+
+    abstract public function countPeriodsPassed(DateTimeImmutable $since, DateTimeImmutable $time): float;
 
     public function getValue()
     {

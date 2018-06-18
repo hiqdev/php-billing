@@ -88,7 +88,7 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getPlan()
+    public function getPlan(): ?PlanInterface
     {
         return $this->plan;
     }

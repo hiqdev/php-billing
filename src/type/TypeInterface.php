@@ -27,6 +27,12 @@ interface TypeInterface extends \JsonSerializable
     public function getId();
 
     /**
+     * Globally unique ID: e.g. ID or name.
+     * @return int|string
+     */
+    public function getUniqueId();
+
+    /**
      * Returns type name.
      * @return string
      */

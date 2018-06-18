@@ -24,6 +24,12 @@ interface CustomerInterface
     public function getId();
 
     /**
+     * Globally unique ID: e.g. ID or login.
+     * @return int|string
+     */
+    public function getUniqueId();
+
+    /**
      * Returns client login.
      * @return string
      */

@@ -23,7 +23,7 @@ interface ChargeModifier
     /**
      * Calculates modified charges.
      *
-     * @param ChargeInterface $charge
+     * @param ChargeInterface|null $charge
      * @param ActionInterface $action
      * @return ChargeInterface[] calculated charges
      */
@@ -33,9 +33,9 @@ interface ChargeModifier
      * Returns true if modifier is applicable for the given charge
      * (due to time or other limitations).
      *
-     * @param ChargeInterface $charge
+     * @param ChargeInterface|null $charge
      * @param ActionInterface $action
-     * @return ChargeInterface[] calculated charges
+     * @return bool
      */
     public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool;
 }

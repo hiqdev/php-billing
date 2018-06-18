@@ -83,7 +83,7 @@ class Bill implements BillInterface
         $this->state        = $state;
     }
 
-    public function getUniqueString()
+    public function getUniqueString(): string
     {
         $parts = [
             'buyer'     => $this->customer->getUniqueId(),
@@ -126,7 +126,7 @@ class Bill implements BillInterface
     /**
      * @return TypeInterface
      */
-    public function getType()
+    public function getType(): TypeInterface
     {
         return $this->type;
     }
@@ -134,7 +134,7 @@ class Bill implements BillInterface
     /**
      * @return DateTimeImmutable
      */
-    public function getTime()
+    public function getTime(): DateTimeImmutable
     {
         return $this->time;
     }

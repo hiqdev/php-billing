@@ -97,7 +97,7 @@ class Plan implements PlanInterface
     }
 
     /**
-     * @return string
+     * @return PlanInterface|null
      */
     public function getParent(): ?PlanInterface
     {

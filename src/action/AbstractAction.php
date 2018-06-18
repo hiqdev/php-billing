@@ -134,7 +134,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getSale()
+    public function getSale(): ?SaleInterface
     {
         return $this->sale;
     }

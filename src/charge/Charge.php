@@ -110,12 +110,14 @@ class Charge implements ChargeInterface
         return $this->bill !== null;
     }
 
-    public function setBill(BillInterface $bill)
+    public function setBill(BillInterface $bill): ChargeInterface
     {
         if ($this->hasBill()) {
             throw new \Exception('cannot reassign sale bill');
         }
         $this->bill = $bill;
+
+        return $this;
     }
 
     public function getState(): ?ChargeState
@@ -123,9 +125,11 @@ class Charge implements ChargeInterface
         return $this->state;
     }
 
-    public function setFinished(): void
+    public function setFinished(): ChargeInterface
     {
         $this->state = ChargeState::finished();
+
+        return $this;
     }
 
     public function isFinished(): ?bool
@@ -138,20 +142,24 @@ class Charge implements ChargeInterface
         return $this->comment;
     }
 
-    public function setComment(string $comment)
+    public function setComment(string $comment): ChargeInterface
     {
         $this->comment = $comment;
+
+        return $this;
     }
 
-    public function setId($id)
+    public function setId($id): ChargeInterface
     {
         if ($this->id === $id) {
-            return;
+            return $this;
         }
         if ($this->id !== null) {
             throw new \Exception('cannot reassign sale id');
         }
         $this->id = $id;
+
+        return $this;
     }
 
     public function jsonSerialize()

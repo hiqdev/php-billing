@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\bill;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
@@ -27,9 +28,19 @@ use Money\Money;
 interface BillInterface extends EntityInterface
 {
     /**
+     * @return string
+     */
+    public function getUniqueString(): string;
+
+    /**
      * @return TypeInterface
      */
-    public function getType();
+    public function getType(): TypeInterface;
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getTime(): DateTimeImmutable;
 
     /**
      * @return TargetInterface

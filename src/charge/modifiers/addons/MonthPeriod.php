@@ -19,7 +19,7 @@ use DateTimeImmutable;
  */
 class MonthPeriod extends Period
 {
-    public function countPeriodsPassed(DateTimeImmutable $since, DateTimeImmutable $time)
+    public function countPeriodsPassed(DateTimeImmutable $since, DateTimeImmutable $time): float
     {
         $diff = $time->diff($since);
 

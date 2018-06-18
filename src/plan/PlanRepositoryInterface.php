@@ -27,7 +27,7 @@ interface PlanRepositoryInterface
 
     /**
      * Finds suitable plans for given order: customer + actions.
-     * @param ActionInterface $action
+     * @param OrderInterface $order
      * @return PlanInterface[] array: actionKey => plan
      */
     public function findByOrder(OrderInterface $order);

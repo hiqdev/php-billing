@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
@@ -75,4 +76,16 @@ interface ActionInterface extends \JsonSerializable
      * @return DateTimeImmutable
      */
     public function getTime(): DateTimeImmutable;
+
+    /**
+     * Returns sale if set.
+     * @return SaleInterface|null
+     */
+    public function getSale(): ?SaleInterface;
+
+    /**
+     * Returns null if the action state is not set.
+     * @return bool|null
+     */
+    public function isFinished(): ?bool;
 }
