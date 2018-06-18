@@ -164,9 +164,17 @@ abstract class AbstractPrice implements PriceInterface, EntityInterface
     {
         $charge = $action->calculateCharge($this);
         if ($this instanceof ChargeModifier) {
-            return $this->modifyCharge($charge, $action);
+            $charges = $this->modifyCharge($charge, $action);
+        } else {
+            $charges = $charge ? [$charge] : [];
         }
 
-        return $charge ? [$charge] : [];
+        if ($action->isFinished()) {
+            foreach ($charges as $charge) {
+                $charge->setFinished();
+            }
+        }
+
+        return $charges;
     }
 }
