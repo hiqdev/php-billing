@@ -45,17 +45,17 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     /** @var CustomerInterface */
     protected $customer;
 
-    /** @var SaleInterface */
-    protected $sale;
-
     /** @var DateTimeImmutable */
     protected $time;
 
-    /** @var ActionInterface */
-    protected $parent;
+    /** @var SaleInterface */
+    protected $sale;
 
     /** @var ActionState */
     protected $state;
+
+    /** @var ActionInterface */
+    protected $parent;
 
     /**
      * @param TypeInterface $type
