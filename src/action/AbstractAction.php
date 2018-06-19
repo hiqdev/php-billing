@@ -74,6 +74,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         CustomerInterface $customer,
         DateTimeImmutable $time,
         SaleInterface $sale = null,
+        ActionState $state = null,
         ActionInterface $parent = null
     ) {
         $this->id       = $id;
@@ -83,12 +84,13 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         $this->customer = $customer;
         $this->time     = $time;
         $this->sale     = $sale;
+        $this->state    = $state;
         $this->parent   = $parent;
     }
 
     public function createSubaction(CustomerInterface $customer)
     {
-        return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->time, $this->sale, $this);
+        return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->time, $this->sale, $this->state, $this);
     }
 
     /**
