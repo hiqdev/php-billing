@@ -151,7 +151,7 @@ class Charge implements ChargeInterface
 
     public function setId($id): ChargeInterface
     {
-        if ($this->id === $id) {
+        if ((string)$this->id === (string)$id) {
             return $this;
         }
         if ($this->id !== null) {
