@@ -155,7 +155,7 @@ class Charge implements ChargeInterface
             return $this;
         }
         if ($this->id !== null) {
-            throw new \Exception('cannot reassign sale id');
+            throw new \Exception('cannot reassign charge id');
         }
         $this->id = $id;
 
