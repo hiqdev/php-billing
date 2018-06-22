@@ -151,11 +151,11 @@ class Charge implements ChargeInterface
 
     public function setId($id): ChargeInterface
     {
-        if ($this->id === $id) {
+        if ((string)$this->id === (string)$id) {
             return $this;
         }
         if ($this->id !== null) {
-            throw new \Exception('cannot reassign sale id');
+            throw new \Exception('cannot reassign charge id');
         }
         $this->id = $id;
 
