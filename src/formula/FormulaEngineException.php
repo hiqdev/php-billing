@@ -33,7 +33,7 @@ class FormulaEngineException extends Exception
 
         $message .= $previous->getMessage();
 
-        $exception = new static($message, 0, $previous);
+        $exception = new static($message . ' : ' . $formula, 0, $previous);
         $exception->formula = $formula;
 
         return $exception;
@@ -41,7 +41,7 @@ class FormulaEngineException extends Exception
 
     public static function create(string $formula, string $message)
     {
-        $exception = new static($message);
+        $exception = new static($message . ' : ' . $formula);
         $exception->formula = $formula;
 
         return $exception;
