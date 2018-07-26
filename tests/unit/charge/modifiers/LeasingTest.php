@@ -47,7 +47,7 @@ class LeasingTest extends ActionTest
     public function testReason()
     {
         $leasing = $this->buildLeasing('12 months');
-        $this->assertSame($leasing, $leasing->reason($this->reason));
+        $leasing = $leasing->reason($this->reason);
         $this->assertSame($this->reason, $leasing->getReason()->getValue());
     }
 

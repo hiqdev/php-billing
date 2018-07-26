@@ -52,9 +52,12 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
 
     public function testSimpleLeasing()
     {
-        $date = '2018-08-01';
-        $num = 2;
-        $reason = 'test reason';
+        $this->checkSimpleLeasing('2018-08-01', 2, 'test reason');
+        $this->checkSimpleLeasing('2018-09-01', 3, 'test reason');
+    }
+
+    protected function checkSimpleLeasing($date, $num, $reason)
+    {
         $formula = $this->engine->build("leasing.since('$date').lasts('$num months').reason('$reason')");
 
         $this->assertInstanceOf(Leasing::class, $formula);
@@ -100,8 +103,8 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
     public function validateDataProvider()
     {
         return [
-            ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑"],
-            ['true', 'Formula run returned unexpected result'],
+            ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑: "],
+            ['true', 'Formula run returned unexpected result: true'],
             ['discount.fixed("50%")', null],
             ["discount.fixed(\"50%\")\ndiscount.fixed(\"5 USD\")", null],
         ];
