@@ -27,18 +27,14 @@ class FormulaEngineException extends Exception
 
     public static function fromException(Throwable $previous, string $formula, string $message = null): FormulaEngineException
     {
-        if ($previous !== null) {
-            if ($message !== null) {
-                $message .= ': ';
-            }
-
-            $message .= $previous->getMessage();
+        if ($message !== null) {
+            $message .= ': ';
         }
+
+        $message .= $previous->getMessage();
 
         $exception = new static($message, 0, $previous);
-        if ($formula !== null) {
-            $exception->formula = $formula;
-        }
+        $exception->formula = $formula;
 
         return $exception;
     }
@@ -46,10 +42,7 @@ class FormulaEngineException extends Exception
     public static function create(string $formula, string $message)
     {
         $exception = new static($message);
-
-        if ($formula !== null) {
-            $exception->formula = $formula;
-        }
+        $exception->formula = $formula;
 
         return $exception;
     }
