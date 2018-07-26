@@ -26,11 +26,6 @@ use Money\Money;
  */
 class Leasing extends Modifier
 {
-    public function getNext()
-    {
-        return $this;
-    }
-
     public function buildPrice(Money $sum)
     {
         $type = $this->getType();
