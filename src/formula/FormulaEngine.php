@@ -70,8 +70,8 @@ class FormulaEngine implements FormulaEngineInterface
             throw $e;
         } catch (\Hoa\Ruler\Exception\Asserter $e) {
             throw FormulaRuntimeError::fromException($e, $formula);
-        } catch (\Exception $exception) {
-            throw FormulaRuntimeError::create($formula, 'Formula run failed');
+        } catch (\Exception $e) {
+            throw FormulaRuntimeError::fromException($e, $formula, 'Formula run failed');
         }
 
         if (!$result instanceof ChargeModifier) {
