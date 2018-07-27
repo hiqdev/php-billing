@@ -25,7 +25,7 @@ interface ChargeModifier
      *
      * @param ChargeInterface|null $charge
      * @param ActionInterface $action
-     * @return ChargeInterface[] calculated charges
+     * @return ChargeInterface[] calculated modification charges, including the original $charge
      */
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array;
 

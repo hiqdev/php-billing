@@ -28,7 +28,11 @@ trait FormulaChargeModifierTrait
     /** {@inheritdoc} */
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        return $this->formula ? $this->formula->modifyCharge($charge, $action) : ($charge ? [$charge] : []);
+        if ($this->formula !== null) {
+            return $this->formula->modifyCharge($charge, $action);
+        }
+
+        return $charge ? [$charge] : [];
     }
 
     /** {@inheritdoc} */

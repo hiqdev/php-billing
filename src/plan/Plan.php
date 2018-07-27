@@ -122,6 +122,7 @@ class Plan implements PlanInterface
 
     /**
      * @param PriceInterface[] $prices
+     * @throws \Exception
      */
     public function setPrices(array $prices)
     {
