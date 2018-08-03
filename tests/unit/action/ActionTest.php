@@ -14,10 +14,14 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
 /**
@@ -39,6 +43,26 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      * @var Money
      */
     protected $money;
+    /**
+     * @var Type
+     */
+    protected $type;
+    /**
+     * @var Target
+     */
+    protected $target;
+    /**
+     * @var QuantityInterface
+     */
+    protected $prepaid;
+    /**
+     * @var Customer|CustomerInterface
+     */
+    protected $customer;
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $time;
 
     protected function setUp()
     {
@@ -51,7 +75,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->time     = new DateTimeImmutable('now');
     }
 
-    protected function createAction($quantity)
+    protected function createAction(QuantityInterface $quantity)
     {
         return new Action(null, $this->type, $this->target, $quantity, $this->customer, $this->time);
     }
@@ -75,6 +99,18 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     public function testCalculateChargeNull()
     {
         $action = $this->createAction($this->prepaid);
+        $charge = $action->calculateCharge($this->price);
+        $this->assertNull($charge);
+    }
+
+    public function testChargesForFutureSalesAreNotCalculated()
+    {
+        $action = $this->createAction($this->prepaid->multiply(2));
+
+        $plan = new Plan(null, '', $this->customer, [$this->price]);
+        $futureSale = new Sale(null, $this->target, $this->customer, $plan, $this->time->add(new \DateInterval('P1D')));
+        $action->setSale($futureSale);
+
         $charge = $action->calculateCharge($this->price);
         $this->assertNull($charge);
     }

@@ -12,12 +12,23 @@ namespace hiqdev\php\billing\tests\unit\order;
 
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\order\Calculator;
+use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\order\Order;
+use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
 use hiqdev\php\units\Quantity;
 
 class CalculatorTest extends SaleTest
 {
+    /**
+     * @var CalculatorInterface|Calculator
+     */
+    protected $calculator;
+    /**
+     * @var Order|OrderInterface
+     */
+    protected $order;
+
     protected function setUp()
     {
         parent::setUp();

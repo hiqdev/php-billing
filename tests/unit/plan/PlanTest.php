@@ -12,13 +12,21 @@ namespace hiqdev\php\billing\tests\unit\plan;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Money;
 
 class PlanTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var Plan|PlanInterface */
+    protected $plan;
+    /** @var DateTimeImmutable */
+    protected $time;
+
     protected function setUp()
     {
         $this->plan = CertificatePlan::get();
@@ -39,10 +47,14 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function checkCharges($action, $charges)
+    /**
+     * @param ActionInterface|Action $action
+     * @param array $charges
+     */
+    public function checkCharges(ActionInterface $action, array $charges)
     {
-        $this->assertTrue(is_array($charges));
-        $this->assertSame(1, count($charges));
+        $this->assertInternalType('array', $charges);
+        $this->assertCount(1, $charges);
         $charge = reset($charges);
         $sum = Money::USD($this->plan->getRawPrice($action));
         $usage = $action->getQuantity()->convert(Unit::year());

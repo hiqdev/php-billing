@@ -26,6 +26,21 @@ class Action extends AbstractAction
      */
     public function isApplicable(PriceInterface $price): bool
     {
-        return $price->isApplicable($this);
+        return $this->saleOccurred() && $price->isApplicable($this);
+    }
+
+    /**
+     * // TODO: think about moving to Sale::isOccurred()
+     *
+     * @return bool whether Sale that belongs to current Action has been already occurred
+     * @throws \Exception
+     */
+    private function saleOccurred(): bool
+    {
+        if ($this->sale === null) {
+            return true;
+        }
+
+        return $this->sale->getTime() <= new \DateTimeImmutable();
     }
 }

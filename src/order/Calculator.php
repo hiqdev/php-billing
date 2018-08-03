@@ -31,17 +31,25 @@ class Calculator implements CalculatorInterface
      * @var PlanRepositoryInterface
      */
     private $planRepository;
+    /**
+     * @var \DateTimeImmutable|null
+     */
+    private $chargingTime;
 
     /**
      * @param SaleRepositoryInterface|null $saleRepository
      * @param PlanRepositoryInterface $planRepository
+     * @param \DateTimeImmutable|null $chargingTime
+     * @throws \Exception
      */
     public function __construct(
         ?SaleRepositoryInterface $saleRepository,
-        ?PlanRepositoryInterface $planRepository
+        ?PlanRepositoryInterface $planRepository,
+        \DateTimeImmutable $chargingTime = null
     ) {
         $this->saleRepository = $saleRepository;
         $this->planRepository = $planRepository;
+        $this->chargingTime = $chargingTime ?? new \DateTimeImmutable();
     }
 
     /**
@@ -59,10 +67,6 @@ class Calculator implements CalculatorInterface
                 continue;
             }
 
-            // If Sale occurred after Action, the Action MUST NOT get charged.
-            if ($action->getSale() !== null && $action->getSale()->getTime() > $action->getTime()) {
-                continue;
-            }
             $charges[$actionKey] = $plans[$actionKey]->calculateCharges($action);
         }
 

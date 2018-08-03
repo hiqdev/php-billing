@@ -12,10 +12,21 @@ namespace hiqdev\php\billing\tests\unit\sale;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\sale\Sale;
+use hiqdev\php\billing\sale\SaleInterface;
+use hiqdev\php\billing\sale\SaleRepositoryInterface;
 use hiqdev\php\billing\tests\unit\plan\PlanTest;
 
 class SaleTest extends PlanTest
 {
+    /**
+     * @var Sale|SaleInterface
+     */
+    protected $sale;
+    /**
+     * @var SaleRepositoryInterface|SimpleSaleRepository
+     */
+    protected $repository;
+
     protected function setUp()
     {
         parent::setUp();
