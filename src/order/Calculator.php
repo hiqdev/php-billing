@@ -33,6 +33,7 @@ class Calculator implements CalculatorInterface
     private $planRepository;
 
     /**
+     * @param SaleRepositoryInterface|null $saleRepository
      * @param PlanRepositoryInterface $planRepository
      */
     public function __construct(
@@ -55,6 +56,11 @@ class Calculator implements CalculatorInterface
                 /* XXX not sure... think more
                 throw new FailedFindPlan();
                  */
+                continue;
+            }
+
+            // If Sale occurred after Action, the Action MUST NOT get charged.
+            if ($action->getSale() !== null && $action->getSale()->getTime() > $action->getTime()) {
                 continue;
             }
             $charges[$actionKey] = $plans[$actionKey]->calculateCharges($action);
