@@ -31,25 +31,18 @@ class Calculator implements CalculatorInterface
      * @var PlanRepositoryInterface
      */
     private $planRepository;
-    /**
-     * @var \DateTimeImmutable|null
-     */
-    private $chargingTime;
 
     /**
      * @param SaleRepositoryInterface|null $saleRepository
      * @param PlanRepositoryInterface $planRepository
-     * @param \DateTimeImmutable|null $chargingTime
      * @throws \Exception
      */
     public function __construct(
         ?SaleRepositoryInterface $saleRepository,
-        ?PlanRepositoryInterface $planRepository,
-        \DateTimeImmutable $chargingTime = null
+        ?PlanRepositoryInterface $planRepository
     ) {
         $this->saleRepository = $saleRepository;
         $this->planRepository = $planRepository;
-        $this->chargingTime = $chargingTime ?? new \DateTimeImmutable();
     }
 
     /**
