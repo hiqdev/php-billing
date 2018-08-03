@@ -10,7 +10,11 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
+use hiqdev\php\billing\sale\Sale;
+use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
 
 /**
@@ -59,6 +63,11 @@ class Calculator implements CalculatorInterface
         return $charges;
     }
 
+    /**
+     * @param OrderInterface $order
+     * @return PlanInterface[]|Plan
+     * @throws \Exception
+     */
     public function findPlans(OrderInterface $order)
     {
         $sales = $this->findSales($order);
@@ -71,6 +80,7 @@ class Calculator implements CalculatorInterface
                 $plans[$actionKey] = null;
             } else {
                 $sale = $sales[$actionKey];
+                /** @var Plan|PlanInterface[] $plan */
                 $plan = $sale->getPlan();
                 if ($plan->hasPrices()) {
                     $plans[$actionKey] = $plan;
@@ -96,6 +106,10 @@ class Calculator implements CalculatorInterface
         return $plans;
     }
 
+    /**
+     * @param OrderInterface $order
+     * @return SaleInterface[]|Sale
+     */
     public function findSales(OrderInterface $order)
     {
         $sales = [];

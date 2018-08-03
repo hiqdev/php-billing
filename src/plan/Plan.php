@@ -142,7 +142,7 @@ class Plan implements PlanInterface
         $result = [];
         foreach ($this->prices as $price) {
             $charges = $price->calculateCharges($action);
-            if ($charges) {
+            if (!empty($charges)) {
                 $result = array_merge($result, $charges);
             }
         }
