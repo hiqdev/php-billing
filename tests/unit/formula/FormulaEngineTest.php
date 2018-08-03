@@ -103,8 +103,8 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
     public function validateDataProvider()
     {
         return [
-            ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑: "],
-            ['true', 'Formula run returned unexpected result: true'],
+            ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑ : "],
+            ['true', 'Formula run returned unexpected result : true'],
             ['discount.fixed("50%")', null],
             ["discount.fixed(\"50%\")\ndiscount.fixed(\"5 USD\")", null],
         ];
