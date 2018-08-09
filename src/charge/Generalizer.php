@@ -44,7 +44,7 @@ class Generalizer implements GeneralizerInterface
 
     public function generalizeSum(ChargeInterface $charge)
     {
-        return $charge->getSum();
+        return $charge->getSum()->negative();
     }
 
     public function generalizeQuantity(ChargeInterface $charge)
