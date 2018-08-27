@@ -187,6 +187,21 @@ class Bill implements BillInterface
         return $this->charges;
     }
 
+    /**
+     * @return string - comma separated charges ids
+     */
+    public function getChargesIds()
+    {
+        $ids = [];
+
+        foreach ($this->charges as $charge) {
+            $ids[] = $charge->getId();
+        }
+        $chargeIds = implode(',', $ids);
+
+        return $chargeIds;
+    }
+
     public function getState(): ?BillState
     {
         return $this->state;
