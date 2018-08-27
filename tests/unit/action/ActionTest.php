@@ -103,15 +103,27 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($charge);
     }
 
-    public function testChargesForFutureSalesAreNotCalculated()
+    public function testChargesForNextMonthSalesAreNotCalculated()
     {
         $action = $this->createAction($this->prepaid->multiply(2));
 
         $plan = new Plan(null, '', $this->customer, [$this->price]);
-        $futureSale = new Sale(null, $this->target, $this->customer, $plan, $this->time->add(new \DateInterval('P1D')));
+        $futureSale = new Sale(null, $this->target, $this->customer, $plan, $this->time->add(new \DateInterval('P1M')));
         $action->setSale($futureSale);
 
         $charge = $action->calculateCharge($this->price);
         $this->assertNull($charge);
+    }
+
+    public function testChargesForThisMonthSalesAreCalculated()
+    {
+        $action = $this->createAction($this->prepaid->multiply(2));
+
+        $plan = new Plan(null, '', $this->customer, [$this->price]);
+        $futureSale = new Sale(null, $this->target, $this->customer, $plan, $this->time->add(new \DateInterval('PT2S')));
+        $action->setSale($futureSale);
+
+        $charge = $action->calculateCharge($this->price);
+        $this->assertNotNull($charge);
     }
 }

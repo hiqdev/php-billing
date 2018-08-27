@@ -32,7 +32,7 @@ class Action extends AbstractAction
     /**
      * // TODO: think about moving to Sale::isOccurred()
      *
-     * @return bool whether Sale that belongs to current Action has been already occurred
+     * @return bool whether Sale that belongs to current Action occurs in current month or earlier
      * @throws \Exception
      */
     private function saleOccurred(): bool
@@ -41,6 +41,6 @@ class Action extends AbstractAction
             return true;
         }
 
-        return $this->sale->getTime() <= new \DateTimeImmutable();
+        return $this->sale->getTime() < new \DateTimeImmutable('first day of next month 00:00');
     }
 }
