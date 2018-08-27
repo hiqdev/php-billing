@@ -47,7 +47,7 @@ class EnumPrice extends AbstractPrice
                             $id,
         TypeInterface       $type,
         TargetInterface     $target,
-        PlanInterface       $plan = null,
+        ?PlanInterface      $plan,
         UnitInterface       $unit,
         Currency            $currency,
         array               $sums
