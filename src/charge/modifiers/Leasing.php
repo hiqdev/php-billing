@@ -37,7 +37,7 @@ class Leasing extends Modifier
 
     public function getType()
     {
-        return new Type(Type::ANY, 'discount');
+        return new Type(Type::ANY, 'leasing');
     }
 
     public function getTarget()
