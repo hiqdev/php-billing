@@ -41,13 +41,13 @@ class Aggregator implements AggregatorInterface
         foreach ($charges as $charge) {
             if (is_array($charge)) {
                 $others = $this->aggregateCharges($charge);
-                $bills = $this->aggregateBills($bills, $others);
             } elseif ($charge instanceof ChargeInterface) {
-                $bill = $this->generalizer->createBill($charge);
-                $bills = $this->aggregateBills($bills, [$bill]);
+                $others = [$this->generalizer->createBill($charge)];
             } else {
                 throw new \Exception('not a Charge given to Aggregator');
             }
+
+            $bills = $this->aggregateBills($bills, $others);
         }
 
         return $bills;
@@ -59,7 +59,7 @@ class Aggregator implements AggregatorInterface
      * @param BillInterface[] $others
      * @return BillInterface[]
      */
-    public function aggregateBills(array $bills, array $others)
+    protected function aggregateBills(array $bills, array $others): array
     {
         foreach ($others as $bill) {
             $uid = $bill->getUniqueString();
@@ -73,14 +73,19 @@ class Aggregator implements AggregatorInterface
         return $bills;
     }
 
-    public function aggregateBill(BillInterface $first, BillInterface $other)
+    /**
+     * @param BillInterface $first
+     * @param BillInterface $other
+     * @return BillInterface
+     */
+    protected function aggregateBill(BillInterface $first, BillInterface $other): BillInterface
     {
         return new Bill(
             null,
             $first->getType(),
             $first->getTime(),
-            $this->aggregateSum($first->getSum(), $other->getSum()),
-            $this->aggregateQuantity($first->getQuantity(), $other->getQuantity()),
+            $this->aggregateSum($first, $other),
+            $this->aggregateQuantity($first, $other),
             $first->getCustomer(),
             $first->getTarget(),
             $first->getPlan(),
@@ -88,13 +93,13 @@ class Aggregator implements AggregatorInterface
         );
     }
 
-    public function aggregateSum(Money $first, Money $other)
+    protected function aggregateSum(BillInterface $first, BillInterface $other): Money
     {
-        return $first->add($other);
+        return $first->getSum()->add($other->getSum());
     }
 
-    public function aggregateQuantity(QuantityInterface $first, QuantityInterface $other)
+    protected function aggregateQuantity(BillInterface $first, BillInterface $other): QuantityInterface
     {
-        return $first->add($other);
+        return $first->getQuantity()->add($other->getQuantity());
     }
 }

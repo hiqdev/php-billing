@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\tests\unit\order;
+namespace hiqdev\php\billing\tests\unit\charge;
 
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Aggregator;
