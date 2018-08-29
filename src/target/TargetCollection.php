@@ -108,7 +108,13 @@ class TargetCollection implements TargetInterface
         return implode(':', array_filter([$this->getType(), $this->getId()]));
     }
 
+    public function equals(TargetInterface $other): bool
+    {
+        return $this->getUniqueId() === $other->getUniqueId();
+    }
+
     /**
+     * @param TargetInterface $other
      * @return bool
      */
     public function matches(TargetInterface $other): bool

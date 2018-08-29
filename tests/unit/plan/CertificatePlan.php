@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\plan;
 
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\EnumPrice;
@@ -21,6 +22,23 @@ use Money\Currency;
 class CertificatePlan extends Plan
 {
     protected static $instance;
+
+    /** @var Customer */
+    public $customer;
+    /** @var Type  */
+    public $purchase;
+    /** @var Type  */
+    public $renewal;
+    /** @var Target  */
+    public $rapidssl;
+    /** @var Target  */
+    public $verisign;
+    /** @var array  */
+    public $types;
+    /** @var array  */
+    public $rawPrices;
+    /** @var Target[] */
+    public $targets;
 
     public static function get()
     {
@@ -81,6 +99,11 @@ class CertificatePlan extends Plan
         parent::__construct(null, 'Test Certificate Plan', $this->seller, $prices);
     }
 
+
+    /**
+     * @param Action $action
+     * @return mixed
+     */
     public function getRawPrice($action)
     {
         $years = $action->getQuantity()->convert(Unit::year())->getQuantity();
@@ -93,6 +116,11 @@ class CertificatePlan extends Plan
         return $this->rawPrices[$this->getRawPriceKey($type, $target)];
     }
 
+    /**
+     * @param Type $type
+     * @param Target $target
+     * @return string
+     */
     public function getRawPriceKey($type, $target)
     {
         return $type->getName() . '-' . $target->getUniqueId();

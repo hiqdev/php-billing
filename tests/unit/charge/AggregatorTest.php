@@ -12,15 +12,36 @@ namespace hiqdev\php\billing\tests\unit\order;
 
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Aggregator;
+use hiqdev\php\billing\charge\AggregatorInterface;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Calculator;
+use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\order\Order;
+use hiqdev\php\billing\order\OrderInterface;
+use hiqdev\php\billing\tests\unit\plan\CertificatePlan;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
 use hiqdev\php\units\Quantity;
 use Money\Money;
 
 class AggregatorTest extends SaleTest
 {
+    /**
+     * @var Calculator|CalculatorInterface
+     */
+    protected $calculator;
+    /**
+     * @var Aggregator|AggregatorInterface
+     */
+    protected $aggregator;
+    /**
+     * @var Order|OrderInterface
+     */
+    protected $order;
+    /**
+     * @var CertificatePlan
+     */
+    protected $plan;
+
     protected function setUp()
     {
         parent::setUp();
@@ -42,7 +63,7 @@ class AggregatorTest extends SaleTest
     {
         $charges = $this->calculator->calculateCharges($this->order);
         $bills = $this->aggregator->aggregateCharges($charges);
-        $this->assertSame(4, count($bills));
+        $this->assertCount(4, $bills);
         foreach ($bills as $bill) {
             $prices = $this->plan->getRawPrices($bill->getType(), $bill->getTarget());
             $sum = Money::USD(array_sum($prices));
