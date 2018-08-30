@@ -22,7 +22,7 @@ trait WithTill
         return $this->addAddon('till', new Till($time));
     }
 
-    public function getTill()
+    public function getTill(): ?Till
     {
         return $this->getAddon('till');
     }

@@ -55,4 +55,9 @@ interface ChargeInterface extends \JsonSerializable
      * @return self
      */
     public function setFinished(): self;
+
+    /**
+     * @return ChargeInterface|null
+     */
+    public function getParent(): ?ChargeInterface;
 }

@@ -22,7 +22,7 @@ trait WithReason
         return $this->addAddon('reason', new Reason($text));
     }
 
-    public function getReason()
+    public function getReason(): ?Reason
     {
         return $this->getAddon('reason');
     }

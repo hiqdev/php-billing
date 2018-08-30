@@ -49,6 +49,9 @@ class Charge implements ChargeInterface
     /** @var string */
     protected $comment;
 
+    /** @var ChargeInterface|null */
+    protected $parent;
+
     public function __construct(
                             $id,
         ActionInterface     $action,
@@ -165,5 +168,30 @@ class Charge implements ChargeInterface
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return ChargeInterface|null
+     */
+    public function getParent(): ?ChargeInterface
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param ChargeInterface|null $parent
+     *
+     * @return Charge
+     * @throws \Exception if parent is already set
+     */
+    public function setParent(ChargeInterface $parent): self
+    {
+        if ($this->parent !== null) {
+            throw new \Exception('cannot reassign charge parent');
+        }
+
+        $this->parent = $parent;
+
+        return $this;
     }
 }

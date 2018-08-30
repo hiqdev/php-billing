@@ -22,7 +22,7 @@ trait WithSince
         return $this->addAddon('since', new Since($time));
     }
 
-    public function getSince()
+    public function getSince(): ?Since
     {
         return $this->getAddon('since');
     }
