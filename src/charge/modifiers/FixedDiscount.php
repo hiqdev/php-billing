@@ -16,6 +16,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Money;
@@ -60,23 +61,17 @@ class FixedDiscount extends Modifier
         return $this->getValue($charge)->calculateSum($charge);
     }
 
-    public function buildPrice(Money $sum)
+    private function buildPrice(Money $sum, TargetInterface $target)
     {
         $type = $this->getType();
-        $target = $this->getTarget();
         $prepaid = Quantity::create('items', 0);
 
         return new SinglePrice(null, $type, $target, null, $prepaid, $sum);
     }
 
-    public function getType()
+    private function getType()
     {
-        return new Type(Type::ANY, 'discount');
-    }
-
-    public function getTarget()
-    {
-        return new Target(Target::ANY, Target::ANY);
+        return new Type(Type::ANY, 'discount,discount');
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
@@ -92,7 +87,8 @@ class FixedDiscount extends Modifier
 
         $sum = $this->calculateSum($charge);
         $usage  = Quantity::create('items', 1);
-        $price = $this->buildPrice($sum);
+        $price = $this->buildPrice($sum, $charge->getPrice()->getTarget());
+
         $discount = new Charge(null, $action, $price, $usage, $sum->multiply(-1));
         $discount->setParent($charge);
 
