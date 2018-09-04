@@ -184,11 +184,34 @@ class Bill implements BillInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasCharges(): bool
+    {
+        return $this->charges !== [];
+    }
+
+    /**
      * @return ChargeInterface[]
      */
-    public function getCharges()
+    public function getCharges(): array
     {
         return $this->charges;
+    }
+
+    /**
+     * @param ChargeInterface[] $prices
+     * @return self
+     * @throws \Exception
+     */
+    public function setCharges(array $charges): self
+    {
+        if ($this->hasCharges()) {
+            throw new \Exception('cannot reassign charges for bill');
+        }
+        $this->charges = $charges;
+
+        return $this;
     }
 
     public function getState(): ?BillState
