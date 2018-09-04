@@ -88,6 +88,22 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         $this->parent   = $parent;
     }
 
+    /**
+     * Provides unique string.
+     * Can be used to compare or aggregate actions.
+     */
+    public function getUniqueString(): string
+    {
+        $parts = [
+            'buyer'     => $this->customer->getUniqueId(),
+            'target'    => $this->target ? $this->target->getUniqueId() : null,
+            'type'      => $this->type->getUniqueId(),
+            'time'      => $this->time->format('c'),
+        ];
+
+        return implode('-', $parts);
+    }
+
     public function createSubaction(CustomerInterface $customer)
     {
         return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->time, $this->sale, $this->state, $this);

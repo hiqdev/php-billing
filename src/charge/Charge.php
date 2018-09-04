@@ -68,6 +68,20 @@ class Charge implements ChargeInterface
         $this->bill     = $bill;
     }
 
+    /**
+     * Provides unique string.
+     * Can be used to compare or aggregate charges.
+     */
+    public function getUniqueString(): string
+    {
+        $parts = [
+            'currency'  => $this->sum->getCurrency()->getCode(),
+            'action'    => $this->action->getUniqueString(),
+        ];
+
+        return implode('-', $parts);
+    }
+
     public function getId()
     {
         return $this->id;
