@@ -83,11 +83,15 @@ class Bill implements BillInterface
         $this->state        = $state;
     }
 
+    /**
+     * Provides unique string.
+     * Can be used to compare or aggregate bills.
+     */
     public function getUniqueString(): string
     {
         $parts = [
-            'buyer'     => $this->customer->getUniqueId(),
             'currency'  => $this->sum->getCurrency()->getCode(),
+            'buyer'     => $this->customer->getUniqueId(),
             'target'    => $this->target ? $this->target->getUniqueId() : null,
             'type'      => $this->type->getUniqueId(),
             'time'      => $this->time->format('c'),
