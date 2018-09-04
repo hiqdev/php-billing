@@ -41,6 +41,6 @@ class Action extends AbstractAction
             return true;
         }
 
-        return $this->sale->getTime() < new \DateTimeImmutable('first day of next month 00:00');
+        return $this->sale->getTime() <= $this->getTime()->modify('first day of next month 00:00');
     }
 }
