@@ -168,6 +168,16 @@ class Bill implements BillInterface
     }
 
     /**
+     * @return BillInterface
+     */
+    public function setQuantity(QuantityInterface $quantity): BillInterface
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
      * @return Money
      */
     public function getSum()

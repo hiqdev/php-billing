@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\charge;
+namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\Bill;
 
@@ -22,5 +22,5 @@ interface AggregatorInterface
      * @param Charge[] $charges array (can be nested) of charges
      * @return Bill[]
      */
-    public function aggregateCharges(array $charges);
+    public function aggregateCharges(array $charges): array;
 }

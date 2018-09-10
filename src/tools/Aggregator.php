@@ -8,10 +8,12 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\charge;
+namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\GeneralizerInterface;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -20,11 +22,6 @@ use Money\Money;
  */
 class Aggregator implements AggregatorInterface
 {
-    /**
-     * @var BillInterface[]
-     */
-    protected $bills = [];
-
     /**
      * @var GeneralizerInterface
      */
@@ -35,7 +32,12 @@ class Aggregator implements AggregatorInterface
         $this->generalizer = $generalizer;
     }
 
-    public function aggregateCharges(array $charges)
+    /**
+     * Aggregates given Charges to Bills. Then aggregates them again with DB.
+     * @param ChargeInterface[]|ChargeInterface[][] $charges
+     * @return BillInterface[]
+     */
+    public function aggregateCharges(array $charges): array
     {
         $bills = [];
         foreach ($charges as $charge) {
@@ -44,6 +46,7 @@ class Aggregator implements AggregatorInterface
             } elseif ($charge instanceof ChargeInterface) {
                 $others = [$this->generalizer->createBill($charge)];
             } else {
+                var_dump($charge);die;
                 throw new \Exception('not a Charge given to Aggregator');
             }
 
@@ -81,7 +84,7 @@ class Aggregator implements AggregatorInterface
     protected function aggregateBill(BillInterface $first, BillInterface $other): BillInterface
     {
         return new Bill(
-            null,
+            $this->aggregateId($first, $other),
             $first->getType(),
             $first->getTime(),
             $this->aggregateSum($first, $other),
@@ -93,11 +96,43 @@ class Aggregator implements AggregatorInterface
         );
     }
 
+    /**
+     * @param BillInterface $first
+     * @param BillInterface $other
+     * @return string|int|null
+     */
+    protected function aggregateId(BillInterface $first, BillInterface $other)
+    {
+        if ($first->getId() === null) {
+            return $other->getId();
+        }
+        if ($other->getId() === null) {
+            return $first->getId();
+        }
+        if ($first->getId() === $other->getId()) {
+            return $other->getId();
+        }
+
+        throw new AggregationException('cannot aggregate bills with different IDs');
+    }
+
+    /**
+     * @param BillInterface $first
+     * @param BillInterface $other
+     * @param ChargeInterface[] $charges
+     * @return Money
+     */
     protected function aggregateSum(BillInterface $first, BillInterface $other): Money
     {
         return $first->getSum()->add($other->getSum());
     }
 
+    /**
+     * @param BillInterface $first
+     * @param BillInterface $other
+     * @param ChargeInterface[] $charges
+     * @return QuantityInterface
+     */
     protected function aggregateQuantity(BillInterface $first, BillInterface $other): QuantityInterface
     {
         return $first->getQuantity()->add($other->getQuantity());

@@ -82,6 +82,11 @@ class Charge implements ChargeInterface
         return implode('-', $parts);
     }
 
+    public function hasId(): bool
+    {
+        return $this->id !== null;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -129,9 +134,9 @@ class Charge implements ChargeInterface
 
     public function setBill(BillInterface $bill): ChargeInterface
     {
-        if ($this->hasBill()) {
+        /*if ($this->hasBill()) {
             throw new \Exception('cannot reassign sale bill');
-        }
+        }*/
         $this->bill = $bill;
 
         return $this;
