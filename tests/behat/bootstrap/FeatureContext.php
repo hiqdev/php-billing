@@ -241,9 +241,9 @@ class FeatureContext implements Context
         Assert::assertInstanceOf(Charge::class, $charge);
         Assert::assertSame($type, $this->normalizeType($charge->getType()->getName()));
         $money = $this->moneyParser->parse($sum, $currency);
-        Assert::assertEquals($money, $charge->getSum()); // TODO: Should we add `getSum()` to ChargeInterface?
+        Assert::assertEquals($money, $charge->getSum());
         if ($reason !== null) {
-            Assert::assertSame($reason, $charge->getComment()); // TODO: Should we add `getComment()` to ChargeInterface?
+            Assert::assertSame($reason, $charge->getComment());
         }
     }
 

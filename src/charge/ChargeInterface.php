@@ -64,6 +64,11 @@ interface ChargeInterface extends \JsonSerializable
     public function setComment(string $comment): self;
 
     /**
+     * @return string
+     */
+    public function getComment(): string;
+
+    /**
      * @return self
      */
     public function setFinished(): self;
