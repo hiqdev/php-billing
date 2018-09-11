@@ -10,9 +10,11 @@
 
 namespace hiqdev\php\billing\charge;
 
+use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\units\Quantity;
+use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
 /**
@@ -26,24 +28,34 @@ interface ChargeInterface extends \JsonSerializable
     public function getId();
 
     /**
+     * @return TypeInterface
+     */
+    public function getType(): TypeInterface;
+
+    /**
+     * @return TargetInterface
+     */
+    public function getTarget(): TargetInterface;
+
+    /**
      * @return ActionInterface
      */
-    public function getAction();
+    public function getAction(): ActionInterface;
 
     /**
      * @return PriceInterface
      */
-    public function getPrice();
+    public function getPrice(): PriceInterface;
 
     /**
      * @return Money
      */
-    public function getSum();
+    public function getSum(): Money;
 
     /**
-     * @return Quantity
+     * @return QuantityInterface
      */
-    public function getUsage();
+    public function getUsage(): QuantityInterface;
 
     /**
      * @param string $comment

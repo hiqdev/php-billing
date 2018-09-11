@@ -13,6 +13,8 @@ namespace hiqdev\php\billing\charge;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -27,6 +29,12 @@ class Charge implements ChargeInterface
 {
     /** @var int */
     protected $id;
+
+    /** @var TypeInterface */
+    protected $type;
+
+    /** @var TargetInterface */
+    protected $target;
 
     /** @var ActionInterface */
     protected $action;
@@ -54,6 +62,8 @@ class Charge implements ChargeInterface
 
     public function __construct(
                             $id,
+        TypeInterface       $type,
+        TargetInterface     $target,
         ActionInterface     $action,
         PriceInterface      $price,
         QuantityInterface   $usage,
@@ -61,6 +71,8 @@ class Charge implements ChargeInterface
         BillInterface       $bill = null
     ) {
         $this->id       = $id;
+        $this->type     = $type;
+        $this->target   = $target;
         $this->action   = $action;
         $this->price    = $price;
         $this->usage    = $usage;
@@ -92,7 +104,17 @@ class Charge implements ChargeInterface
         return $this->id;
     }
 
-    public function getAction()
+    public function getType(): TypeInterface
+    {
+        return $this->type;
+    }
+
+    public function getTarget(): TargetInterface
+    {
+        return $this->target;
+    }
+
+    public function getAction(): ActionInterface
     {
         return $this->action;
     }
@@ -100,29 +122,29 @@ class Charge implements ChargeInterface
     /**
      * @return PriceInterface
      */
-    public function getPrice()
+    public function getPrice(): PriceInterface
     {
         return $this->price;
     }
 
-    public function getUsage()
+    public function getUsage(): QuantityInterface
     {
         return $this->usage;
     }
 
-    public function getSum()
+    public function getSum(): Money
     {
         return $this->sum;
     }
 
-    public function calculatePrice()
+    public function calculatePrice(): Money
     {
         $usage = $this->usage->getQuantity();
 
         return $usage ? $this->sum->divide($usage) : $this->sum;
     }
 
-    public function getBill()
+    public function getBill(): ?BillInterface
     {
         return $this->bill;
     }
