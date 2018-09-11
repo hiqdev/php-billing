@@ -13,8 +13,10 @@ namespace hiqdev\php\billing\tests\unit\action;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\sale\Sale;
@@ -63,6 +65,14 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      * @var DateTimeImmutable
      */
     protected $time;
+    /**
+     * @var Generalizer
+     */
+    protected $generalizer;
+    /**
+     * @var Calculator
+     */
+    protected $calculator;
 
     protected function setUp()
     {
@@ -73,6 +83,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
         $this->customer = new Customer(2, 'client');
         $this->time     = new DateTimeImmutable('now');
+        $this->generalizer = new Generalizer();
+        $this->calculator = new Calculator($this->generalizer, null, null);
     }
 
     protected function createAction(QuantityInterface $quantity)
@@ -87,11 +99,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     public function testCalculateCharge()
     {
         $action = $this->createAction($this->prepaid->multiply(2));
-        $charge = $action->calculateCharge($this->price);
+        $charge = $this->calculator->calculateCharge($this->price, $action);
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
         //$this->assertSame($this->target, $charge->getTarget());
-        $this->assertSame($this->type, $charge->getPrice()->getType());
+        $this->assertSame($this->type, $charge->getType());
         $this->assertEquals($this->prepaid, $charge->getUsage());
         $this->assertEquals($this->money->multiply($this->prepaid->getQuantity()), $charge->getSum());
     }
@@ -99,7 +111,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     public function testCalculateChargeNull()
     {
         $action = $this->createAction($this->prepaid);
-        $charge = $action->calculateCharge($this->price);
+        $charge = $this->calculator->calculateCharge($this->price, $action);
         $this->assertNull($charge);
     }
 
@@ -111,7 +123,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $futureSale = new Sale(null, $this->target, $this->customer, $plan, $this->time->add(new \DateInterval('P1M')));
         $action->setSale($futureSale);
 
-        $charge = $action->calculateCharge($this->price);
+        $charge = $this->calculator->calculateCharge($this->price, $action);
         $this->assertNull($charge);
     }
 
@@ -123,7 +135,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $futureSale = new Sale(null, $this->target, $this->customer, $plan, $this->time->add(new \DateInterval('PT2S')));
         $action->setSale($futureSale);
 
-        $charge = $action->calculateCharge($this->price);
+        $charge = $this->calculator->calculateCharge($this->price, $action);
         $this->assertNotNull($charge);
     }
 }

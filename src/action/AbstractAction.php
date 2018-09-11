@@ -237,35 +237,4 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     {
         return get_object_vars($this);
     }
-
-    /**
-     * @param PriceInterface $price
-     * @return ChargeInterface|Charge|null
-     */
-    public function calculateCharge(PriceInterface $price): ?ChargeInterface
-    {
-        if (!$this->isApplicable($price)) {
-            return null;
-        }
-
-        $usage = $price->calculateUsage($this->getQuantity());
-        if ($usage === null) {
-            return null;
-        }
-
-        $sum = $price->calculateSum($this->getQuantity());
-        if ($sum === null) {
-            return null;
-        }
-
-        /* sorry, debugging facility
-         * var_dump([
-            'unit'      => $usage->getUnit()->getName(),
-            'quantity'  => $usage->getQuantity(),
-            'price'     => $price->calculatePrice($usage)->getAmount(),
-            'sum'       => $sum->getAmount(),
-        ]);*/
-
-        return new Charge(null, $this, $price, $usage, $sum);
-    }
 }

@@ -61,14 +61,6 @@ class FixedDiscount extends Modifier
         return $this->getValue($charge)->calculateSum($charge);
     }
 
-    private function buildPrice(Money $sum, TargetInterface $target)
-    {
-        $type = $this->getType();
-        $prepaid = Quantity::create('items', 0);
-
-        return new SinglePrice(null, $type, $target, null, $prepaid, $sum);
-    }
-
     private function getType()
     {
         return new Type(Type::ANY, 'discount,discount');
@@ -85,11 +77,13 @@ class FixedDiscount extends Modifier
             return [$charge];
         }
 
-        $sum = $this->calculateSum($charge);
+        $sum    = $this->calculateSum($charge)->multiply(-1);
         $usage  = Quantity::create('items', 1);
-        $price = $this->buildPrice($sum, $charge->getPrice()->getTarget());
+        $type   = $this->getType();
+        $price  = $charge->getPrice();
+        $target = $price->getTarget();
 
-        $discount = new Charge(null, $action, $price, $usage, $sum->multiply(-1));
+        $discount = new Charge(null, $type, $target, $action, $price, $usage, $sum);
         $discount->setParent($charge);
 
         $reason = $this->getReason();

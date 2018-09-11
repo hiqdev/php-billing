@@ -21,13 +21,6 @@ use hiqdev\php\billing\charge\ChargeInterface;
 interface PlanInterface
 {
     /**
-     * Calculates charges for given action.
-     * @param ActionInterface $action
-     * @return ChargeInterface[]
-     */
-    public function calculateCharges(ActionInterface $action);
-
-    /**
      * @return int|string
      */
     public function getId();

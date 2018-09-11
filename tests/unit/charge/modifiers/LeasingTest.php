@@ -63,7 +63,7 @@ class LeasingTest extends ActionTest
     {
         $leasing = $this->buildLeasing('6 months');
         $action = $this->createAction($this->prepaid->multiply(2));
-        $charge = $action->calculateCharge($this->price);
+        $charge = $this->calculator->calculateCharge($this->price, $action);
         $charges = $leasing->modifyCharge($charge, $action);
         $this->assertInternalType('array', $charges);
         $this->assertSame(1, count($charges));

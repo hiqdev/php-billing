@@ -26,6 +26,10 @@ use Money\Money;
 class AggregatorTest extends SaleTest
 {
     /**
+     * @var Generalizer|GeneralizerInterface
+     */
+    protected $generalizer;
+    /**
      * @var Calculator|CalculatorInterface
      */
     protected $calculator;
@@ -45,8 +49,9 @@ class AggregatorTest extends SaleTest
     protected function setUp()
     {
         parent::setUp();
-        $this->calculator = new Calculator($this->repository, null);
-        $this->aggregator = new Aggregator(new Generalizer());
+        $this->generalizer = new Generalizer();
+        $this->calculator = new Calculator($this->generalizer, $this->repository, null);
+        $this->aggregator = new Aggregator($this->generalizer);
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
@@ -61,7 +66,7 @@ class AggregatorTest extends SaleTest
 
     public function testCalculateCharges()
     {
-        $charges = $this->calculator->calculateCharges($this->order);
+        $charges = $this->calculator->calculateOrder($this->order);
         $bills = $this->aggregator->aggregateCharges($charges);
         $this->assertCount(4, $bills);
         foreach ($bills as $bill) {
@@ -71,8 +76,8 @@ class AggregatorTest extends SaleTest
             $this->assertEquals(6, $bill->getQuantity()->getQuantity());
             $this->assertEquals(3, count($bill->getCharges()));
             foreach ($bill->getCharges() as $charge) {
-                $this->assertTrue($bill->getType()->equals($charge->getPrice()->getType()));
-                $this->assertTrue($bill->getTarget()->equals($charge->getAction()->getTarget()));
+                $this->assertTrue($bill->getType()->equals($charge->getType()));
+                $this->assertTrue($bill->getTarget()->equals($charge->getTarget()));
             }
         }
     }

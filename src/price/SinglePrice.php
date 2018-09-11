@@ -25,6 +25,8 @@ use Money\Money;
  * - no charge for quantity less then prepaid
  * - same price for any quantity above prepaid
  *
+ * TODO add `$modifier` property instead of FormulaChargeModifierTrait
+ *
  * @see PriceInterface
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>

@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\unit\order;
 
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\order\Order;
@@ -20,6 +21,10 @@ use hiqdev\php\units\Quantity;
 
 class CalculatorTest extends SaleTest
 {
+    /**
+     * @var GeneralizerInterface|Generalizer
+     */
+    protected $generalizer;
     /**
      * @var CalculatorInterface|Calculator
      */
@@ -32,7 +37,8 @@ class CalculatorTest extends SaleTest
     protected function setUp()
     {
         parent::setUp();
-        $this->calculator = new Calculator($this->repository, null);
+        $this->generalizer = new Generalizer();
+        $this->calculator = new Calculator($this->generalizer, $this->repository, null);
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
@@ -46,7 +52,7 @@ class CalculatorTest extends SaleTest
 
     public function testCalculateCharges()
     {
-        $charges = $this->calculator->calculateCharges($this->order);
+        $charges = $this->calculator->calculateOrder($this->order);
         foreach ($this->order->getActions() as $actionKey => $action) {
             $this->checkCharges($action, $charges[$actionKey]);
         }

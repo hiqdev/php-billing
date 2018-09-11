@@ -43,15 +43,6 @@ interface ActionInterface extends \JsonSerializable
     public function isApplicable(PriceInterface $price): bool;
 
     /**
-     * Calculate charge for the given $price.
-     * Returns `null`, if $price is not applicable to this action.
-     *
-     * @param PriceInterface $price
-     * @return ChargeInterface|null
-     */
-    public function calculateCharge(PriceInterface $price): ?ChargeInterface;
-
-    /**
      * Returns client ot this action.
      * @return CustomerInterface
      */

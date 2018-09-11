@@ -14,6 +14,8 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\charge\Generalizer;
+use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\units\Quantity;
@@ -26,11 +28,14 @@ class PlanTest extends \PHPUnit\Framework\TestCase
     protected $plan;
     /** @var DateTimeImmutable */
     protected $time;
+    /** @var Calculator */
+    protected $calculator;
 
     protected function setUp()
     {
         $this->plan = CertificatePlan::get();
         $this->time = new DateTimeImmutable('now');
+        $this->calculator = new Calculator(new Generalizer(), null, null);
     }
 
     public function testCalculateCharges()
@@ -40,7 +45,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
                 foreach ([1, 2, 3] as $years) {
                     $usage = Quantity::month($years * 12);
                     $action = new Action(null, $type, $target, $usage, $this->plan->customer, $this->time);
-                    $charges = $this->plan->calculateCharges($action);
+                    $charges = $this->calculator->calculatePlan($this->plan, $action);
                     $this->checkCharges($action, $charges);
                 }
             }
@@ -60,7 +65,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $usage = $action->getQuantity()->convert(Unit::year());
         $this->assertInstanceOf(Charge::class, $charge);
         $this->assertSame($action, $charge->getAction());
-        $this->assertSame($action->getType(), $charge->getPrice()->getType());
+        $this->assertSame($action->getType(), $charge->getType());
         $this->assertTrue($usage->equals($charge->getUsage()));
         $this->assertTrue($sum->equals($charge->getSum()));
     }

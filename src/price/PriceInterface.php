@@ -78,12 +78,4 @@ interface PriceInterface
      * @return PlanInterface|null
      */
     public function getPlan(): ?PlanInterface;
-
-    /**
-     * Calculates charges of this price for $action.
-     *
-     * @param ActionInterface $action
-     * @return ChargeInterface[]
-     */
-    public function calculateCharges(ActionInterface $action): array;
 }

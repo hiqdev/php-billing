@@ -132,24 +132,6 @@ class Plan implements PlanInterface
         $this->prices = $prices;
     }
 
-    /**
-     * Calculate charges for given action.
-     * @param ActionInterface $action
-     * @return Charge[]|ChargeInterface[]
-     */
-    public function calculateCharges(ActionInterface $action)
-    {
-        $result = [];
-        foreach ($this->prices as $price) {
-            $charges = $price->calculateCharges($action);
-            if (!empty($charges)) {
-                $result = array_merge($result, $charges);
-            }
-        }
-
-        return $result;
-    }
-
     public function jsonSerialize()
     {
         return get_object_vars($this);

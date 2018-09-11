@@ -16,8 +16,10 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
+use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -68,6 +70,8 @@ class FeatureContext implements Context
     {
         $this->customer = new Customer(null, 'somebody');
         $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
+        $this->generalizer = new Generalizer();
+        $this->calculator = new Calculator($this->generalizer, null, null);
     }
 
     /**
@@ -190,7 +194,7 @@ class FeatureContext implements Context
     {
         $this->expectError(function () {
             $this->price->setFormula($this->getFormulaEngine()->build($this->formula));
-            $this->charges = $this->price->calculateCharges($this->action);
+            $this->charges = $this->calculator->calculatePrice($this->price, $this->action);
         });
     }
 
@@ -235,12 +239,17 @@ class FeatureContext implements Context
             return;
         }
         Assert::assertInstanceOf(Charge::class, $charge);
-        Assert::assertSame($type, $charge->getPrice()->getType()->getName());
+        Assert::assertSame($type, $this->normalizeType($charge->getType()->getName()));
         $money = $this->moneyParser->parse($sum, $currency);
         Assert::assertEquals($money, $charge->getSum()); // TODO: Should we add `getSum()` to ChargeInterface?
         if ($reason !== null) {
             Assert::assertSame($reason, $charge->getComment()); // TODO: Should we add `getComment()` to ChargeInterface?
         }
+    }
+
+    private function normalizeType($string): string
+    {
+        return $string === 'discount,discount' ? 'discount' : $string;
     }
 
     private function ensureNo(string $numeral): int

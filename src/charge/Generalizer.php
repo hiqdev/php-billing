@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\bill\Bill;
+use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -23,7 +24,7 @@ use Money\Money;
  */
 class Generalizer implements GeneralizerInterface
 {
-    public function createBill(ChargeInterface $charge)
+    public function createBill(ChargeInterface $charge): BillInterface
     {
         return new Bill(
             null,
@@ -40,7 +41,7 @@ class Generalizer implements GeneralizerInterface
 
     public function generalizeType(ChargeInterface $charge): TypeInterface
     {
-        return $charge->getPrice()->getType();
+        return $charge->getType();
     }
 
     public function generalizeTime(ChargeInterface $charge): \DateTimeImmutable
@@ -65,11 +66,21 @@ class Generalizer implements GeneralizerInterface
 
     public function generalizeTarget(ChargeInterface $charge): TargetInterface
     {
-        return $charge->getAction()->getTarget();
+        return $charge->getTarget();
     }
 
     public function generalizePlan(ChargeInterface $charge): ?PlanInterface
     {
         return $charge->getPrice()->getPlan();
+    }
+
+    public function specializeType(TypeInterface $first, TypeInterface $other): TypeInterface
+    {
+        return $first;
+    }
+
+    public function specializeTarget(TargetInterface $first, TargetInterface $other): TargetInterface
+    {
+        return $first;
     }
 }
