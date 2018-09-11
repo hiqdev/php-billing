@@ -20,10 +20,15 @@ use hiqdev\php\billing\EntityInterface;
  *
  * Provides:
  *
- * - type
- * - ID, unique only between targets of same type
- * - unique ID
- * - target matching with ANY and NONE features
+ * - data:
+ *      - ID, unique only between targets of same type
+ *      - type
+ *      - name
+ * - logic:
+ *      - unique ID
+ *      - target matching with ANY and NONE features
+ *      - comparison
+ *      - generalization
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */

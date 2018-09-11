@@ -11,7 +11,18 @@
 namespace hiqdev\php\billing\type;
 
 /**
- * Type interface.
+ * Type - type of action, price, charge, bill.
+ *
+ * Provides:
+ *
+ * - data:
+ *      - ID
+ *      - name
+ * - logic:
+ *      - unique ID
+ *      - type matching with ANY and NONE features
+ *      - comparison
+ *      - generalization
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
