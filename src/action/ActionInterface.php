@@ -21,10 +21,14 @@ use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 
 /**
- * Chargeable Action Interface.
+ * Action is action to be charged.
  *
- * Action knows which Prices are applicable.
- * Action calculates charges.
+ * Provides:
+ *
+ * - data: id, type, target, quantity, customer, time, sale, state, parent
+ * - logic:
+ *      - unique ID
+ *      - check is applicable to price
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
