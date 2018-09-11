@@ -11,8 +11,6 @@
 namespace hiqdev\php\billing\tests\unit\charge;
 
 use hiqdev\php\billing\action\Action;
-use hiqdev\php\billing\charge\Aggregator;
-use hiqdev\php\billing\charge\AggregatorInterface;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\CalculatorInterface;
@@ -20,6 +18,8 @@ use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\tests\unit\plan\CertificatePlan;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
+use hiqdev\php\billing\tools\Aggregator;
+use hiqdev\php\billing\tools\AggregatorInterface;
 use hiqdev\php\units\Quantity;
 use Money\Money;
 
