@@ -86,12 +86,13 @@ class Charge implements ChargeInterface
      */
     public function getUniqueString(): string
     {
-        $parts = [
+        return implode('-', [
             'currency'  => $this->sum->getCurrency()->getCode(),
-            'action'    => $this->action->getUniqueString(),
-        ];
-
-        return implode('-', $parts);
+            'buyer'     => $this->action->getCustomer()->getUniqueId(),
+            'target'    => $this->target->getUniqueId(),
+            'type'      => $this->type->getUniqueId(),
+            'time'      => $this->action->getTime()->format('c'),
+        ]);
     }
 
     public function hasId(): bool
