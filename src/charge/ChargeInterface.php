@@ -66,7 +66,7 @@ interface ChargeInterface extends \JsonSerializable
     /**
      * @return string
      */
-    public function getComment(): string;
+    public function getComment(): ?string;
 
     /**
      * @return self

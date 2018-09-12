@@ -182,7 +182,7 @@ class Charge implements ChargeInterface
         return $this->state === null ? null : $this->state->isFinished();
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
