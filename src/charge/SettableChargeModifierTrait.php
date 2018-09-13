@@ -13,23 +13,22 @@ namespace hiqdev\php\billing\charge;
 use hiqdev\php\billing\action\ActionInterface;
 
 /**
- * Price with formula
- * Provides charge modification (recalculation) with formula.
+ * Adds modifier property and implements ChargeModifier interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-trait FormulaChargeModifierTrait
+trait SettableChargeModifierTrait
 {
     /**
      * @var ChargeModifier|null
      */
-    protected $formula;
+    protected $modifier;
 
     /** {@inheritdoc} */
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        if ($this->formula !== null) {
-            return $this->formula->modifyCharge($charge, $action);
+        if ($this->modifier !== null) {
+            return $this->modifier->modifyCharge($charge, $action);
         }
 
         return $charge ? [$charge] : [];
@@ -38,11 +37,11 @@ trait FormulaChargeModifierTrait
     /** {@inheritdoc} */
     public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool
     {
-        return $this->formula ? $this->formula->isSuitable($charge, $action) : false;
+        return $this->modifier ? $this->modifier->isSuitable($charge, $action) : false;
     }
 
-    public function setFormula(ChargeModifier $formula)
+    public function setModifier(ChargeModifier $modifier)
     {
-        $this->formula = $formula;
+        $this->modifier = $modifier;
     }
 }

@@ -193,7 +193,7 @@ class FeatureContext implements Context
     public function calculateCharges(): void
     {
         $this->expectError(function () {
-            $this->price->setFormula($this->getFormulaEngine()->build($this->formula));
+            $this->price->setModifier($this->getFormulaEngine()->build($this->formula));
             $this->charges = $this->calculator->calculatePrice($this->price, $this->action);
         });
     }

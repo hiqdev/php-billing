@@ -31,10 +31,8 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SinglePrice extends AbstractPrice implements ChargeModifier
+class SinglePrice extends AbstractPrice
 {
-    use FormulaChargeModifierTrait;
-
     /**
      * @var QuantityInterface prepaid quantity also implies Unit
      */

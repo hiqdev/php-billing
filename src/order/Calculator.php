@@ -97,9 +97,10 @@ class Calculator implements CalculatorInterface
             return [];
         }
 
-        $charges = [$charge];
         if ($price instanceof ChargeModifier) {
             $charges = $price->modifyCharge($charge, $action);
+        } else {
+            $charges = [$charge];
         }
 
         if ($action->isFinished()) {
