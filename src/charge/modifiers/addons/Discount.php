@@ -132,6 +132,9 @@ class Discount implements AddonInterface
 
     public function calculateSum(ChargeInterface $charge): Money
     {
-        return $this->value instanceof Money ? $this->value : $charge->getSum()->multiply($this->value*0.01);
+        return $this->value instanceof Money
+            ? $this->value->multiply($charge->getUsage()->getQuantity())
+            : $charge->getSum()->multiply($this->value * 0.01)
+        ;
     }
 }
