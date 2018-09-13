@@ -54,7 +54,8 @@ class DbMergingAggregator extends Aggregator
         $bills  = parent::aggregateCharges($charges);
         $ids    = $this->billRepository->findIds($bills);
         $fromdb = $this->billRepository->findByIds($ids);
+        $res    = $this->merger->mergeBills(array_merge($bills, $fromdb));
 
-        return $this->merger->mergeBills(array_merge($bills, $fromdb));
+        return $res;
     }
 }
