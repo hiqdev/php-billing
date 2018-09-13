@@ -16,8 +16,8 @@ namespace hiqdev\php\billing\type;
  * Provides:
  *
  * - data:
- *      - ID
- *      - name
+ *      - ID - unique
+ *      - name - unique also!
  * - logic:
  *      - unique ID
  *      - type matching with ANY and NONE features

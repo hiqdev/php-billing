@@ -49,9 +49,14 @@ class Type implements TypeInterface
         return $this->name;
     }
 
+    public function hasName(): bool
+    {
+        return !empty($this->name) && $this->name !== self::ANY && $this->name !== self::NONE;
+    }
+
     public function getUniqueId()
     {
-        return $this->getId() !== self::ANY ? $this->getId() : $this->getName();
+        return $this->hasName() ? $this->name : $this->id;
     }
 
     /**
