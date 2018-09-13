@@ -70,10 +70,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUniqueId()
     {
-        $this->assertSame($this->sid1,  $this->server11->getUniqueId());
+        $this->assertSame($this->sop1,  $this->server11->getUniqueId());
         $this->assertSame($this->sop1,  $this->server_1->getUniqueId());
         $this->assertSame($this->sid1,  $this->server1_->getUniqueId());
-        $this->assertSame($this->sid2,  $this->server22->getUniqueId());
+        $this->assertSame($this->sop2,  $this->server22->getUniqueId());
         $this->assertSame($this->sop2,  $this->server_2->getUniqueId());
         $this->assertSame($this->sid2,  $this->server2_->getUniqueId());
     }
