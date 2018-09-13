@@ -10,6 +10,9 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
+use hiqdev\php\billing\charge\ChargeInterface;
+use Money\Money;
+
 /**
  * Discount maximum addon.
  *
@@ -18,4 +21,12 @@ namespace hiqdev\php\billing\charge\modifiers\addons;
 class Maximum extends Extremum
 {
     protected static $name = 'maximum';
+
+    public function calculateSum(ChargeInterface $charge): Money
+    {
+        return $this->value instanceof Money
+            ? $this->value
+            : $charge->getSum()->multiply($this->value*0.01)
+        ;
+    }
 }
