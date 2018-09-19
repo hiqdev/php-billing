@@ -10,7 +10,9 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\price\PriceInterface;
 
 /**
  * Calculator calculates charges for given order or action.
@@ -22,5 +24,12 @@ interface CalculatorInterface
      * @param OrderInterface $order
      * @return Charge[]
      */
-    public function calculateOrder(OrderInterface $order);
+    public function calculateOrder(OrderInterface $order): array;
+
+    /**
+     * @param PriceInterface $price
+     * @param ActionInterface $action
+     * @return ChargeInterface[] array of charges
+     */
+    public function calculatePrice(PriceInterface $price, ActionInterface $action): array;
 }

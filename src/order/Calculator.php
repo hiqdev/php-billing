@@ -90,6 +90,9 @@ class Calculator implements CalculatorInterface
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function calculatePrice(PriceInterface $price, ActionInterface $action): array
     {
         $charge = $this->calculateCharge($price, $action);
