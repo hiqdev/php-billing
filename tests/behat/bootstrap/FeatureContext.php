@@ -182,7 +182,7 @@ class FeatureContext implements Context
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
-            $this->calculateCharges();
+            $this->calculatePrice();
         }
         $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason);
     }
@@ -190,7 +190,7 @@ class FeatureContext implements Context
     /**
      * @When /^calculating charges$/
      */
-    public function calculateCharges(): void
+    public function calculatePrice(): void
     {
         $this->expectError(function () {
             $this->price->setModifier($this->getFormulaEngine()->build($this->formula));
