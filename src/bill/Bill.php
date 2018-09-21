@@ -95,7 +95,6 @@ class Bill implements BillInterface
             'target'    => $this->target ? $this->target->getUniqueId() : null,
             'type'      => $this->type->getUniqueId(),
             'time'      => $this->time->format('c'),
-            'plan'      => $this->plan ? $this->plan->getUniqueId() : null,
         ];
 
         return implode('-', $parts);
