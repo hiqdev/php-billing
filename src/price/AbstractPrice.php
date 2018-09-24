@@ -151,14 +151,14 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier, EntityIn
     public function isApplicable(ActionInterface $action): bool
     {
         /* sorry, debugging facility
-         * var_dump([
+        var_dump([
             'action.target'     => $action->getTarget(),
-            'this.target'       => $this->getTarget(),
+            'price.target'      => $this->getTarget(),
             'action.type'       => $action->getType(),
-            'this.type'         => $this->getType(),
+            'price.type'        => $this->getType(),
             'target matches'    => $action->getTarget()->matches($this->getTarget()),
             'type matches'      => $action->getType()->matches($this->getType()),
-        ]);*/
+        ]); */
         return $action->getTarget()->matches($this->getTarget()) &&
                $action->getType()->matches($this->getType());
     }
