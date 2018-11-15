@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
+use hiqdev\php\billing\charge\modifiers\PercentPoint;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
@@ -42,7 +43,7 @@ class Discount implements AddonInterface
 
     public function getValue()
     {
-        return $this->value;
+        return $this->value instanceof PercentPoint ? $this->value->getNumber() : $this->value;
     }
 
     public function isAbsolute()
@@ -55,13 +56,18 @@ class Discount implements AddonInterface
         return !$this->isAbsolute();
     }
 
+    public function isPercentPoint(): bool
+    {
+        return $this->value instanceof PercentPoint;
+    }
+
     public function ensureValidValue($value)
     {
-        if ($value instanceof static) {
+        if ($value instanceof self) {
             return $value->getValue();
         }
 
-        if ($value instanceof Money) {
+        if ($value instanceof Money || $value instanceof PercentPoint) {
             return $value;
         }
 
@@ -69,8 +75,13 @@ class Discount implements AddonInterface
             return (string) $value;
         }
 
+        /// TODO: if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)(%|pp| [A-Z]{3})$/', $value, $ms)) {
         if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $ms)) {
             return $ms[1];
+        }
+
+        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)pp$/', $value, $ms)) {
+            return new PercentPoint($ms[1]);
         }
 
         if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?) ([A-Z]{3})$/', $value, $ms)) {
@@ -87,7 +98,7 @@ class Discount implements AddonInterface
             throw new FormulaSemanticsError('multiplier for discount must be numeric');
         }
 
-        return new static($this->isAbsolute() ? $this->value->multiply($multiplier) : $this->value*$multiplier);
+        return new static($this->isAbsolute() ? $this->value->multiply($multiplier) : $this->getValue()*$multiplier);
     }
 
     public function add($addend)
@@ -98,9 +109,9 @@ class Discount implements AddonInterface
         $this->ensureSameType($addend, 'addend');
 
         if ($this->isAbsolute()) {
-            $sum = $this->value->add($addend->getValue());
+            $sum = $this->getValue()->add($addend->getValue());
         } else {
-            $sum = $this->value + $addend->getValue();
+            $sum = $this->getValue() + $addend->getValue();
         }
 
         return new static($sum);

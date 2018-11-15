@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
+use hiqdev\php\billing\charge\modifiers\PercentPoint;
+
 /**
  * Discount step addon.
  *
@@ -23,6 +25,15 @@ class Step extends Discount
     {
         $start = $min ? $min : $this;
 
-        return $this->multiply($num)->add($start);
+        if ($this->isAbsolute() || $this->isPercentPoint()) {
+            return $this->multiply($num)->add($start);
+        }
+
+        $start = $start->getValue()/100.0;
+        $factor = $this->getValue()/100.0;
+
+        $value = 1 - (1 - $start)*pow(1 - $factor, $num);
+
+        return new Discount($value*100);
     }
 }
