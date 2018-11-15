@@ -8,6 +8,21 @@ Feature: Growing discount
          Then error is minimum must be relative
          When calculating charges
 
+    Scenario Outline: absolute growing discount without given max
+        Given formula is discount.since('08.2018').grows('11.11 USD').every('months').min('10 USD')
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
+        Examples:
+            | date       | first           | second               |
+            | 2018-07-31 | monthly 100 USD |                      |
+            | 2018-08-01 | monthly 100 USD | discount  -20.00 USD |
+            | 2018-09-01 | monthly 100 USD | discount  -42.22 USD |
+            | 2018-10-01 | monthly 100 USD | discount  -64.44 USD |
+            | 2018-11-01 | monthly 100 USD | discount  -86.66 USD |
+            | 2018-12-01 | monthly 100 USD | discount -100.00 USD |
+            | 2019-01-01 | monthly 100 USD | discount -100.00 USD |
+
     Scenario Outline: relative discount growing 30% every month
         Given formula is discount.since('08.2000').grows('30%').every('year').max('100%')
          When action date is <date>
