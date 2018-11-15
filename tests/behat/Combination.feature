@@ -22,7 +22,7 @@ Feature: Combination
             | 2028-11-01 | monthly 100 USD | discount -55 USD reason THREE |
 
     Scenario Outline: discounts then leasing
-        Given formula is            discount.since('08.2018').grows('10%').every('month').max('100%').reason('ONE')
+        Given formula is            discount.since('08.2018').grows('10pp').every('month').max('100%').reason('ONE')
           And formula continues     leasing.since('11.2018').lasts('2 months').reason('TWO')
          When action date is <date>
          Then first charge is <first>
