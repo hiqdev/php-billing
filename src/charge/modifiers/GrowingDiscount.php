@@ -57,6 +57,10 @@ class GrowingDiscount extends FixedDiscount
 
     public function getMax()
     {
+        if (!$this->hasAddon(self::MAX)) {
+            $this->max('100%');
+        }
+
         return $this->getAddon(self::MAX);
     }
 
@@ -99,9 +103,6 @@ class GrowingDiscount extends FixedDiscount
 
     public function getValue(ChargeInterface $charge = null): Discount
     {
-        if ($this->getMax() === null && $this->getTill() === null) {
-            throw new \Exception("growing discount must be limited with 'max' or 'till'");
-        }
         $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
         $num = (int) $this->countPeriodsPassed($time);
 

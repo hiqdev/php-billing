@@ -3,11 +3,6 @@ Feature: Growing discount
         Given server monthly price is 50 USD per unit
           And action is server monthly 2 units
 
-    Scenario: discount can not be unlimited
-        Given formula is discount.since('01.2018').grows('1%').every('month').min('5%')
-         Then error is growing discount must be limited
-         When calculating charges
-
     Scenario: discount minimum must match step
         Given formula is discount.since('08.2018').grows('1%').every('month').min('10 USD')
          Then error is minimum must be relative
