@@ -75,17 +75,15 @@ class Discount implements AddonInterface
             return (string) $value;
         }
 
-        /// TODO: if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)(%|pp| [A-Z]{3})$/', $value, $ms)) {
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)%$/', $value, $ms)) {
-            return $ms[1];
-        }
+        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)(%|pp| [A-Z]{3})$/', $value, $ms)) {
+            if ($ms[3] === '%') {
+                return $ms[1];
+            }
+            if ($ms[3] === 'pp') {
+                return new PercentPoint($ms[1]);
+            }
 
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?)pp$/', $value, $ms)) {
-            return new PercentPoint($ms[1]);
-        }
-
-        if (is_string($value) && preg_match('/^(\d{1,5}(\.\d+)?) ([A-Z]{3})$/', $value, $ms)) {
-            return $this->moneyParser->parse($ms[1], new Currency($ms[3]));
+            return $this->moneyParser->parse($ms[1], new Currency(trim($ms[3])));
         }
 
         $name = static::$name;
