@@ -10,13 +10,10 @@
 
 namespace hiqdev\php\billing\tools;
 
-use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\GeneralizerInterface;
-use hiqdev\php\units\QuantityInterface;
-use Money\Money;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -46,8 +43,10 @@ class DbMergingAggregator extends Aggregator
     /**
      * Aggregates given Charges to Bills.
      * Then merges them with Bills from DB.
+     *
      * @param ChargeInterface[]|ChargeInterface[][] $charges
      * @return BillInterface[]
+     * @throws \Exception
      */
     public function aggregateCharges(array $charges): array
     {

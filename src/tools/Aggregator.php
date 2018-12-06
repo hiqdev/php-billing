@@ -46,7 +46,6 @@ class Aggregator implements AggregatorInterface
             } elseif ($charge instanceof ChargeInterface) {
                 $others = [$this->generalizer->createBill($charge)];
             } else {
-                var_dump($charge);die;
                 throw new \Exception('not a Charge given to Aggregator');
             }
 

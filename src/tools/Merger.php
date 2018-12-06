@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\charge\AggregationException;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
