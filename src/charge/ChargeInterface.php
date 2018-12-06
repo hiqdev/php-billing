@@ -77,4 +77,12 @@ interface ChargeInterface extends \JsonSerializable
      * @return ChargeInterface|null
      */
     public function getParent(): ?ChargeInterface;
+
+    /**
+     * Provides unique string.
+     * Can be used to compare or aggregate charges.
+     *
+     * @return string
+     */
+    public function getUniqueString(): string;
 }
