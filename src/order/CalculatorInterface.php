@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\order;
 
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\price\PriceInterface;
 
 /**

@@ -22,7 +22,6 @@ use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
-use hiqdev\php\billing\type\TypeInterface;
 
 /**
  * Calculator calculates charges for given order or action.
@@ -32,19 +31,22 @@ use hiqdev\php\billing\type\TypeInterface;
 class Calculator implements CalculatorInterface
 {
     /**
+     * @var GeneralizerInterface
+     */
+    protected $generalizer;
+    /**
      * @var SaleRepositoryInterface
      */
     private $saleRepository;
-
     /**
      * @var PlanRepositoryInterface
      */
     private $planRepository;
 
     /**
+     * @param GeneralizerInterface $generalizer
      * @param SaleRepositoryInterface|null $saleRepository
      * @param PlanRepositoryInterface $planRepository
-     * @throws \Exception
      */
     public function __construct(
         GeneralizerInterface $generalizer,
