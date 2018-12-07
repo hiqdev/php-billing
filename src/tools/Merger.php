@@ -77,7 +77,6 @@ class Merger implements MergerInterface
             }
         }
 
-        //var_dump(array_keys($res));die;
         return $res;
     }
 
@@ -125,6 +124,10 @@ class Merger implements MergerInterface
      */
     protected function mergeSum(BillInterface $first, BillInterface $other, array $charges): Money
     {
+        if (empty($charges)) {
+            return $first->getSum()->add($other->getSum());
+        }
+
         $sum = array_shift($charges)->getSum();
         foreach ($charges as $charge) {
             $sum = $sum->add($charge->getSum());
@@ -141,6 +144,10 @@ class Merger implements MergerInterface
      */
     protected function mergeQuantity(BillInterface $first, BillInterface $other, array $charges): QuantityInterface
     {
+        if (empty($charges)) {
+            return $first->getQuantity()->add($other->getQuantity());
+        }
+
         $usage = array_shift($charges)->getUsage();
         foreach ($charges as $charge) {
             $usage = $usage->add($charge->getUsage());
