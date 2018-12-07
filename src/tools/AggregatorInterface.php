@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\Bill;
+use hiqdev\php\billing\charge\Charge;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\charge\AggregationException;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\GeneralizerInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -46,7 +47,7 @@ class Aggregator implements AggregatorInterface
             } elseif ($charge instanceof ChargeInterface) {
                 $others = [$this->generalizer->createBill($charge)];
             } else {
-                throw new \Exception('not a Charge given to Aggregator');
+                throw new AggregationException('Not a Charge given to Aggregator');
             }
 
             $bills = $this->aggregateBills($bills, $others);
@@ -118,7 +119,6 @@ class Aggregator implements AggregatorInterface
     /**
      * @param BillInterface $first
      * @param BillInterface $other
-     * @param ChargeInterface[] $charges
      * @return Money
      */
     protected function aggregateSum(BillInterface $first, BillInterface $other): Money
@@ -129,7 +129,6 @@ class Aggregator implements AggregatorInterface
     /**
      * @param BillInterface $first
      * @param BillInterface $other
-     * @param ChargeInterface[] $charges
      * @return QuantityInterface
      */
     protected function aggregateQuantity(BillInterface $first, BillInterface $other): QuantityInterface
