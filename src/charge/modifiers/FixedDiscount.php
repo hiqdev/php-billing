@@ -81,7 +81,7 @@ class FixedDiscount extends Modifier
         $usage  = Quantity::create('items', 1);
         $type   = $this->getType();
         $price  = $charge->getPrice();
-        $target = $price->getTarget();
+        $target = $charge->getTarget();
 
         $discount = new Charge(null, $type, $target, $action, $price, $usage, $sum);
         $discount->setParent($charge);
