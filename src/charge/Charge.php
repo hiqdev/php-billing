@@ -91,7 +91,7 @@ class Charge implements ChargeInterface
             'target'    => $this->target->getUniqueId(),
             'type'      => $this->type->getUniqueId(),
             'time'      => $this->action->getTime()->format('c'),
-            'parent_id' => $this->parent !== null ? $this->parent->getId() : null
+            'parent'    => '(' . ($this->parent !== null ? $this->parent->getUniqueString() : null) . ')',
         ]);
     }
 
