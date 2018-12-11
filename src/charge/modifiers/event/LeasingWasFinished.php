@@ -2,44 +2,60 @@
 
 namespace hiqdev\php\billing\charge\modifiers\event;
 
-use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
 use League\Event\AbstractEvent;
 
-class LeasingWasFinished extends AbstractEvent
+class LeasingWasFinished extends AbstractEvent implements \JsonSerializable
 {
     /**
-     * @var PriceInterface
+     * @var ChargeInterface
      */
-    private $price;
+    private $charge;
     /**
      * @var \DateTimeImmutable
      */
-    private $date;
+    private $time;
 
-    private function __construct(PriceInterface $price, \DateTimeImmutable $date)
+    private function __construct(ChargeInterface $charge, \DateTimeImmutable $time)
     {
-        $this->price = $price;
-        $this->date = $date;
+        $this->charge = $charge;
+        $this->time = $time;
     }
 
-    public static function forPriceInMonth(PriceInterface $price, \DateTimeImmutable $date): self
+    public static function onCharge(ChargeInterface $charge, \DateTimeImmutable $time): self
     {
-        return new self($price, $date);
+        return new self($charge, $time);
     }
 
     /**
-     * @return PriceInterface
+     * @return ChargeInterface
      */
-    public function getPrice(): PriceInterface
+    public function getCharge(): ChargeInterface
     {
-        return $this->price;
+        return $this->charge;
     }
 
     /**
      * @return \DateTimeImmutable
      */
-    public function getDate(): \DateTimeImmutable
+    public function getTime(): \DateTimeImmutable
     {
-        return $this->date;
+        return $this->time;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'price_id' => $this->charge->getPrice()->getId(),
+            'part_id' => $this->charge->getPrice()->getTarget()->getId(),
+        ];
     }
 }

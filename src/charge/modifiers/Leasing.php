@@ -123,7 +123,7 @@ class Leasing extends Modifier
             $charge->getUsage(),
             new Money(0, $charge->getSum()->getCurrency())
         );
-        $result->recordThat(LeasingWasFinished::forPriceInMonth($charge->getPrice(), $month));
+        $result->recordThat(LeasingWasFinished::onCharge($result, $month));
         if ($charge->getComment()) {
             $result->setComment($charge->getComment());
         }
