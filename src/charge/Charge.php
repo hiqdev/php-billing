@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\event\EventAwareTrait;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -27,6 +28,8 @@ use Money\Money;
  */
 class Charge implements ChargeInterface
 {
+    use EventAwareTrait;
+
     /** @var int */
     protected $id;
 
