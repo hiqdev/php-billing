@@ -58,7 +58,8 @@
     },
     "suggest": {
         "ext-intl": "intl extension is required for formula support",
-        "hoa/ruler": "version ^2.17 required for formula support"
+        "hoa/ruler": "version ^2.17 required for formula support",
+        "league/event": "required for event-rich billing"
     },
     "autoload": {
         "psr-4": {

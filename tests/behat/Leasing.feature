@@ -11,27 +11,26 @@ Feature: Leasing
     Scenario Outline: simple leasing with reason
         Given formula is leasing.since('08.2018').lasts('3 months').reason('TEST')
          When action date is <date>
-         Then first charge is <first>
-          And second charge is 
+         Then first charge is <first> with <events>
         Examples:
-            | date       | first                       |
-            | 2018-07-01 |                             |
-            | 2018-08-01 | monthly 100 USD reason TEST |
-            | 2018-09-01 | monthly 100 USD reason TEST |
-            | 2018-10-01 | monthly 100 USD reason TEST |
-            | 2018-11-01 |                             |
-            | 2028-01-01 |                             |
+            | date       | first                       | events                     |
+            | 2018-07-01 |                             |                            |
+            | 2018-08-01 | monthly 100 USD reason TEST |                            |
+            | 2018-09-01 | monthly 100 USD reason TEST |                            |
+            | 2018-10-01 | monthly 100 USD reason TEST |                            |
+            | 2018-11-01 | monthly 0 USD reason TEST   | LeasingWasFinished         |
+            | 2028-01-01 |                             |                            |
 
     Scenario Outline: leasing will not work when price is zero
         Given server monthly price is 0 USD per item
           And formula is leasing.since('08.2018').lasts('3 months').reason('TEST')
          When action date is <date>
-         Then first charge is <first>
+         Then first charge is <first> with <events>
       Examples:
-        | date       | first                     |
-        | 2018-07-01 |                           |
-        | 2018-08-01 | monthly 0 USD reason TEST |
-        | 2018-09-01 | monthly 0 USD reason TEST |
-        | 2018-10-01 | monthly 0 USD reason TEST |
-        | 2018-11-01 |                           |
-        | 2028-01-01 |                           |
+        | date       | first                     | events             |
+        | 2018-07-01 |                           |                    |
+        | 2018-08-01 | monthly 0 USD reason TEST |                    |
+        | 2018-09-01 | monthly 0 USD reason TEST |                    |
+        | 2018-10-01 | monthly 0 USD reason TEST |                    |
+        | 2018-11-01 | monthly 0 USD reason TEST | LeasingWasFinished |
+        | 2028-01-01 |                           |                    |

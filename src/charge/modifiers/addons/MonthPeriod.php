@@ -25,4 +25,9 @@ class MonthPeriod extends Period
 
         return ($diff->m + $diff->y*12) / $this->value;
     }
+
+    public function addTo(DateTimeImmutable $since): DateTimeImmutable
+    {
+        return $since->add(new \DateInterval("P{$this->value}M"));
+    }
 }

@@ -11,7 +11,9 @@
 namespace hiqdev\php\billing\charge\modifiers;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\modifiers\event\LeasingWasFinished;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -58,20 +60,24 @@ class Leasing extends Modifier
 
         $this->ensureIsValid();
 
-        $month = $action->getTime()->modify('first day of this month midnight');
-        if (!$this->checkPeriod($month)) {
-            return [];
-        }
-
         $reason = $this->getReason();
         if ($reason) {
             $charge->setComment($reason->getValue());
         }
 
+        $month = $action->getTime()->modify('first day of this month midnight');
+        if (!$this->checkPeriod($month)) {
+            if ($this->isFirstMonthAfterLeasingPassed($month)) {
+                return [$this->createLeasingFinishingCharge($charge, $month)];
+            }
+
+            return [];
+        }
+
         return [$charge];
     }
 
-    protected function ensureIsValid()
+    protected function ensureIsValid(): void
     {
         $since = $this->getSince();
         if ($since === null) {
@@ -82,5 +88,46 @@ class Leasing extends Modifier
         if ($term === null) {
             throw new FormulaSemanticsError('no term given for leasing');
         }
+    }
+
+    private function isFirstMonthAfterLeasingPassed(\DateTimeImmutable $time): bool
+    {
+        $since = $this->getSince();
+        if ($since && $since->getValue() > $time) {
+            return false;
+        }
+
+        $till = $this->getTill();
+        if ($till && $till->getValue() <= $time) {
+            if ($till->getValue()->diff($time)->format('%a') === '0') {
+                return true;
+            }
+        }
+
+        $term = $this->getTerm();
+        if ($term && $term->addTo($since->getValue())->diff($time)->format('%a') === '0') {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function createLeasingFinishingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    {
+        $result = new Charge(
+            null,
+            $charge->getType(),
+            $charge->getTarget(),
+            $charge->getAction(),
+            $charge->getPrice(),
+            $charge->getUsage(),
+            new Money(0, $charge->getSum()->getCurrency())
+        );
+        $result->recordThat(LeasingWasFinished::forPriceInMonth($charge->getPrice(), $month));
+        if ($charge->getComment()) {
+            $result->setComment($charge->getComment());
+        }
+
+        return $result;
     }
 }

@@ -25,4 +25,9 @@ class YearPeriod extends Period
 
         return $diff->y / $this->value;
     }
+
+    public function addTo(DateTimeImmutable $since): DateTimeImmutable
+    {
+        return $since->add(new \DateInterval("P{$this->value}Y"));
+    }
 }

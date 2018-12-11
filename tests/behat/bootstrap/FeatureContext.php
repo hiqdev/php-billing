@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Closure;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
@@ -62,6 +63,10 @@ class FeatureContext implements Context
 
     /** @var string */
     protected $expectedError;
+    /** @var Generalizer */
+    protected $generalizer;
+    /** @var Calculator */
+    protected $calculator;
 
     /**
      * Initializes context.
@@ -154,7 +159,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is ?$/
+     * @Then /^(\w+) charge is ?(?: with ?)?$/
      * @param string $numeral
      */
     public function emptyCharge(string $numeral): void
@@ -163,28 +168,28 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})$/
+     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})(?: with (.+)?)?$/
      */
-    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null): void
+    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null, $events = null): void
     {
-        $this->chargeIs($numeral, $type, $sum, $currency);
+        $this->chargeIs($numeral, $type, $sum, $currency, null, $events);
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3}) reason (.+)/
+     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3}) reason ([\w]+)(?: with (.+)?)?$/
      */
-    public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null): void
+    public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null, $events = null): void
     {
-        $this->chargeIs($numeral, $type, $sum, $currency, $reason);
+        $this->chargeIs($numeral, $type, $sum, $currency, $reason, $events);
     }
 
-    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null): void
+    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null, $events = null): void
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
             $this->calculatePrice();
         }
-        $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason);
+        $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason, $events);
     }
 
     /**
@@ -225,13 +230,14 @@ class FeatureContext implements Context
     }
 
     /**
-     * @param ChargeInterface|null $charge
+     * @param ChargeInterface|Charge|null $charge
      * @param string|null $type
      * @param string|null $sum
      * @param string|null $currency
      * @param string|null $reason
+     * @param string|null $events
      */
-    public function assertCharge($charge, $type, $sum, $currency, $reason): void
+    public function assertCharge($charge, $type, $sum, $currency, $reason, $events): void
     {
         if (empty($type) && empty($sum) && empty($currency)) {
             Assert::assertNull($charge);
@@ -243,7 +249,24 @@ class FeatureContext implements Context
         $money = $this->moneyParser->parse($sum, $currency);
         Assert::assertEquals($money, $charge->getSum());
         if ($reason !== null) {
-            Assert::assertSame($reason, $charge->getComment());
+            Assert::assertSame($reason, $charge->getComment(),
+                sprintf('Charge comment %s does not match expected %s', $charge->getComment(), $reason)
+            );
+        }
+        if ($events !== null) {
+            $storedEvents = $charge->releaseEvents();
+            foreach (array_map('trim', explode(',', $events)) as $eventClass) {
+                foreach ($storedEvents as $storedEvent) {
+                    $eventReflection = new \ReflectionObject($storedEvent);
+                    if ($eventReflection->getShortName() === $eventClass) {
+                        continue 2;
+                    }
+                }
+
+                Assert::fail(sprintf('Event of class %s is not present is charge', $eventClass));
+            }
+        } else {
+            Assert::assertEmpty($charge->releaseEvents(), 'Failed asserting that charge does not have events');
         }
     }
 
