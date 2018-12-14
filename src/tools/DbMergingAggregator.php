@@ -18,7 +18,7 @@ use hiqdev\php\billing\charge\GeneralizerInterface;
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class DbMergingAggregator extends Aggregator
+class DbMergingAggregator implements AggregatorInterface
 {
     /**
      * @var BillRepositoryInterface
@@ -29,15 +29,19 @@ class DbMergingAggregator extends Aggregator
      * @var MergerInterface
      */
     protected $merger;
+    /**
+     * @var AggregatorInterface
+     */
+    private $localAggregator;
 
     public function __construct(
-        GeneralizerInterface $generalizer,
+        AggregatorInterface $localAggregator,
         BillRepositoryInterface $billRepository,
         MergerInterface $merger
     ) {
-        parent::__construct($generalizer);
         $this->billRepository = $billRepository;
         $this->merger = $merger;
+        $this->localAggregator = $localAggregator;
     }
 
     /**
@@ -50,7 +54,7 @@ class DbMergingAggregator extends Aggregator
      */
     public function aggregateCharges(array $charges): array
     {
-        $bills  = parent::aggregateCharges($charges);
+        $bills  = $this->localAggregator->aggregateCharges($charges);
         $ids    = $this->billRepository->findIds($bills);
         $fromdb = $this->billRepository->findByIds($ids);
         $res    = $this->merger->mergeBills(array_merge($bills, $fromdb));
