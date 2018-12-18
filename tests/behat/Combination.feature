@@ -5,21 +5,23 @@ Feature: Combination
 
     Scenario Outline: sequential fixed discounts
         Given formula is            discount.since('08.2018').fixed('30%').reason('ONE')
-          And formula continues     discount.since('10.2018').fixed('11 USD').reason('TWO')
-          And formula continues     discount.since('12.2018').fixed('55%').reason('THREE')
+          And formula continues     discount.since('10.2018').fixed('10 USD').reason('TWO')
+          And formula continues     discount.since('12.2018').fixed('50%').reason('THREE')
          When action date is <date>
          Then first charge is <first>
           And second charge is <second>
+          And third charge is <third>
+          And fourth charge is <fourth>
         Examples:
-            | date       | first           | second                        |
-            | 2018-07-31 | monthly 100 USD |                               |
-            | 2018-08-01 | monthly 100 USD | discount -30 USD reason ONE   |
-            | 2018-09-01 | monthly 100 USD | discount -30 USD reason ONE   |
-            | 2018-10-01 | monthly 100 USD | discount -11 USD reason TWO   |
-            | 2018-11-01 | monthly 100 USD | discount -11 USD reason TWO   |
-            | 2018-12-01 | monthly 100 USD | discount -55 USD reason THREE |
-            | 2019-01-01 | monthly 100 USD | discount -55 USD reason THREE |
-            | 2028-11-01 | monthly 100 USD | discount -55 USD reason THREE |
+            | date       | first           | second                        | third                        | fourth                        |
+            | 2018-07-31 | monthly 100 USD |                               |                              |                               |
+            | 2018-08-01 | monthly 100 USD | discount -30 USD reason ONE   |                              |                               |
+            | 2018-09-01 | monthly 100 USD | discount -30 USD reason ONE   |                              |                               |
+            | 2018-10-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  |                               |
+            | 2018-11-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  |                               |
+            | 2018-12-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  | discount -30 USD reason THREE |
+            | 2019-01-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  | discount -30 USD reason THREE |
+            | 2028-11-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  | discount -30 USD reason THREE |
 
     Scenario Outline: discounts then leasing
         Given formula is            discount.since('08.2018').grows('10pp').every('month').max('100%').reason('ONE')
@@ -33,7 +35,7 @@ Feature: Combination
             | 2018-08-01 | monthly 100 USD            |                    | discount -10 USD reason ONE |
             | 2018-09-01 | monthly 100 USD            |                    | discount -20 USD reason ONE |
             | 2018-10-01 | monthly 100 USD            |                    | discount -30 USD reason ONE |
-            | 2018-11-01 | monthly 100 USD reason TWO |                    |                             |
-            | 2018-12-01 | monthly 100 USD reason TWO |                    |                             |
-            | 2019-01-01 | monthly 0 USD reason TWO   | LeasingWasFinished |                             |
+            | 2018-11-01 | monthly 100 USD reason TWO |                    | discount -40 USD reason ONE |
+            | 2018-12-01 | monthly 100 USD reason TWO |                    | discount -50 USD reason ONE |
+            | 2019-01-11 | monthly 0 USD reason TWO   | LeasingWasFinished |                             |
             | 2028-11-01 |                            |                    |                             |

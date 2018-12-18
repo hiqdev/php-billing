@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\formula;
 
-use hiqdev\php\billing\charge\modifiers\LastCombination;
+use hiqdev\php\billing\charge\modifiers\FullCombination;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model;
 
@@ -30,7 +30,7 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
 
     public function makeAnd($lhs, $rhs)
     {
-        return new LastCombination($lhs, $rhs);
+        return new FullCombination($lhs, $rhs);
     }
 
     public function visitModel(Model $element, &$handle = null, $eldnah = null)
