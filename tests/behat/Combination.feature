@@ -23,7 +23,7 @@ Feature: Combination
             | 2019-01-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  | discount -30 USD reason THREE |
             | 2028-11-01 | monthly 100 USD | discount -30 USD reason ONE   | discount -10 USD reason TWO  | discount -30 USD reason THREE |
 
-    Scenario Outline: leasing then leasing
+    Scenario Outline: leasing then discount
         Given formula is            leasing.since('11.2018').lasts('2 months').reason('ONE')
           And formula continues     discount.since('08.2018').grows('10pp').every('month').max('100%').reason('TWO')
          When action date is <date>
