@@ -39,7 +39,7 @@ class Leasing extends Modifier
 
     public function getType()
     {
-        return new Type(Type::ANY, 'discount,leasing');
+        return new Type(Type::ANY, 'monthly,leasing');
     }
 
     public function getTarget()
@@ -74,7 +74,7 @@ class Leasing extends Modifier
             return [];
         }
 
-        return [$charge];
+        return [$this->createLeasingCharge($charge, $month)];
     }
 
     protected function ensureIsValid(): void
@@ -116,7 +116,7 @@ class Leasing extends Modifier
     {
         $result = new Charge(
             null,
-            $charge->getType(),
+            $this->getType(),
             $charge->getTarget(),
             $charge->getAction(),
             $charge->getPrice(),
@@ -124,6 +124,24 @@ class Leasing extends Modifier
             new Money(0, $charge->getSum()->getCurrency())
         );
         $result->recordThat(LeasingWasFinished::onCharge($result, $month));
+        if ($charge->getComment()) {
+            $result->setComment($charge->getComment());
+        }
+
+        return $result;
+    }
+
+    private function createLeasingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    {
+        $result = new Charge(
+            null,
+            $this->getType(),
+            $charge->getTarget(),
+            $charge->getAction(),
+            $charge->getPrice(),
+            $charge->getUsage(),
+            $charge->getSum()
+        );
         if ($charge->getComment()) {
             $result->setComment($charge->getComment());
         }

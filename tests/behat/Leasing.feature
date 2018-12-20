@@ -15,10 +15,10 @@ Feature: Leasing
         Examples:
             | date       | first                       | events                     |
             | 2018-07-01 |                             |                            |
-            | 2018-08-01 | monthly 100 USD reason TEST |                            |
-            | 2018-09-01 | monthly 100 USD reason TEST |                            |
-            | 2018-10-01 | monthly 100 USD reason TEST |                            |
-            | 2018-11-01 | monthly 0 USD reason TEST   | LeasingWasFinished         |
+            | 2018-08-01 | leasing 100 USD reason TEST |                            |
+            | 2018-09-01 | leasing 100 USD reason TEST |                            |
+            | 2018-10-01 | leasing 100 USD reason TEST |                            |
+            | 2018-11-01 | leasing 0 USD reason TEST   | LeasingWasFinished         |
             | 2028-01-01 |                             |                            |
 
     Scenario Outline: leasing will not work when price is zero
@@ -29,8 +29,8 @@ Feature: Leasing
       Examples:
         | date       | first                     | events             |
         | 2018-07-01 |                           |                    |
-        | 2018-08-01 | monthly 0 USD reason TEST |                    |
-        | 2018-09-01 | monthly 0 USD reason TEST |                    |
-        | 2018-10-01 | monthly 0 USD reason TEST |                    |
-        | 2018-11-01 | monthly 0 USD reason TEST | LeasingWasFinished |
+        | 2018-08-01 | leasing 0 USD reason TEST |                    |
+        | 2018-09-01 | leasing 0 USD reason TEST |                    |
+        | 2018-10-01 | leasing 0 USD reason TEST |                    |
+        | 2018-11-01 | leasing 0 USD reason TEST | LeasingWasFinished |
         | 2028-01-01 |                           |                    |

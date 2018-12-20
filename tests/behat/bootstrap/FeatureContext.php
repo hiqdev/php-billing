@@ -245,7 +245,9 @@ class FeatureContext implements Context
             return;
         }
         Assert::assertInstanceOf(Charge::class, $charge);
-        Assert::assertSame($type, $this->normalizeType($charge->getType()->getName()));
+        Assert::assertSame($type, $this->normalizeType($charge->getType()->getName()), sprintf(
+            'Charge type %s does not match expected %s', $type, $this->normalizeType($charge->getType()->getName())
+        ));
         $money = $this->moneyParser->parse($sum, $currency);
         Assert::assertTrue($money->equals($charge->getSum()), sprintf(
             'Charge sum %s does not match expected %s', $charge->getSum()->getAmount(), $money->getAmount()
@@ -274,7 +276,14 @@ class FeatureContext implements Context
 
     private function normalizeType($string): string
     {
-        return $string === 'discount,discount' ? 'discount' : $string;
+        switch ($string) {
+            case 'discount,discount':
+                return 'discount';
+            case 'monthly,leasing';
+                return 'leasing';
+            default:
+                return $string;
+        }
     }
 
     private function ensureNo(string $numeral): int
