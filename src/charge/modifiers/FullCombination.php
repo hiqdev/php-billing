@@ -47,14 +47,22 @@ class FullCombination implements ChargeModifier
 
         if ($this->left->isSuitable($charge, $action)) {
             $leftCharges = $this->left->modifyCharge($charge, $action);
+
             if ($charge && empty($leftCharges)) {
                 return []; // If there was at least one charge, but it disappeared – modifier does not want this charge to happen. Stop.
+            }
+
+            $originalChargeExists = array_reduce($leftCharges, function ($result, Charge $item) use ($charge) {
+                return $result || $charge === $item;
+            }, false);
+            if ($charge && !$originalChargeExists) {
+                return $leftCharges;
             }
         }
 
         /** @var Charge $leftTotal */
         /** @var Charge $charge */
-        $leftTotal = $this->chargesSum($charge, $leftCharges);
+        $leftTotal = $this->sumCharges($charge, $leftCharges);
         if ($this->right->isSuitable($leftTotal, $action)) {
             $dirtyRightCharges = $this->right->modifyCharge($leftTotal, $action);
             if ($leftTotal && empty($dirtyRightCharges)) {
@@ -123,7 +131,7 @@ class FullCombination implements ChargeModifier
      * @return ChargeInterface|null
      * @throws \Exception
      */
-    private function chargesSum(?ChargeInterface $originalCharge, array $producedCharges): ?ChargeInterface
+    private function sumCharges(?ChargeInterface $originalCharge, array $producedCharges): ?ChargeInterface
     {
         if ($originalCharge === null) {
             return null;
