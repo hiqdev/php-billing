@@ -11,7 +11,6 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
 use Closure;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
@@ -80,19 +79,19 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /(\S+) (\S+) price is ([0-9.]+) (\w+) per (\w+)/
+     * @Given /(\S+) (\S+) price is ([0-9.]+) (\w+) per (\w+)(?: includes ([\d.]+))?/
      */
-    public function priceIs($target, $type, $sum, $currency, $unit)
+    public function priceIs($target, $type, $sum, $currency, $unit, $quantity = 0)
     {
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
-        $quantity = Quantity::create($unit, 0);
+        $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, $currency);
         $this->price = new SinglePrice(null, $type, $target, null, $quantity, $sum);
     }
 
     /**
-     * @Given /action is (\S+) (\w+) ([0-9.]+) (\S+)/
+     * @Given /action is (\S+) ([\w_,]+) ([0-9.]+) (\S+)/
      */
     public function actionIs($target, $type, $amount, $unit)
     {

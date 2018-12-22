@@ -26,6 +26,7 @@ class Modifier implements ChargeModifier
     use \hiqdev\php\billing\charge\modifiers\addons\WithSince;
     use \hiqdev\php\billing\charge\modifiers\addons\WithTill;
     use \hiqdev\php\billing\charge\modifiers\addons\WithTerm;
+    use \hiqdev\php\billing\charge\modifiers\addons\WithChargeType;
 
     /**
      * @var AddonInterface[]
