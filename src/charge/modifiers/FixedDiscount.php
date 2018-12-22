@@ -14,9 +14,6 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Discount;
-use hiqdev\php\billing\price\SinglePrice;
-use hiqdev\php\billing\target\Target;
-use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Money;
@@ -63,7 +60,10 @@ class FixedDiscount extends Modifier
 
     private function getType()
     {
-        return new Type(Type::ANY, 'discount,discount');
+        $chargeTypeAddon = $this->getChargeType();
+
+        $type = $chargeTypeAddon ? $chargeTypeAddon->getValue() : 'discount,discount';
+        return new Type(Type::ANY, $type);
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
