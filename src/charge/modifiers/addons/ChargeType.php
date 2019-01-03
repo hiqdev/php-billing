@@ -36,7 +36,7 @@ class ChargeType implements AddonInterface
 
     private function ensureValidValue($value): string
     {
-        if (!preg_match('/^[\w_]+$/', $value)) {
+        if (!preg_match('/^[\w_,]+$/', $value)) {
             throw new \InvalidArgumentException('Charge type is not valid');
         }
 
