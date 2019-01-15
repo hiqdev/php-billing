@@ -78,7 +78,7 @@ class FixedDiscount extends Modifier
         }
 
         $sum    = $this->calculateSum($charge)->multiply(-1);
-        $usage  = Quantity::create('items', 1);
+        $usage  = Quantity::create('items', 0);
         $type   = $this->getType();
         $price  = $charge->getPrice();
         $target = $charge->getTarget();
