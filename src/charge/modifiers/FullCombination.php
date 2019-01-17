@@ -58,29 +58,41 @@ class FullCombination implements ChargeModifier
             if ($charge && !$originalChargeExists) {
                 return $leftCharges;
             }
+            // $leftCharge will contain original charge and 0+ additional charges (discounts)
         }
 
         /** @var Charge $leftTotal */
         /** @var Charge $charge */
         $leftTotal = $this->sumCharges($charge, $leftCharges);
         if ($this->right->isSuitable($leftTotal, $action)) {
+            /** @var Charge[] $dirtyRightCharges */
             $dirtyRightCharges = $this->right->modifyCharge($leftTotal, $action);
             if ($leftTotal && empty($dirtyRightCharges)) {
                 return []; // If there was a charge, but it disappeared – modifier does not want this charge to happen. Stop.
             }
 
-            // Drop $leftTotal from $rightCharges array
-            $rightCharges = array_filter($dirtyRightCharges, function (ChargeInterface $charge) use ($leftTotal) {
+            $lastLeftCharge = end($leftCharges);
+            $rightCharges = array_filter($dirtyRightCharges, function (ChargeInterface $charge) use ($leftTotal, $lastLeftCharge) {
+                /** @var Charge $charge */
+                if ($charge->getParent() === $leftTotal) {
+                    $charge->overwriteParent($lastLeftCharge);
+                }
+
+                // Drop $leftTotal from $rightCharges array
                 return $charge !== $leftTotal;
             });
 
             if (\count($rightCharges) === \count($dirtyRightCharges)) { // Original $leftTotal was not returned
+                foreach ($rightCharges as $rightCharge) {
+                    $rightCharge->overwriteParent($charge);
+                }
+
                 return $rightCharges;
             }
         }
 
         if ($charge && $leftTotal) {
-            // If we had charge and left hand total charge – pass comments and events that were probably generated in left total
+            // If we had both charge and left hand total charge – pass comments and events that were probably generated in left total
             if ($leftTotal->getComment()) {
                 $charge->setComment($leftTotal->getComment());
             }

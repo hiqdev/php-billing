@@ -239,4 +239,17 @@ class Charge implements ChargeInterface
 
         return $this;
     }
+
+    /**
+     * Forcefully changes parent charge
+     *
+     * @param ChargeInterface $parent
+     * @return Charge
+     */
+    public function overwriteParent(ChargeInterface $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
 }
