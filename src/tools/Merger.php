@@ -150,6 +150,9 @@ class Merger implements MergerInterface
 
         $usage = array_shift($charges)->getUsage();
         foreach ($charges as $charge) {
+            if (! $charge->getUsage()->isConvertible($usage->getUnit())) {
+                continue;
+            }
             $usage = $usage->add($charge->getUsage());
         }
 
