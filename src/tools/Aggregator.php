@@ -133,6 +133,10 @@ class Aggregator implements AggregatorInterface
      */
     protected function aggregateQuantity(BillInterface $first, BillInterface $other): QuantityInterface
     {
-        return $first->getQuantity()->add($other->getQuantity());
+        if ($first->getQuantity()->isConvertible($other->getQuantity()->getUnit())) {
+            return $first->getQuantity()->add($other->getQuantity());
+        }
+
+        return $first->getQuantity();
     }
 }
