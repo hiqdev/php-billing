@@ -28,6 +28,11 @@ interface ChargeInterface extends \JsonSerializable
     public function getId();
 
     /**
+     * @return bool
+     */
+    public function hasId(): bool;
+
+    /**
      * @return TypeInterface
      */
     public function getType(): TypeInterface;
