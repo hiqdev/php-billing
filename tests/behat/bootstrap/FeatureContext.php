@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
+use Cache\Adapter\PHPArray\ArrayCachePool;
 use Closure;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
@@ -123,7 +124,7 @@ class FeatureContext implements Context
     protected function getFormulaEngine()
     {
         if ($this->engine === null) {
-            $this->engine = new FormulaEngine();
+            $this->engine = new FormulaEngine(new ArrayCachePool());
         }
 
         return $this->engine;

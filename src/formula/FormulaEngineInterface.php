@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\formula;
 
 use hiqdev\php\billing\charge\ChargeModifier;
+use Hoa\Ruler\Model\Model;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -30,4 +31,11 @@ interface FormulaEngineInterface
      * @return null|string `null` when formula has no errors or string error message
      */
     public function validate(string $formula): ?string;
+
+    /**
+     * @param string $formula
+     * @return Model
+     * @throws FormulaSyntaxError
+     */
+    public function interpret(string $formula): Model;
 }

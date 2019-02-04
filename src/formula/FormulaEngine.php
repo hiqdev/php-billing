@@ -17,6 +17,7 @@ use Hoa\Ruler\Context;
 use Hoa\Ruler\Model;
 use Hoa\Ruler\Ruler;
 use Hoa\Visitor\Visit;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -47,12 +48,18 @@ class FormulaEngine implements FormulaEngineInterface
      * @var ChargeModifier
      */
     protected $leasing;
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
 
-    public function __construct()
+    public function __construct(CacheInterface $cache)
     {
         if (!class_exists(Context::class)) {
             throw new \Exception('to use formula engine install `hoa/ruler`');
         }
+
+        $this->cache = $cache;
     }
 
     /**
@@ -83,15 +90,22 @@ class FormulaEngine implements FormulaEngineInterface
 
     /**
      * @param string $formula
-     * @throws FormulaSyntaxError
      * @return Model\Model
+     * @throws FormulaEngineException
      */
     public function interpret(string $formula): Model\Model
     {
         try {
             $rule = str_replace("\n", ' AND ', $this->normalize($formula));
 
-            return $this->getRuler()->interpret($rule);
+            $key = md5(__METHOD__ . $rule);
+            $model = $this->cache->get($key);
+            if ($model === null) {
+                $model = $this->getRuler()->interpret($rule);
+                $this->cache->set($key, $model);
+            }
+
+            return $model;
         } catch (\Hoa\Compiler\Exception\Exception $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
         } catch (\Hoa\Ruler\Exception\Interpreter $exception) {
@@ -106,7 +120,7 @@ class FormulaEngine implements FormulaEngineInterface
         $lines = explode("\n", $formula);
         $normalized = array_map(function ($value) {
             $value = trim($value);
-            if (strlen($value) === 0) {
+            if ('' === $value) {
                 return null;
             }
 
@@ -142,6 +156,16 @@ class FormulaEngine implements FormulaEngineInterface
         }
 
         return $this->ruler;
+    }
+
+    public function setAsserter(Visit $asserter): self
+    {
+        $this->asserter = $asserter;
+        if ($this->ruler !== null) {
+            $this->ruler->setAsserter($asserter);
+        }
+
+        return $this;
     }
 
     public function getAsserter(): Visit
