@@ -176,8 +176,10 @@ class Calculator implements CalculatorInterface
                 $plan = $sale->getPlan();
                 if ($plan->hasPrices()) {
                     $plans[$actionKey] = $plan;
-                } else {
+                } elseif ($plan->getId() !== null) {
                     $lookPlanIds[$actionKey] = $plan->getId();
+                } else {
+                    $plans[$actionKey] = null;
                 }
             }
         }
