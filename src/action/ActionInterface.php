@@ -88,4 +88,9 @@ interface ActionInterface extends \JsonSerializable
      * @return ActionInterface|null
      */
     public function getParent(): ?ActionInterface;
+
+    /**
+     * @return ActionState|null
+     */
+    public function getState(): ?ActionState;
 }
