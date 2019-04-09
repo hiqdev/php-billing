@@ -11,11 +11,8 @@
 namespace hiqdev\php\billing\action;
 
 use DateTimeImmutable;
-use hiqdev\php\billing\charge\Charge;
-use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
-use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
@@ -102,11 +99,6 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         ];
 
         return implode('-', $parts);
-    }
-
-    public function createSubaction(CustomerInterface $customer)
-    {
-        return new static(null, $this->type, $this->target, $this->quantity, $customer, $this->time, null, $this->state, $this);
     }
 
     /**
