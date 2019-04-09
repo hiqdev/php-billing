@@ -66,10 +66,7 @@ class Calculator implements CalculatorInterface
         $plans = $this->findPlans($order);
         $charges = [];
         foreach ($order->getActions() as $actionKey => $action) {
-            if (empty($plans[$actionKey])) {
-                /* XXX not sure... think more
-                throw new FailedFindPlan();
-                 */
+            if ($plans[$actionKey] === null) {
                 continue;
             }
 
@@ -166,9 +163,8 @@ class Calculator implements CalculatorInterface
         $plans = [];
         $lookPlanIds = [];
         foreach ($order->getActions() as $actionKey => $action) {
-            if (empty($sales[$actionKey])) {
+            if ($sales[$actionKey] === false) {
                 /// it is ok when no sale found for upper resellers
-                /// throw new \Exception('not found sale');
                 $plans[$actionKey] = null;
             } else {
                 $sale = $sales[$actionKey];
@@ -220,8 +216,8 @@ class Calculator implements CalculatorInterface
         if ($lookActions) {
             $lookOrder = new Order(null, $order->getCustomer(), $lookActions);
             $foundSales = $this->saleRepository->findByOrder($lookOrder);
-            foreach ($foundSales as $actionKey => $plan) {
-                $sales[$actionKey] = $plan;
+            foreach ($foundSales as $actionKey => $sale) {
+                $sales[$actionKey] = $sale;
             }
         }
 
