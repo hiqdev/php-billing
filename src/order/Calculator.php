@@ -10,8 +10,9 @@
 
 namespace hiqdev\php\billing\order;
 
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\action\TemporaryAction;
+use hiqdev\php\billing\action\TemporaryActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
@@ -164,6 +165,7 @@ class Calculator implements CalculatorInterface
         $plans = [];
         $lookPlanIds = [];
         foreach ($order->getActions() as $actionKey => $action) {
+            /** @var Action $action */
             if ($sales[$actionKey] === false) {
                 /// it is ok when no sale found for upper resellers
                 $plans[$actionKey] = null;
@@ -172,7 +174,7 @@ class Calculator implements CalculatorInterface
                 /** @var Plan|PlanInterface[] $plan */
                 $plan = $sale->getPlan();
 
-                if ($action instanceof TemporaryAction && $plan->getId() && !$action->hasSale()) {
+                if ($action instanceof TemporaryActionInterface && $plan->getId() && !$action->hasSale()) {
                     $action->setSale($sale);
                 }
 

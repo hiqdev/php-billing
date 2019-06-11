@@ -9,40 +9,22 @@
  */
 namespace hiqdev\php\billing\action;
 
-use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
-use hiqdev\php\billing\sale\SaleInterface;
-use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\type\TypeInterface;
-use hiqdev\php\units\QuantityInterface;
 
 /**
  * Class TemporaryAction represents an action, that is generated for
  * runtime-only purposes such as, but not limited to:
  *
- *  - Extending primary action with TemporaryActions, that represent client billing hierarchy
+ * - Extending primary action with TemporaryActions, that represent client billing hierarchy
+ * - Actions produced in ActionMux
  *
  * Actions of this class MUST NOT be saved into the database and SHOULD be used
  * only for runtime calculations.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class TemporaryAction extends Action
+class TemporaryAction extends Action implements TemporaryActionInterface
 {
-    private function __construct(
-        $id,
-        TypeInterface $type,
-        TargetInterface $target,
-        QuantityInterface $quantity,
-        CustomerInterface $customer,
-        DateTimeImmutable $time,
-        SaleInterface $sale = null,
-        ActionState $state = null,
-        ActionInterface $parent = null
-    ) {
-        parent::__construct($id, $type, $target, $quantity, $customer, $time, $sale, $state, $parent);
-    }
-
     /**
      * Creates Temporary Action out of generic $action
      *
