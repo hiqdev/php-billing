@@ -23,6 +23,10 @@ use hiqdev\php\billing\target\TargetInterface;
 interface SaleInterface
 {
     /**
+     * @return int|string|null
+     */
+    public function getId();
+    /**
      * @return TargetInterface
      */
     public function getTarget();
