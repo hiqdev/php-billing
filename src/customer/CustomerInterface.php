@@ -36,7 +36,7 @@ interface CustomerInterface
     public function getLogin();
 
     /**
-     * @return static
+     * @return static|null
      */
     public function getSeller();
 }

@@ -14,6 +14,8 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\charge\derivative\ChargeDerivative;
+use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
 
 /**
  * Class FullCombination combines charges from all formulas from $left and $right parts of condition
@@ -165,23 +167,7 @@ class FullCombination implements ChargeModifier
             return $originalCharge;
         }
 
-        $tempCharge = new Charge(
-            $originalCharge->getId(),
-            $originalCharge->getType(),
-            $originalCharge->getTarget(),
-            $originalCharge->getAction(),
-            $originalCharge->getPrice(),
-            $originalCharge->getUsage(),
-            $sum,
-            $originalCharge->getBill()
-        );
-        if ($originalCharge->getComment() !== null) {
-            $tempCharge->setComment($originalCharge->getComment());
-        }
-        if ($originalCharge->getParent() !== null) {
-            $tempCharge->setParent($originalCharge->getParent());
-        }
-
-        return $tempCharge;
+        $query = (new ChargeDerivativeQuery())->changeSum($sum);
+        return (new ChargeDerivative())->__invoke($originalCharge, $query);
     }
 }

@@ -65,6 +65,9 @@ class Customer implements CustomerInterface
         return $this->login;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getSeller()
     {
         return $this->seller;
