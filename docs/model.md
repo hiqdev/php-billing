@@ -1,6 +1,7 @@
 @startuml
 
 !define Entity(name,desc) class name as "desc" << (E,#FFAAAA) >>
+!define Outer(name,desc) class name as "desc" << (O,#DDDDDD) >>
 !define ValueObject(name,desc) class name as "desc" << (V,#AAFFAA) >>
 ' we use bold for primary key
 ' green color for unique
@@ -17,14 +18,6 @@
 ' see: http://plantuml.com/classes.html#More
 hide methods
 hide stereotypes
-
-package "Billed objects" {
-    Entity(target, "Target") {
-        primary_key(id)
-        value_object(type, Type)
-        name TEXT
-    }
-}
 
 package "Tariff plans" {
     Entity(plan, "Plan") {
@@ -74,21 +67,27 @@ package "Subscriptions" {
         time DATETIME
     }
 
-    Entity(customer, "Customer") {
+    Outer(customer, "Customer") {
         primary_key(id)
         foreign_key(seller, Customer)
     }
+
+    Outer(target, "Target") {
+        primary_key(id)
+        value_object(type, Type)
+        name TEXT
+    }
 }
 
-package "Actions" {
-    Entity(order, "Order") {
+package "Metered activity" {
+    Outer(order, "Order") {
         primary_key(id)
-        foreign_key(customer, Customer)
     }
 
     Entity(action, "Action") {
         primary_key(id)
         foreign_key(parent, Action)
+        foreign_key(customer, Customer)
         foreign_key(order, Order)
         foreign_key(target, Target)
         value_object(type, Type)
@@ -114,29 +113,30 @@ package "Value Objects" {
     }
 }
 
-type "N" --* "1" type
+type --> type : Parent
 
-price "N" --* "1" plan
-price "N" -down-> "1" target
+price --> plan
+price -down-> target
 
-sale "N" --* "1" customer
-sale "N" --* "1" plan
-sale "N" -down-> "1" target
+sale --> customer
+sale --> plan
+sale -down-> target
 
-customer "N" --* "1" customer : Seller
+customer --> customer : Seller
 
-action "N" --* "1" order
-action "N" --* "1" action : Parent
-action "N" -down-> "1" target
+action --> order
+action --> action : Parent
+action -down-> target
+action --> customer
 
-order "N" --* "1" customer
+charge -left-> bill
+charge -up-> action
+charge -up-> target
 
-charge "N" --* "1" bill
-charge "N" --* "1" action
-charge "N" -down-> "1" target
+bill -up-> customer
+bill -up-> plan
+bill -up-> target
 
-bill "N" --* "1" customer
-bill "N" --* "1" plan
-bill "N" -down-> "1" target
+charge -[hidden]-> money
 
 @enduml
