@@ -1,8 +1,14 @@
 @startuml
 
-!define Entity(name,desc) class name as "desc" << (E,#FFAAAA) >>
-!define Outer(name,desc) class name as "desc" << (O,#DDDDDD) >>
-!define ValueObject(name,desc) class name as "desc" << (V,#AAFFAA) >>
+legend right
+        |<#FFDDDD>  <b>E</b>  |  <b>Entity</b> |
+        |<#DDFFDD>  <b>V</b>  |  <b>Value Object</b>  |
+        |<#FFFFDD>  <b>A</b>  |  <b>Auxiliary</b> |
+endlegend
+
+!define Entity(name,desc) class name as "desc" << (E,#EEEEEE) >> #FFDDDD
+!define ValueObject(name,desc) class name as "desc" << (V,#FFFFFF) >> #DDFFDD
+!define Auxiliary(name,desc) class name as "desc" << (A,#FFFFFF) >> #FFFFDD
 ' we use bold for primary key
 ' green color for unique
 ' and underscore for not_null
@@ -67,12 +73,12 @@ package "Subscriptions" {
         time DATETIME
     }
 
-    Outer(customer, "Customer") {
+    Auxiliary(customer, "Customer") {
         primary_key(id)
         foreign_key(seller, Customer)
     }
 
-    Outer(target, "Target") {
+    Auxiliary(target, "Target") {
         primary_key(id)
         value_object(type, Type)
         name TEXT
@@ -80,8 +86,7 @@ package "Subscriptions" {
 }
 
 package "Metered activity" {
-    Outer(order, "Order") {
-        primary_key(id)
+    Auxiliary(order, "Order") {
     }
 
     Entity(action, "Action") {
