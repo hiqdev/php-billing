@@ -53,8 +53,9 @@
         "behat/behat": "^3.4.3",
         "phpunit/phpunit": "^7.1",
         "hoa/ruler": "^2.17",
-        "hiqdev/hidev-php": "<2.0 || dev-master",
-        "hiqdev/hidev-hiqdev": "<2.0 || dev-master",
+        "hiqdev/hidev": "dev-master",
+        "hiqdev/hidev-php": "dev-master",
+        "hiqdev/hidev-hiqdev": "dev-master",
         "vimeo/psalm": "^2.0",
         "cache/array-adapter": "*"
     },
@@ -69,6 +70,7 @@
             "hiqdev\\php\\billing\\tests\\": "tests"
         }
     },
+    "minimum-stability": "dev",
     "repositories": [
         {
             "type": "composer",
