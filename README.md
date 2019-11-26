@@ -62,6 +62,8 @@ Billing operates such ideas:
 - [Calculator]
 - [Aggregator]
 
+![model](https://raw.githubusercontent.com/hiqdev/php-billing/master/docs/model.png)
+
 [Action]:       /src/action/Action.php
 [Aggregator]:   /src/charge/Aggregator.php
 [Bill]:         /src/bill/Bill.php
