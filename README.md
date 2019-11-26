@@ -49,7 +49,7 @@ Then [charge]s can be aggregated to [bill]s with [aggregator].
 
 Billing operates such ideas:
 
-- [Action] - [customer]'s metered activity of a certain [type] to a certain [target]
+- [Action] - [customer]'s metered activity of a certain [type] at a certain [target]
 - [Order] - collection of [action]s
 - [Bill]
 - [Charge]
