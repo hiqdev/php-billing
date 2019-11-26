@@ -6,14 +6,14 @@ Then [charge]s can be aggregated to [bill]s with [aggregator].
 
 Billing operates such ideas:
 
-- [Action] - [customer]'s action of a [type] to a [target]
+- [Action] - [customer]'s metered activity of a certain [type] to a certain [target]
 - [Order] - collection of [action]s
-- [Charge]
 - [Bill]
+- [Charge]
 - [Plan]
 - [Price]
 - [Customer]
-- [Sale] - binds [customer] to [target] and [plan]
+- [Sale] - a subscription, binding [customer] to a [target] and a [plan]
 - [Target] - object being charged in billing
 - [Type]
 - [Calculator]
