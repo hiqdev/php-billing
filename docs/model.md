@@ -9,32 +9,22 @@ endlegend
 !define Entity(name,desc) class name as "desc" << (E,#EEEEEE) >> #FFDDDD
 !define ValueObject(name,desc) class name as "desc" << (V,#FFFFFF) >> #DDFFDD
 !define Auxiliary(name,desc) class name as "desc" << (A,#FFFFFF) >> #FFFFDD
-' we use bold for primary key
-' green color for unique
-' and underscore for not_null
 !define primary_key(x) x INTEGER
 !define foreign_key(x, y) <i>x</i> --> <b>y</b>
-!define unique(x) <color:green>x</color>
-!define not_null(x) <u>x</u>
 !define value_object(x, y) x <b>y</b>
-' other tags available:
-' <i></i>
-' <back:COLOR></color>, where color is a color name or html color code
-' (#FFAACC)
-' see: http://plantuml.com/classes.html#More
 hide methods
 hide stereotypes
 
 package "Tariff plans" {
     Entity(plan, "Plan") {
         primary_key(id)
-        value_object(type, Type)
     }
 
     Entity(price, "Price") {
         primary_key(id)
         foreign_key(plan, Plan)
         foreign_key(target, Target)
+        value_object(type, Type)
         value_object(price, Money)
         value_object(prepaid, Quantity)
     }
@@ -55,6 +45,7 @@ package "Payments" {
 
     Entity(charge, "Charge") {
         primary_key(id)
+        foreign_key(parent, Charge)
         foreign_key(bill, Bill)
         foreign_key(target, Target)
         foreign_key(action, Action)
@@ -93,7 +84,6 @@ package "Metered activity" {
         primary_key(id)
         foreign_key(parent, Action)
         foreign_key(customer, Customer)
-        foreign_key(order, Order)
         foreign_key(target, Target)
         value_object(type, Type)
         value_object(quantity, Quantity)
@@ -103,7 +93,7 @@ package "Metered activity" {
 
 package "Value Objects" {
     ValueObject(type, "Type") {
-        foreign_key(parent, Type)
+        value_object(parent, Type)
         name TEXT
     }
 
@@ -118,7 +108,7 @@ package "Value Objects" {
     }
 }
 
-type --> type : Parent
+type -up-> type : Parent
 
 price --> plan
 price -down-> target
@@ -127,13 +117,15 @@ sale --> customer
 sale --> plan
 sale -down-> target
 
-customer --> customer : Seller
+customer -up-> customer : Seller
 
-action --> order
-action --> action : Parent
+action -up-> action : Parent
 action -down-> target
 action --> customer
 
+order "1" -up-{ "N" action
+
+charge -up-> charge : Parent
 charge -left-> bill
 charge -up-> action
 charge -up-> target
