@@ -49,7 +49,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier, EntityIn
     protected $target;
 
     /**
-     * @var PlanInterface
+     * @var PlanInterface|null
      */
     protected $plan;
 
