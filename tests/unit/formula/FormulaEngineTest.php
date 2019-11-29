@@ -17,11 +17,14 @@ use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\formula\FormulaEngine;
+use hiqdev\yii\compat\PsrCache;
+use PHPUnit\Framework\TestCase;
+use yii\caching\DummyCache;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class FormulaEngineTest extends \PHPUnit\Framework\TestCase
+class FormulaEngineTest extends TestCase
 {
     /**
      * @var FormulaEngine
@@ -30,7 +33,7 @@ class FormulaEngineTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->engine = new FormulaEngine();
+        $this->engine = new FormulaEngine(new PsrCache(new DummyCache()));
     }
 
     public function testSimpleDiscount()

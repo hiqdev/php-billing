@@ -87,7 +87,7 @@ class FixedDiscountTest extends ActionTest
         $this->assertSame($charge, $charges[0]);
         $discount = $charges[1];
         $this->assertInstanceOf(Charge::class, $discount);
-        $this->assertEquals(Quantity::items(1), $discount->getUsage());
+        $this->assertEquals(Quantity::items(0), $discount->getUsage());
         $this->assertEquals($sum->multiply(-1), $discount->getSum());
     }
 }

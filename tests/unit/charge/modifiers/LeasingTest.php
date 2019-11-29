@@ -14,7 +14,9 @@ use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use hiqdev\php\billing\charge\modifiers\Leasing;
+use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
+use hiqdev\php\billing\type\Type;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -22,6 +24,13 @@ use hiqdev\php\billing\tests\unit\action\ActionTest;
 class LeasingTest extends ActionTest
 {
     protected $reason = 'test reason string';
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->type = new Type(Type::ANY, 'monthly,leasing');
+        $this->price = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+    }
 
     protected function buildLeasing($term)
     {
