@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\plan;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\Exception\EntityNotFoundException;
 use hiqdev\php\billing\order\OrderInterface;
 
 /**
@@ -38,4 +39,11 @@ interface PlanRepositoryInterface
      * @return PlanInterface[] array
      */
     public function findByIds(array $ids);
+
+    /**
+     * @param int $id
+     * @return PlanInterface
+     * @throws EntityNotFoundException
+     */
+    public function getById(int $id): PlanInterface;
 }
