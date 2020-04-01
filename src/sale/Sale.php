@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * Sale.
@@ -97,7 +98,7 @@ class Sale implements SaleInterface
             return;
         }
         if ($this->hasId()) {
-            throw new \Exception('cannot reassign sale id');
+            throw new CannotReassignException('sale id');
         }
         $this->id = $id;
     }

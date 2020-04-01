@@ -26,6 +26,12 @@ interface SaleInterface
      * @return int|string|null
      */
     public function getId();
+
+    /**
+     * @return int|string|null
+     */
+    public function setId($id);
+
     /**
      * @return TargetInterface
      */

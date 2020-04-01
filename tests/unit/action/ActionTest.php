@@ -74,6 +74,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     protected $calculator;
 
+    protected $testId = 12321;
+
     protected function setUp()
     {
         $this->type     = new Type(null, 'server_traf');
@@ -137,5 +139,22 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
         $charge = $this->calculator->calculateCharge($this->price, $action);
         $this->assertNotNull($charge);
+    }
+
+    /**
+     * @expectedException \hiqdev\php\billing\Exception\CannotReassignException
+     */
+    public function testGetHasSetId()
+    {
+        $action = $this->createAction($this->prepaid->multiply(2));
+        $this->assertFalse($action->hasId());
+        $action->setId($this->testId);
+        $this->assertTrue($action->hasId());
+        $this->assertSame($this->testId, $action->getId());
+        $action->setId((string)$this->testId);
+        $this->assertSame($this->testId, $action->getId());
+        $action->setId((int)$this->testId);
+        $this->assertSame($this->testId, $action->getId());
+        $action->setId('other id cannot be set');
     }
 }

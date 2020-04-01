@@ -16,6 +16,7 @@ use hiqdev\php\billing\event\EventAwareTrait;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -161,7 +162,7 @@ class Charge implements ChargeInterface
     public function setBill(BillInterface $bill): ChargeInterface
     {
         /*if ($this->hasBill()) {
-            throw new \Exception('cannot reassign sale bill');
+            throw new CannotReassignException('sale bill');
         }*/
         $this->bill = $bill;
 
@@ -203,7 +204,7 @@ class Charge implements ChargeInterface
             return $this;
         }
         if ($this->id !== null) {
-            throw new \Exception('cannot reassign charge id');
+            throw new CannotReassignException('charge id');
         }
         $this->id = $id;
 
@@ -232,7 +233,7 @@ class Charge implements ChargeInterface
     public function setParent(ChargeInterface $parent): self
     {
         if ($this->parent !== null) {
-            throw new \Exception('cannot reassign charge parent');
+            throw new CannotReassignException('charge parent');
         }
 
         $this->parent = $parent;

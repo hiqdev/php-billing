@@ -16,6 +16,7 @@ use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -121,7 +122,7 @@ class Bill implements BillInterface
             return;
         }
         if ($this->id !== null) {
-            throw new \Exception('cannot reassign bill id');
+            throw new CannotReassignException('bill id');
         }
         $this->id = $id;
     }
@@ -216,7 +217,7 @@ class Bill implements BillInterface
     public function setCharges(array $charges): self
     {
         if ($this->hasCharges()) {
-            throw new \Exception('cannot reassign charges for bill');
+            throw new CannotReassignException('charges for bill');
         }
         $this->charges = $charges;
 

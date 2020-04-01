@@ -17,6 +17,7 @@ use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * Chargeable Action.
@@ -204,7 +205,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
             return;
         }
         if ($this->hasId()) {
-            throw new \Exception('cannot reassign action id');
+            throw new CannotReassignException('action id');
         }
         $this->id = $id;
     }
@@ -217,7 +218,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     public function setSale(SaleInterface $sale)
     {
         if ($this->hasSale()) {
-            throw new \Exception('cannot reassign sale for action');
+            throw new CannotReassignException('sale for action');
         }
         $this->sale = $sale;
     }

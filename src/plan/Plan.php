@@ -10,11 +10,9 @@
 
 namespace hiqdev\php\billing\plan;
 
-use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\charge\Charge;
-use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * Tariff Plan.
@@ -127,7 +125,7 @@ class Plan implements PlanInterface
     public function setPrices(array $prices)
     {
         if ($this->hasPrices()) {
-            throw new \Exception('cannot reassign prices for plan');
+            throw new CannotReassignException('prices for plan');
         }
         $this->prices = $prices;
     }
