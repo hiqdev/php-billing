@@ -112,7 +112,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier, EntityIn
     public function setPlan(PlanInterface $plan)
     {
         if ($this->hasPlan()) {
-            throw new CannotReassignException('plan for price');
+            throw new CannotReassignException('price plan');
         }
         $this->plan = $plan;
     }

@@ -125,7 +125,7 @@ class Plan implements PlanInterface
     public function setPrices(array $prices)
     {
         if ($this->hasPrices()) {
-            throw new CannotReassignException('prices for plan');
+            throw new CannotReassignException('plan prices');
         }
         $this->prices = $prices;
     }

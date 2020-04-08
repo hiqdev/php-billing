@@ -217,7 +217,7 @@ class Bill implements BillInterface
     public function setCharges(array $charges): self
     {
         if ($this->hasCharges()) {
-            throw new CannotReassignException('charges for bill');
+            throw new CannotReassignException('bill charges');
         }
         $this->charges = $charges;
 

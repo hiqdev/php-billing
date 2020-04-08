@@ -218,7 +218,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     public function setSale(SaleInterface $sale)
     {
         if ($this->hasSale()) {
-            throw new CannotReassignException('sale for action');
+            throw new CannotReassignException('action sale');
         }
         $this->sale = $sale;
     }
