@@ -22,7 +22,7 @@ class TargetFactory implements TargetFactoryInterface
      */
     public function create(TargetCreationDto $dto)
     {
-        return new Target($dto->id, $dto->type);
+        return new Target($dto->id, $dto->type, $dto->name);
     }
 
     public function getClassForType(string $type): string

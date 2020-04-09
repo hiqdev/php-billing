@@ -10,6 +10,12 @@
 
 namespace hiqdev\php\billing\tools;
 
+use Money\Money;
+use Money\Currency;
+use hiqdev\php\units\Quantity;
+use Money\Parser\DecimalMoneyParser;
+use Money\Currencies\ISOCurrencies;
+
 /**
  * Generalized entity factory.
  *
@@ -21,9 +27,51 @@ class Factory
 
     private $factories = [];
 
+    protected $moneyParser;
+
     public function __construct(array $factories)
     {
         $this->factories = $factories;
+        $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
+    }
+
+    public function getMoney($data)
+    {
+        if (is_array($data)) {
+            $sum = $data['sum'];
+            $currency = $data['currency'];
+        } else {
+            [$sum, $currency] = explode(' ', $data);
+        }
+
+        return $this->moneyParser->parse($sum, $currency);
+    }
+
+    public function getCurrency($data)
+    {
+        return new Currency($data);
+    }
+
+    public function getQuantity($data)
+    {
+        [$quantity, $unit] = explode(' ', $data);
+
+        return Quantity::create($unit, $quantity);
+    }
+
+    public function getType($data)
+    {
+        return $this->get('type', $data);
+    }
+
+    public function getTarget($data)
+    {
+        return $this->get('target', $data);
+    }
+
+    public function getPlan($data)
+    {
+        return $this->get('plan', $data);
     }
 
     public function getCustomer($data)
@@ -98,6 +146,22 @@ class Factory
         if ($key === 'seller') {
             return 'getCustomer';
         }
+        switch ($key) {
+            case 'seller':
+                return 'getCustomer';
+            case 'plan':
+                return 'getPlan';
+            case 'type':
+                return 'getType';
+            case 'target':
+                return 'getTarget';
+            case 'price':
+                return 'getMoney';
+            case 'currency':
+                return 'getCurrency';
+            case 'prepaid':
+                return 'getQuantity';
+        }
 
         return null;
     }
@@ -132,10 +196,16 @@ class Factory
         switch ($entity) {
             case 'customer':
                 return 'login';
+            case 'type':
+                return 'name';
             case 'plan':
                 return 'name';
+            case 'price':
+                return 'id';
+            case 'target':
+                return 'id';
         }
 
-        throw UnknownEntityException($entity);
+        throw new UnknownEntityException($entity);
     }
 }
