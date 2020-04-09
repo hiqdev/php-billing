@@ -35,6 +35,7 @@ class SinglePrice extends AbstractPrice
 {
     /**
      * @var QuantityInterface prepaid quantity also implies Unit
+     * XXX cannot be null cause Unit is required
      */
     protected $prepaid;
 
