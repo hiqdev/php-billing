@@ -52,6 +52,7 @@
         "ext-intl": "*",
         "behat/behat": "^3.4.3",
         "phpunit/phpunit": "^7.1",
+        "league/event": "^2.1",
         "hoa/ruler": "^2.17",
         "hiqdev/hidev": "dev-master",
         "hiqdev/hidev-php": "dev-master",
