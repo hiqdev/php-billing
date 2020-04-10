@@ -23,6 +23,8 @@ use hiqdev\php\billing\plan\PlanFactory;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\billing\sale\Sale;
+use hiqdev\php\billing\sale\SaleFactory;
 use hiqdev\php\units\Unit;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
@@ -41,6 +43,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     private $type = 'type';
     private $typeId = 'type-id';
 
+    private $saleId = 'sale-id';
+
     private $priceId = 'price-id';
     private $priceSum = '11.99';
 
@@ -52,6 +56,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->factory = new Factory([
             'type'      => new TypeFactory(),
             'plan'      => new PlanFactory(),
+            'sale'      => new SaleFactory(),
             'price'     => new PriceFactory([], SinglePrice::class),
             'target'    => new TargetFactory(),
             'customer'  => new CustomerFactory(),
@@ -121,6 +126,34 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($p1, $p3);
         $this->assertSame($p1, $p4);
         $this->assertSame($p1, $p5);
+    }
+
+    public function testGetSale()
+    {
+        $this->testGetCustomer();
+        $this->testGetPlan();
+
+        $s1 = $this->factory->get('sale', [
+            'id' => $this->saleId,
+            'customer' => $this->user,
+            'target' => $this->targetId,
+            'plan' => $this->planId,
+            'time' => $this->time,
+        ]);
+        $s2 = $this->factory->get('sale', ['id' => $this->saleId, 'target' => $this->targetId]);
+        $s3 = $this->factory->get('sale', ['id' => $this->saleId]);
+        $s4 = $this->factory->get('sale', $this->saleId);
+        $s5 = $this->factory->find('sale', [$this->saleId]);
+        $this->assertInstanceOf(Sale::class, $s1);
+        $this->assertSame($this->saleId, $s1->getId());
+        $this->assertSame($this->user, $s1->getCustomer()->getLogin());
+        $this->assertSame($this->time, $s1->getTime()->format('c'));
+        $this->assertSame($this->targetId, $s1->getTarget()->getId());
+        $this->assertSame($this->planId, $s1->getPlan()->getId());
+        $this->assertSame($s1, $s2);
+        $this->assertSame($s1, $s3);
+        $this->assertSame($s1, $s4);
+        $this->assertSame($s1, $s5);
     }
 
     public function testGetPrice()

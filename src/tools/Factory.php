@@ -218,6 +218,8 @@ class Factory
         switch ($key) {
             case 'seller':
                 return 'getCustomer';
+            case 'customer':
+                return 'getCustomer';
             case 'plan':
                 return 'getPlan';
             case 'type':
@@ -284,6 +286,8 @@ class Factory
                 return ['name'];
             case 'plan':
                 return ['name', 'seller'];
+            case 'sale':
+                return [];
             case 'price':
                 return [];
             case 'target':
