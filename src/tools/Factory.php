@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tools;
 
 use Money\Currency;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\Unit;
 use Money\Parser\DecimalMoneyParser;
 use Money\Currencies\ISOCurrencies;
 
@@ -79,6 +80,15 @@ class Factory
         return Quantity::create($data['unit'], $data['quantity']);
     }
 
+    public function getUnit($data)
+    {
+        return $this->get('unit', $data);
+    }
+
+    public function createUnit($data)
+    {
+        return Unit::create($data['name']);
+    }
 
     public function getType($data)
     {
@@ -209,6 +219,8 @@ class Factory
                 return 'getCurrency';
             case 'prepaid':
                 return 'getQuantity';
+            case 'unit':
+                return 'getUnit';
         }
 
         return null;
@@ -265,6 +277,8 @@ class Factory
                 return ['type', 'name'];
             case 'money':
                 return ['amount', 'currency'];
+            case 'unit':
+                return ['name'];
             case 'quantity':
                 return ['quantity', 'unit'];
         }

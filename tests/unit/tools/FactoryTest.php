@@ -22,6 +22,7 @@ use hiqdev\php\billing\plan\PlanFactory;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\units\Unit;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -169,4 +170,20 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($m1, $m2);
         $this->assertSame($m1, $m3);
     }
+
+    public function testGetUnit()
+    {
+        $u1 = $this->factory->get('unit', ['name' => $this->unit]);
+        $u2 = $this->factory->get('unit', ['name' => $this->unit]);
+        $u3 = $this->factory->get('unit', ['name' => $this->unit]);
+        $u4 = $this->factory->get('unit', $this->unit);
+        $u5 = $this->factory->find('unit', [$this->unit]);
+        $this->assertInstanceOf(Unit::class, $u1);
+        $this->assertSame($this->unit, $u1->getName());
+        $this->assertSame($u1, $u2);
+        $this->assertSame($u1, $u3);
+        $this->assertSame($u1, $u4);
+        $this->assertSame($u1, $u5);
+    }
+
 }
