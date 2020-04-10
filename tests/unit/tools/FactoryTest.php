@@ -11,23 +11,15 @@
 namespace hiqdev\php\billing\tests\unit\tools;
 
 use DateTimeImmutable;
-use hiqdev\php\billing\tools\Factory;
-use hiqdev\php\billing\customer\Customer;
-use hiqdev\php\billing\customer\CustomerFactory;
-use hiqdev\php\billing\type\Type;
-use hiqdev\php\billing\type\TypeFactory;
-use hiqdev\php\billing\target\Target;
-use hiqdev\php\billing\target\TargetFactory;
-use hiqdev\php\billing\plan\Plan;
-use hiqdev\php\billing\plan\PlanFactory;
-use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\billing\price\PriceFactory;
-use hiqdev\php\billing\price\SinglePrice;
-use hiqdev\php\billing\sale\Sale;
-use hiqdev\php\billing\sale\SaleFactory;
-use hiqdev\php\units\Unit;
 use hiqdev\php\billing\action\Action;
-use hiqdev\php\billing\action\ActionFactory;
+use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\sale\Sale;
+use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\tests\support\tools\SimpleFactory;
+use hiqdev\php\billing\type\Type;
+use hiqdev\php\units\Unit;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -57,15 +49,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->factory = new Factory([
-            'type'      => new TypeFactory(),
-            'plan'      => new PlanFactory(),
-            'sale'      => new SaleFactory(),
-            'price'     => new PriceFactory([], SinglePrice::class),
-            'action'    => new ActionFactory(),
-            'target'    => new TargetFactory(),
-            'customer'  => new CustomerFactory(),
-        ]);
+        $this->factory = new SimpleFactory();
     }
 
     public function testGetCustomer()
