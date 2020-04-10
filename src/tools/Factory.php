@@ -16,6 +16,7 @@ use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Parser\DecimalMoneyParser;
 use Money\Currencies\ISOCurrencies;
+use hiqdev\php\billing\Exception\UnknownEntityException;
 
 /**
  * Generalized entity factory.
@@ -116,6 +117,11 @@ class Factory
         return $this->get('plan', $data);
     }
 
+    public function getSale($data)
+    {
+        return $this->get('sale', $data);
+    }
+
     public function getCustomer($data)
     {
         return $this->get('customer', $data);
@@ -213,32 +219,24 @@ class Factory
         return method_exists($this, $method) ? $method : null;
     }
 
+    private $prepareMethods = [
+        'seller'    => 'getCustomer',
+        'customer'  => 'getCustomer',
+        'plan'      => 'getPlan',
+        'sale'      => 'getSale',
+        'type'      => 'getType',
+        'target'    => 'getTarget',
+        'price'     => 'getMoney',
+        'currency'  => 'getCurrency',
+        'prepaid'   => 'getQuantity',
+        'quantity'  => 'getQuantity',
+        'unit'      => 'getUnit',
+        'time'      => 'getTime',
+    ];
+
     private function getPrepareMethod(string $entity, string $key)
     {
-        switch ($key) {
-            case 'seller':
-                return 'getCustomer';
-            case 'customer':
-                return 'getCustomer';
-            case 'plan':
-                return 'getPlan';
-            case 'type':
-                return 'getType';
-            case 'target':
-                return 'getTarget';
-            case 'price':
-                return 'getMoney';
-            case 'currency':
-                return 'getCurrency';
-            case 'prepaid':
-                return 'getQuantity';
-            case 'unit':
-                return 'getUnit';
-            case 'time':
-                return 'getTime';
-        }
-
-        return null;
+        return $this->prepareMethods[$key] ?? null;
     }
 
     public function getEntityClass(string $entity)
@@ -277,31 +275,29 @@ class Factory
         return implode(' ', $values);
     }
 
+
+    private $uniqueKeys = [
+        'customer'  => ['login'],
+        'type'      => ['name'],
+        'plan'      => ['name', 'seller'],
+        'sale'      => [],
+        'action'    => [],
+        'price'     => [],
+        'target'    => ['type', 'name'],
+        'money'     => ['amount', 'currency'],
+        'time'      => ['time'],
+        'unit'      => ['name'],
+        'quantity'  => ['quantity', 'unit'],
+    ];
+
     public function getEntityUniqueKeys(string $entity): array
     {
-        switch ($entity) {
-            case 'customer':
-                return ['login'];
-            case 'type':
-                return ['name'];
-            case 'plan':
-                return ['name', 'seller'];
-            case 'sale':
-                return [];
-            case 'price':
-                return [];
-            case 'target':
-                return ['type', 'name'];
-            case 'money':
-                return ['amount', 'currency'];
-            case 'time':
-                return ['time'];
-            case 'unit':
-                return ['name'];
-            case 'quantity':
-                return ['quantity', 'unit'];
+        $keys = $this->uniqueKeys[$entity] ?? null;
+
+        if (is_null($keys)) {
+            throw new UnknownEntityException($entity);
         }
 
-        throw new UnknownEntityException($entity);
+        return $keys;
     }
 }

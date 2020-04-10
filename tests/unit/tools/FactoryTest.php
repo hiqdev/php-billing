@@ -26,6 +26,8 @@ use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleFactory;
 use hiqdev\php\units\Unit;
+use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\ActionFactory;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,6 +47,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     private $saleId = 'sale-id';
 
+    private $actionId = 'action-id';
+
     private $priceId = 'price-id';
     private $priceSum = '11.99';
 
@@ -58,6 +62,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'plan'      => new PlanFactory(),
             'sale'      => new SaleFactory(),
             'price'     => new PriceFactory([], SinglePrice::class),
+            'action'    => new ActionFactory(),
             'target'    => new TargetFactory(),
             'customer'  => new CustomerFactory(),
         ]);
@@ -132,7 +137,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->testGetCustomer();
         $this->testGetPlan();
-
         $s1 = $this->factory->get('sale', [
             'id' => $this->saleId,
             'customer' => $this->user,
@@ -150,6 +154,35 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->time, $s1->getTime()->format('c'));
         $this->assertSame($this->targetId, $s1->getTarget()->getId());
         $this->assertSame($this->planId, $s1->getPlan()->getId());
+        $this->assertSame($s1, $s2);
+        $this->assertSame($s1, $s3);
+        $this->assertSame($s1, $s4);
+        $this->assertSame($s1, $s5);
+    }
+
+    public function testGetAction()
+    {
+        $this->testGetSale();
+        $s1 = $this->factory->get('action', [
+            'id' => $this->actionId,
+            'type' => $this->type,
+            'target' => $this->targetId,
+            'customer' => $this->user,
+            'quantity' => $this->quantity . ' ' . $this->unit,
+            'sale' => $this->saleId,
+            'time' => $this->time,
+        ]);
+        $s2 = $this->factory->get('action', ['id' => $this->actionId, 'target' => $this->targetId]);
+        $s3 = $this->factory->get('action', ['id' => $this->actionId]);
+        $s4 = $this->factory->get('action', $this->actionId);
+        $s5 = $this->factory->find('action', [$this->actionId]);
+        $this->assertInstanceOf(Action::class, $s1);
+        $this->assertSame($this->actionId, $s1->getId());
+        $this->assertSame($this->user, $s1->getCustomer()->getLogin());
+        $this->assertSame($this->time, $s1->getTime()->format('c'));
+        $this->assertSame($this->type, $s1->getType()->getName());
+        $this->assertSame($this->targetId, $s1->getTarget()->getId());
+        $this->assertSame($this->saleId, $s1->getSale()->getId());
         $this->assertSame($s1, $s2);
         $this->assertSame($s1, $s3);
         $this->assertSame($s1, $s4);
