@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tools;
 
+use DateTimeImmutable;
 use Money\Currency;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
@@ -93,6 +94,16 @@ class Factory
     public function getType($data)
     {
         return $this->get('type', $data);
+    }
+
+    public function getTime($data)
+    {
+        return $this->get('time', $data);
+    }
+
+    public function createTime($data)
+    {
+        return new DateTimeImmutable($data['time']);
     }
 
     public function getTarget($data)
@@ -221,6 +232,8 @@ class Factory
                 return 'getQuantity';
             case 'unit':
                 return 'getUnit';
+            case 'time':
+                return 'getTime';
         }
 
         return null;
@@ -277,6 +290,8 @@ class Factory
                 return ['type', 'name'];
             case 'money':
                 return ['amount', 'currency'];
+            case 'time':
+                return ['time'];
             case 'unit':
                 return ['name'];
             case 'quantity':

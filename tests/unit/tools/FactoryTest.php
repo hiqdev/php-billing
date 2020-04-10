@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\tools;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\tools\Factory;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerFactory;
@@ -26,6 +27,7 @@ use hiqdev\php\units\Unit;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
+    private $time = '2020-02-01T00:00:00+00:00';
     private $unit = 'items';
     private $quantity = '10';
     private $currency = 'USD';
@@ -180,6 +182,21 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $u5 = $this->factory->find('unit', [$this->unit]);
         $this->assertInstanceOf(Unit::class, $u1);
         $this->assertSame($this->unit, $u1->getName());
+        $this->assertSame($u1, $u2);
+        $this->assertSame($u1, $u3);
+        $this->assertSame($u1, $u4);
+        $this->assertSame($u1, $u5);
+    }
+
+    public function testGetTime()
+    {
+        $u1 = $this->factory->get('time', ['time' => $this->time]);
+        $u2 = $this->factory->get('time', ['time' => $this->time]);
+        $u3 = $this->factory->get('time', ['time' => $this->time]);
+        $u4 = $this->factory->get('time', $this->time);
+        $u5 = $this->factory->find('time', [$this->time]);
+        $this->assertInstanceOf(DateTimeImmutable::class, $u1);
+        $this->assertSame($this->time, $u1->format('c'));
         $this->assertSame($u1, $u2);
         $this->assertSame($u1, $u3);
         $this->assertSame($u1, $u4);
