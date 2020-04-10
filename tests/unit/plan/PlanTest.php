@@ -18,6 +18,7 @@ use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\tests\support\plan\CertificatePlan;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Money;

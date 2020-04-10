@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\tests\unit\plan;
+namespace hiqdev\php\billing\tests\support\plan;
 
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\Exception\EntityNotFoundException;
