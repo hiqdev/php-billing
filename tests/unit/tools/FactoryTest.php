@@ -10,13 +10,6 @@
 
 namespace hiqdev\php\billing\tests\unit\tools;
 
-use hiqdev\php\billing\action\Action;
-use hiqdev\php\billing\charge\Generalizer;
-use hiqdev\php\billing\order\Calculator;
-use hiqdev\php\billing\order\CalculatorInterface;
-use hiqdev\php\billing\order\Order;
-use hiqdev\php\billing\order\OrderInterface;
-use hiqdev\php\billing\tests\unit\plan\CertificatePlan;
 use hiqdev\php\billing\tools\Factory;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerFactory;
@@ -33,10 +26,13 @@ use hiqdev\php\billing\price\SinglePrice;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     private $unit = 'items';
+    private $quantity = '10';
     private $currency = 'USD';
 
     private $user = 'user';
     private $reseller = 'reseller';
+
+    private $planId = 'plan-id';
     private $plan = 'plan';
 
     private $type = 'type';
@@ -70,9 +66,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->user, $c1->getLogin());
         $this->assertSame($this->reseller, $c1->getSeller()->getLogin());
         $this->assertSame($c1, $c2);
-        $this->assertSame($c2, $c3);
-        $this->assertSame($c3, $c4);
-        $this->assertSame($c4, $c5);
+        $this->assertSame($c1, $c3);
+        $this->assertSame($c1, $c4);
+        $this->assertSame($c1, $c5);
     }
 
     public function testGetType()
@@ -109,18 +105,19 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPlan()
     {
-        $p1 = $this->factory->get('plan', ['name' => $this->plan, 'seller' => $this->reseller]);
+        $str = $this->plan . ' ' . $this->reseller;
+        $p1 = $this->factory->get('plan', ['id' => $this->planId, 'name' => $this->plan, 'seller' => $this->reseller]);
         $p2 = $this->factory->get('plan', ['name' => $this->plan, 'seller' => $this->reseller]);
-        $p3 = $this->factory->get('plan', ['name' => $this->plan]);
-        $p4 = $this->factory->get('plan', $this->plan);
-        $p5 = $this->factory->find('plan', [$this->plan]);
+        $p3 = $this->factory->get('plan', ['id' => $this->planId]);
+        $p4 = $this->factory->get('plan', $str);
+        $p5 = $this->factory->find('plan', [$str]);
         $this->assertInstanceOf(Plan::class, $p1);
         $this->assertSame($this->plan, $p1->getName());
         $this->assertSame($this->reseller, $p1->getSeller()->getLogin());
         $this->assertSame($p1, $p2);
-        $this->assertSame($p2, $p3);
-        $this->assertSame($p3, $p4);
-        $this->assertSame($p4, $p5);
+        $this->assertSame($p1, $p3);
+        $this->assertSame($p1, $p4);
+        $this->assertSame($p1, $p5);
     }
 
     public function testGetPrice()
@@ -147,5 +144,29 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($p1, $p3);
         $this->assertSame($p1, $p4);
         $this->assertSame($p1, $p5);
+    }
+
+    public function testGetMoney()
+    {
+        $str = $this->priceSum . ' ' . $this->currency;
+        $m1 = $this->factory->get('money', ['amount' => $this->priceSum, 'currency' => $this->currency]);
+        $m2 = $this->factory->get('money', $str);
+        $m3 = $this->factory->find('money', [$str]);
+        $this->assertEquals($this->priceSum*100, $m1->getAmount());
+        $this->assertSame($this->currency, $m1->getCurrency()->getCode());
+        $this->assertSame($m1, $m2);
+        $this->assertSame($m1, $m3);
+    }
+
+    public function testGetQuantity()
+    {
+        $str = $this->quantity . ' ' . $this->unit;
+        $m1 = $this->factory->get('quantity', ['quantity' => $this->quantity, 'unit' => $this->unit]);
+        $m2 = $this->factory->get('quantity', $str);
+        $m3 = $this->factory->find('quantity', [$str]);
+        $this->assertSame($this->quantity, $m1->getQuantity());
+        $this->assertSame($this->unit, $m1->getUnit()->getName());
+        $this->assertSame($m1, $m2);
+        $this->assertSame($m1, $m3);
     }
 }

@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\tools;
 
-use Money\Money;
 use Money\Currency;
 use hiqdev\php\units\Quantity;
 use Money\Parser\DecimalMoneyParser;
@@ -37,14 +36,22 @@ class Factory
 
     public function getMoney($data)
     {
-        if (is_array($data)) {
-            $sum = $data['sum'];
-            $currency = $data['currency'];
-        } else {
-            [$sum, $currency] = explode(' ', $data);
-        }
+        return $this->get('money', $data);
+    }
 
-        return $this->moneyParser->parse($sum, $currency);
+    public function parseMoney($str)
+    {
+        [$amount, $currency] = explode(' ', $str);
+
+        return [
+            'amount' => $amount,
+            'currency' => $currency,
+        ];
+    }
+
+    public function createMoney($data)
+    {
+        return $this->moneyParser->parse($data['amount'], $data['currency']);
     }
 
     public function getCurrency($data)
@@ -54,10 +61,24 @@ class Factory
 
     public function getQuantity($data)
     {
-        [$quantity, $unit] = explode(' ', $data);
-
-        return Quantity::create($unit, $quantity);
+        return $this->get('quantity', $data);
     }
+
+    public function parseQuantity($str)
+    {
+        [$quantity, $unit] = explode(' ', $str);
+
+        return [
+            'quantity' => $quantity,
+            'unit' => $unit,
+        ];
+    }
+
+    public function createQuantity($data)
+    {
+        return Quantity::create($data['unit'], $data['quantity']);
+    }
+
 
     public function getType($data)
     {
@@ -82,8 +103,9 @@ class Factory
     public function get(string $entity, $data)
     {
         if (is_scalar($data)) {
-            $data = [$this->getEntityKey($entity) => $data];
+            $data = $this->parse($entity, $data);
         }
+
         $keys = $this->extractKeys($entity, $data);
 
         $res = $this->find($entity, $keys) ?: $this->create($entity, $data);
@@ -93,6 +115,23 @@ class Factory
         }
 
         return $res;
+    }
+
+    public function parse(string $entity, $str)
+    {
+        $method = $this->getMethod($entity, 'parse');
+
+        return $method ? $this->{$method}($str) : $this->parseByUnique($entity, $str);
+    }
+
+    public function parseByUnique(string $entity, $str)
+    {
+        $keys = $this->getEntityUniqueKeys($entity);
+        if (count($keys) === 1) {
+            return [reset($keys) => $str];
+        }
+
+        return ['id' => $str];
     }
 
     public function find(string $entity, array $keys)
@@ -108,6 +147,11 @@ class Factory
 
     public function create(string $entity, $data)
     {
+        $method = $this->getMethod($entity, 'create');
+        if ($method) {
+            return $this->{$method}($data);
+        }
+
         if (empty($this->factories[$entity])) {
             throw new FactoryNotFoundException($entity);
         }
@@ -141,11 +185,15 @@ class Factory
         return $method ? $this->{$method}($value) : $value;
     }
 
+    private function getMethod(string $entity, string $op)
+    {
+        $method = $op . ucfirst($entity);
+
+        return method_exists($this, $method) ? $method : null;
+    }
+
     private function getPrepareMethod(string $entity, string $key)
     {
-        if ($key === 'seller') {
-            return 'getCustomer';
-        }
         switch ($key) {
             case 'seller':
                 return 'getCustomer';
@@ -179,31 +227,46 @@ class Factory
     public function extractKeys(string $entity, $data)
     {
         $id = $data['id'] ?? null;
-        $key = $this->extractKey($entity, $data);
+        $unique = $this->extractUnique($entity, $data);
 
-        return array_filter(['id' => $id, 'key' => $key]);
+        return array_filter(['id' => $id, 'unique' => $unique]);
     }
 
-    public function extractKey(string $entity, $data)
+    public function extractUnique(string $entity, $data)
     {
-        $key = $this->getEntityKey($entity);
+        $keys = $this->getEntityUniqueKeys($entity);
+        if (empty($keys)) {
+            return null;
+        }
 
-        return $data[$key] ?? null;
+        $values = [];
+        foreach ($keys as $key) {
+            if (empty($data[$key])) {
+                return null;
+            }
+            $values[$key] = $data[$key];
+        }
+
+        return implode(' ', $values);
     }
 
-    public function getEntityKey(string $entity): string
+    public function getEntityUniqueKeys(string $entity): array
     {
         switch ($entity) {
             case 'customer':
-                return 'login';
+                return ['login'];
             case 'type':
-                return 'name';
+                return ['name'];
             case 'plan':
-                return 'name';
+                return ['name', 'seller'];
             case 'price':
-                return 'id';
+                return [];
             case 'target':
-                return 'id';
+                return ['type', 'name'];
+            case 'money':
+                return ['amount', 'currency'];
+            case 'quantity':
+                return ['quantity', 'unit'];
         }
 
         throw new UnknownEntityException($entity);
