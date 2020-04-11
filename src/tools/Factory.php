@@ -239,19 +239,20 @@ class Factory
     }
 
     private $prepareMethods = [
-        'seller'    => 'getCustomer',
+        'charge'    => 'getCharge',
+        'currency'  => 'getCurrency',
         'customer'  => 'getCustomer',
         'plan'      => 'getPlan',
+        'prepaid'   => 'getQuantity',
+        'price'     => 'getMoney',
+        'quantity'  => 'getQuantity',
         'sale'      => 'getSale',
-        'type'      => 'getType',
+        'seller'    => 'getCustomer',
         'target'    => 'getTarget',
         'targets'   => 'getTargets',
-        'price'     => 'getMoney',
-        'currency'  => 'getCurrency',
-        'prepaid'   => 'getQuantity',
-        'quantity'  => 'getQuantity',
-        'unit'      => 'getUnit',
         'time'      => 'getTime',
+        'type'      => 'getType',
+        'unit'      => 'getUnit',
     ];
 
     private function getPrepareMethod(string $entity, string $key)
@@ -297,18 +298,18 @@ class Factory
 
 
     private $uniqueKeys = [
-        'customer'  => ['login'],
-        'type'      => ['name'],
-        'plan'      => ['name', 'seller'],
-        'sale'      => [],
         'action'    => [],
-        'price'     => [],
-        'target'    => ['type', 'name'],
-        'targets'   => [],
+        'customer'  => ['login'],
         'money'     => ['amount', 'currency'],
-        'time'      => ['time'],
-        'unit'      => ['name'],
+        'plan'      => ['name', 'seller'],
+        'price'     => [],
         'quantity'  => ['quantity', 'unit'],
+        'sale'      => [],
+        'targets'   => [],
+        'target'    => ['type', 'name'],
+        'time'      => ['time'],
+        'type'      => ['name'],
+        'unit'      => ['name'],
     ];
 
     public function getEntityUniqueKeys(string $entity): array
