@@ -60,5 +60,11 @@ class Billing implements BillingInterface
 
     public function perform(OrderInterface $order): array
     {
+        $bills = $this->calculate($order);
+        foreach ($bills as $bill) {
+            $this->billRepository->save($bill);
+        }
+
+        return $bills;
     }
 }

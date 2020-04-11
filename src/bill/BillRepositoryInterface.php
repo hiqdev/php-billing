@@ -35,4 +35,10 @@ interface BillRepositoryInterface
      * @return BillInterface[] array
      */
     public function findByIds(array $ids): array;
+
+    /**
+     * Save bill to storage.
+     * @return string|int|null
+     */
+    public function save(BillInterface $bill);
 }
