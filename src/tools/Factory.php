@@ -17,6 +17,7 @@ use hiqdev\php\units\Unit;
 use Money\Parser\DecimalMoneyParser;
 use Money\Currencies\ISOCurrencies;
 use hiqdev\php\billing\Exception\UnknownEntityException;
+use hiqdev\php\billing\target\TargetCollection;
 
 /**
  * Generalized entity factory.
@@ -105,6 +106,21 @@ class Factory
     public function createTime($data)
     {
         return new DateTimeImmutable($data['time']);
+    }
+
+    public function getTargets($data)
+    {
+        return $this->get('targets', $data);
+    }
+
+    public function createTargets($data)
+    {
+        $targets = [];
+        foreach ($data as $one) {
+            $targets[] = $this->getTarget($one);
+        }
+
+        return new TargetCollection($targets);
     }
 
     public function getTarget($data)
@@ -207,6 +223,9 @@ class Factory
 
     public function prepareValue($entity, $key, $value)
     {
+        if (is_object($value)) {
+            return $value;
+        }
         $method = $this->getPrepareMethod($entity, $key);
 
         return $method ? $this->{$method}($value) : $value;
@@ -226,6 +245,7 @@ class Factory
         'sale'      => 'getSale',
         'type'      => 'getType',
         'target'    => 'getTarget',
+        'targets'   => 'getTargets',
         'price'     => 'getMoney',
         'currency'  => 'getCurrency',
         'prepaid'   => 'getQuantity',
@@ -284,6 +304,7 @@ class Factory
         'action'    => [],
         'price'     => [],
         'target'    => ['type', 'name'],
+        'targets'   => [],
         'money'     => ['amount', 'currency'],
         'time'      => ['time'],
         'unit'      => ['name'],
