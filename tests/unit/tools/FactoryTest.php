@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\tests\unit\tools;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\Sale;
@@ -24,8 +25,11 @@ use hiqdev\php\units\Unit;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     private $time = '2020-02-01T00:00:00+00:00';
-    private $unit = 'items';
+
     private $quantity = '10';
+    private $unit = 'items';
+
+    private $sum = '11.99';
     private $currency = 'USD';
 
     private $user = 'user';
@@ -39,10 +43,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     private $saleId = 'sale-id';
 
+    private $billId = 'bill-id';
+
     private $actionId = 'action-id';
 
     private $priceId = 'price-id';
-    private $priceSum = '11.99';
 
     private $target = 'target';
     private $targetId = 'target-id';
@@ -144,6 +149,39 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($s1, $s5);
     }
 
+    public function testGetBill()
+    {
+        $this->testGetSale();
+        $s1 = $this->factory->get('bill', [
+            'id' => $this->billId,
+            'type' => $this->type,
+            'customer' => $this->user,
+            'target' => $this->targetId,
+            'sum' => $this->sum . ' ' . $this->currency,
+            'quantity' => $this->quantity . ' ' . $this->unit,
+            'plan' => $this->planId,
+            'time' => $this->time,
+        ]);
+        $s2 = $this->factory->get('bill', ['id' => $this->billId, 'target' => $this->targetId]);
+        $s3 = $this->factory->get('bill', ['id' => $this->billId]);
+        $s4 = $this->factory->get('bill', $this->billId);
+        $s5 = $this->factory->find('bill', [$this->billId]);
+        $this->assertInstanceOf(Bill::class, $s1);
+        $this->assertSame($this->billId, $s1->getId());
+        $this->assertSame($this->user, $s1->getCustomer()->getLogin());
+        $this->assertSame($this->time, $s1->getTime()->format('c'));
+        $this->assertSame($this->targetId, $s1->getTarget()->getId());
+        $this->assertSame($this->planId, $s1->getPlan()->getId());
+        $this->assertSame($this->quantity, $s1->getQuantity()->getQuantity());
+        $this->assertSame($this->unit, $s1->getQuantity()->getUnit()->getName());
+        $this->assertEquals($this->sum*100, $s1->getSum()->getAmount());
+        $this->assertSame($this->currency, $s1->getSum()->getCurrency()->getCode());
+        $this->assertSame($s1, $s2);
+        $this->assertSame($s1, $s3);
+        $this->assertSame($s1, $s4);
+        $this->assertSame($s1, $s5);
+    }
+
     public function testGetAction()
     {
         $this->testGetSale();
@@ -179,7 +217,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'id' => $this->priceId,
             'type' => $this->type,
             'target' => $this->targetId,
-            'price' => $this->priceSum . ' ' . $this->currency,
+            'price' => $this->sum . ' ' . $this->currency,
             'prepaid' => '0 ' . $this->unit,
             'currency' => $this->currency,
         ]);
@@ -192,7 +230,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->type, $p1->getType()->getName());
         $this->assertSame($this->targetId, $p1->getTarget()->getId());
         $this->assertSame($this->unit, $p1->getPrepaid()->getUnit()->getName());
-        $this->assertEquals($this->priceSum*100, $p1->getPrice()->getAmount());
+        $this->assertEquals($this->sum*100, $p1->getPrice()->getAmount());
         $this->assertSame($p1, $p2);
         $this->assertSame($p1, $p3);
         $this->assertSame($p1, $p4);
@@ -201,11 +239,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMoney()
     {
-        $str = $this->priceSum . ' ' . $this->currency;
-        $m1 = $this->factory->get('money', ['amount' => $this->priceSum, 'currency' => $this->currency]);
+        $str = $this->sum . ' ' . $this->currency;
+        $m1 = $this->factory->get('money', ['amount' => $this->sum, 'currency' => $this->currency]);
         $m2 = $this->factory->get('money', $str);
         $m3 = $this->factory->find('money', [$str]);
-        $this->assertEquals($this->priceSum*100, $m1->getAmount());
+        $this->assertEquals($this->sum*100, $m1->getAmount());
         $this->assertSame($this->currency, $m1->getCurrency()->getCode());
         $this->assertSame($m1, $m2);
         $this->assertSame($m1, $m3);

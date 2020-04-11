@@ -239,6 +239,7 @@ class Factory
     }
 
     private $prepareMethods = [
+        'bill'      => 'getBill',
         'charge'    => 'getCharge',
         'currency'  => 'getCurrency',
         'customer'  => 'getCustomer',
@@ -248,6 +249,7 @@ class Factory
         'quantity'  => 'getQuantity',
         'sale'      => 'getSale',
         'seller'    => 'getCustomer',
+        'sum'       => 'getMoney',
         'target'    => 'getTarget',
         'targets'   => 'getTargets',
         'time'      => 'getTime',
@@ -299,6 +301,7 @@ class Factory
 
     private $uniqueKeys = [
         'action'    => [],
+        'bill'      => [],
         'customer'  => ['login'],
         'money'     => ['amount', 'currency'],
         'plan'      => ['name', 'seller'],

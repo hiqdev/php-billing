@@ -19,6 +19,7 @@ use hiqdev\php\billing\sale\SaleFactory;
 use hiqdev\php\billing\target\TargetFactory;
 use hiqdev\php\billing\tools\Factory;
 use hiqdev\php\billing\type\TypeFactory;
+use hiqdev\php\billing\bill\BillFactory;
 
 class SimpleFactory extends Factory
 {
@@ -31,6 +32,7 @@ class SimpleFactory extends Factory
     {
         return [
             'action'    => new ActionFactory(),
+            'bill'      => new BillFactory(),
             'customer'  => new CustomerFactory(),
             'plan'      => new PlanFactory(),
             'price'     => new PriceFactory([], SinglePrice::class),
