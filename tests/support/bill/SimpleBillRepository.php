@@ -49,7 +49,7 @@ class SimpleBillRepository implements BillRepositoryInterface
         return $id;
     }
 
-    public function findByTarget(TargetInterface $target)
+    public function findByUniqueness(BillInterface $bill)
     {
         return $this->bills;
     }

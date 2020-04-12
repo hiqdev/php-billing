@@ -37,6 +37,12 @@ interface BillRepositoryInterface
     public function findByIds(array $ids): array;
 
     /**
+     * Finds bills by unique fields.
+     * @return BillInterface[] array
+     */
+    public function findByUniqueness(BillInterface $bill): array;
+
+    /**
      * Save bill to storage.
      * @return string|int|null
      */
