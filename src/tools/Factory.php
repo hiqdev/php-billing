@@ -43,6 +43,16 @@ class Factory
         return $this->get('money', $data);
     }
 
+    public function getSums($data)
+    {
+        $res = [];
+        foreach ($data as $key => $value) {
+            $res[$key] = $value*100;
+        }
+
+        return $res;
+    }
+
     public function parseMoney($str)
     {
         [$amount, $currency] = explode(' ', $str);
@@ -250,6 +260,7 @@ class Factory
         'sale'      => 'getSale',
         'seller'    => 'getCustomer',
         'sum'       => 'getMoney',
+        'sums'      => 'getSums',
         'target'    => 'getTarget',
         'targets'   => 'getTargets',
         'time'      => 'getTime',
