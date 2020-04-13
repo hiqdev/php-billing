@@ -111,9 +111,9 @@ class Plan implements PlanInterface
     }
 
     /**
-     * @return PriceInterface[]
+     * @return null|PriceInterface[]
      */
-    public function getPrices()
+    public function getPrices(): ?array
     {
         return $this->prices;
     }

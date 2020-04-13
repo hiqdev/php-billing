@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\tools;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
-use hiqdev\php\billing\charge\GeneralizerInterface;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

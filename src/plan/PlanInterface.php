@@ -10,8 +10,7 @@
 
 namespace hiqdev\php\billing\plan;
 
-use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\price\PriceInterface;
 
 /**
  * Plan Interface.
@@ -30,4 +29,9 @@ interface PlanInterface
      * @return int|string
      */
     public function getUniqueId();
+
+    /**
+     * @return PriceInterface[]
+     */
+    public function getPrices(): ?array;
 }
