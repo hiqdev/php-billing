@@ -177,14 +177,18 @@ class Factory
         return $method ? $this->{$method}($str) : $this->parseByUnique($entity, $str);
     }
 
-    public function parseByUnique(string $entity, $str)
+    public function parseByUnique(string $entity, $str, $delimiter = ':')
     {
         $keys = $this->getEntityUniqueKeys($entity);
         if (count($keys) === 1) {
             return [reset($keys) => $str];
         }
+        $parts = explode($delimiter, $str, count($keys));
+        if (count($parts) !== count($keys)) {
+            return ['id' => $str];
+        }
 
-        return ['id' => $str];
+        return array_combine($keys, $parts);
     }
 
     public function find(string $entity, array $keys)

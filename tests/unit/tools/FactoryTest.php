@@ -24,6 +24,11 @@ use hiqdev\php\units\Unit;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
+    private $type = 'type';
+    private $typeId = 'type-id';
+
+    private $name = 'name';
+
     private $time = '2020-02-01T00:00:00+00:00';
 
     private $quantity = '10';
@@ -37,9 +42,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     private $planId = 'plan-id';
     private $plan = 'plan';
-
-    private $type = 'type';
-    private $typeId = 'type-id';
 
     private $saleId = 'sale-id';
 
@@ -91,13 +93,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTarget()
     {
-        $t1 = $this->factory->get('target', ['id' => $this->targetId, 'name' => $this->target, 'type' => 'simple']);
-        $t2 = $this->factory->get('target', ['id' => $this->targetId, 'name' => $this->target, 'type' => 'simple']);
+        $t1 = $this->factory->get('target', ['id' => $this->targetId, 'name' => $this->name, 'type' => $this->type]);
+        $t2 = $this->factory->get('target', ['name' => $this->name, 'type' => $this->type]);
         $t3 = $this->factory->get('target', ['id' => $this->targetId]);
         $t4 = $this->factory->get('target', $this->targetId);
-        $t5 = $this->factory->find('target', [$this->targetId]);
+        $t5 = $this->factory->get('target', $this->type . ':' . $this->name);
         $this->assertInstanceOf(Target::class, $t1);
-        $this->assertSame($this->target, $t1->getName());
+        $this->assertSame($this->name, $t1->getName());
+        $this->assertSame($this->type, $t1->getType()->getName());
         $this->assertSame($this->targetId, $t1->getId());
         $this->assertSame($t1, $t2);
         $this->assertSame($t1, $t3);
