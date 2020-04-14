@@ -30,4 +30,8 @@ class BillCreationDto
     public $target;
 
     public $plan;
+
+    public $charges;
+
+    public $state;
 }
