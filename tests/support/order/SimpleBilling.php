@@ -11,47 +11,32 @@
 namespace hiqdev\php\billing\tests\support\order;
 
 use hiqdev\php\billing\bill\BillRepositoryInterface;
-use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Billing;
-use hiqdev\php\billing\order\BillingInterface;
-use hiqdev\php\billing\order\Calculator;
-use hiqdev\php\billing\order\OrderInterface;
-use hiqdev\php\billing\plan\PlanInterface;
-use hiqdev\php\billing\sale\SaleInterface;
+use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\tests\support\bill\SimpleBillRepository;
-use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
-use hiqdev\php\billing\tests\support\sale\SimpleSaleRepository;
 use hiqdev\php\billing\tools\Aggregator;
+use hiqdev\php\billing\tools\AggregatorInterface;
 use hiqdev\php\billing\tools\Merger;
+use hiqdev\php\billing\tools\MergerInterface;
 
-class SimpleBilling implements BillingInterface
+class SimpleBilling extends Billing
 {
-    private $billing;
+    public function __construct(
+        CalculatorInterface $calculator = null,
+        AggregatorInterface $aggregator = null,
+        MergerInterface $merger = null,
+        $repository = null
+    ) {
+        $calculator = $calculator ?: new SimpleCalculator();
+        $aggregator = $aggregator ?: new Aggregator($calculator->getGeneralizer());
+        $merger = $merger ?: new Merger();
+        $repository = $repository ?: new SimpleBillRepository();
 
-    private $billRepository;
-
-    public function __construct(SaleInterface $sale = null, PlanInterface $plan = null)
-    {
-        $saleRepo = $sale ? new SimpleSaleRepository($sale) : null;
-        $planRepo = $plan ? new SimplePlanRepository($plan) : null;
-        $this->billRepository = $plan ? new SimpleBillRepository() : null;
-        $calculator = new Calculator(new Generalizer(), $saleRepo, $planRepo);
-        $aggregator = new Aggregator(new Generalizer());
-        $this->billing = new Billing($calculator, $aggregator, new Merger(), $this->billRepository);
-    }
-
-    public function calculate(OrderInterface $order): array
-    {
-        return $this->billing->calculate($order);
-    }
-
-    public function perform(OrderInterface $order): array
-    {
-        return $this->billing->perform($order);
+        parent::__construct($calculator, $aggregator, $merger, $repository);
     }
 
     public function getBillRepository(): BillRepositoryInterface
     {
-        return $this->billRepository;
+        return $this->repository;
     }
 }
