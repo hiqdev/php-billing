@@ -16,31 +16,11 @@ namespace hiqdev\php\billing\bill;
 interface BillRepositoryInterface
 {
     /**
-     * Finds in database ID of given bill.
-     * @param BillInterface $bill
-     * @return string|int|null
-     */
-    public function findId(BillInterface $bill);
-
-    /**
-     * Finds in database IDs of given bills.
-     * @param BillInterface[] $ids
-     * @return array
-     */
-    public function findIds(array $bills): array;
-
-    /**
-     * Finds bills by given ids.
-     * @param int[] $ids
-     * @return BillInterface[] array
-     */
-    public function findByIds(array $ids): array;
-
-    /**
      * Finds bills by unique fields.
-     * @return BillInterface[] array
+     * @param BillInterfacep[] $bills
+     * @return BillInterface[]
      */
-    public function findByUniqueness(BillInterface $bill): array;
+    public function findByUniqueness(array $bills): array;
 
     /**
      * Save bill to storage.

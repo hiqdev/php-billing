@@ -54,8 +54,7 @@ class DbMergingAggregator implements AggregatorInterface
     public function aggregateCharges(array $charges): array
     {
         $bills  = $this->localAggregator->aggregateCharges($charges);
-        $ids    = $this->billRepository->findIds($bills);
-        $fromdb = $this->billRepository->findByIds($ids);
+        $fromdb = $this->billRepository->findByUniqueness($bills);
         $res    = $this->merger->mergeBills(array_merge($bills, $fromdb));
 
         return $res;

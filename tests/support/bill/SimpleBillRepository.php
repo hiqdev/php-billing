@@ -12,21 +12,10 @@ namespace hiqdev\php\billing\tests\support\bill;
 
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
-use hiqdev\php\billing\target\TargetInterface;
 
 class SimpleBillRepository implements BillRepositoryInterface
 {
-    protected $bills;
-
-    public function findId(BillInterface $bill)
-    {
-        throw new \Exception('not implemented');
-    }
-
-    public function findIds(array $bills): array
-    {
-        throw new \Exception('not implemented');
-    }
+    protected $bills = [];
 
     public function findByIds(array $ids): array
     {
@@ -49,8 +38,20 @@ class SimpleBillRepository implements BillRepositoryInterface
         return $id;
     }
 
-    public function findByUniqueness(BillInterface $bill)
+    public function findByUniqueness(array $bills): array
     {
-        return $this->bills;
+        $found = [];
+        foreach ($this->bills as $bill) {
+            foreach ($bills as $one) {
+                if (#!$bill->getType()->equals($one->getType()) ||
+                   !$bill->getTarget()->equals($one->getTarget())
+                ) {
+                    continue;
+                }
+                $found[] = $bill;
+            }
+        }
+
+        return $found;
     }
 }
