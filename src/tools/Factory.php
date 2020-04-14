@@ -184,11 +184,14 @@ class Factory
             return [reset($keys) => $str];
         }
         $parts = explode($delimiter, $str, count($keys));
-        if (count($parts) !== count($keys)) {
-            return ['id' => $str];
+        if (count($parts) === count($keys)) {
+            $res = array_combine($keys, $parts);
+        } else {
+            $res = [];
         }
+        $res['id'] = $str;
 
-        return array_combine($keys, $parts);
+        return $res;
     }
 
     public function find(string $entity, array $keys)
@@ -274,6 +277,9 @@ class Factory
 
     private function getPrepareMethod(string $entity, string $key)
     {
+        if ($entity === 'target' && $key === 'type') {
+            return null;
+        }
         return $this->prepareMethods[$key] ?? null;
     }
 

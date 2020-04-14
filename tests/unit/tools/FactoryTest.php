@@ -51,7 +51,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     private $priceId = 'price-id';
 
-    private $target = 'target';
     private $targetId = 'target-id';
 
     protected function setUp()
@@ -100,12 +99,22 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $t5 = $this->factory->get('target', $this->type . ':' . $this->name);
         $this->assertInstanceOf(Target::class, $t1);
         $this->assertSame($this->name, $t1->getName());
-        $this->assertSame($this->type, $t1->getType()->getName());
+        $this->assertSame($this->type, $t1->getType());
         $this->assertSame($this->targetId, $t1->getId());
         $this->assertSame($t1, $t2);
         $this->assertSame($t1, $t3);
         $this->assertSame($t1, $t4);
         $this->assertSame($t1, $t5);
+    }
+
+    public function testParseTarget()
+    {
+        $id = $this->type . ':' . $this->name;
+        $t1 = $this->factory->get('target', $id);
+        $this->assertInstanceOf(Target::class, $t1);
+        $this->assertSame($this->name, $t1->getName());
+        $this->assertSame($this->type, $t1->getType());
+        $this->assertSame($id, $t1->getId());
     }
 
     public function testGetPlan()
