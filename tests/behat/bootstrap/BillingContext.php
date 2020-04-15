@@ -22,6 +22,14 @@ class BillingContext extends BaseContext
     }
 
     /**
+     * @Given manager :manager
+     */
+    public function manager($manager)
+    {
+        $this->builder->buildManager($manager);
+    }
+
+    /**
      * @Given /^(grouping )?(\S+) tariff plan (\S+)/
      */
     public function plan($grouping, $type, $plan)
