@@ -88,6 +88,9 @@ class FactoryBasedBuilder
 
     public function buildPrice(array $data)
     {
+        if (empty($data['prepaid'])) {
+            $data['prepaid'] = "0 $data[unit]";
+        }
         $this->prices[] = $this->factory->get('price', $data);
     }
 

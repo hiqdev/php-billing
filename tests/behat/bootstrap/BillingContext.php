@@ -43,11 +43,11 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) for target (\S+)/
+     * @Given /price for (\S+) is +(\S+ \S+) per (\S+) for target (\S+)/
      */
-    public function priceWithObject($type, $price, $currency, $unit, $target)
+    public function priceWithObject($type, $price, $unit, $target)
     {
-        return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'target'));
+        return $this->fullPrice(compact('type', 'price', 'unit', 'target'));
     }
 
     /**
@@ -154,7 +154,7 @@ class BillingContext extends BaseContext
         Assert::assertSame($target->getName(), $charge->getTarget()->getName());
         Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
-        Assert::assertSame($quantity, $charge->getUsage()->getQuantity());
+        Assert::assertEquals($quantity, $charge->getUsage()->getQuantity());
         Assert::assertSame($unit, $charge->getUsage()->getUnit()->getName());
     }
 
