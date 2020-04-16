@@ -43,11 +43,11 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /price for (\S+) is +(\S+ \S+) per (\S+) for target (\S+)/
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) for target (\S+)/
      */
-    public function priceWithObject($type, $price, $unit, $target)
+    public function priceWithObject($type, $price, $currency, $unit, $target)
     {
-        return $this->fullPrice(compact('type', 'price', 'unit', 'target'));
+        return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'target'));
     }
 
     /**
@@ -94,8 +94,9 @@ class BillingContext extends BaseContext
     /**
      * @Given /resource consumption for (\S+) is (\d+) (\S+) (\S+) for target (\S+)/
      */
-    public function setConsumption($type, $amount, $unit, $time, $target): void
+    public function setConsumption(string $type, int $amount, string $unit, string $time, string $target): void
     {
+        $this->builder->buildConsumtion($type, $amount, $unit, $time, $target);
     }
 
     /**
