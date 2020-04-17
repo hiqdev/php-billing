@@ -96,17 +96,15 @@ class BillingContext extends BaseContext
      */
     public function setConsumption(string $type, int $amount, string $unit, string $time, string $target): void
     {
-        $this->builder->buildConsumtion($type, $amount, $unit, $time, $target);
+        $this->builder->setConsumption($type, $amount, $unit, $time, $target);
     }
 
     /**
      * @Given /perform billing for time (\S+) for sales/
      */
-    public function performBilling($time)
+    public function performBilling(string $time): void
     {
-        foreach ($this->sales as $sale) {
-            // TODO: perform billing for sales
-        }
+        $this->builder->performBilling($time);
     }
 
     /**
