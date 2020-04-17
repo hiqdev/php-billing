@@ -30,6 +30,14 @@ class BillingContext extends BaseContext
     }
 
     /**
+     * @Given admin :login
+     */
+    public function admin($login)
+    {
+        $this->builder->buildAdmin($login);
+    }
+
+    /**
      * @Given /^(grouping )?(\S+) tariff plan (\S+)/
      */
     public function plan($grouping, $type, $plan)
