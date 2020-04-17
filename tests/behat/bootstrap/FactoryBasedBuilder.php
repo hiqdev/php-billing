@@ -88,6 +88,9 @@ class FactoryBasedBuilder
 
     public function buildPrice(array $data)
     {
+        if (!empty($data['price'])) {
+            $data['price'] = "$data[price] $data[currency]";
+        }
         if (empty($data['prepaid'])) {
             $data['prepaid'] = "0 $data[unit]";
         }

@@ -43,11 +43,11 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /price for (\S+) is +(\S+ \S+) per (\S+) for target (\S+)/
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) for target (\S+)/
      */
-    public function priceWithObject($type, $price, $unit, $target)
+    public function priceWithObject($type, $price, $currency, $unit, $target)
     {
-        return $this->fullPrice(compact('type', 'price', 'unit', 'target'));
+        return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'target'));
     }
 
     /**
