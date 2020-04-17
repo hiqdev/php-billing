@@ -94,8 +94,9 @@ class BillingContext extends BaseContext
     /**
      * @Given /resource consumption for (\S+) is (\d+) (\S+) (\S+) for target (\S+)/
      */
-    public function setConsumption($type, $amount, $unit, $time, $target): void
+    public function setConsumption(string $type, int $amount, string $unit, string $time, string $target): void
     {
+        $this->builder->buildConsumtion($type, $amount, $unit, $time, $target);
     }
 
     /**
