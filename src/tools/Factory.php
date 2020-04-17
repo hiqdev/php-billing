@@ -11,13 +11,13 @@
 namespace hiqdev\php\billing\tools;
 
 use DateTimeImmutable;
-use Money\Currency;
-use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
-use Money\Parser\DecimalMoneyParser;
-use Money\Currencies\ISOCurrencies;
 use hiqdev\php\billing\Exception\UnknownEntityException;
 use hiqdev\php\billing\target\TargetCollection;
+use hiqdev\php\units\Quantity;
+use hiqdev\php\units\Unit;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Parser\DecimalMoneyParser;
 
 /**
  * Generalized entity factory.

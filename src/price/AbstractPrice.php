@@ -11,16 +11,15 @@
 namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\SettableChargeModifierTrait;
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
-use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * Price.

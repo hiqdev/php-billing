@@ -13,10 +13,10 @@ namespace hiqdev\php\billing\charge;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\event\EventAwareTrait;
-use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\billing\type\TypeInterface;
-use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
+use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 

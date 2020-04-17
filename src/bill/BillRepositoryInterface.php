@@ -17,7 +17,7 @@ interface BillRepositoryInterface
 {
     /**
      * Finds bills by unique fields.
-     * @param BillInterfacep[] $bills
+     * @param BillInterface[] $bills
      * @return BillInterface[]
      */
     public function findByUniqueness(array $bills): array;
