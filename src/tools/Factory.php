@@ -15,9 +15,8 @@ use hiqdev\php\billing\Exception\UnknownEntityException;
 use hiqdev\php\billing\target\TargetCollection;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
-use Money\Currencies\ISOCurrencies;
 use Money\Currency;
-use Money\Parser\DecimalMoneyParser;
+use Money\Money;
 
 /**
  * Generalized entity factory.
@@ -30,12 +29,9 @@ class Factory
 
     private $factories = [];
 
-    protected $moneyParser;
-
     public function __construct(array $factories)
     {
         $this->factories = $factories;
-        $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
     }
 
     public function getMoney($data)
@@ -58,14 +54,14 @@ class Factory
         [$amount, $currency] = explode(' ', $str);
 
         return [
-            'amount' => $amount,
+            'amount' => $amount*100,
             'currency' => $currency,
         ];
     }
 
     public function createMoney($data)
     {
-        return $this->moneyParser->parse($data['amount'], $data['currency']);
+        return new Money($data['amount'], new Currency(strtoupper($data['currency'])));
     }
 
     public function getCurrency($data)
@@ -115,7 +111,11 @@ class Factory
 
     public function createTime($data)
     {
-        return new DateTimeImmutable($data['time']);
+        $str = $data['date'];
+        if (!empty($data['timezone'])) {
+            $str .= ' ' . $data['timezone'];
+        }
+        return new DateTimeImmutable($str);
     }
 
     public function getTargets($data)
@@ -331,7 +331,7 @@ class Factory
         'sale'      => [],
         'targets'   => [],
         'target'    => ['type', 'name'],
-        'time'      => ['time'],
+        'time'      => ['date'],
         'type'      => ['name'],
         'unit'      => ['name'],
     ];
