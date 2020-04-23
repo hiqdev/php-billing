@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\plan;
 
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\price\PriceInterface;
 
 /**
@@ -17,7 +18,7 @@ use hiqdev\php\billing\price\PriceInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface PlanInterface
+interface PlanInterface extends EntityInterface
 {
     /**
      * @return int|string

@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\sale;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 
@@ -20,7 +21,7 @@ use hiqdev\php\billing\target\TargetInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface SaleInterface
+interface SaleInterface extends EntityInterface
 {
     /**
      * @return int|string|null

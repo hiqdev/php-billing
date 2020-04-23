@@ -61,4 +61,25 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->money, $this->price->calculatePrice(Quantity::byte(1)));
         $this->assertEquals($this->money, $this->price->calculatePrice(Quantity::megabyte(1)));
     }
+
+    public function testJsonSerialize()
+    {
+        $this->assertEquals([
+            'type' => [
+                'name' => 'server_traf',
+            ],
+            'prepaid' => [
+                'unit' => 'gigabyte',
+                'quantity' => 10,
+            ],
+            'price' => [
+                'amount' => '15',
+                'currency' => 'USD',
+            ],
+            'target' => [
+                'id' => '1',
+                'type' => 'server',
+            ],
+        ], json_decode(json_encode($this->price), true));
+    }
 }

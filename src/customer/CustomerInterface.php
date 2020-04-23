@@ -10,19 +10,15 @@
 
 namespace hiqdev\php\billing\customer;
 
+use hiqdev\php\billing\EntityInterface;
+
 /**
  * Customer interface.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface CustomerInterface
+interface CustomerInterface extends EntityInterface
 {
-    /**
-     * Get ID.
-     * @return int|string
-     */
-    public function getId();
-
     /**
      * Globally unique ID: e.g. ID or login.
      * @return int|string

@@ -86,9 +86,6 @@ class Type implements TypeInterface
 
     public function jsonSerialize()
     {
-        return array_filter([
-            'name' => $this->name,
-            'id' => $this->id,
-        ]);
+        return array_filter(get_object_vars($this));
     }
 }

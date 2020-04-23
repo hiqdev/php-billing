@@ -11,7 +11,7 @@
 namespace hiqdev\php\billing\price;
 
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
@@ -26,7 +26,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface PriceInterface
+interface PriceInterface extends EntityInterface
 {
     /**
      * Calculate sum for given quantity.
