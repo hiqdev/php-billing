@@ -1,10 +1,16 @@
 <?php
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
+
+use hiqdev\php\billing\bill\BillInterface;
 use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
 {
+    protected $bill;
+
+    protected array $charges = [];
+
     /**
      * @Given reseller :reseller
      */
@@ -112,7 +118,7 @@ class BillingContext extends BaseContext
      */
     public function bill($type, $sum, $currency, $quantity, $unit, $target)
     {
-        $bill = $this->builder->findBill([
+        $bill = $this->findBill([
             'type' => $type,
             'target' => $target,
             'sum' => "$sum $currency",
@@ -124,6 +130,15 @@ class BillingContext extends BaseContext
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
         Assert::assertSame($unit, $bill->getQuantity()->getUnit()->getName());
+    }
+
+    public function findBill(array $params): BillInterface
+    {
+        $bills = $this->builder->findBills($params);
+        $this->bill = reset($bills);
+        $this->charges = $this->bill->getCharges();
+
+        return $this->bill;
     }
 
     /**
@@ -144,7 +159,7 @@ class BillingContext extends BaseContext
      */
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target)
     {
-        $charge = $this->builder->getNextCharge();
+        $charge = $this->getNextCharge();
         Assert::assertSame($type, $charge->getType()->getName());
         Assert::assertSame($target, $charge->getTarget()->getType() . ':' . $charge->getTarget()->getName());
         Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
@@ -159,5 +174,13 @@ class BillingContext extends BaseContext
     public function charge($type, $amount, $currency, $quantity, $unit)
     {
         $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
+    }
+
+    public function getNextCharge()
+    {
+        $charge = current($this->charges);
+        next($this->charges);
+
+        return $charge;
     }
 }

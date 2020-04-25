@@ -9,7 +9,6 @@ use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
-use hiqdev\php\billing\bill\BillInterface;
 
 class FactoryBasedBuilder
 {
@@ -24,10 +23,6 @@ class FactoryBasedBuilder
     private $sale;
 
     private $prices = [];
-
-    private $bill;
-
-    private $charges = [];
 
     private $factory;
 
@@ -148,15 +143,6 @@ class FactoryBasedBuilder
         return $repo->findByUniqueness([$bill]);
     }
 
-    public function findBill(array $data): BillInterface
-    {
-        $bills = $this->findBills($data);
-        $this->bill = reset($bills);
-        $this->charges = $this->bill->getCharges();
-
-        return $this->bill;
-    }
-
     public function buildBill(array $data)
     {
         $data['time'] = $data['time'] ?? $this->time;
@@ -176,14 +162,6 @@ class FactoryBasedBuilder
         $repo = $this->getBilling()->getChargeRepository();
 
         return $repo->findByUniqueness($bill);
-    }
-
-    public function getNextCharge()
-    {
-        $charge = current($this->charges);
-        next($this->charges);
-
-        return $charge;
     }
 
     public function buildCharge(array $data)
