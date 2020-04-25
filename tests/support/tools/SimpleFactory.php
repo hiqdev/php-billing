@@ -11,6 +11,8 @@
 namespace hiqdev\php\billing\tests\support\tools;
 
 use hiqdev\php\billing\action\ActionFactory;
+use hiqdev\php\billing\bill\BillFactory;
+use hiqdev\php\billing\charge\ChargeFactory;
 use hiqdev\php\billing\customer\CustomerFactory;
 use hiqdev\php\billing\plan\PlanFactory;
 use hiqdev\php\billing\price\PriceFactory;
@@ -19,7 +21,6 @@ use hiqdev\php\billing\sale\SaleFactory;
 use hiqdev\php\billing\target\TargetFactory;
 use hiqdev\php\billing\tools\Factory;
 use hiqdev\php\billing\type\TypeFactory;
-use hiqdev\php\billing\bill\BillFactory;
 
 class SimpleFactory extends Factory
 {
@@ -33,6 +34,7 @@ class SimpleFactory extends Factory
         return [
             'action'    => new ActionFactory(),
             'bill'      => new BillFactory(),
+            'charge'    => new ChargeFactory(),
             'customer'  => new CustomerFactory(),
             'plan'      => new PlanFactory(),
             'price'     => new PriceFactory([], SinglePrice::class),

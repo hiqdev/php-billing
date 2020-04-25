@@ -69,7 +69,7 @@ class Charge implements ChargeInterface
         TypeInterface       $type,
         TargetInterface     $target,
         ActionInterface     $action,
-        PriceInterface      $price,
+        ?PriceInterface     $price,
         QuantityInterface   $usage,
         Money               $sum,
         BillInterface       $bill = null

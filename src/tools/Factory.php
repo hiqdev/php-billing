@@ -138,6 +138,26 @@ class Factory
         return $this->get('target', $data);
     }
 
+    public function getAction($data)
+    {
+        return $this->get('action', $data);
+    }
+
+    public function getCharges($data)
+    {
+        $res = [];
+        foreach ($data as $key => $row) {
+            $res[$key] = $this->getCharge($row);
+        }
+
+        return $res;
+    }
+
+    public function getCharge($data)
+    {
+        return $this->get('charge', $data);
+    }
+
     public function getPlan($data)
     {
         return $this->get('plan', $data);
@@ -256,8 +276,10 @@ class Factory
     }
 
     private $prepareMethods = [
+        'action'    => 'getAction',
         'bill'      => 'getBill',
         'charge'    => 'getCharge',
+        'charges'   => 'getCharges',
         'currency'  => 'getCurrency',
         'customer'  => 'getCustomer',
         'plan'      => 'getPlan',
@@ -273,6 +295,7 @@ class Factory
         'time'      => 'getTime',
         'type'      => 'getType',
         'unit'      => 'getUnit',
+        'usage'     => 'getQuantity',
     ];
 
     private function getPrepareMethod(string $entity, string $key)
@@ -323,6 +346,7 @@ class Factory
     private $uniqueKeys = [
         'action'    => [],
         'bill'      => [],
+        'charge'    => [],
         'customer'  => ['login'],
         'money'     => ['amount', 'currency'],
         'plan'      => ['name', 'seller'],
