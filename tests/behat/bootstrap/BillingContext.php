@@ -112,7 +112,6 @@ class BillingContext extends BaseContext
      */
     public function bill($type, $sum, $currency, $quantity, $unit, $target)
     {
-        $target = $this->builder->buildTarget($target);
         $bill = $this->builder->findBill([
             'type' => $type,
             'target' => $target,
@@ -120,8 +119,7 @@ class BillingContext extends BaseContext
             'quantity' => "$quantity $unit",
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
-        Assert::assertSame($target->getType(), $bill->getTarget()->getType());
-        Assert::assertSame($target->getName(), $bill->getTarget()->getName());
+        Assert::assertSame($target, $bill->getTarget()->getType() . ':' . $bill->getTarget()->getName());
         Assert::assertEquals($sum*100, $bill->getSum()->getAmount());
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
@@ -146,11 +144,9 @@ class BillingContext extends BaseContext
      */
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target)
     {
-        $target = $this->builder->buildTarget($target);
         $charge = $this->builder->getNextCharge();
         Assert::assertSame($type, $charge->getType()->getName());
-        Assert::assertSame($target->getType(), $charge->getTarget()->getType());
-        Assert::assertSame($target->getName(), $charge->getTarget()->getName());
+        Assert::assertSame($target, $charge->getTarget()->getType() . ':' . $charge->getTarget()->getName());
         Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $charge->getUsage()->getQuantity());

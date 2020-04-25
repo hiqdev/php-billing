@@ -9,6 +9,7 @@ use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
+use hiqdev\php\billing\bill\BillInterface;
 
 class FactoryBasedBuilder
 {
@@ -147,7 +148,7 @@ class FactoryBasedBuilder
         return $repo->findByUniqueness([$bill]);
     }
 
-    public function findBill(array $data)
+    public function findBill(array $data): BillInterface
     {
         $bills = $this->findBills($data);
         $this->bill = reset($bills);
