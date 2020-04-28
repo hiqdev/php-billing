@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
 use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
@@ -176,7 +177,7 @@ class BillingContext extends BaseContext
         $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
     }
 
-    public function getNextCharge()
+    public function getNextCharge(): ChargeInterface
     {
         $charge = current($this->charges);
         next($this->charges);
