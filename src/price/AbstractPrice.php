@@ -29,7 +29,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class AbstractPrice implements PriceInterface, ChargeModifier, EntityInterface
+abstract class AbstractPrice implements PriceInterface, ChargeModifier
 {
     use SettableChargeModifierTrait;
 
