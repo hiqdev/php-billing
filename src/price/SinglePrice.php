@@ -10,12 +10,9 @@
 
 namespace hiqdev\php\billing\price;
 
-use hiqdev\php\billing\charge\ChargeModifier;
-use hiqdev\php\billing\charge\FormulaChargeModifierTrait;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
-use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -24,8 +21,6 @@ use Money\Money;
  *
  * - no charge for quantity less then prepaid
  * - same price for any quantity above prepaid
- *
- * TODO add `$modifier` property instead of FormulaChargeModifierTrait
  *
  * @see PriceInterface
  *
