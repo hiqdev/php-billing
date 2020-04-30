@@ -20,17 +20,22 @@ use hiqdev\php\billing\target\TargetInterface;
 class TargetTest extends \PHPUnit\Framework\TestCase
 {
     protected $id1 = 1;
-
     protected $id2 = 2;
+    protected $idA = 8;
+    protected $idB = 9;
 
     protected function setUp()
     {
         $this->target_ = new Target(Target::ANY,    Target::ANY);
         $this->target1 = new Target($this->id1,     Target::ANY);
         $this->target2 = new Target($this->id2,     Target::ANY);
+        $this->targetA = new Target($this->idA,     Target::ANY, 'A');
+        $this->targetB = new Target($this->idB,     Target::ANY, 'B');
         $this->server_ = new Target(Target::ANY,    'server');
         $this->server1 = new Target($this->id1,     'server');
         $this->server2 = new Target($this->id2,     'server');
+        $this->serverA = new Target($this->idA,     'server', 'A');
+        $this->serverB = new Target($this->idB,     'server', 'B');
         $this->serverN = new Target(Target::NONE,   'server');
         $this->servers = new TargetCollection([$this->server1, $this->server2]);
         $this->domain_ = new Target(Target::ANY,    'domain');
@@ -44,14 +49,32 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     {
     }
 
+    public function testGetFullName()
+    {
+        $this->assertSame('',           $this->target_->getFullName());
+        $this->assertSame('',           $this->target1->getFullName());
+        $this->assertSame('',           $this->target2->getFullName());
+        $this->assertSame(':A',         $this->targetA->getFullName());
+        $this->assertSame(':B',         $this->targetB->getFullName());
+        $this->assertSame('server:',    $this->server_->getFullName());
+        $this->assertSame('server:',    $this->server1->getFullName());
+        $this->assertSame('server:',    $this->server2->getFullName());
+        $this->assertSame('server:A',   $this->serverA->getFullName());
+        $this->assertSame('server:B',   $this->serverB->getFullName());
+    }
+
     public function testGetUniqueId()
     {
         $this->assertSame(':',          $this->target_->getUniqueId());
         $this->assertSame(':1',         $this->target1->getUniqueId());
         $this->assertSame(':2',         $this->target2->getUniqueId());
+        $this->assertSame(':8',         $this->targetA->getUniqueId());
+        $this->assertSame(':9',         $this->targetB->getUniqueId());
         $this->assertSame('server:',    $this->server_->getUniqueId());
         $this->assertSame('server:1',   $this->server1->getUniqueId());
         $this->assertSame('server:2',   $this->server2->getUniqueId());
+        $this->assertSame('server:8',   $this->serverA->getUniqueId());
+        $this->assertSame('server:9',   $this->serverB->getUniqueId());
     }
 
     public function testEquals()

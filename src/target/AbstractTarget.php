@@ -71,6 +71,14 @@ abstract class AbstractTarget implements TargetInterface
         return $this->name;
     }
 
+    public function getFullName(): string
+    {
+        $type = $this->getType();
+        $name = $this->getName();
+
+        return $type === self::ANY && $name === null ? '' : "$type:$name";
+    }
+
     /**
      * @return string
      */
