@@ -160,7 +160,7 @@ class BillingContext extends BaseContext
      */
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target)
     {
-        $charge = $this->getNextCharge();
+        $charge = $this->findCharge($type, $target);
         Assert::assertSame($type, $charge->getType()->getName());
         Assert::assertSame($target, $charge->getTarget()->getType() . ':' . $charge->getTarget()->getName());
         Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
@@ -175,6 +175,19 @@ class BillingContext extends BaseContext
     public function charge($type, $amount, $currency, $quantity, $unit)
     {
         $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
+    }
+
+    public function findCharge($type, $target): ChargeInterface
+    {
+        foreach ($this->charges as $charge) {
+            if ($charge->getType()->getName() !== $type) {
+                continue;
+            }
+            if ($charge->getTarget()->getFullName() !== $target) {
+                continue;
+            }
+            return $charge;
+        }
     }
 
     public function getNextCharge(): ChargeInterface
