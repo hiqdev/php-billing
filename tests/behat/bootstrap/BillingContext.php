@@ -99,11 +99,11 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /resource consumption for (\S+) is (\d+) (\S+) (\S+) for target (\S+)/
+     * @Given /resource consumption for (\S+) is (\d+) (\S+) for target (\S+) at (.+)$/
      */
-    public function setConsumption(string $type, int $amount, string $unit, string $time, string $target): void
+    public function setConsumption(string $type, int $amount, string $unit, string $target, string $time): void
     {
-        $this->builder->setConsumption($type, $amount, $unit, $time, $target);
+        $this->builder->setConsumption($type, $amount, $unit, $target, $time);
     }
 
     /**
