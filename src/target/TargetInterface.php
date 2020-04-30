@@ -56,6 +56,12 @@ interface TargetInterface extends EntityInterface
     public function getName();
 
     /**
+     * Get target full name: `type:name`
+     * @return string
+     */
+    public function getFullName(): string;
+
+    /**
      * Get target unique ID, unique among all targets. Used for comparison.
      * Could be formed like $type:$id.
      * E.g.: client:login, client:1, server:T1, server:9.

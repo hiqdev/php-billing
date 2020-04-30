@@ -126,7 +126,7 @@ class BillingContext extends BaseContext
             'quantity' => "$quantity $unit",
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
-        Assert::assertSame($target, $bill->getTarget()->getType() . ':' . $bill->getTarget()->getName());
+        Assert::assertSame($target, $bill->getTarget()->getFullName());
         Assert::assertEquals($sum*100, $bill->getSum()->getAmount());
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
@@ -162,7 +162,7 @@ class BillingContext extends BaseContext
     {
         $charge = $this->findCharge($type, $target);
         Assert::assertSame($type, $charge->getType()->getName());
-        Assert::assertSame($target, $charge->getTarget()->getType() . ':' . $charge->getTarget()->getName());
+        Assert::assertSame($target, $charge->getTarget()->getFullName());
         Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $charge->getUsage()->getQuantity());

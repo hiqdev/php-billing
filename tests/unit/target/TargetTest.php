@@ -31,6 +31,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->target2 = new Target($this->id2,     Target::ANY);
         $this->targetA = new Target($this->idA,     Target::ANY, 'A');
         $this->targetB = new Target($this->idB,     Target::ANY, 'B');
+        $this->targets = new TargetCollection([$this->target1, $this->target2]);
         $this->server_ = new Target(Target::ANY,    'server');
         $this->server1 = new Target($this->id1,     'server');
         $this->server2 = new Target($this->id2,     'server');
@@ -56,11 +57,13 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('',           $this->target2->getFullName());
         $this->assertSame(':A',         $this->targetA->getFullName());
         $this->assertSame(':B',         $this->targetB->getFullName());
+        $this->assertSame('',           $this->targets->getFullName());
         $this->assertSame('server:',    $this->server_->getFullName());
         $this->assertSame('server:',    $this->server1->getFullName());
         $this->assertSame('server:',    $this->server2->getFullName());
         $this->assertSame('server:A',   $this->serverA->getFullName());
         $this->assertSame('server:B',   $this->serverB->getFullName());
+        $this->assertSame('server:',    $this->servers->getFullName());
     }
 
     public function testGetUniqueId()
@@ -70,11 +73,13 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(':2',         $this->target2->getUniqueId());
         $this->assertSame(':8',         $this->targetA->getUniqueId());
         $this->assertSame(':9',         $this->targetB->getUniqueId());
+        $this->assertSame(':1',         $this->targets->getUniqueId());
         $this->assertSame('server:',    $this->server_->getUniqueId());
         $this->assertSame('server:1',   $this->server1->getUniqueId());
         $this->assertSame('server:2',   $this->server2->getUniqueId());
         $this->assertSame('server:8',   $this->serverA->getUniqueId());
         $this->assertSame('server:9',   $this->serverB->getUniqueId());
+        $this->assertSame('server:1',   $this->servers->getUniqueId());
     }
 
     public function testEquals()

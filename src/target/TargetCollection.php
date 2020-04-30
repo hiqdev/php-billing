@@ -100,12 +100,17 @@ class TargetCollection implements TargetInterface
         return $this->targets;
     }
 
+    public function getFullName(): string
+    {
+        return $this->getTarget()->getFullName();
+    }
+
     /**
      * @return string
      */
     public function getUniqueId()
     {
-        return implode(':', array_filter([$this->getType(), $this->getId()]));
+        return $this->getTarget()->getUniqueId();
     }
 
     public function equals(TargetInterface $other): bool
