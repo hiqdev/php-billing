@@ -15,6 +15,7 @@ use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\target\Target;
@@ -45,6 +46,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     private $saleId = 'sale-id';
 
+    private $chargeId = 'charge-id';
+
     private $billId = 'bill-id';
 
     private $actionId = 'action-id';
@@ -52,6 +55,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     private $priceId = 'price-id';
 
     private $targetId = 'target-id';
+    private $target = 'type:name';
 
     protected function setUp()
     {
@@ -159,6 +163,42 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($s1, $s3);
         $this->assertSame($s1, $s4);
         $this->assertSame($s1, $s5);
+    }
+
+    public function testGetCharge()
+    {
+        $this->testGetBill();
+        $this->testGetPrice();
+        $this->testGetAction();
+        $charge = $this->factory->get('charge', [
+            'id' => $this->chargeId,
+            'type' => $this->type,
+            'target' => $this->target,
+            'action' => $this->actionId,
+            'price' => $this->priceId,
+            'usage' => $this->quantity . ' ' . $this->unit,
+            'sum' => $this->sum . ' ' . $this->currency,
+            'bill' => $this->billId,
+        ]);
+        $e2 = $this->factory->get('charge', ['id' => $this->chargeId, 'target' => $this->targetId]);
+        $e3 = $this->factory->get('charge', ['id' => $this->chargeId]);
+        $e4 = $this->factory->get('charge', $this->chargeId);
+        $e5 = $this->factory->find('charge', [$this->chargeId]);
+        $this->assertInstanceOf(Charge::class, $charge);
+        $this->assertSame($this->chargeId, $charge->getId());
+        $this->assertSame($this->type, $charge->getType()->getName());
+        $this->assertSame($this->target, $charge->getTarget()->getFullName());
+        $this->assertSame($this->actionId, $charge->getAction()->getId());
+        $this->assertSame($this->priceId, $charge->getPrice()->getId());
+        $this->assertSame($this->quantity, $charge->getUsage()->getQuantity());
+        $this->assertSame($this->unit, $charge->getUsage()->getUnit()->getName());
+        $this->assertEquals($this->sum*100, $charge->getSum()->getAmount());
+        $this->assertSame($this->currency, $charge->getSum()->getCurrency()->getCode());
+        $this->assertSame($this->billId, $charge->getBill()->getId());
+        $this->assertSame($charge, $e2);
+        $this->assertSame($charge, $e3);
+        $this->assertSame($charge, $e4);
+        $this->assertSame($charge, $e5);
     }
 
     public function testGetBill()

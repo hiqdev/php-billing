@@ -158,6 +158,16 @@ class Factory
         return $this->get('charge', $data);
     }
 
+    public function getPrice($data)
+    {
+        return $this->get('price', $data);
+    }
+
+    public function getBill($data)
+    {
+        return $this->get('bill', $data);
+    }
+
     public function getPlan($data)
     {
         return $this->get('plan', $data);
@@ -300,6 +310,9 @@ class Factory
 
     private function getPrepareMethod(string $entity, string $key)
     {
+        if ($entity === 'charge' && $key === 'price') {
+            return 'getPrice';
+        }
         if ($entity === 'target' && $key === 'type') {
             return null;
         }
