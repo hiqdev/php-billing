@@ -10,7 +10,7 @@ use hiqdev\php\billing\tests\support\tools\SimpleFactory;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
 
-class FactoryBasedBuilder
+class FactoryBasedBuilder implements BuilderInterface
 {
     private $reseller;
 
