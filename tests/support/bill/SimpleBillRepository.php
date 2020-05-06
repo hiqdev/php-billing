@@ -32,7 +32,7 @@ class SimpleBillRepository implements BillRepositoryInterface
 
     public function save(BillInterface $bill)
     {
-        $id = $bill->getId();
+        $id = $bill->getId() ?? hash('md5', $bill->getTarget()->getFullName() . $bill->getType()->getName());
         $this->bills[$id] = $bill;
 
         return $id;
@@ -43,8 +43,9 @@ class SimpleBillRepository implements BillRepositoryInterface
         $found = [];
         foreach ($this->bills as $bill) {
             foreach ($bills as $one) {
-                if (#!$bill->getType()->equals($one->getType()) ||
-                   !$bill->getTarget()->equals($one->getTarget())
+                if (
+                    !$bill->getType()->equals($one->getType()) ||
+                    !$bill->getTarget()->equals($one->getTarget())
                 ) {
                     continue;
                 }
