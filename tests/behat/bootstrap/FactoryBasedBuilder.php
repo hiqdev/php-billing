@@ -6,6 +6,7 @@ use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\order\Order;
+use hiqdev\php\billing\target\AnyTarget;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
@@ -90,6 +91,9 @@ class FactoryBasedBuilder implements BuilderInterface
         if (empty($data['prepaid'])) {
             $data['prepaid'] = "0 $data[unit]";
         }
+        if (empty($data['target'])) {
+            $data['target'] = AnyTarget::get();
+        }
         $this->prices[] = $this->factory->get('price', $data);
     }
 
@@ -99,15 +103,27 @@ class FactoryBasedBuilder implements BuilderInterface
         $plan->setPrices($this->prices);
     }
 
-    public function buildSale(string $id, string $target, string $plan, string $time)
+    public function buildSale($id, string $target, string $plan, string $time)
     {
         $this->time = $time;
-        $this->sale = $this->factory->get('sale', [
+        $this->sale = $this->factory->get('sale', array_filter([
             'id' => $id,
             'customer' => $this->customer,
             'target' => $target,
             'plan' => $plan,
             'time' => $time,
+        ]));
+
+        return $this->sale;
+    }
+
+    public function buildPurchase(string $target, string $plan, string $time)
+    {
+        $this->performAction([
+            'sale' => $this->buildSale(null, $target, $plan, $time),
+            'type' => 'monthly,cdn_traf95',
+            'quantity' => '1 items',
+            'target' => $target,
         ]);
     }
 

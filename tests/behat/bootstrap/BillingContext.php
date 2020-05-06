@@ -60,8 +60,9 @@ class BillingContext extends BaseContext
     /**
      * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+)/
      */
-    public function priceWithOver($type, $price, $currency, $unit, $prepaid)
+    public function priceWithPrepaid($type, $price, $currency, $unit, $prepaid)
     {
+        $prepaid = "$prepaid $unit";
         return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid'));
     }
 
@@ -96,6 +97,15 @@ class BillingContext extends BaseContext
     public function sale($id, $target, $plan, $time): void
     {
         $this->builder->buildSale($id, $target, $plan, $time);
+    }
+
+
+    /**
+     * @Given /purchase target (\S+) by plan (\S+) at (.+)$/
+     */
+    public function purchaseTarget(string $target, string $plan, string $time): void
+    {
+        $this->builder->buildPurchase($target, $plan, $time);
     }
 
     /**
@@ -161,6 +171,7 @@ class BillingContext extends BaseContext
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target)
     {
         $charge = $this->findCharge($type, $target);
+        Assert::assertNotNull($charge);
         Assert::assertSame($type, $charge->getType()->getName());
         Assert::assertSame($target, $charge->getTarget()->getFullName());
         Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
@@ -177,7 +188,7 @@ class BillingContext extends BaseContext
         $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
     }
 
-    public function findCharge($type, $target): ChargeInterface
+    public function findCharge($type, $target): ?ChargeInterface
     {
         foreach ($this->charges as $charge) {
             if ($charge->getType()->getName() !== $type) {
@@ -188,6 +199,8 @@ class BillingContext extends BaseContext
             }
             return $charge;
         }
+
+        return null;
     }
 
     public function getNextCharge(): ChargeInterface

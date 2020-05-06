@@ -16,5 +16,7 @@ interface BuilderInterface
 
     public function buildSale(string $id, string $target, string $plan, string $time);
 
+    public function buildPurchase(string $target, string $plan, string $time);
+
     public function findBills(array $data): array;
 }
