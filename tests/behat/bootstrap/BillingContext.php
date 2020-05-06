@@ -2,12 +2,15 @@
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
 {
+    protected $saleTime;
+
     protected $bill;
 
     protected array $charges = [];
@@ -96,7 +99,8 @@ class BillingContext extends BaseContext
      */
     public function sale($id, $target, $plan, $time): void
     {
-        $this->builder->buildSale($id, $target, $plan, $time);
+        $this->saleTime = $this->prepareTime($time);
+        $this->builder->buildSale($id, $target, $plan, $this->saleTime);
     }
 
 
@@ -105,6 +109,7 @@ class BillingContext extends BaseContext
      */
     public function purchaseTarget(string $target, string $plan, string $time): void
     {
+        $time = $this->prepareTime($time);
         $this->builder->buildPurchase($target, $plan, $time);
     }
 
@@ -125,10 +130,12 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /bill +for (\S+) is +(\S+) (\S+) per (\d+) (\S+) for target (\S+)$/
+     * @Given /bill +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+)$/
      */
     public function bill($type, $sum, $currency, $quantity, $unit, $target)
     {
+        $quantity = $this->prepareQuantity($quantity);
+        $sum = $this->prepareSum($sum, $quantity);
         $bill = $this->findBill([
             'type' => $type,
             'target' => $target,
@@ -166,10 +173,12 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /charge for (\S+) is +(\S+) (\S+) per (\d+) (\S+) for target (\S+)$/
+     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+)$/
      */
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target)
     {
+        $quantity = $this->prepareQuantity($quantity);
+        $amount = $this->prepareSum($amount, $quantity);
         $charge = $this->findCharge($type, $target);
         Assert::assertNotNull($charge);
         Assert::assertSame($type, $charge->getType()->getName());
@@ -181,7 +190,7 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /charge for (\S+) is +(\S+) (\S+) per (\d+) (\S+)$/
+     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+)$/
      */
     public function charge($type, $amount, $currency, $quantity, $unit)
     {
@@ -209,5 +218,50 @@ class BillingContext extends BaseContext
         next($this->charges);
 
         return $charge;
+    }
+
+    private function prepareTime($time)
+    {
+        if ($time === 'midnight second day of this month') {
+            return date("Y-m-02");
+        }
+        if ($time[0] === 'Y') {
+            return date($time);
+        }
+
+        return $time;
+    }
+
+    private function prepareQuantity($quantity)
+    {
+        if ($quantity[0] === 's') {
+            return $this->getSaleQuantity();
+        }
+        return $quantity;
+    }
+
+    private function prepareSum($sum, $quantity)
+    {
+        if ($sum[0] === 's') {
+            $sum = round(substr($sum, 1) * $quantity*100)/100;
+        }
+
+        return $sum;
+    }
+
+    public function getSaleQuantity()
+    {
+        return $this->days2quantity(new DateTimeImmutable($this->saleTime));
+    }
+
+    private function days2quantity(DateTimeImmutable $from)
+    {
+        $till = new DateTimeImmutable('first day of next month midnight');
+        $diff = $from->diff($till);
+        if ($diff->m) {
+            return 1;
+        }
+
+        return $diff->d/date('t');
     }
 }

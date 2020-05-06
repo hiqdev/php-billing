@@ -2,6 +2,7 @@
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\price\PriceFactory;
