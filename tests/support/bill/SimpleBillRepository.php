@@ -32,7 +32,7 @@ class SimpleBillRepository implements BillRepositoryInterface
 
     public function save(BillInterface $bill)
     {
-        $id = $bill->getId() ?? hash('md5', $bill->getTarget()->getFullName() . $bill->getType()->getName());
+        $id = $bill->getId() ?? $bill->getUniqueString();
         $this->bills[$id] = $bill;
 
         return $id;
