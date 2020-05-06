@@ -32,10 +32,9 @@ class SimpleBillRepository implements BillRepositoryInterface
 
     public function save(BillInterface $bill)
     {
-        $id = $bill->getId();
-        $this->bills[$id] = $bill;
+        $this->bills[$bill->getUniqueString()] = $bill;
 
-        return $id;
+        return $bill->getId();
     }
 
     public function findByUniqueness(array $bills): array
@@ -43,8 +42,9 @@ class SimpleBillRepository implements BillRepositoryInterface
         $found = [];
         foreach ($this->bills as $bill) {
             foreach ($bills as $one) {
-                if (#!$bill->getType()->equals($one->getType()) ||
-                   !$bill->getTarget()->equals($one->getTarget())
+                if (
+                    !$bill->getType()->equals($one->getType()) ||
+                    !$bill->getTarget()->equals($one->getTarget())
                 ) {
                     continue;
                 }
