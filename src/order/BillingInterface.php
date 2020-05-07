@@ -10,7 +10,8 @@
 
 namespace hiqdev\php\billing\order;
 
-use hiqdev\php\billing\bill\Bill;
+use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
 
 /**
  * Billing calculates and saves bills for given order.
@@ -20,12 +21,17 @@ use hiqdev\php\billing\bill\Bill;
 interface BillingInterface
 {
     /**
-     * @return Bill[]
+     * @return BillInterface[]
      */
-    public function calculate(OrderInterface $order): array;
+    public function calculate($source, DateTimeImmutable $time = null): array;
 
     /**
      * @return BillInterface[] array of charges
      */
-    public function perform(OrderInterface $order): array;
+    public function perform($source, DateTimeImmutable $time = null): array;
+
+    /**
+     * @return ChargeInterface[]
+     */
+    public function calculateCharges($source, DateTimeImmutable $time = null): array;
 }

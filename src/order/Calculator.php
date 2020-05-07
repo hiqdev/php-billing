@@ -72,7 +72,7 @@ class Calculator implements CalculatorInterface
                 continue;
             }
 
-            $charges[$actionKey] = $this->calculatePlan($plans[$actionKey], $action);
+            $charges = array_merge($charges, $this->calculatePlan($plans[$actionKey], $action));
         }
 
         return $charges;

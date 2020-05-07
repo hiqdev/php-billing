@@ -17,12 +17,12 @@ use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
-use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
-use hiqdev\php\billing\order\Calculator;
+use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Currencies\ISOCurrencies;
@@ -63,10 +63,6 @@ class FeatureContext implements Context
 
     /** @var string */
     protected $expectedError;
-    /** @var Generalizer */
-    protected $generalizer;
-    /** @var Calculator */
-    protected $calculator;
 
     /**
      * Initializes context.
@@ -75,8 +71,8 @@ class FeatureContext implements Context
     {
         $this->customer = new Customer(null, 'somebody');
         $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->generalizer = new Generalizer();
-        $this->calculator = new Calculator($this->generalizer, null, null);
+        $this->plan = new Plan(null, 'plan', $this->customer);
+        $this->billing = SimpleBilling::fromPlan($this->plan);
     }
 
     /**
@@ -88,7 +84,16 @@ class FeatureContext implements Context
         $target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, $currency);
-        $this->price = new SinglePrice(null, $type, $target, null, $quantity, $sum);
+        $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
+    }
+
+    private function setPrice($price)
+    {
+        $this->price = $price;
+        $ref = new \ReflectionClass($this->plan);
+        $prop = $ref->getProperty('prices');
+        $prop->setAccessible(true);
+        $prop->setValue($this->plan, [$price]);
     }
 
     /**
@@ -199,7 +204,7 @@ class FeatureContext implements Context
     {
         $this->expectError(function () {
             $this->price->setModifier($this->getFormulaEngine()->build($this->formula));
-            $this->charges = $this->calculator->calculatePrice($this->price, $this->action);
+            $this->charges = $this->billing->calculateCharges($this->action);
         });
     }
 

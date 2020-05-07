@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\plan;
 
 use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\customer\CustomerInterface;
 
 /**
  * Plan Interface.
@@ -35,4 +36,9 @@ interface PlanInterface extends EntityInterface
      * @return PriceInterface[]
      */
     public function getPrices(): ?array;
+
+    /**
+     * @return CustomerInterface
+     */
+    public function getSeller(): ?CustomerInterface;
 }

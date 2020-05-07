@@ -42,33 +42,46 @@ class Billing implements BillingInterface
      * @var BillRepositoryInterface
      */
     protected $repository;
+    /**
+     * @var CollectorInterface
+     */
+    protected $collector;
 
     public function __construct(
         CalculatorInterface $calculator,
         AggregatorInterface $aggregator,
         MergerInterface $merger,
-        ?BillRepositoryInterface $repository
+        ?BillRepositoryInterface $repository,
+        ?CollectorInterface $collector
     ) {
         $this->calculator = $calculator;
         $this->aggregator = $aggregator;
         $this->merger = $merger;
         $this->repository = $repository;
+        $this->collector = $collector ?? new Collector();
     }
 
-    public function calculate(OrderInterface $order): array
+    public function calculate($source, DateTimeImmutable $time = null): array
     {
-        $charges = $this->calculator->calculateOrder($order);
+        $charges = $this->calculateCharges($source, $time);
         $bills = $this->aggregator->aggregateCharges($charges);
 
         return $this->merger->mergeBills($bills);
     }
 
-    public function perform(OrderInterface $order): array
+    public function perform($source, DateTimeImmutable $time = null): array
     {
-        $charges = $this->calculator->calculateOrder($order);
+        $charges = $this->calculateCharges($source, $time);
         $bills = $this->getRepoAggregator()->aggregateCharges($charges);
 
         return $this->saveBills($bills);
+    }
+
+    public function calculateCharges($source, DateTimeImmutable $time = null): array
+    {
+        $order = $this->collector->collect($source, $time);
+
+        return $this->calculator->calculateOrder($order);
     }
 
     private function getRepoAggregator(): AggregatorInterface

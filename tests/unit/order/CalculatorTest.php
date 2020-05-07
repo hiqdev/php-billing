@@ -54,7 +54,7 @@ class CalculatorTest extends SaleTest
     {
         $charges = $this->calculator->calculateOrder($this->order);
         foreach ($this->order->getActions() as $actionKey => $action) {
-            $this->checkCharges($action, $charges[$actionKey]);
+            $this->checkCharges($action, [$charges[$actionKey]]);
         }
     }
 }
