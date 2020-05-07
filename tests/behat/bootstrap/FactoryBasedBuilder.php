@@ -2,12 +2,11 @@
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
-use DateTimeImmutable;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\order\Order;
-use hiqdev\php\billing\target\AnyTarget;
+use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
@@ -93,7 +92,7 @@ class FactoryBasedBuilder implements BuilderInterface
             $data['prepaid'] = "0 $data[unit]";
         }
         if (empty($data['target'])) {
-            $data['target'] = AnyTarget::get();
+            $data['target'] = Target::any();
         }
         $this->prices[] = $this->factory->get('price', $data);
     }

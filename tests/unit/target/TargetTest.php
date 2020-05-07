@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\tests\unit\target;
 
-use hiqdev\php\billing\target\AnyTarget;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\target\TargetCollection;
 use hiqdev\php\billing\target\TargetInterface;
@@ -27,7 +26,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->target_ = AnyTarget::get();
+        $this->target_ = Target::any();
         $this->target1 = new Target($this->id1,     Target::ANY);
         $this->target2 = new Target($this->id2,     Target::ANY);
         $this->targetA = new Target($this->idA,     Target::ANY, 'A');
