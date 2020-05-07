@@ -5,6 +5,7 @@ namespace hiqdev\php\billing\tests\behat\bootstrap;
 use DateTimeImmutable;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\units\Unit;
 use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
@@ -103,6 +104,14 @@ class BillingContext extends BaseContext
         $this->builder->buildSale($id, $target, $plan, $this->saleTime);
     }
 
+    /**
+     * @Given /sale server (\S+) plan (\S+) at (\S+)/
+     */
+    public function saleServer(string $server, string $plan, string $time): void
+    {
+        $time = $this->prepareTime($time);
+        $this->builder->buildServerSale($server, $plan, $time);
+    }
 
     /**
      * @Given /purchase target (\S+) by plan (\S+) at (.+)$/
@@ -118,6 +127,7 @@ class BillingContext extends BaseContext
      */
     public function setConsumption(string $type, int $amount, string $unit, string $target, string $time): void
     {
+        $time = $this->prepareTime($time);
         $this->builder->setConsumption($type, $amount, $unit, $target, $time);
     }
 
@@ -144,10 +154,10 @@ class BillingContext extends BaseContext
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
         Assert::assertSame($target, $bill->getTarget()->getFullName());
-        Assert::assertEquals($sum*100, $bill->getSum()->getAmount());
+        Assert::assertEquals($sum * 100, $bill->getSum()->getAmount());
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
-        Assert::assertSame($unit, $bill->getQuantity()->getUnit()->getName());
+        Assert::assertTrue(Unit::create($unit)->equals($bill->getQuantity()->getUnit()));
     }
 
     public function findBill(array $params): BillInterface
@@ -183,10 +193,10 @@ class BillingContext extends BaseContext
         Assert::assertNotNull($charge);
         Assert::assertSame($type, $charge->getType()->getName());
         Assert::assertSame($target, $charge->getTarget()->getFullName());
-        Assert::assertEquals($amount*100, $charge->getSum()->getAmount());
+        Assert::assertEquals($amount * 100, $charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $charge->getUsage()->getQuantity());
-        Assert::assertSame($unit, $charge->getUsage()->getUnit()->getName());
+        Assert::assertTrue(Unit::create($unit)->equals($charge->getUsage()->getUnit()));
     }
 
     /**
@@ -220,12 +230,16 @@ class BillingContext extends BaseContext
         return $charge;
     }
 
-    private function prepareTime($time)
+    /**
+     * @param string $time
+     * @return string|false
+     */
+    private function prepareTime(string $time)
     {
         if ($time === 'midnight second day of this month') {
             return date("Y-m-02");
         }
-        if ($time[0] === 'Y') {
+        if (strpos($time, 'Y') === 0) {
             return date($time);
         }
 
