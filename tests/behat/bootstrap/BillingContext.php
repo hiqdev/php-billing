@@ -105,15 +105,6 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /sale server (\S+) plan (\S+) at (\S+)/
-     */
-    public function saleServer(string $server, string $plan, string $time): void
-    {
-        $time = $this->prepareTime($time);
-        $this->builder->buildServerSale($server, $plan, $time);
-    }
-
-    /**
      * @Given /purchase target (\S+) by plan (\S+) at (.+)$/
      */
     public function purchaseTarget(string $target, string $plan, string $time): void
@@ -234,12 +225,12 @@ class BillingContext extends BaseContext
      * @param string $time
      * @return string|false
      */
-    private function prepareTime(string $time)
+    protected function prepareTime(string $time)
     {
         if ($time === 'midnight second day of this month') {
             return date("Y-m-02");
         }
-        if (strpos($time, 'Y') === 0) {
+        if (strncmp($time, 'Y', 1) === 0) {
             return date($time);
         }
 
