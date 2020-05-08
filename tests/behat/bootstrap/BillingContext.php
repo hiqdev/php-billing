@@ -62,12 +62,21 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+)/
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+)$/
      */
     public function priceWithPrepaid($type, $price, $currency, $unit, $prepaid)
     {
         $prepaid = "$prepaid $unit";
         return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid'));
+    }
+
+    /**
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+) for target (\S+)$/
+     */
+    public function priceWithPrepaidAndObject($type, $price, $currency, $unit, $prepaid, $target)
+    {
+        $prepaid = "$prepaid $unit";
+        return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid', 'target'));
     }
 
     /**
