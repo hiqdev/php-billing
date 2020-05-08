@@ -66,7 +66,6 @@ class BillingContext extends BaseContext
      */
     public function priceWithPrepaid($type, $price, $currency, $unit, $prepaid)
     {
-        $prepaid = "$prepaid $unit";
         return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid'));
     }
 
@@ -75,7 +74,6 @@ class BillingContext extends BaseContext
      */
     public function priceWithPrepaidAndTarget($type, $price, $currency, $unit, $prepaid, $target)
     {
-        $prepaid = "$prepaid $unit";
         return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid', 'target'));
     }
 
