@@ -56,18 +56,27 @@ class BillingContext extends BaseContext
     /**
      * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) for target (\S+)/
      */
-    public function priceWithObject($type, $price, $currency, $unit, $target)
+    public function priceWithTarget($type, $price, $currency, $unit, $target)
     {
         return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'target'));
     }
 
     /**
-     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+)/
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+)$/
      */
     public function priceWithPrepaid($type, $price, $currency, $unit, $prepaid)
     {
         $prepaid = "$prepaid $unit";
         return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid'));
+    }
+
+    /**
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) prepaid (\S+) for target (\S+)$/
+     */
+    public function priceWithPrepaidAndTarget($type, $price, $currency, $unit, $prepaid, $target)
+    {
+        $prepaid = "$prepaid $unit";
+        return $this->fullPrice(compact('type', 'price', 'currency', 'unit', 'prepaid', 'target'));
     }
 
     /**
