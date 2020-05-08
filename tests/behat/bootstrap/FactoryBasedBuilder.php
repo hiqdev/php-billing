@@ -88,9 +88,7 @@ class FactoryBasedBuilder implements BuilderInterface
         if (!empty($data['price'])) {
             $data['price'] = "$data[price] $data[currency]";
         }
-        if (empty($data['prepaid'])) {
-            $data['prepaid'] = "0 $data[unit]";
-        }
+        $data['prepaid'] = ($data['prepaid'] ?? 0) . " $data[unit]";
         if (empty($data['target'])) {
             $data['target'] = Target::any();
         }
