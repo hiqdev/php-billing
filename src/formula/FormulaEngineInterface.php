@@ -18,23 +18,16 @@ use Hoa\Ruler\Model\Model;
  */
 interface FormulaEngineInterface
 {
-    /**
-     * @param string $formula
-     * @return ChargeModifier
-     */
     public function build(string $formula): ChargeModifier;
 
     /**
      * Validates $formula.
      *
-     * @param string $formula
-     * @return null|string `null` when formula has no errors or string error message
+     * @return string|null `null` when formula has no errors or string error message
      */
     public function validate(string $formula): ?string;
 
     /**
-     * @param string $formula
-     * @return Model
      * @throws FormulaSyntaxError
      */
     public function interpret(string $formula): Model;

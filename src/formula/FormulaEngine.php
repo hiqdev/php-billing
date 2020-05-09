@@ -62,10 +62,6 @@ class FormulaEngine implements FormulaEngineInterface
         $this->cache = $cache;
     }
 
-    /**
-     * @param string $formula
-     * @return ChargeModifier
-     */
     public function build(string $formula): ChargeModifier
     {
         try {
@@ -89,8 +85,6 @@ class FormulaEngine implements FormulaEngineInterface
     }
 
     /**
-     * @param string $formula
-     * @return Model\Model
      * @throws FormulaEngineException
      */
     public function interpret(string $formula): Model\Model
@@ -134,8 +128,7 @@ class FormulaEngine implements FormulaEngineInterface
     /**
      * Validates $formula.
      *
-     * @param string $formula
-     * @return null|string `null` when formula has no errors or string error message
+     * @return string|null `null` when formula has no errors or string error message
      */
     public function validate(string $formula): ?string
     {

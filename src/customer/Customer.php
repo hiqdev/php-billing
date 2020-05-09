@@ -66,7 +66,7 @@ class Customer implements CustomerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSeller()
     {

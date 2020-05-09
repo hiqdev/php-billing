@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\sale;
 
-use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 
@@ -21,7 +20,6 @@ interface SaleRepositoryInterface
 {
     /**
      * Finds suitable sales for given order.
-     * @param OrderInterface $order
      * @return PlanInterface[] array: actionKey => plan
      */
     public function findByOrder(OrderInterface $order);

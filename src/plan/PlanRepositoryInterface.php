@@ -21,14 +21,12 @@ interface PlanRepositoryInterface
 {
     /**
      * Finds suitable plan for given action: customer + type + target.
-     * @param ActionInterface $action
      * @return PlanInterface
      */
     public function findByAction(ActionInterface $action);
 
     /**
      * Finds suitable plans for given order: customer + actions.
-     * @param OrderInterface $order
      * @return PlanInterface[] array: actionKey => plan
      */
     public function findByOrder(OrderInterface $order);
@@ -41,8 +39,6 @@ interface PlanRepositoryInterface
     public function findByIds(array $ids);
 
     /**
-     * @param int $id
-     * @return PlanInterface
      * @throws EntityNotFoundException
      */
     public function getById(int $id): PlanInterface;

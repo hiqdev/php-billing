@@ -27,45 +27,20 @@ interface ChargeInterface extends \JsonSerializable
      */
     public function getId();
 
-    /**
-     * @return bool
-     */
     public function hasId(): bool;
 
-    /**
-     * @return TypeInterface
-     */
     public function getType(): TypeInterface;
 
-    /**
-     * @return TargetInterface
-     */
     public function getTarget(): TargetInterface;
 
-    /**
-     * @return ActionInterface
-     */
     public function getAction(): ActionInterface;
 
-    /**
-     * @return PriceInterface
-     */
     public function getPrice(): PriceInterface;
 
-    /**
-     * @return Money
-     */
     public function getSum(): Money;
 
-    /**
-     * @return QuantityInterface
-     */
     public function getUsage(): QuantityInterface;
 
-    /**
-     * @param string $comment
-     * @return self
-     */
     public function setComment(string $comment): self;
 
     /**
@@ -73,21 +48,13 @@ interface ChargeInterface extends \JsonSerializable
      */
     public function getComment(): ?string;
 
-    /**
-     * @return self
-     */
     public function setFinished(): self;
 
-    /**
-     * @return ChargeInterface|null
-     */
     public function getParent(): ?ChargeInterface;
 
     /**
      * Provides unique string.
      * Can be used to compare or aggregate charges.
-     *
-     * @return string
      */
     public function getUniqueString(): string;
 }

@@ -75,7 +75,7 @@ class Discount implements AddonInterface
         }
 
         if (is_numeric($value)) {
-            return (string)$value;
+            return (string) $value;
         }
 
         $name = static::$name;
@@ -165,6 +165,7 @@ class Discount implements AddonInterface
             }
 
             $compensatedQuantity = $this->calculateCompensatedQuantity($charge)->add($price->getPrepaid());
+
             return $price->calculateSum($compensatedQuantity);
         }
 

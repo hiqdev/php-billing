@@ -11,7 +11,6 @@
 namespace hiqdev\php\billing\action;
 
 use DateTimeImmutable;
-use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\SaleInterface;
@@ -36,61 +35,45 @@ interface ActionInterface extends \JsonSerializable
 {
     /**
      * Returns if the given price applicable to this action.
-     *
-     * @param PriceInterface $price
-     * @return bool
      */
     public function isApplicable(PriceInterface $price): bool;
 
     /**
      * Returns client ot this action.
-     * @return CustomerInterface
      */
     public function getCustomer(): CustomerInterface;
 
     /**
      * Returns target ot this action.
-     * @return TargetInterface
      */
     public function getTarget(): TargetInterface;
 
     /**
      * Returns type ot this action.
-     * @return TypeInterface
      */
     public function getType(): TypeInterface;
 
     /**
      * Returns quantity ot this action.
-     * @return QuantityInterface
      */
     public function getQuantity(): QuantityInterface;
 
     /**
      * Returns time ot this action.
-     * @return DateTimeImmutable
      */
     public function getTime(): DateTimeImmutable;
 
     /**
      * Returns sale if set.
-     * @return SaleInterface|null
      */
     public function getSale(): ?SaleInterface;
 
     /**
      * Returns null if the action state is not set.
-     * @return bool|null
      */
     public function isFinished(): ?bool;
 
-    /**
-     * @return ActionInterface|null
-     */
     public function getParent(): ?ActionInterface;
 
-    /**
-     * @return ActionState|null
-     */
     public function getState(): ?ActionState;
 }

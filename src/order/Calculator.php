@@ -46,8 +46,6 @@ class Calculator implements CalculatorInterface
     private $planRepository;
 
     /**
-     * @param GeneralizerInterface $generalizer
-     * @param SaleRepositoryInterface|null $saleRepository
      * @param PlanRepositoryInterface $planRepository
      */
     public function __construct(
@@ -120,8 +118,6 @@ class Calculator implements CalculatorInterface
      * Calculates charge for given action and price.
      * Returns `null`, if $price is not applicable to $action.
      *
-     * @param PriceInterface $price
-     * @param ActionInterface $action
      * @return ChargeInterface|Charge|null
      */
     public function calculateCharge(PriceInterface $price, ActionInterface $action): ?ChargeInterface
@@ -155,9 +151,8 @@ class Calculator implements CalculatorInterface
     }
 
     /**
-     * @param OrderInterface $order
-     * @return PlanInterface[]|Plan
      * @throws \Exception
+     * @return PlanInterface[]|Plan
      */
     public function findPlans(OrderInterface $order)
     {
@@ -205,7 +200,6 @@ class Calculator implements CalculatorInterface
     }
 
     /**
-     * @param OrderInterface $order
      * @return SaleInterface[]|Sale
      */
     public function findSales(OrderInterface $order)

@@ -151,9 +151,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $action->setId($this->testId);
         $this->assertTrue($action->hasId());
         $this->assertSame($this->testId, $action->getId());
-        $action->setId((string)$this->testId);
+        $action->setId((string) $this->testId);
         $this->assertSame($this->testId, $action->getId());
-        $action->setId((int)$this->testId);
+        $action->setId((int) $this->testId);
         $this->assertSame($this->testId, $action->getId());
         $action->setId('other id cannot be set');
     }

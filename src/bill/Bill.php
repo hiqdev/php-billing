@@ -62,15 +62,15 @@ class Bill implements BillInterface
 
     public function __construct(
                             $id,
-        TypeInterface       $type,
-        DateTimeImmutable   $time,
-        Money               $sum,
-        QuantityInterface   $quantity,
-        CustomerInterface   $customer,
-        TargetInterface     $target = null,
-        PlanInterface       $plan = null,
-        array               $charges = [],
-        BillState           $state = null
+        TypeInterface $type,
+        DateTimeImmutable $time,
+        Money $sum,
+        QuantityInterface $quantity,
+        CustomerInterface $customer,
+        TargetInterface $target = null,
+        PlanInterface $plan = null,
+        array $charges = [],
+        BillState $state = null
     ) {
         $this->id           = $id;
         $this->type         = $type;
@@ -127,17 +127,11 @@ class Bill implements BillInterface
         $this->id = $id;
     }
 
-    /**
-     * @return TypeInterface
-     */
     public function getType(): TypeInterface
     {
         return $this->type;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getTime(): DateTimeImmutable
     {
         return $this->time;
@@ -167,9 +161,6 @@ class Bill implements BillInterface
         return $this->quantity;
     }
 
-    /**
-     * @return BillInterface
-     */
     public function setQuantity(QuantityInterface $quantity): BillInterface
     {
         $this->quantity = $quantity;
@@ -193,9 +184,6 @@ class Bill implements BillInterface
         return $this->plan;
     }
 
-    /**
-     * @return bool
-     */
     public function hasCharges(): bool
     {
         return $this->charges !== [];
@@ -211,7 +199,6 @@ class Bill implements BillInterface
 
     /**
      * @param ChargeInterface[] $prices
-     * @return self
      * @throws \Exception
      */
     public function setCharges(array $charges): self

@@ -63,6 +63,7 @@ class FixedDiscount extends Modifier
         $chargeTypeAddon = $this->getChargeType();
 
         $type = $chargeTypeAddon ? $chargeTypeAddon->getValue() : 'discount,discount';
+
         return new Type(Type::ANY, $type);
     }
 

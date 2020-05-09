@@ -110,7 +110,6 @@ class FeatureContext implements Context
 
     /**
      * @Given /formula is (.+)/
-     * @param string $formula
      */
     public function formulaIs(string $formula): void
     {
@@ -119,7 +118,6 @@ class FeatureContext implements Context
 
     /**
      * @Given /formula continues (.+)/
-     * @param string $formula
      */
     public function formulaContinues(string $formula): void
     {
@@ -137,7 +135,6 @@ class FeatureContext implements Context
 
     /**
      * @When /action date is ([0-9.-]+)/
-     * @param string $date
      * @throws \Exception
      */
     public function actionDateIs(string $date): void
@@ -165,7 +162,6 @@ class FeatureContext implements Context
 
     /**
      * @Then /^(\w+) charge is ?(?: with ?)?$/
-     * @param string $numeral
      */
     public function emptyCharge(string $numeral): void
     {
@@ -284,7 +280,7 @@ class FeatureContext implements Context
         switch ($string) {
             case 'discount,discount':
                 return 'discount';
-            case 'monthly,leasing';
+            case 'monthly,leasing':
                 return 'leasing';
             default:
                 return $string;

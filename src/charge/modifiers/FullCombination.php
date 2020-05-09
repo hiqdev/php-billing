@@ -142,7 +142,6 @@ class FullCombination implements ChargeModifier
     /**
      * @param ChargeInterface $originalCharge
      * @param ChargeInterface[] $producedCharges
-     * @return ChargeInterface|null
      * @throws \Exception
      */
     private function sumCharges(?ChargeInterface $originalCharge, array $producedCharges): ?ChargeInterface
@@ -168,6 +167,7 @@ class FullCombination implements ChargeModifier
         }
 
         $query = (new ChargeDerivativeQuery())->changeSum($sum);
+
         return (new ChargeDerivative())->__invoke($originalCharge, $query);
     }
 }

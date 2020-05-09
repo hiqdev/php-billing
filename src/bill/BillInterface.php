@@ -27,19 +27,10 @@ use Money\Money;
  */
 interface BillInterface extends EntityInterface
 {
-    /**
-     * @return string
-     */
     public function getUniqueString(): string;
 
-    /**
-     * @return TypeInterface
-     */
     public function getType(): TypeInterface;
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getTime(): DateTimeImmutable;
 
     /**

@@ -26,8 +26,5 @@ use DateTimeImmutable;
  */
 interface CollectorInterface
 {
-    /**
-     * @return OrderInterface
-     */
     public function collect($source, DateTimeImmutable $time = null): OrderInterface;
 }

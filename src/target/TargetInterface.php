@@ -57,7 +57,6 @@ interface TargetInterface extends EntityInterface
 
     /**
      * Get target full name: `type:name`
-     * @return string
      */
     public function getFullName(): string;
 
@@ -71,24 +70,17 @@ interface TargetInterface extends EntityInterface
 
     /**
      * Checks, whether this target matches $other.
-     * @param TargetInterface $other
-     * @return bool
      */
     public function matches(TargetInterface $other): bool;
 
     /**
      * One way check matches. For internal use only.
      * Use `matches`.
-     * @param TargetInterface $other
-     * @return bool
      */
     public function checkMatches(TargetInterface $other): bool;
 
     /**
      * Checks whether $other target is the same as current one
-     *
-     * @param TargetInterface $other
-     * @return bool
      */
     public function equals(TargetInterface $other): bool;
 }

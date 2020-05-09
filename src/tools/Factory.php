@@ -115,6 +115,7 @@ class Factory
         if (!empty($data['timezone'])) {
             $str .= ' ' . $data['timezone'];
         }
+
         return new DateTimeImmutable($str);
     }
 
@@ -316,6 +317,7 @@ class Factory
         if ($entity === 'target' && $key === 'type') {
             return null;
         }
+
         return $this->prepareMethods[$key] ?? null;
     }
 
@@ -354,7 +356,6 @@ class Factory
 
         return implode(' ', $values);
     }
-
 
     private $uniqueKeys = [
         'action'    => [],

@@ -59,9 +59,6 @@ class Type implements TypeInterface
         return $this->hasName() ? $this->name : $this->id;
     }
 
-    /**
-     * @return bool
-     */
     public function equals(TypeInterface $other): bool
     {
         return $this->id === $other->getId() &&

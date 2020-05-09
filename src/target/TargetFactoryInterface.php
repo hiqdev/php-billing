@@ -26,16 +26,12 @@ interface TargetFactoryInterface
      * Returns class that represents target with $type.
      *
      * @param string $type the target type
-     * @return string
      */
     public function getClassForType(string $type): string;
 
     /**
      * Ensures type does not contain subtype.
      * XXX should be removed.
-     *
-     * @param string $type
-     * @return string
      */
     public function shortenType(string $type): string;
 }

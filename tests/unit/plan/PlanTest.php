@@ -55,7 +55,6 @@ class PlanTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param ActionInterface|Action $action
-     * @param array $charges
      */
     public function checkCharges(ActionInterface $action, array $charges)
     {

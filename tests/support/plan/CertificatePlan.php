@@ -25,17 +25,17 @@ class CertificatePlan extends Plan
 
     /** @var Customer */
     public $customer;
-    /** @var Type  */
+    /** @var Type */
     public $purchase;
-    /** @var Type  */
+    /** @var Type */
     public $renewal;
-    /** @var Target  */
+    /** @var Target */
     public $rapidssl;
-    /** @var Target  */
+    /** @var Target */
     public $verisign;
-    /** @var array  */
+    /** @var array */
     public $types;
-    /** @var array  */
+    /** @var array */
     public $rawPrices;
     /** @var Target[] */
     public $targets;
@@ -98,7 +98,6 @@ class CertificatePlan extends Plan
         }
         parent::__construct(null, 'Test Certificate Plan', $this->seller, $prices);
     }
-
 
     /**
      * @param Action $action

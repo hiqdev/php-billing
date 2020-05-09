@@ -31,7 +31,6 @@ interface PriceInterface extends EntityInterface
     /**
      * Calculate sum for given quantity.
      *
-     * @param QuantityInterface $quantity
      * @return Money|null null when must not be charged
      */
     public function calculateSum(QuantityInterface $quantity): ?Money;
@@ -39,7 +38,6 @@ interface PriceInterface extends EntityInterface
     /**
      * Calculate usage for given quantity.
      *
-     * @param QuantityInterface $quantity
      * @return QuantityInterface|null null when must not be charged
      */
     public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface;
@@ -47,15 +45,10 @@ interface PriceInterface extends EntityInterface
     /**
      * Calculate price for given quantity.
      *
-     * @param QuantityInterface $quantity
      * @return Money|null null when must not be charged
      */
     public function calculatePrice(QuantityInterface $quantity): ?Money;
 
-    /**
-     * @param ActionInterface $action
-     * @return bool
-     */
     public function isApplicable(ActionInterface $action): bool;
 
     /**
@@ -74,8 +67,6 @@ interface PriceInterface extends EntityInterface
 
     /**
      * Get plan.
-     *
-     * @return PlanInterface|null
      */
     public function getPlan(): ?PlanInterface;
 }

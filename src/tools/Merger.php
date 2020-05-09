@@ -83,9 +83,6 @@ class Merger implements MergerInterface
     /**
      * Merges two charges.
      * Simple implementation just returns latest charge.
-     * @param ChargeInterface $first
-     * @param ChargeInterface $other
-     * @return ChargeInterface
      */
     protected function mergeCharge(ChargeInterface $first, ChargeInterface $other): ChargeInterface
     {
@@ -97,8 +94,6 @@ class Merger implements MergerInterface
     }
 
     /**
-     * @param BillInterface $first
-     * @param BillInterface $other
      * @return string|int|null
      */
     protected function mergeId(BillInterface $first, BillInterface $other)
@@ -117,10 +112,7 @@ class Merger implements MergerInterface
     }
 
     /**
-     * @param BillInterface $first
-     * @param BillInterface $other
      * @param ChargeInterface[] $charges
-     * @return Money
      */
     protected function mergeSum(BillInterface $first, BillInterface $other, array $charges): Money
     {
@@ -137,10 +129,7 @@ class Merger implements MergerInterface
     }
 
     /**
-     * @param BillInterface $first
-     * @param BillInterface $other
      * @param ChargeInterface[] $charges
-     * @return QuantityInterface
      */
     protected function mergeQuantity(BillInterface $first, BillInterface $other, array $charges): QuantityInterface
     {
@@ -150,7 +139,7 @@ class Merger implements MergerInterface
 
         $usage = array_shift($charges)->getUsage();
         foreach ($charges as $charge) {
-            if (! $charge->getUsage()->isConvertible($usage->getUnit())) {
+            if (!$charge->getUsage()->isConvertible($usage->getUnit())) {
                 continue;
             }
             $usage = $usage->add($charge->getUsage());

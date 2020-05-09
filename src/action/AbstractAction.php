@@ -13,11 +13,11 @@ namespace hiqdev\php\billing\action;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
-use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * Chargeable Action.
@@ -56,12 +56,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     protected $parent;
 
     /**
-     * @param TypeInterface $type
-     * @param TargetInterface $target
-     * @param QuantityInterface $quantity
-     * @param CustomerInterface $customer
      * @param SaleInterface $sale
-     * @param DateTimeImmutable $time
      * @param ActionInterface $parent
      */
     public function __construct(

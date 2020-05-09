@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\unit\formula;
 
+use Cache\Adapter\PHPArray\ArrayCachePool;
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
@@ -18,7 +19,6 @@ use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\formula\FormulaEngine;
 use PHPUnit\Framework\TestCase;
-use Cache\Adapter\PHPArray\ArrayCachePool;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

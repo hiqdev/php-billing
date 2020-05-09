@@ -91,6 +91,7 @@ class BillingContext extends BaseContext
     public function enumPrice($type, $price, $currency, $unit, $price2, $currency2, $unit2, $target)
     {
         $sums = [1 => $price, 2 => $price2];
+
         return $this->fullPrice(compact('type', 'sums', 'currency', 'unit', 'target'));
     }
 
@@ -214,6 +215,7 @@ class BillingContext extends BaseContext
             if ($charge->getTarget()->getFullName() !== $target) {
                 continue;
             }
+
             return $charge;
         }
 
@@ -229,13 +231,12 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @param string $time
      * @return string|false
      */
     protected function prepareTime(string $time)
     {
         if ($time === 'midnight second day of this month') {
-            return date("Y-m-02");
+            return date('Y-m-02');
         }
         if (strncmp($time, 'Y', 1) === 0) {
             return date($time);
@@ -249,6 +250,7 @@ class BillingContext extends BaseContext
         if ($quantity[0] === 's') {
             return $this->getSaleQuantity();
         }
+
         return $quantity;
     }
 

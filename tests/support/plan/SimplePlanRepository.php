@@ -11,7 +11,6 @@
 namespace hiqdev\php\billing\tests\support\plan;
 
 use hiqdev\php\billing\action\ActionInterface;
-use hiqdev\php\billing\Exception\EntityNotFoundException;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
@@ -46,7 +45,7 @@ class SimplePlanRepository implements PlanRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getById(int $id): PlanInterface
     {

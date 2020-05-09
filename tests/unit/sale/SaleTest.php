@@ -14,8 +14,8 @@ use DateTimeImmutable;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
-use hiqdev\php\billing\tests\unit\plan\PlanTest;
 use hiqdev\php\billing\tests\support\sale\SimpleSaleRepository;
+use hiqdev\php\billing\tests\unit\plan\PlanTest;
 
 class SaleTest extends PlanTest
 {

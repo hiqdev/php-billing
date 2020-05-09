@@ -15,6 +15,7 @@ use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\order\Billing;
 use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\bill\SimpleBillRepository;
@@ -22,7 +23,6 @@ use hiqdev\php\billing\tools\Aggregator;
 use hiqdev\php\billing\tools\AggregatorInterface;
 use hiqdev\php\billing\tools\Merger;
 use hiqdev\php\billing\tools\MergerInterface;
-use hiqdev\php\billing\sale\Sale;
 
 class SimpleBilling extends Billing
 {
@@ -49,6 +49,7 @@ class SimpleBilling extends Billing
     {
         $customer ??= $plan->getSeller();
         $sale = new Sale(null, Target::any(), $customer, $plan);
+
         return self::fromSale($sale);
     }
 

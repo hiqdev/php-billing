@@ -21,28 +21,46 @@ use Money\Money;
 interface ChargeDerivativeQueryInterface
 {
     public function changeId($id): self;
+
     public function changeType(TypeInterface $type): self;
+
     public function changeTarget(TargetInterface $target): self;
+
     public function changeAction(ActionInterface $action): self;
+
     public function changePrice(PriceInterface $price): self;
+
     public function changeUsage(QuantityInterface $quantity): self;
+
     public function changeSum(Money $sum): self;
+
     public function changeBill(BillInterface $bill): self;
+
     public function changeComment(?string $comment): self;
+
     public function changeParent(?ChargeInterface $charge): self;
+
     public function getParent(): ?ChargeInterface;
 
     /**
      * @return string|int|null
      */
     public function getId();
+
     public function getUsage(): ?QuantityInterface;
+
     public function getType(): ?TypeInterface;
+
     public function getTarget(): ?TargetInterface;
+
     public function getComment(): ?string;
+
     public function getSum(): ?Money;
+
     public function getAction(): ?ActionInterface;
+
     public function getBill(): ?BillInterface;
+
     public function getPrice(): ?PriceInterface;
 
     public function isChanged(string $field): bool;

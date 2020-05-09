@@ -41,11 +41,11 @@ class SinglePrice extends AbstractPrice
 
     public function __construct(
                             $id,
-        TypeInterface       $type,
-        TargetInterface     $target,
-        PlanInterface       $plan = null,
-        QuantityInterface   $prepaid,
-        Money               $price
+        TypeInterface $type,
+        TargetInterface $target,
+        PlanInterface $plan = null,
+        QuantityInterface $prepaid,
+        Money $price
     ) {
         parent::__construct($id, $type, $target, $plan);
         $this->prepaid  = $prepaid;
@@ -80,5 +80,4 @@ class SinglePrice extends AbstractPrice
     {
         return $this->price;
     }
-
 }

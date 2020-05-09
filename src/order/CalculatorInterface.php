@@ -22,14 +22,11 @@ use hiqdev\php\billing\price\PriceInterface;
 interface CalculatorInterface
 {
     /**
-     * @param OrderInterface $order
      * @return Charge[]
      */
     public function calculateOrder(OrderInterface $order): array;
 
     /**
-     * @param PriceInterface $price
-     * @param ActionInterface $action
      * @return ChargeInterface[] array of charges
      */
     public function calculatePrice(PriceInterface $price, ActionInterface $action): array;

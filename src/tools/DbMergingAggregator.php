@@ -48,8 +48,8 @@ class DbMergingAggregator implements AggregatorInterface
      * Then merges them with Bills from DB.
      *
      * @param ChargeInterface[]|ChargeInterface[][] $charges
-     * @return BillInterface[]
      * @throws \Exception
+     * @return BillInterface[]
      */
     public function aggregateCharges(array $charges): array
     {

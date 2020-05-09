@@ -19,9 +19,6 @@ interface PriceFactoryInterface
 {
     /**
      * Creates price object.
-     *
-     * @param PriceCreationDto $dto
-     * @return PriceInterface
      */
     public function create(PriceCreationDto $dto): PriceInterface;
 }

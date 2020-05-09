@@ -40,9 +40,6 @@ class PriceFactory implements PriceFactoryInterface
 
     /**
      * Creates price object.
-     *
-     * @param PriceCreationDto $dto
-     * @return PriceInterface
      */
     public function create(PriceCreationDto $dto): PriceInterface
     {
@@ -65,10 +62,7 @@ class PriceFactory implements PriceFactoryInterface
         if ($this->defaultClass) {
             return $this->defaultClass;
         }
-        throw new FailedCreatePriceException(sprintf(
-            'unknown types: "%s"',
-            implode(',', $types)
-        ));
+        throw new FailedCreatePriceException(sprintf('unknown types: "%s"', implode(',', $types)));
     }
 
     public function findMethodForClass($class)

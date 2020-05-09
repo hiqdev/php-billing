@@ -66,13 +66,13 @@ class Charge implements ChargeInterface
 
     public function __construct(
                             $id,
-        TypeInterface       $type,
-        TargetInterface     $target,
-        ActionInterface     $action,
-        ?PriceInterface     $price,
-        QuantityInterface   $usage,
-        Money               $sum,
-        BillInterface       $bill = null
+        TypeInterface $type,
+        TargetInterface $target,
+        ActionInterface $action,
+        ?PriceInterface $price,
+        QuantityInterface $usage,
+        Money $sum,
+        BillInterface $bill = null
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -124,9 +124,6 @@ class Charge implements ChargeInterface
         return $this->action;
     }
 
-    /**
-     * @return PriceInterface
-     */
     public function getPrice(): PriceInterface
     {
         return $this->price;
@@ -200,7 +197,7 @@ class Charge implements ChargeInterface
 
     public function setId($id): ChargeInterface
     {
-        if ((string)$this->id === (string)$id) {
+        if ((string) $this->id === (string) $id) {
             return $this;
         }
         if ($this->id !== null) {
@@ -216,9 +213,6 @@ class Charge implements ChargeInterface
         return array_filter(get_object_vars($this));
     }
 
-    /**
-     * @return ChargeInterface|null
-     */
     public function getParent(): ?ChargeInterface
     {
         return $this->parent;
@@ -227,8 +221,8 @@ class Charge implements ChargeInterface
     /**
      * @param ChargeInterface|null $parent
      *
-     * @return Charge
      * @throws \Exception if parent is already set
+     * @return Charge
      */
     public function setParent(ChargeInterface $parent): self
     {
@@ -244,7 +238,6 @@ class Charge implements ChargeInterface
     /**
      * Forcefully changes parent charge
      *
-     * @param ChargeInterface $parent
      * @return Charge
      */
     public function overwriteParent(ChargeInterface $parent): self

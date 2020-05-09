@@ -45,12 +45,12 @@ class EnumPrice extends AbstractPrice
 
     public function __construct(
                             $id,
-        TypeInterface       $type,
-        TargetInterface     $target,
-        ?PlanInterface      $plan,
-        UnitInterface       $unit,
-        Currency            $currency,
-        array               $sums
+        TypeInterface $type,
+        TargetInterface $target,
+        ?PlanInterface $plan,
+        UnitInterface $unit,
+        Currency $currency,
+        array $sums
     ) {
         parent::__construct($id, $type, $target, $plan);
         $this->unit = $unit;
@@ -114,5 +114,4 @@ class EnumPrice extends AbstractPrice
     {
         return $quantity->convert($this->unit);
     }
-
 }

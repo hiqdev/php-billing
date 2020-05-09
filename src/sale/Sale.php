@@ -12,9 +12,9 @@ namespace hiqdev\php\billing\sale;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * Sale.
@@ -50,10 +50,10 @@ class Sale implements SaleInterface
 
     public function __construct(
                             $id,
-        TargetInterface     $target,
-        CustomerInterface   $customer,
-        PlanInterface       $plan,
-        DateTimeImmutable   $time = null
+        TargetInterface $target,
+        CustomerInterface $customer,
+        PlanInterface $plan,
+        DateTimeImmutable $time = null
     ) {
         $this->id = $id;
         $this->target = $target;

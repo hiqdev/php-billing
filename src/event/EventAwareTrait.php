@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace hiqdev\php\billing\event;
@@ -19,7 +20,6 @@ trait EventAwareTrait
 
     /**
      * Registers that $event occurred
-     * @param EventInterface $event
      */
     public function recordThat(EventInterface $event): void
     {

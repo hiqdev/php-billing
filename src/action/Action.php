@@ -32,8 +32,8 @@ class Action extends AbstractAction
     /**
      * // TODO: think about moving to Sale::isOccurred()
      *
-     * @return bool whether Sale that belongs to current Action occurs in current month or earlier
      * @throws \Exception
+     * @return bool whether Sale that belongs to current Action occurs in current month or earlier
      */
     private function saleOccurred(): bool
     {

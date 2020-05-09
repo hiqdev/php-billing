@@ -76,11 +76,6 @@ class Aggregator implements AggregatorInterface
         return $bills;
     }
 
-    /**
-     * @param BillInterface $first
-     * @param BillInterface $other
-     * @return BillInterface
-     */
     protected function aggregateBill(BillInterface $first, BillInterface $other): BillInterface
     {
         return new Bill(
@@ -97,8 +92,6 @@ class Aggregator implements AggregatorInterface
     }
 
     /**
-     * @param BillInterface $first
-     * @param BillInterface $other
      * @return string|int|null
      */
     protected function aggregateId(BillInterface $first, BillInterface $other)
@@ -116,21 +109,11 @@ class Aggregator implements AggregatorInterface
         throw new AggregationException('cannot aggregate bills with different IDs');
     }
 
-    /**
-     * @param BillInterface $first
-     * @param BillInterface $other
-     * @return Money
-     */
     protected function aggregateSum(BillInterface $first, BillInterface $other): Money
     {
         return $first->getSum()->add($other->getSum());
     }
 
-    /**
-     * @param BillInterface $first
-     * @param BillInterface $other
-     * @return QuantityInterface
-     */
     protected function aggregateQuantity(BillInterface $first, BillInterface $other): QuantityInterface
     {
         if ($first->getQuantity()->isConvertible($other->getQuantity()->getUnit())) {

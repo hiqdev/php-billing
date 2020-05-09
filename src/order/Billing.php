@@ -12,8 +12,8 @@ namespace hiqdev\php\billing\order;
 
 use hiqdev\php\billing\bill\BillRepositoryInterface;
 use hiqdev\php\billing\tools\AggregatorInterface;
-use hiqdev\php\billing\tools\MergerInterface;
 use hiqdev\php\billing\tools\DbMergingAggregator;
+use hiqdev\php\billing\tools\MergerInterface;
 
 /**
  * Billing calculates and saves bills for given order.

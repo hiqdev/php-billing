@@ -12,10 +12,10 @@ namespace hiqdev\php\billing\tests\unit\tools;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
-use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\bill\Bill;
-use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\target\Target;
@@ -294,11 +294,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $str = $this->sum . ' ' . $this->currency;
         $m1 = $this->factory->get('money', ['amount' => $this->sum*100, 'currency' => $this->currency]);
         $m2 = $this->factory->get('money', $str);
-        #$m3 = $this->factory->find('money', [$str]);
+        //$m3 = $this->factory->find('money', [$str]);
         $this->assertEquals($this->sum*100, $m1->getAmount());
         $this->assertSame($this->currency, $m1->getCurrency()->getCode());
         $this->assertSame($m1, $m2);
-        #$this->assertSame($m1, $m3);
+        //$this->assertSame($m1, $m3);
     }
 
     public function testGetQuantity()
@@ -342,5 +342,4 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($u1, $u4);
         $this->assertSame($u1, $u5);
     }
-
 }

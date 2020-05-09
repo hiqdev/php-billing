@@ -118,10 +118,6 @@ class TargetCollection implements TargetInterface
         return $this->getUniqueId() === $other->getUniqueId();
     }
 
-    /**
-     * @param TargetInterface $other
-     * @return bool
-     */
     public function matches(TargetInterface $other): bool
     {
         return $this->checkMatches($other);

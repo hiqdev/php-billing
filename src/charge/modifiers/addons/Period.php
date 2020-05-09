@@ -70,7 +70,6 @@ abstract class Period implements AddonInterface
     /**
      * Adds current period to the passed $startTime
      *
-     * @param DateTimeImmutable $startTime
      * @return DateTimeImmutable time of period end
      */
     abstract public function addTo(DateTimeImmutable $startTime): DateTimeImmutable;

@@ -90,17 +90,11 @@ abstract class AbstractTarget implements TargetInterface
         return ($type === self::ANY ? '' : $type) . ':' . ($id === self::ANY ? '' : $id);
     }
 
-    /**
-     * @return bool
-     */
     public function equals(TargetInterface $other): bool
     {
         return $this->getUniqueId() === $other->getUniqueId();
     }
 
-    /**
-     * @return bool
-     */
     public function matches(TargetInterface $other): bool
     {
         return $this->checkMatches($other) || $other->checkMatches($this);

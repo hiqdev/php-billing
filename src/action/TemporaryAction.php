@@ -7,6 +7,7 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2019, HiQDev (http://hiqdev.com/)
  */
+
 namespace hiqdev\php\billing\action;
 
 use hiqdev\php\billing\customer\CustomerInterface;
@@ -27,10 +28,6 @@ class TemporaryAction extends Action implements TemporaryActionInterface
 {
     /**
      * Creates Temporary Action out of generic $action
-     *
-     * @param ActionInterface $action
-     * @param CustomerInterface $customer
-     * @return TemporaryAction
      */
     public static function createAsSubaction(ActionInterface $action, CustomerInterface $customer): TemporaryAction
     {

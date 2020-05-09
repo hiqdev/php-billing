@@ -11,8 +11,8 @@
 namespace hiqdev\php\billing\plan;
 
 use hiqdev\php\billing\customer\CustomerInterface;
-use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
+use hiqdev\php\billing\price\PriceInterface;
 
 /**
  * Tariff Plan.
@@ -50,13 +50,12 @@ class Plan implements PlanInterface
     /**
      * @param int $id
      * @param string $name
-     * @param CustomerInterface|null $seller
      * @param PriceInterface[] $prices
      */
     public function __construct(
                             $id,
                             $name,
-        CustomerInterface   $seller = null,
+        CustomerInterface $seller = null,
                             $prices = null
     ) {
         $this->id = $id;
@@ -94,9 +93,6 @@ class Plan implements PlanInterface
         return $this->seller;
     }
 
-    /**
-     * @return PlanInterface|null
-     */
     public function getParent(): ?PlanInterface
     {
         return $this->parent;
@@ -111,7 +107,7 @@ class Plan implements PlanInterface
     }
 
     /**
-     * @return null|PriceInterface[]
+     * @return PriceInterface[]|null
      */
     public function getPrices(): ?array
     {

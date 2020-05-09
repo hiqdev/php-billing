@@ -28,6 +28,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_no_alias_tag'                        =>  ['replacements' => ['type' => 'var']],
         'blank_line_before_return'                   =>  false,
         'phpdoc_align'                               =>  false,
+        'phpdoc_summary'                             =>  false,
         'phpdoc_scalar'                              =>  false,
         'phpdoc_separation'                          =>  false,
         'phpdoc_to_comment'                          =>  false,

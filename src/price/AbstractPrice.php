@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\price;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\SettableChargeModifierTrait;
-use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -55,9 +54,9 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
 
     public function __construct(
                             $id,
-        TypeInterface       $type,
-        TargetInterface     $target,
-        PlanInterface       $plan = null
+        TypeInterface $type,
+        TargetInterface $target,
+        PlanInterface $plan = null
     ) {
         $this->id = $id;
         $this->type = $type;
@@ -158,5 +157,4 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
         return $action->getTarget()->matches($this->getTarget()) &&
                $action->getType()->matches($this->getType());
     }
-
 }
