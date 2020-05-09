@@ -10,9 +10,6 @@ cache:
 before_install:
     - 'composer self-update'
     - 'composer --version'
-    - 'wget http://hiqdev.com/hidev/hidev.phar -O hidev.phar && chmod a+x hidev.phar'
-    - './hidev.phar --version'
-    - './hidev.phar travis/before-install'
     - 'composer install --no-interaction'
     - './vendor/bin/hidev --version'
     - './vendor/bin/hidev travis/before-install'
