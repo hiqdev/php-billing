@@ -27,6 +27,7 @@ coverage.clover
 .phpunit.result.cache
 
 # Binaries
+behat.phar
 chkipper.phar
 composer.phar
 ocular.phar

@@ -56,6 +56,7 @@
         "hoa/ruler": "^2.17",
         "hiqdev/hidev": "dev-master",
         "hiqdev/hidev-php": "dev-master",
+        "hiqdev/hidev-behat": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
         "vimeo/psalm": "^2.0",
         "cache/array-adapter": "*"
