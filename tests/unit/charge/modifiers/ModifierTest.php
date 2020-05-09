@@ -26,7 +26,7 @@ class ModifierTest extends \PHPUnit\Framework\TestCase
 
     const SOME_TEXT = 'some text';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->now = new DateTimeImmutable();

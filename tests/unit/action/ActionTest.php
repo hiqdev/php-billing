@@ -25,6 +25,7 @@ use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
+use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -76,7 +77,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     protected $testId = 12321;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type     = new Type(null, 'server_traf');
         $this->target   = new Target(2, 'server');
@@ -94,7 +95,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         return new Action(null, $this->type, $this->target, $quantity, $this->customer, $this->time);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 
@@ -141,11 +142,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($charge);
     }
 
-    /**
-     * @expectedException \hiqdev\php\billing\Exception\CannotReassignException
-     */
     public function testGetHasSetId()
     {
+        $this->expectException(CannotReassignException::class);
         $action = $this->createAction($this->prepaid->multiply(2));
         $this->assertFalse($action->hasId());
         $action->setId($this->testId);

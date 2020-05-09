@@ -22,7 +22,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     protected $year = '2018';
     protected $month = '11';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->date = new DateTimeImmutable($this->year . '-' . $this->month . '-01');
     }

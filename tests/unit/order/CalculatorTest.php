@@ -34,7 +34,7 @@ class CalculatorTest extends SaleTest
      */
     protected $order;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->generalizer = new Generalizer();

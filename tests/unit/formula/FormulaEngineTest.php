@@ -30,7 +30,7 @@ class FormulaEngineTest extends TestCase
      */
     protected $engine;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->engine = new FormulaEngine(new ArrayCachePool());
     }

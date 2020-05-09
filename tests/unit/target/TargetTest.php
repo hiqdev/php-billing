@@ -24,7 +24,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
     protected $idA = 8;
     protected $idB = 9;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->target_ = Target::any();
         $this->target1 = new Target($this->id1,     Target::ANY);
@@ -46,7 +46,7 @@ class TargetTest extends \PHPUnit\Framework\TestCase
         $this->domains = new TargetCollection([$this->domain1, $this->domain2]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 

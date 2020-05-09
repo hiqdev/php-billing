@@ -20,7 +20,7 @@ class ModifierFactoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->factory = new ModifierFactory();

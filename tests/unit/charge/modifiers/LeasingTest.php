@@ -25,7 +25,7 @@ class LeasingTest extends ActionTest
 {
     protected $reason = 'test reason string';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->type = new Type(Type::ANY, 'monthly,leasing');
@@ -74,7 +74,7 @@ class LeasingTest extends ActionTest
         $action = $this->createAction($this->prepaid->multiply(2));
         $charge = $this->calculator->calculateCharge($this->price, $action);
         $charges = $leasing->modifyCharge($charge, $action);
-        $this->assertInternalType('array', $charges);
+        $this->assertIsArray($charges);
         $this->assertSame(1, count($charges));
         $this->assertEquals($charge, $charges[0]);
     }

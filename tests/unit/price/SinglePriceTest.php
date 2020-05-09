@@ -37,7 +37,7 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
      */
     protected $money;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->target   = new Target(1, 'server');
         $this->type     = new Type(null, 'server_traf');
@@ -46,7 +46,7 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
         $this->price    = new SinglePrice(null, $this->type, $this->target, null, $this->quantity, $this->money);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 

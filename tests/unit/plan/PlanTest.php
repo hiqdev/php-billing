@@ -32,7 +32,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
     /** @var Calculator */
     protected $calculator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->plan = CertificatePlan::get();
         $this->time = new DateTimeImmutable('now');
@@ -58,7 +58,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
      */
     public function checkCharges(ActionInterface $action, array $charges)
     {
-        $this->assertInternalType('array', $charges);
+        $this->assertIsArray($charges);
         $this->assertCount(1, $charges);
         $charge = reset($charges);
         $sum = Money::USD($this->plan->getRawPrice($action));

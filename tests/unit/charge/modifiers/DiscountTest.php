@@ -21,7 +21,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 {
     protected $discount;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->discount = new Discount();

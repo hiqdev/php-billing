@@ -24,7 +24,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
     protected $sum = 1234;
     protected $currency = 'USD';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->absolute = new Discount($this->sum/100 . ' ' . $this->currency);
         $this->relative = new Discount($this->rate . '%');
@@ -53,10 +53,10 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider badMultipliers
-     * @expectedException \Exception
      */
     public function testMultiplyFailed($multiplier)
     {
+        $this->expectException(\Exception::class);
         $this->absolute->multiply($multiplier);
     }
 
@@ -83,10 +83,10 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider badAddends
-     * @expectedException \Exception
      */
     public function testAddFailed($discount, $addend)
     {
+        $this->expectException(\Exception::class);
         $discount->add($addend);
     }
 

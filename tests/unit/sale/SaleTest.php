@@ -28,7 +28,7 @@ class SaleTest extends PlanTest
      */
     protected $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->time = new DateTimeImmutable('now');

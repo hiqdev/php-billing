@@ -32,7 +32,7 @@ class GrowingDiscountTest extends FixedDiscountTest
         $action = $this->createAction($this->prepaid->multiply(2));
         $charge = $this->calculator->calculateCharge($this->price, $action);
         $charges = $fd->modifyCharge($charge, $action);
-        $this->assertInternalType('array', $charges);
+        $this->assertIsArray($charges);
         $this->assertSame(2, count($charges));
         $this->assertSame($charge, $charges[0]);
         $discount = $charges[1];

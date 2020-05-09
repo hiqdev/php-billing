@@ -25,7 +25,7 @@ use Money\Money;
  */
 class PriceFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->id       = 'foo:bar';
         $this->single   = new Type(null, 'server_traf');

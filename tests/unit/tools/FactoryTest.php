@@ -57,7 +57,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     private $targetId = 'target-id';
     private $target = 'type:name';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = new SimpleFactory();
     }

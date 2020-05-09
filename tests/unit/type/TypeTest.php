@@ -30,7 +30,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected $dop1 = 'domain1';
     protected $dop2 = 'domain2';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nonenone = new Type(Type::NONE,   Type::NONE);
 
@@ -59,7 +59,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->domain2_ = new Type($this->did2,  Type::ANY);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 
