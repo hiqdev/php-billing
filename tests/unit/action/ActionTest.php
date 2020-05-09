@@ -16,6 +16,7 @@ use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\SinglePrice;
@@ -25,7 +26,6 @@ use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
-use hiqdev\php\billing\Exception\CannotReassignException;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>

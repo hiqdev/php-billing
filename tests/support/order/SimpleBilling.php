@@ -47,7 +47,7 @@ class SimpleBilling extends Billing
 
     public static function fromPlan(PlanInterface $plan, CustomerInterface $customer = null)
     {
-        $customer ??= $plan->getSeller();
+        $customer = $customer ?? $plan->getSeller();
         $sale = new Sale(null, Target::any(), $customer, $plan);
 
         return self::fromSale($sale);

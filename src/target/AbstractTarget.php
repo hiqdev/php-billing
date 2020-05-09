@@ -141,7 +141,7 @@ abstract class AbstractTarget implements TargetInterface
         return array_filter(get_object_vars($this));
     }
 
-    private static $anyTarget;
+    protected static $anyTarget;
 
     public static function any(): self
     {

@@ -22,7 +22,7 @@ class BillingContext extends BaseContext
 
     protected $bill;
 
-    protected array $charges = [];
+    protected $charges = [];
 
     /**
      * @Given reseller :reseller
