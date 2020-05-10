@@ -69,6 +69,7 @@ class FeatureContext implements Context
      */
     public function __construct()
     {
+        date_default_timezone_set('UTC');
         $this->customer = new Customer(null, 'somebody');
         $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
         $this->plan = new Plan(null, 'plan', $this->customer);
