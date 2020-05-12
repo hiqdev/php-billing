@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\billing\charge;
+namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\ExceptionInterface;
 
