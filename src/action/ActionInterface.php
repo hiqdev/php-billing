@@ -76,4 +76,8 @@ interface ActionInterface extends \JsonSerializable
     public function getParent(): ?ActionInterface;
 
     public function getState(): ?ActionState;
+
+    public function hasSale();
+
+    public function setSale(SaleInterface $sale);
 }

@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\order;
 
+use DateTimeImmutable;
+use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
 use hiqdev\php\billing\tools\AggregatorInterface;
 use hiqdev\php\billing\tools\DbMergingAggregator;

@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
@@ -29,6 +30,8 @@ interface ChargeInterface extends \JsonSerializable
 
     public function hasId(): bool;
 
+    public function setId($id): ChargeInterface;
+
     public function getType(): TypeInterface;
 
     public function getTarget(): TargetInterface;
@@ -38,6 +41,8 @@ interface ChargeInterface extends \JsonSerializable
     public function getPrice(): PriceInterface;
 
     public function getSum(): Money;
+
+    public function getBill(): ?BillInterface;
 
     public function getUsage(): QuantityInterface;
 

@@ -50,6 +50,8 @@ interface ChargeDerivativeQueryInterface
 
     public function getParent(): ?ChargeInterface;
 
+    public function get(string $name, $default = null);
+
     /**
      * @return string|int|null
      */

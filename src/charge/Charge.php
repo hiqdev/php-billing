@@ -219,8 +219,6 @@ class Charge implements ChargeInterface
     }
 
     /**
-     * @param ChargeInterface|null $parent
-     *
      * @throws \Exception if parent is already set
      * @return Charge
      */

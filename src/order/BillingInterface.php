@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\order;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 
