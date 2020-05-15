@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\target;
 
+use hiqdev\php\billing\Exception\CannotReassignException;
+
 /**
  * @see TargetInterface
  *
@@ -53,6 +55,17 @@ abstract class AbstractTarget implements TargetInterface
     public function hasId()
     {
         return $this->id !== null;
+    }
+
+    public function setId($id)
+    {
+        if ((string) $this->id === (string) $id) {
+            return;
+        }
+        if ($this->hasId()) {
+            throw new CannotReassignException('sale id');
+        }
+        $this->id = $id;
     }
 
     /**
