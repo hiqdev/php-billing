@@ -14,7 +14,7 @@ use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use Hoa\Ruler\Context;
-use Hoa\Ruler\Model;
+use Hoa\Ruler\Model\Model;
 use Hoa\Ruler\Ruler;
 use Hoa\Visitor\Visit;
 use Psr\SimpleCache\CacheInterface;
@@ -87,7 +87,7 @@ class FormulaEngine implements FormulaEngineInterface
     /**
      * @throws FormulaEngineException
      */
-    public function interpret(string $formula): Model\Model
+    public function interpret(string $formula): Model
     {
         try {
             $rule = str_replace("\n", ' AND ', $this->normalize($formula));

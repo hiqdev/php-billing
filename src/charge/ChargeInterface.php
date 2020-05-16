@@ -57,6 +57,8 @@ interface ChargeInterface extends \JsonSerializable
 
     public function getParent(): ?ChargeInterface;
 
+    public function overwriteParent(ChargeInterface $parent): self;
+
     /**
      * Provides unique string.
      * Can be used to compare or aggregate charges.

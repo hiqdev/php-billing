@@ -12,7 +12,7 @@ namespace hiqdev\php\billing\formula;
 
 use hiqdev\php\billing\charge\modifiers\FullCombination;
 use Hoa\Ruler\Context;
-use Hoa\Ruler\Model;
+use Hoa\Ruler\Model\Model;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
