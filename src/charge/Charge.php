@@ -219,8 +219,7 @@ class Charge implements ChargeInterface
     }
 
     /**
-     * @throws \Exception if parent is already set
-     * @return Charge
+     * @throws CannotReassignException if parent is already set
      */
     public function setParent(ChargeInterface $parent): self
     {
@@ -235,10 +234,8 @@ class Charge implements ChargeInterface
 
     /**
      * Forcefully changes parent charge
-     *
-     * @return Charge
      */
-    public function overwriteParent(ChargeInterface $parent): self
+    public function overwriteParent(ChargeInterface $parent): ChargeInterface
     {
         $this->parent = $parent;
 
