@@ -139,11 +139,11 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /perform billing for time (\S+) for sales/
+     * @Given /perform billing at (\S+)/
      */
     public function performBilling(string $time): void
     {
-        $this->builder->performBilling($time);
+        $this->builder->performBilling($this->prepareTime($time));
     }
 
     /**
