@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tests\support\bill;
 
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
+use hiqdev\yii\DataMapper\query\Specification;
 
 class SimpleBillRepository implements BillRepositoryInterface
 {
@@ -53,5 +54,10 @@ class SimpleBillRepository implements BillRepositoryInterface
         }
 
         return $found;
+    }
+
+    public function findAll(Specification $specification): array
+    {
+        return $this->bills;
     }
 }

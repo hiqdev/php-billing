@@ -18,6 +18,7 @@ use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
+use hiqdev\yii\DataMapper\query\Specification;
 
 class FactoryBasedBuilder implements BuilderInterface
 {
@@ -127,7 +128,7 @@ class FactoryBasedBuilder implements BuilderInterface
     {
         $this->performAction([
             'sale' => $this->buildSale(null, $target, $plan, $time),
-            'type' => 'monthly,cdn_traf95',
+            'type' => 'monthly,cdn_traf95_max',
             'quantity' => '1 items',
             'target' => $target,
         ]);
@@ -146,7 +147,7 @@ class FactoryBasedBuilder implements BuilderInterface
     public function performAction(array $data)
     {
         $action = $this->buildAction($data);
-        $this->getBilling()->perform(Order::fromActions([$action]));
+        $this->getBilling()->perform($action);
     }
 
     public function buildAction(array $data)
