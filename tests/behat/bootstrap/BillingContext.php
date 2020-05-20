@@ -151,6 +151,14 @@ class BillingContext extends BaseContext
      */
     public function bill($type, $sum, $currency, $quantity, $unit, $target)
     {
+        $this->billWithTime($type, $sum, $currency, $quantity, $unit, $target);
+    }
+
+    /**
+     * @Given /bill +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+) at (.+)$/
+     */
+    public function billWithTime($type, $sum, $currency, $quantity, $unit, $target, $time = null)
+    {
         $quantity = $this->prepareQuantity($quantity);
         $sum = $this->prepareSum($sum, $quantity);
         $bill = $this->findBill([
@@ -165,6 +173,11 @@ class BillingContext extends BaseContext
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
         Assert::assertTrue(Unit::create($unit)->equals($bill->getQuantity()->getUnit()));
+        if ($time) {
+            $time = new DateTimeImmutable($this->prepareTime($time));
+            Assert::assertEquals($time, $bill->getTime());
+        }
+
     }
 
     public function findBill(array $params): BillInterface
