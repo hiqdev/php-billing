@@ -27,4 +27,6 @@ interface BuilderInterface
     public function buildPurchase(string $target, string $plan, string $time);
 
     public function findBills(array $data): array;
+
+    public function performBilling(string $time): void;
 }

@@ -139,7 +139,7 @@ class FactoryBasedBuilder implements BuilderInterface
         return $this->factory->get('target', $target);
     }
 
-    public function performBilling(string $time)
+    public function performBilling(string $time): void
     {
         // TODO implement
     }
