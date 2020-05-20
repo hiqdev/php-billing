@@ -203,6 +203,14 @@ class BillingContext extends BaseContext
     }
 
     /**
+     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+)$/
+     */
+    public function charge($type, $amount, $currency, $quantity, $unit)
+    {
+        $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
+    }
+
+    /**
      * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+)$/
      */
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target)
@@ -217,14 +225,6 @@ class BillingContext extends BaseContext
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
         Assert::assertEquals($quantity, $charge->getUsage()->getQuantity());
         Assert::assertTrue(Unit::create($unit)->equals($charge->getUsage()->getUnit()));
-    }
-
-    /**
-     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+)$/
-     */
-    public function charge($type, $amount, $currency, $quantity, $unit)
-    {
-        $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
     }
 
     public function findCharge($type, $target): ?ChargeInterface
