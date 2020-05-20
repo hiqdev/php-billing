@@ -177,7 +177,6 @@ class BillingContext extends BaseContext
             $time = new DateTimeImmutable($this->prepareTime($time));
             Assert::assertEquals($time, $bill->getTime());
         }
-
     }
 
     public function findBill(array $params): BillInterface
