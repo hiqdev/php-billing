@@ -15,6 +15,7 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 
 abstract class BaseContext implements Context
 {
+    /** @var BuilderInterface */
     protected $builder;
 
     /**
