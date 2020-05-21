@@ -166,6 +166,7 @@ class BillingContext extends BaseContext
             'target' => $target,
             'sum' => "$sum $currency",
             'quantity' => "$quantity $unit",
+            'time' => $time ? $this->prepareTime($time) : null,
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
         Assert::assertSame($target, $bill->getTarget()->getFullName());
