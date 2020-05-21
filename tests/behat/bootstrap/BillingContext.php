@@ -161,11 +161,13 @@ class BillingContext extends BaseContext
     {
         $quantity = $this->prepareQuantity($quantity);
         $sum = $this->prepareSum($sum, $quantity);
+        $time = $this->prepareTime($time);
         $bill = $this->findBill([
             'type' => $type,
             'target' => $target,
             'sum' => "$sum $currency",
             'quantity' => "$quantity $unit",
+            'time' => $time,
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
         Assert::assertSame($target, $bill->getTarget()->getFullName());
@@ -174,8 +176,7 @@ class BillingContext extends BaseContext
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
         Assert::assertTrue(Unit::create($unit)->equals($bill->getQuantity()->getUnit()));
         if ($time) {
-            $time = new DateTimeImmutable($this->prepareTime($time));
-            Assert::assertEquals($time, $bill->getTime());
+            Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime());
         }
     }
 
@@ -259,9 +260,9 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @return string|false
+     * @return string|false|null
      */
-    protected function prepareTime(string $time)
+    protected function prepareTime(string $time = null)
     {
         if ($time === 'midnight second day of this month') {
             return date('Y-m-02');
