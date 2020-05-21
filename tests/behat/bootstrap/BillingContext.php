@@ -161,12 +161,13 @@ class BillingContext extends BaseContext
     {
         $quantity = $this->prepareQuantity($quantity);
         $sum = $this->prepareSum($sum, $quantity);
+        $time = $time ? $this->prepareTime($time) : null;
         $bill = $this->findBill([
             'type' => $type,
             'target' => $target,
             'sum' => "$sum $currency",
             'quantity' => "$quantity $unit",
-            'time' => $time ? $this->prepareTime($time) : null,
+            'time' => $time,
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
         Assert::assertSame($target, $bill->getTarget()->getFullName());
@@ -175,8 +176,7 @@ class BillingContext extends BaseContext
         Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
         Assert::assertTrue(Unit::create($unit)->equals($bill->getQuantity()->getUnit()));
         if ($time) {
-            $time = new DateTimeImmutable($this->prepareTime($time));
-            Assert::assertEquals($time, $bill->getTime());
+            Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime());
         }
     }
 
