@@ -161,7 +161,7 @@ class BillingContext extends BaseContext
     {
         $quantity = $this->prepareQuantity($quantity);
         $sum = $this->prepareSum($sum, $quantity);
-        $time = $time ? $this->prepareTime($time) : null;
+        $time = $this->prepareTime($time);
         $bill = $this->findBill([
             'type' => $type,
             'target' => $target,
@@ -260,9 +260,9 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @return string|false
+     * @return string|false|null
      */
-    protected function prepareTime(string $time)
+    protected function prepareTime(string $time = null)
     {
         if ($time === 'midnight second day of this month') {
             return date('Y-m-02');
