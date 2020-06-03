@@ -12,7 +12,7 @@ namespace hiqdev\php\billing\tests\support\bill;
 
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
-use hiqdev\yii\DataMapper\query\Specification;
+use hiqdev\DataMapper\Query\Specification;
 
 class SimpleBillRepository implements BillRepositoryInterface
 {
