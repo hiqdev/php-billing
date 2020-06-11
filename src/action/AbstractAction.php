@@ -200,7 +200,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
             return;
         }
         if ($this->hasId()) {
-            throw new CannotReassignException('action id');
+            throw new CannotReassignException("action id old:{$this->id} new: $id");
         }
         $this->id = $id;
     }
