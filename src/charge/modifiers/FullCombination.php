@@ -86,7 +86,9 @@ class FullCombination implements ChargeModifier
 
             if (\count($rightCharges) === \count($dirtyRightCharges)) { // Original $leftTotal was not returned
                 foreach ($rightCharges as $rightCharge) {
-                    $rightCharge->overwriteParent($charge);
+                    if ($rightCharge->getParent() !== null) {
+                        $rightCharge->overwriteParent($charge);
+                    }
                 }
 
                 return $rightCharges;
