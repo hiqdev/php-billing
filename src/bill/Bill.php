@@ -137,26 +137,17 @@ class Bill implements BillInterface
         return $this->time;
     }
 
-    /**
-     * @return TargetInterface
-     */
-    public function getTarget()
+    public function getTarget(): ?TargetInterface
     {
         return $this->target;
     }
 
-    /**
-     * @return CustomerInterface
-     */
-    public function getCustomer()
+    public function getCustomer(): CustomerInterface
     {
         return $this->customer;
     }
 
-    /**
-     * @return QuantityInterface
-     */
-    public function getQuantity()
+    public function getQuantity(): QuantityInterface
     {
         return $this->quantity;
     }
@@ -168,18 +159,12 @@ class Bill implements BillInterface
         return $this;
     }
 
-    /**
-     * @return Money
-     */
-    public function getSum()
+    public function getSum(): Money
     {
         return $this->sum;
     }
 
-    /**
-     * @return PlanInterface
-     */
-    public function getPlan()
+    public function getPlan(): ?PlanInterface
     {
         return $this->plan;
     }
