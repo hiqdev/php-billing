@@ -124,7 +124,7 @@ class Charge implements ChargeInterface
         return $this->action;
     }
 
-    public function getPrice(): PriceInterface
+    public function getPrice(): ?PriceInterface
     {
         return $this->price;
     }

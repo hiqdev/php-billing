@@ -38,7 +38,7 @@ interface ChargeInterface extends \JsonSerializable
 
     public function getAction(): ActionInterface;
 
-    public function getPrice(): PriceInterface;
+    public function getPrice(): ?PriceInterface;
 
     public function getSum(): Money;
 
