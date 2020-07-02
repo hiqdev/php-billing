@@ -137,7 +137,10 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
 
     public function jsonSerialize()
     {
-        return array_filter(get_object_vars($this));
+        $res = array_filter(get_object_vars($this));
+        unset($res['plan']);
+
+        return $res;
     }
 
     /**
