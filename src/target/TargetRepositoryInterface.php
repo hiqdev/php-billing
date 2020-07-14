@@ -15,5 +15,7 @@ namespace hiqdev\php\billing\target;
  */
 interface TargetRepositoryInterface
 {
+    public function findOne($specification);
+
     public function save(TargetInterface $target);
 }

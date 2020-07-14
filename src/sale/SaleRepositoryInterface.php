@@ -12,12 +12,15 @@ namespace hiqdev\php\billing\sale;
 
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\sale\SaleInterface;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface SaleRepositoryInterface
 {
+    public function findId(SaleInterface $sale);
+
     /**
      * Finds suitable sales for given order.
      * @return PlanInterface[] array: actionKey => plan
