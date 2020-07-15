@@ -19,6 +19,7 @@ class PriceFactory implements PriceFactoryInterface
 {
     protected $creators = [
         EnumPrice::class    => 'createEnumPrice',
+        RatePrice::class    => 'createRatePrice',
         SinglePrice::class  => 'createSinglePrice',
     ];
 
@@ -37,6 +38,7 @@ class PriceFactory implements PriceFactoryInterface
         $this->types = $types;
         $this->defaultClass = $defaultClass;
     }
+
 
     /**
      * Creates price object.
@@ -76,6 +78,11 @@ class PriceFactory implements PriceFactoryInterface
     public function createEnumPrice(PriceCreationDto $dto)
     {
         return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->unit, $dto->currency, $dto->sums);
+    }
+
+    public function createRatePrice(PriceCreationDto $dto)
+    {
+        return new RatePrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->rate);
     }
 
     public function createSinglePrice(PriceCreationDto $dto)
