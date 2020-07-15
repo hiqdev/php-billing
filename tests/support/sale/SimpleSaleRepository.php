@@ -24,6 +24,11 @@ class SimpleSaleRepository implements SaleRepositoryInterface
         $this->sale = $sale;
     }
 
+    public function findId(SaleInterface $sale)
+    {
+        return $this->sale->getId();
+    }
+
     public function findByAction(ActionInterface $action)
     {
         return $this->sale;
