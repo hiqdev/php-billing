@@ -22,7 +22,7 @@ interface BuilderInterface
 
     public function recreatePlan(string $name);
 
-    public function buildSale(string $id, string $target, string $plan, string $time);
+    public function buildSale(string $target, string $plan, string $time);
 
     public function buildPurchase(string $target, string $plan, string $time);
 

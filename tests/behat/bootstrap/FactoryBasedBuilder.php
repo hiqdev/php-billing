@@ -108,11 +108,10 @@ class FactoryBasedBuilder implements BuilderInterface
         $plan->setPrices($this->prices);
     }
 
-    public function buildSale($id, string $target, string $plan, string $time)
+    public function buildSale(string $target, string $plan, string $time)
     {
         $this->time = $time;
         $this->sale = $this->factory->get('sale', array_filter([
-            'id' => $id,
             'customer' => $this->customer,
             'target' => $target,
             'plan' => $plan,
@@ -125,7 +124,7 @@ class FactoryBasedBuilder implements BuilderInterface
     public function buildPurchase(string $target, string $plan, string $time)
     {
         $this->performAction([
-            'sale' => $this->buildSale(null, $target, $plan, $time),
+            'sale' => $this->buildSale($target, $plan, $time),
             'type' => 'monthly,cdn_traf95_max',
             'quantity' => '1 items',
             'target' => $target,

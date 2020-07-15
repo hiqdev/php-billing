@@ -112,12 +112,12 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /sale (\S+) for (\S+) plan:(\S+) time:(\S+)/
+     * @Given /sale target (\S+) by plan (\S+) at (\S+)/
      */
-    public function sale($id, $target, $plan, $time): void
+    public function sale($target, $plan, $time): void
     {
         $this->saleTime = $this->prepareTime($time);
-        $this->builder->buildSale($id, $target, $plan, $this->saleTime);
+        $this->builder->buildSale($target, $plan, $this->saleTime);
     }
 
     /**
