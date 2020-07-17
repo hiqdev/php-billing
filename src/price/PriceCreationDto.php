@@ -67,4 +67,7 @@ class PriceCreationDto
      * @var string[]
      */
     public $sums;
+
+    /** @var float */
+    public $rate;
 }
