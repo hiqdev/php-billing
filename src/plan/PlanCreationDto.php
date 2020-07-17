@@ -22,4 +22,7 @@ class PlanCreationDto
     public $seller;
 
     public $prices;
+
+    /// XXX should not be here
+    public $is_grouping;
 }
