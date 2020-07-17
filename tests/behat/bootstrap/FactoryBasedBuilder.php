@@ -10,9 +10,12 @@
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
+use hiqdev\billing\hiapi\plan\PlanFactory;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
+use hiqdev\DataMapper\Query\Specification;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\PriceFactory;
+use hiqdev\php\billing\price\RatePrice;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
@@ -44,7 +47,9 @@ class FactoryBasedBuilder implements BuilderInterface
             'price'     => new PriceFactory([
                 'certificate,certificate_purchase' => EnumPrice::class,
                 'certificate,certificate_renewal' => EnumPrice::class,
+                'referral,referral' => RatePrice::class,
             ], SinglePrice::class),
+            'plan' => new PlanFactory(),
         ]);
     }
 
@@ -81,12 +86,13 @@ class FactoryBasedBuilder implements BuilderInterface
         ]);
     }
 
-    public function buildPlan(string $name, string $type, bool $grouping = false)
+    public function buildPlan(string $name, string $type, bool $is_grouping = false)
     {
         $this->prices = [];
         $this->plan = $this->factory->get('plan', [
             'name' => $name,
             'seller' => $this->reseller,
+            'is_grouping' => $is_grouping,
         ]);
     }
 
@@ -98,6 +104,9 @@ class FactoryBasedBuilder implements BuilderInterface
         $data['prepaid'] = ($data['prepaid'] ?? 0) . " $data[unit]";
         if (empty($data['target'])) {
             $data['target'] = Target::any();
+        }
+        if (empty($data['plan'])) {
+            $data['plan'] = $this->plan;
         }
         $this->prices[] = $this->factory->get('price', $data);
     }

@@ -58,6 +58,9 @@ class BillingContext extends BaseContext
 
     protected function fullPrice(array $data)
     {
+        if (!empty($data['price'])) {
+            $data['rate'] = $data['price'];
+        }
         $this->builder->buildPrice($data);
     }
 
@@ -130,7 +133,7 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /resource consumption for (\S+) is (\d+) (\S+) for target (\S+) at (.+)$/
+     * @Given /resource consumption for (\S+) is (\S+) (\S+) for target (\S+) at (.+)$/
      */
     public function setConsumption(string $type, int $amount, string $unit, string $target, string $time): void
     {
