@@ -27,7 +27,7 @@ use Money\Money;
 class RatePrice extends AbstractPrice
 {
     /** @var float */
-    protected $unit;
+    protected $rate;
 
     public function __construct(
         $id,
