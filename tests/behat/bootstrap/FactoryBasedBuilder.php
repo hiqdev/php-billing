@@ -121,6 +121,16 @@ class FactoryBasedBuilder implements BuilderInterface
         return $this->sale;
     }
 
+    public function setConsumption($type, $amount, $unit, $target, $time)
+    {
+        $this->actions[] = $this->buildAction([
+            'type' => $type,
+            'quantity' => "$amount $unit",
+            'target' => $target,
+            'time' => $time,
+        ]);
+    }
+
     public function buildPurchase(string $target, string $plan, string $time)
     {
         $this->performAction([
@@ -138,7 +148,11 @@ class FactoryBasedBuilder implements BuilderInterface
 
     public function performBilling(string $time): void
     {
-        // TODO implement
+        $this->getBilling()->perform($this->actions);
+        #$bills = $this->getBilling()->getBillRepository()->findAll(new Specification);
+        #var_dump(__FILE__ . ':' . __LINE__ . ' ' . __METHOD__, $bills);die;
+        #$b1 = reset($bills);
+        #var_dump(__FILE__ . ':' . __LINE__ . ' ' . __METHOD__, $b1->getCharges());die;
     }
 
     public function performAction(array $data)
