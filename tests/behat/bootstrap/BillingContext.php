@@ -193,14 +193,23 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /bills number is (\d+) for (\S+) for target (\S+)/
+     * @Given /bills number is (\d+) for (\S+) for target (\S+)$/
      */
     public function billsNumber($number, $type, $target)
     {
-        $count = count($this->builder->findBills([
+        $this->billsNumberWithTime($number, $type, $target);
+    }
+
+    /**
+     * @Given /bills number is (\d+) for (\S+) for target (\S+) at (\S+)/
+     */
+    public function billsNumberWithTime($number, $type, $target, $time = null)
+    {
+        $count = count($this->builder->findBills(array_filter([
             'type' => $type,
             'target' => $target,
-        ]));
+            'time' => $this->prepareTime($time),
+        ])));
 
         Assert::assertEquals($number, $count);
     }
