@@ -50,7 +50,7 @@ class RatePrice extends AbstractPrice
         $sum = $quantity->multiply(-$this->rate/100.0);
         $currency = strtoupper($sum->getUnit()->getName());
 
-        return Money::{$currency}($sum->getQuantity());
+        return Money::{$currency}(floor($sum->getQuantity()));
     }
 
     public function calculatePrice(QuantityInterface $quantity): ?Money
