@@ -133,7 +133,7 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /resource consumption for (\S+) is (\S+) (\S+) for target (\S+) at (.+)$/
+     * @Given /resource consumption for (\S+) is +(\S+) (\S+) for target (\S+) at (.+)$/
      */
     public function setConsumption(string $type, int $amount, string $unit, string $target, string $time): void
     {
@@ -176,8 +176,8 @@ class BillingContext extends BaseContext
         Assert::assertSame($target, $bill->getTarget()->getFullName());
         Assert::assertEquals($sum * 100, $bill->getSum()->getAmount());
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
-        Assert::assertEquals($quantity, $bill->getQuantity()->getQuantity());
-        Assert::assertTrue(Unit::create($unit)->equals($bill->getQuantity()->getUnit()));
+        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity());
+        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()));
         if ($time) {
             Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime());
         }
@@ -243,8 +243,8 @@ class BillingContext extends BaseContext
         Assert::assertSame($target, $charge->getTarget()->getFullName());
         Assert::assertEquals($amount * 100, $charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
-        Assert::assertEquals($quantity, $charge->getUsage()->getQuantity());
-        Assert::assertTrue(Unit::create($unit)->equals($charge->getUsage()->getUnit()));
+        Assert::assertEquals((float)$quantity, (float)$charge->getUsage()->getQuantity());
+        Assert::assertEquals(strtolower($unit), $charge->getUsage()->getUnit()->getName());
     }
 
     public function findCharge($type, $target): ?ChargeInterface
