@@ -119,6 +119,10 @@ class Calculator implements CalculatorInterface
             return null;
         }
 
+        if ($action->getSale() !== null && $action->getSale()->getTime() > $this->currentTime) {
+            return null;
+        }
+
         $usage = $price->calculateUsage($action->getQuantity());
         if ($usage === null) {
             return null;

@@ -11,24 +11,16 @@
 namespace hiqdev\php\billing\tests\unit\action;
 
 use DateTimeImmutable;
-use Exception;
 use hiqdev\php\billing\action\Action;
-use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
-use hiqdev\php\billing\Exception\EntityNotFoundException;
 use hiqdev\php\billing\order\Calculator;
-use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\Plan;
-use hiqdev\php\billing\plan\PlanInterface;
-use hiqdev\php\billing\plan\PlanRepositoryInterface;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\sale\Sale;
-use hiqdev\php\billing\sale\SaleInterface;
-use hiqdev\php\billing\sale\SaleRepositoryInterface;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
 use hiqdev\php\billing\tests\support\sale\SimpleSaleRepository;
@@ -140,6 +132,31 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
         $charge = $this->calculator->calculateCharge($this->price, $action);
         $this->assertNull($charge);
+    }
+
+    public function testChargesForThisMonthAreNotCalculatedUntillDateOccurs()
+    {
+        $createChargeForSaleAt = function (DateTimeImmutable $time): ?Charge {
+            $action = $this->createAction($this->prepaid->multiply(2));
+
+            $plan = new Plan(null, '', $this->customer, [$this->price]);
+            $futureSale = new Sale(null, $this->target, $this->customer, $plan, $time);
+            $action->setSale($futureSale);
+
+            return $this->calculator->calculateCharge($this->price, $action);
+        };
+
+        $notOccurredYet = $createChargeForSaleAt(
+            // Sale is in future
+            $this->time->add(new \DateInterval('PT1M'))
+        );
+        $this->assertNull($notOccurredYet);
+
+        $occurred = $createChargeForSaleAt(
+            // Sale is in past
+            $this->time->sub(new \DateInterval('PT1M'))
+        );
+        $this->assertNotNull($occurred);
     }
 
     public function testChargesForThisMonthSalesAreCalculated()
