@@ -19,7 +19,7 @@ class SimpleSaleRepository implements SaleRepositoryInterface
 {
     protected $sale;
 
-    public function __construct(SaleInterface $sale)
+    public function __construct(?SaleInterface $sale = null)
     {
         $this->sale = $sale;
     }

@@ -19,7 +19,7 @@ class SimplePlanRepository implements PlanRepositoryInterface
 {
     protected $plan;
 
-    public function __construct(PlanInterface $plan)
+    public function __construct(?PlanInterface $plan = null)
     {
         $this->plan = $plan;
     }

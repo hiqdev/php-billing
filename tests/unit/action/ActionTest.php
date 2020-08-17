@@ -11,17 +11,27 @@
 namespace hiqdev\php\billing\tests\unit\action;
 
 use DateTimeImmutable;
+use Exception;
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
+use hiqdev\php\billing\Exception\EntityNotFoundException;
 use hiqdev\php\billing\order\Calculator;
+use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\plan\PlanRepositoryInterface;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\sale\Sale;
+use hiqdev\php\billing\sale\SaleInterface;
+use hiqdev\php\billing\sale\SaleRepositoryInterface;
 use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
+use hiqdev\php\billing\tests\support\sale\SimpleSaleRepository;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
@@ -87,7 +97,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->customer = new Customer(2, 'client');
         $this->time     = new DateTimeImmutable('now');
         $this->generalizer = new Generalizer();
-        $this->calculator = new Calculator($this->generalizer, null, null);
+        $saleRepository = new SimpleSaleRepository();
+        $planRepository = new SimplePlanRepository();
+        $this->calculator = new Calculator($this->generalizer, $saleRepository, $planRepository, $this->time);
     }
 
     protected function createAction(QuantityInterface $quantity)

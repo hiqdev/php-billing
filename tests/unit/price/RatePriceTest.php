@@ -15,27 +15,23 @@ use hiqdev\php\billing\price\RatePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\QuantityInterface;
 use Money\Money;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class RatePriceTest extends \PHPUnit\Framework\TestCase
+class RatePriceTest extends TestCase
 {
-    /**
-     * @var SinglePrice
-     */
-    protected $price;
-
-    /**
-     * @var Action
-     */
-    protected $action;
-
-    /**
-     * @var Money
-     */
-    protected $money;
+    protected RatePrice $price;
+    protected Action $action;
+    protected Money $money;
+    protected Target $target;
+    protected Type $type;
+    protected int $sum;
+    protected int $rate;
+    protected QuantityInterface $quantity;
 
     protected function setUp(): void
     {
@@ -43,7 +39,7 @@ class RatePriceTest extends \PHPUnit\Framework\TestCase
         $this->type     = new Type(null, 'referral');
         $this->sum      = 123;
         $this->rate     = 5;
-        $this->quantity = Quantity::usd($this->sum/$this->rate);
+        $this->quantity = Quantity::USD($this->sum/$this->rate);
         $this->price    = new RatePrice(null, $this->type, $this->target, null, $this->rate);
     }
 
@@ -58,7 +54,7 @@ class RatePriceTest extends \PHPUnit\Framework\TestCase
 
     public function testCalculateSum()
     {
-        $this->assertEquals(Money::USD($this->sum), $this->price->calculateSum($this->quantity));
+        $this->assertEquals(Money::USD(-$this->sum), $this->price->calculateSum($this->quantity));
     }
 
     public function testJsonSerialize()

@@ -19,6 +19,8 @@ use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\tests\support\plan\CertificatePlan;
+use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
+use hiqdev\php\billing\tests\support\sale\SimpleSaleRepository;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Money;
@@ -36,7 +38,9 @@ class PlanTest extends \PHPUnit\Framework\TestCase
     {
         $this->plan = CertificatePlan::get();
         $this->time = new DateTimeImmutable('now');
-        $this->calculator = new Calculator(new Generalizer(), null, null);
+        $saleRepository = new SimpleSaleRepository();
+        $planRepository = new SimplePlanRepository();
+        $this->calculator = new Calculator(new Generalizer(), $saleRepository, $planRepository, $this->time);
     }
 
     public function testCalculateCharges()

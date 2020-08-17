@@ -16,6 +16,7 @@ use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\order\OrderInterface;
+use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
 use hiqdev\php\units\Quantity;
 
@@ -38,7 +39,8 @@ class CalculatorTest extends SaleTest
     {
         parent::setUp();
         $this->generalizer = new Generalizer();
-        $this->calculator = new Calculator($this->generalizer, $this->repository, null);
+        $planRepository = new SimplePlanRepository();
+        $this->calculator = new Calculator($this->generalizer, $this->repository, $planRepository, $this->time);
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {

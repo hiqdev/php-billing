@@ -16,6 +16,7 @@ use hiqdev\php\billing\order\Calculator;
 use hiqdev\php\billing\order\CalculatorInterface;
 use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\order\OrderInterface;
+use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
 use hiqdev\php\billing\tests\unit\plan\CertificatePlan;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
 use hiqdev\php\billing\tools\Aggregator;
@@ -50,7 +51,8 @@ class AggregatorTest extends SaleTest
     {
         parent::setUp();
         $this->generalizer = new Generalizer();
-        $this->calculator = new Calculator($this->generalizer, $this->repository, null);
+        $planRepository = new SimplePlanRepository();
+        $this->calculator = new Calculator($this->generalizer, $this->repository, $planRepository, $this->time);
         $this->aggregator = new Aggregator($this->generalizer);
         $actions = [];
         foreach ($this->plan->types as $type) {

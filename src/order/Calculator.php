@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\order;
 
+use DateTimeImmutable;
+use Exception;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\action\TemporaryActionInterface;
@@ -32,30 +34,21 @@ use hiqdev\php\billing\sale\SaleRepositoryInterface;
  */
 class Calculator implements CalculatorInterface
 {
-    /**
-     * @var GeneralizerInterface
-     */
-    protected $generalizer;
-    /**
-     * @var SaleRepositoryInterface
-     */
-    private $saleRepository;
-    /**
-     * @var PlanRepositoryInterface
-     */
-    private $planRepository;
+    protected GeneralizerInterface $generalizer;
+    private SaleRepositoryInterface $saleRepository;
+    private PlanRepositoryInterface $planRepository;
+    private DateTimeImmutable $currentTime;
 
-    /**
-     * @param PlanRepositoryInterface $planRepository
-     */
     public function __construct(
         GeneralizerInterface $generalizer,
-        ?SaleRepositoryInterface $saleRepository,
-        ?PlanRepositoryInterface $planRepository
+        SaleRepositoryInterface $saleRepository,
+        PlanRepositoryInterface $planRepository,
+        DateTimeImmutable $currentTime = null
     ) {
         $this->generalizer    = $generalizer;
         $this->saleRepository = $saleRepository;
         $this->planRepository = $planRepository;
+        $this->currentTime = $currentTime ?? new DateTimeImmutable();
     }
 
     /**
@@ -151,7 +144,7 @@ class Calculator implements CalculatorInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @return PlanInterface[]|Plan
      */
     public function findPlans(OrderInterface $order)
@@ -190,7 +183,7 @@ class Calculator implements CalculatorInterface
             }
             foreach ($lookPlanIds as $actionKey => $planId) {
                 if (empty($foundPlans[$planId])) {
-                    throw new \Exception('not found plan');
+                    throw new Exception('not found plan');
                 }
                 $plans[$actionKey] = $foundPlans[$planId];
             }
