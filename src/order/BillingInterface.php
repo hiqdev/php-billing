@@ -35,4 +35,9 @@ interface BillingInterface
      * @return ChargeInterface[]
      */
     public function calculateCharges($source, DateTimeImmutable $time = null): array;
+
+    /**
+     * @return CalculatorInterface
+     */
+    public function getCalculator(): CalculatorInterface;
 }

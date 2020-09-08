@@ -154,7 +154,7 @@ class Calculator implements CalculatorInterface
      * @throws Exception
      * @return PlanInterface[]|Plan
      */
-    public function findPlans(OrderInterface $order)
+    private function findPlans(OrderInterface $order)
     {
         $sales = $this->findSales($order);
         $plans = [];
@@ -202,7 +202,7 @@ class Calculator implements CalculatorInterface
     /**
      * @return SaleInterface[]|Sale
      */
-    public function findSales(OrderInterface $order)
+    private function findSales(OrderInterface $order)
     {
         $sales = [];
         $lookActions = [];
