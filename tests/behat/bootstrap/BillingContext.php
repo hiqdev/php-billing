@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\tests\behat\bootstrap;
 use DateTimeImmutable;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
-use hiqdev\php\units\Unit;
 use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
