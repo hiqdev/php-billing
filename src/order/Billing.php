@@ -108,4 +108,12 @@ class Billing implements BillingInterface
 
         return $res;
     }
+
+    /**
+     * @return CalculatorInterface
+     */
+    public function getCalculator(): CalculatorInterface
+    {
+        return $this->calculator;
+    }
 }
