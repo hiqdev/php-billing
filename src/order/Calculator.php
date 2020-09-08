@@ -26,6 +26,8 @@ use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
+use hiqdev\php\billing\tools\ActualDateTimeProvider;
+use hiqdev\php\billing\tools\CurrentDateTimeProviderInterface;
 
 /**
  * Calculator calculates charges for given order or action.
@@ -37,18 +39,19 @@ class Calculator implements CalculatorInterface
     protected GeneralizerInterface $generalizer;
     private SaleRepositoryInterface $saleRepository;
     private PlanRepositoryInterface $planRepository;
-    private DateTimeImmutable $currentTime;
+
+    private CurrentDateTimeProviderInterface $dateTimeProvider;
 
     public function __construct(
         GeneralizerInterface $generalizer,
         SaleRepositoryInterface $saleRepository,
         PlanRepositoryInterface $planRepository,
-        DateTimeImmutable $currentTime = null
+        CurrentDateTimeProviderInterface $dateTimeProvider = null
     ) {
         $this->generalizer    = $generalizer;
         $this->saleRepository = $saleRepository;
         $this->planRepository = $planRepository;
-        $this->currentTime = $currentTime ?? new DateTimeImmutable();
+        $this->dateTimeProvider = $dateTimeProvider ?? new ActualDateTimeProvider();
     }
 
     /**
@@ -119,7 +122,7 @@ class Calculator implements CalculatorInterface
             return null;
         }
 
-        if ($action->getSale() !== null && $action->getSale()->getTime() > $this->currentTime) {
+        if ($action->getSale() !== null && $action->getSale()->getTime() > $this->dateTimeProvider->dateTimeImmutable()) {
             return null;
         }
 
