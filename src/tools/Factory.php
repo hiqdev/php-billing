@@ -23,7 +23,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Factory
+class Factory implements FactoryInterface
 {
     private $entities = [];
 
