@@ -23,6 +23,7 @@ use hiqdev\php\billing\tools\Aggregator;
 use hiqdev\php\billing\tools\AggregatorInterface;
 use hiqdev\php\units\Quantity;
 use Money\Money;
+use hiqdev\php\billing\tools\CachedDateTimeProvider;
 
 class AggregatorTest extends SaleTest
 {
@@ -52,7 +53,8 @@ class AggregatorTest extends SaleTest
         parent::setUp();
         $this->generalizer = new Generalizer();
         $planRepository = new SimplePlanRepository();
-        $this->calculator = new Calculator($this->generalizer, $this->repository, $planRepository, $this->time);
+        $timeProvider = new CachedDateTimeProvider($this->time);
+        $this->calculator = new Calculator($this->generalizer, $this->repository, $planRepository, $timeProvider);
         $this->aggregator = new Aggregator($this->generalizer);
         $actions = [];
         foreach ($this->plan->types as $type) {

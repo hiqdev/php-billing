@@ -21,6 +21,7 @@ use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\tests\support\plan\CertificatePlan;
 use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
 use hiqdev\php\billing\tests\support\sale\SimpleSaleRepository;
+use hiqdev\php\billing\tools\CachedDateTimeProvider;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Money;
@@ -40,7 +41,8 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->time = new DateTimeImmutable('now');
         $saleRepository = new SimpleSaleRepository();
         $planRepository = new SimplePlanRepository();
-        $this->calculator = new Calculator(new Generalizer(), $saleRepository, $planRepository, $this->time);
+        $timeProvider = new CachedDateTimeProvider($this->time);
+        $this->calculator = new Calculator(new Generalizer(), $saleRepository, $planRepository, $timeProvider);
     }
 
     public function testCalculateCharges()

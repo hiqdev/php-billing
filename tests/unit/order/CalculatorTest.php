@@ -18,6 +18,7 @@ use hiqdev\php\billing\order\Order;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
 use hiqdev\php\billing\tests\unit\sale\SaleTest;
+use hiqdev\php\billing\tools\CachedDateTimeProvider;
 use hiqdev\php\units\Quantity;
 
 class CalculatorTest extends SaleTest
@@ -40,7 +41,8 @@ class CalculatorTest extends SaleTest
         parent::setUp();
         $this->generalizer = new Generalizer();
         $planRepository = new SimplePlanRepository();
-        $this->calculator = new Calculator($this->generalizer, $this->repository, $planRepository, $this->time);
+        $timeProvider = new CachedDateTimeProvider($this->time);
+        $this->calculator = new Calculator($this->generalizer, $this->repository, $planRepository, $timeProvider);
         $actions = [];
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
