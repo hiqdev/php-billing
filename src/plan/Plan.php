@@ -45,18 +45,18 @@ class Plan implements PlanInterface
     /**
      * @var PriceInterface[]
      */
-    protected $prices;
+    protected $prices = [];
 
     /**
-     * @param int $id
+     * @param int|string|null $id
      * @param string $name
      * @param PriceInterface[] $prices
      */
     public function __construct(
-                            $id,
-                            $name,
+        $id,
+        $name,
         CustomerInterface $seller = null,
-                            $prices = null
+        $prices = []
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -80,9 +80,14 @@ class Plan implements PlanInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     /**
@@ -98,27 +103,20 @@ class Plan implements PlanInterface
         return $this->parent;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasPrices()
+    public function hasPrices(): bool
     {
-        return $this->prices !== null;
+        return $this->prices !== [];
     }
 
     /**
-     * @return PriceInterface[]|null
+     * @return PriceInterface[]
      */
-    public function getPrices(): ?array
+    public function getPrices(): array
     {
         return $this->prices;
     }
 
-    /**
-     * @param PriceInterface[] $prices
-     * @throws \Exception
-     */
-    public function setPrices(array $prices)
+    public function setPrices(array $prices): void
     {
         if ($this->hasPrices()) {
             throw new CannotReassignException('plan prices');

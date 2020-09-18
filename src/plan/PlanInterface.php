@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\plan;
 
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\price\PriceInterface;
 
 /**
@@ -22,7 +23,7 @@ use hiqdev\php\billing\price\PriceInterface;
 interface PlanInterface extends EntityInterface
 {
     /**
-     * @return int|string
+     * @return int|string|null
      */
     public function getId();
 
@@ -35,10 +36,15 @@ interface PlanInterface extends EntityInterface
     /**
      * @return PriceInterface[]
      */
-    public function getPrices(): ?array;
+    public function getPrices(): array;
+    public function hasPrices(): bool;
 
     /**
-     * @return CustomerInterface
+     * @param PriceInterface[] $prices
+     * @throws CannotReassignException when prices are already set
      */
+    public function setPrices(array $prices): void;
     public function getSeller(): ?CustomerInterface;
+    public function getName(): string;
+    public function setName(string $name): void;
 }
