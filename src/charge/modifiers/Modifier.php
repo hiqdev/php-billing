@@ -60,6 +60,11 @@ class Modifier implements ChargeModifier
         return new Discount($this->addons);
     }
 
+    public function cap()
+    {
+        return new Cap($this->addons);
+    }
+
     public function leasing()
     {
         return new Leasing($this->addons);

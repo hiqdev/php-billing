@@ -39,6 +39,8 @@ abstract class Period implements AddonInterface
     }
 
     protected static $periods = [
+        'day'       => DayPeriod::class,
+        'days'      => DayPeriod::class,
         'month'     => MonthPeriod::class,
         'months'    => MonthPeriod::class,
         'year'      => YearPeriod::class,

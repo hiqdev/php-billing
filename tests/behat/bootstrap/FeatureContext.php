@@ -170,11 +170,11 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})(?: with (.+)?)?$/
+     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})(?: for ([\d.]+)? (\w+)?)?(?: with (.+)?)?$/
      */
-    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null, $events = null): void
+    public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null, $qty = null, $unit = null, $events = null): void
     {
-        $this->chargeIs($numeral, $type, $sum, $currency, null, $events);
+        $this->chargeIs($numeral, $type, $sum, $currency, null, $qty, $unit, $events);
     }
 
     /**
@@ -182,16 +182,16 @@ class FeatureContext implements Context
      */
     public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null, $events = null): void
     {
-        $this->chargeIs($numeral, $type, $sum, $currency, $reason, $events);
+        $this->chargeIs($numeral, $type, $sum, $currency, $reason, null, null, $events);
     }
 
-    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null, $events = null): void
+    public function chargeIs($numeral, $type = null, $sum = null, $currency = null, $reason = null, $qty = null, $unit = null, $events = null): void
     {
         $no = $this->ensureNo($numeral);
         if ($no === 0) {
             $this->calculatePrice();
         }
-        $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason, $events);
+        $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason, $qty, $unit, $events);
     }
 
     /**
@@ -237,9 +237,11 @@ class FeatureContext implements Context
      * @param string|null $sum
      * @param string|null $currency
      * @param string|null $reason
+     * @param string|null $qty
+     * @param string|null $unit
      * @param string|null $events
      */
-    public function assertCharge($charge, $type, $sum, $currency, $reason, $events): void
+    public function assertCharge($charge, $type, $sum, $currency, $reason, $qty, $unit, $events): void
     {
         if (empty($type) && empty($sum) && empty($currency)) {
             Assert::assertNull($charge);
@@ -257,6 +259,14 @@ class FeatureContext implements Context
         if ($reason !== null) {
             Assert::assertSame($reason, $charge->getComment(),
                 sprintf('Charge comment %s does not match expected %s', $charge->getComment(), $reason)
+            );
+        }
+        if ($qty !== null && $unit !== null) {
+            Assert::assertSame((string) $qty, (string) $charge->getUsage()->getQuantity(),
+                sprintf('Charge quantity "%s" does not match expected "%s"', $charge->getUsage()->getQuantity(), $qty)
+            );
+            Assert::assertSame($unit, $charge->getUsage()->getUnit()->getName(),
+                sprintf('Charge unit "%s" does not match expected "%s"', $charge->getUsage()->getUnit()->getName(), $unit)
             );
         }
         if ($events !== null) {
