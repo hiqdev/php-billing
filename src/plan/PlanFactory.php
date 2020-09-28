@@ -30,6 +30,6 @@ class PlanFactory implements PlanFactoryInterface
     {
         $class = $class ?? Plan::class;
 
-        return new $class($dto->id, $dto->name, $dto->seller, $dto->prices ?: null);
+        return new $class($dto->id, $dto->name, $dto->seller, $dto->prices ?? []);
     }
 }

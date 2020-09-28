@@ -21,6 +21,7 @@ class PlanCreationDto
 
     public $seller;
 
+    /** @var array|null */
     public $prices;
 
     /// XXX should not be here
