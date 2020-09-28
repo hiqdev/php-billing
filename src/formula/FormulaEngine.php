@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\formula;
 
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use Hoa\Ruler\Context;
@@ -48,6 +49,8 @@ class FormulaEngine implements FormulaEngineInterface
      * @var ChargeModifier
      */
     protected $leasing;
+
+    protected ?Cap $cap = null;
     /**
      * @var CacheInterface
      */
@@ -184,6 +187,7 @@ class FormulaEngine implements FormulaEngineInterface
         $context = new Context();
         $context['discount'] = $this->getDiscount();
         $context['leasing'] = $this->getLeasing();
+        $context['cap'] = $this->getCap();
 
         return $context;
     }
@@ -204,5 +208,14 @@ class FormulaEngine implements FormulaEngineInterface
         }
 
         return $this->leasing;
+    }
+
+    private function getCap(): ChargeModifier
+    {
+        if ($this->cap === null) {
+            $this->cap = new Cap();
+        }
+
+        return $this->cap;
     }
 }
