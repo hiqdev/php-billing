@@ -12,10 +12,11 @@ namespace hiqdev\php\billing\order;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\Exception\NotSupportedException;
 
 /**
  * Creates order from given source:
- * - Order: just passs by. Can be prepared more in other implementations.
+ * - Order: just pass by. Can be prepared more in other implementations.
  * - Action or Action[]: create order from given action(s)
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
@@ -39,7 +40,7 @@ class Collector implements CollectorInterface
             }
         }
 
-        throw new \Exception('unknown order source');
+        throw new NotSupportedException('unknown order source');
     }
 
     protected function mergeOrders(array $orders): OrderInterface

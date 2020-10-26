@@ -11,20 +11,28 @@
 namespace hiqdev\php\billing\order;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\ActionInterface;
 
 /**
- * Order Collector collects order from given source.
- * Actual source can be different, see Collector.
- * Also, it can be user shopping for example.
+ * Order Collector collects the order from given source.
+ * Actual source can be anything, that {@see Collector} can handle.
  *
- * ```
+ * For example, it can be a shopping cart:
+ *
+ * ```php
  * $cart = new Cart();
- * /// fill cart
- * $bills = $this->billing->calculate($cart)
+ * /// fill the cart
+ * $order = $this->billing->calculate($cart);
  * ```
+ *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
 interface CollectorInterface
 {
+    /**
+     * @param OrderInterface|ActionInterface|mixed $source
+     * @param DateTimeImmutable|null $time
+     * @return OrderInterface
+     */
     public function collect($source, DateTimeImmutable $time = null): OrderInterface;
 }

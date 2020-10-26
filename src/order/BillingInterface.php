@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\order;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 
@@ -22,16 +23,22 @@ use hiqdev\php\billing\charge\ChargeInterface;
 interface BillingInterface
 {
     /**
+     * @param OrderInterface|ActionInterface|mixed $source
+     * @param DateTimeImmutable|null $time
      * @return BillInterface[]
      */
     public function calculate($source, DateTimeImmutable $time = null): array;
 
     /**
+     * @param OrderInterface|ActionInterface|mixed $source
+     * @param DateTimeImmutable|null $time
      * @return BillInterface[] array of charges
      */
     public function perform($source, DateTimeImmutable $time = null): array;
 
     /**
+     * @param OrderInterface|ActionInterface|mixed $source
+     * @param DateTimeImmutable|null $time
      * @return ChargeInterface[]
      */
     public function calculateCharges($source, DateTimeImmutable $time = null): array;
