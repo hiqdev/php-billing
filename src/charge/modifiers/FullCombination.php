@@ -172,4 +172,23 @@ class FullCombination implements ChargeModifier
 
         return (new ChargeDerivative())->__invoke($originalCharge, $query);
     }
+
+    /**
+     * @return ChargeModifier[]
+     */
+    public function toPlainModifiersArray(): array
+    {
+        $result = [];
+
+        foreach ([$this->left, $this->right] as $side) {
+            if ($side instanceof FullCombination) {
+                /** @noinspection SlowArrayOperationsInLoopInspection */
+                $result = array_merge($result, $side->toPlainModifiersArray());
+            } else {
+                $result[] = $side;
+            }
+        }
+
+        return $result;
+    }
 }

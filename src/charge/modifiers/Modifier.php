@@ -11,16 +11,20 @@
 namespace hiqdev\php\billing\charge\modifiers;
 
 use DateTimeImmutable;
+use Exception;
 use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\charge\AddonsContainerInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\charge\TimeLimitedModifierInterface;
+use hiqdev\php\billing\formula\FormulaRuntimeError;
 
 /**
  * Fixed discount.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Modifier implements ChargeModifier
+class Modifier implements ChargeModifier, AddonsContainerInterface, TimeLimitedModifierInterface
 {
     use \hiqdev\php\billing\charge\modifiers\addons\WithReason;
     use \hiqdev\php\billing\charge\modifiers\addons\WithSince;
@@ -40,7 +44,7 @@ class Modifier implements ChargeModifier
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        throw new \Exception('not finished modifier');
+        throw new Exception('not finished modifier');
     }
 
     public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool
@@ -70,10 +74,15 @@ class Modifier implements ChargeModifier
         return new Leasing($this->addons);
     }
 
-    public function addAddon($name, $addon)
+    public function getNext()
+    {
+        return new static($this->addons);
+    }
+
+    public function addAddon(string $name, AddonInterface $addon)
     {
         if ($this->hasAddon($name)) {
-            throw new \Exception("'$name' is already set");
+            throw new Exception("'$name' is already set");
         }
         $res = $this->getNext();
         $res->addons[$name] = $addon;
@@ -81,22 +90,17 @@ class Modifier implements ChargeModifier
         return $res;
     }
 
-    public function hasAddon($name)
-    {
-        return isset($this->addons[$name]);
-    }
-
-    public function getNext()
-    {
-        return new static($this->addons);
-    }
-
-    public function getAddon($name)
+    public function getAddon(string $name): ?AddonInterface
     {
         return empty($this->addons[$name]) ? null : $this->addons[$name];
     }
 
-    public function checkPeriod(DateTimeImmutable $time)
+    public function hasAddon(string $name): bool
+    {
+        return isset($this->addons[$name]);
+    }
+
+    public function checkPeriod(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
         if ($since && $since->getValue() > $time) {
@@ -111,7 +115,7 @@ class Modifier implements ChargeModifier
         $term = $this->getTerm();
         if ($term) {
             if (!$since) {
-                throw new \Exception('since must be set to use term');
+                throw new FormulaRuntimeError('since must be set to use term');
             }
             if ($term->countPeriodsPassed($since->getValue(), $time) >= 1) {
                 return false;

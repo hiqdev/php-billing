@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\formula;
 
+use Exception;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
@@ -25,6 +26,8 @@ use Psr\SimpleCache\CacheInterface;
  */
 class FormulaEngine implements FormulaEngineInterface
 {
+    public const FORMULAS_SEPARATOR = "\n";
+
     /**
      * @var Ruler
      */
@@ -59,7 +62,7 @@ class FormulaEngine implements FormulaEngineInterface
     public function __construct(CacheInterface $cache)
     {
         if (!class_exists(Context::class)) {
-            throw new \Exception('to use formula engine install `hoa/ruler`');
+            throw new Exception('to use formula engine install `hoa/ruler`');
         }
 
         $this->cache = $cache;
@@ -93,7 +96,7 @@ class FormulaEngine implements FormulaEngineInterface
     public function interpret(string $formula): Model
     {
         try {
-            $rule = str_replace("\n", ' AND ', $this->normalize($formula));
+            $rule = str_replace(self::FORMULAS_SEPARATOR, ' AND ', $this->normalize($formula));
 
             $key = md5(__METHOD__ . $rule);
             $model = $this->cache->get($key);
@@ -114,7 +117,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     public function normalize(string $formula): ?string
     {
-        $lines = explode("\n", $formula);
+        $lines = explode(self::FORMULAS_SEPARATOR, $formula);
         $normalized = array_map(function ($value) {
             $value = trim($value);
             if ('' === $value) {
@@ -125,7 +128,7 @@ class FormulaEngine implements FormulaEngineInterface
         }, $lines);
         $cleared = array_filter($normalized);
 
-        return empty($cleared) ? null : implode("\n", $cleared);
+        return empty($cleared) ? null : implode(self::FORMULAS_SEPARATOR, $cleared);
     }
 
     /**
