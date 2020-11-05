@@ -11,6 +11,8 @@
 namespace hiqdev\php\billing\charge;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
+use hiqdev\php\billing\charge\modifiers\addons\Till;
 use hiqdev\php\billing\formula\FormulaRuntimeError;
 
 interface TimeLimitedModifierInterface
@@ -21,4 +23,12 @@ interface TimeLimitedModifierInterface
      * @throws FormulaRuntimeError when modifier is misconfigured
      */
     public function checkPeriod(DateTimeImmutable $time): bool;
+
+    public function till($time);
+
+    public function getTill(): ?Till;
+
+    public function since($time);
+
+    public function getSince(): ?Since;
 }
