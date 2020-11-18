@@ -111,6 +111,10 @@ class Factory implements FactoryInterface
 
     public function createTime($data)
     {
+        if (empty($data['date'])) {
+            return new DateTimeImmutable();
+        }
+
         $str = $data['date'];
         if (!empty($data['timezone'])) {
             $str .= ' ' . $data['timezone'];
