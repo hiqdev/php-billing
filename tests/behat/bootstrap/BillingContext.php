@@ -48,11 +48,11 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /^(grouping )?(\S+) tariff plan (\S+)/
+     * @Given /^(\S+ )?(\S+) tariff plan (\S+)/
      */
-    public function plan($grouping, $type, $plan)
+    public function plan($prefix, $type, $plan)
     {
-        $this->builder->buildPlan($plan, $type, !empty($grouping));
+        $this->builder->buildPlan($plan, $prefix.$type, $prefix === 'grouping');
     }
 
     protected function fullPrice(array $data)
@@ -64,7 +64,7 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) for target (\S+)/
+     * @Given /price for (\S+) is +(\S+) (\S+) per (\S+) for target (.+)$/
      */
     public function priceWithTarget($type, $price, $currency, $unit, $target)
     {
@@ -149,17 +149,26 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /bill +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+)$/
+     * @Given /action for (\S+) is +(\S+) (\S+) for target (.+?)( +at (\S+))?$/
      */
-    public function bill($type, $sum, $currency, $quantity, $unit, $target)
+    public function setAction(string $type, int $amount, string $unit, string $target, string $at = null, string $time = null): void
     {
-        $this->billWithTime($type, $sum, $currency, $quantity, $unit, $target);
+        $time = $this->prepareTime($time);
+        $this->builder->setAction($type, $amount, $unit, $target, $time);
     }
 
     /**
-     * @Given /bill +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+) at (.+)$/
+     * @Given /perform calculation( at (\S+))?/
      */
-    public function billWithTime($type, $sum, $currency, $quantity, $unit, $target, $time = null)
+    public function performCalculation(string $at = null, string $time = null): void
+    {
+        $this->charges = $this->builder->performCalculation($this->prepareTime($time));
+    }
+
+    /**
+     * @Given /bill +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (.+?)( +at (.+))?$/
+     */
+    public function billWithTime($type, $sum, $currency, $quantity, $unit, $target, $at = null, $time = null)
     {
         $quantity = $this->prepareQuantity($quantity);
         $sum = $this->prepareSum($sum, $quantity);
@@ -192,17 +201,9 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /bills number is (\d+) for (\S+) for target (\S+)$/
+     * @Given /bills number is (\d+) for (\S+) for target (.+?)( +at (\S+))?$/
      */
-    public function billsNumber($number, $type, $target)
-    {
-        $this->billsNumberWithTime($number, $type, $target);
-    }
-
-    /**
-     * @Given /bills number is (\d+) for (\S+) for target (\S+) at (\S+)/
-     */
-    public function billsNumberWithTime($number, $type, $target, $time = null)
+    public function billsNumberWithTime($number, $type, $target, $at = null, $time = null)
     {
         $count = count($this->builder->findBills(array_filter([
             'type' => $type,
@@ -211,6 +212,14 @@ class BillingContext extends BaseContext
         ])));
 
         Assert::assertEquals($number, $count);
+    }
+
+    /**
+     * @Given /charges number is (\d+)/
+     */
+    public function chargesNumber($number)
+    {
+        Assert::assertEquals($number, count($this->charges));
     }
 
     /**
@@ -230,9 +239,9 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+) at (.+)$/
+     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (.+?)( +at (\S+))?$/
      */
-    public function chargeWithTime($type, $amount, $currency, $quantity, $unit, $target, $time = null)
+    public function chargeWithTime($type, $amount, $currency, $quantity, $unit, $target, $at = null, $time = null)
     {
         $quantity = $this->prepareQuantity($quantity);
         $amount = $this->prepareSum($amount, $quantity);

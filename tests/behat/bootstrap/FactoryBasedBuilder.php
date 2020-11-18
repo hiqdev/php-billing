@@ -35,6 +35,8 @@ class FactoryBasedBuilder implements BuilderInterface
 
     private $prices = [];
 
+    private $actions = [];
+
     private $factory;
 
     private $calculator;
@@ -90,6 +92,7 @@ class FactoryBasedBuilder implements BuilderInterface
     {
         $this->prices = [];
         $this->plan = $this->factory->get('plan', [
+            'id' => $name,
             'name' => $name,
             'seller' => $this->reseller,
             'is_grouping' => $is_grouping,
@@ -117,7 +120,7 @@ class FactoryBasedBuilder implements BuilderInterface
         $plan->setPrices($this->prices);
     }
 
-    public function buildSale(string $target, string $plan, string $time)
+    public function buildSale(string $target, $plan, string $time = null)
     {
         $this->time = $time;
         $this->sale = $this->factory->get('sale', array_filter([
@@ -140,6 +143,17 @@ class FactoryBasedBuilder implements BuilderInterface
         ]);
     }
 
+    public function setAction($type, $amount, $unit, $target, $time)
+    {
+        $this->actions[] = $this->buildAction([
+            'type' => $type,
+            'quantity' => "$amount $unit",
+            'target' => $target,
+            'time' => $time,
+            'sale' => $this->buildSale($target, $this->plan, $time),
+        ]);
+    }
+
     public function buildPurchase(string $target, string $plan, string $time)
     {
         $this->performAction([
@@ -153,6 +167,11 @@ class FactoryBasedBuilder implements BuilderInterface
     public function buildTarget(string $target)
     {
         return $this->factory->get('target', $target);
+    }
+
+    public function performCalculation(string $time = null): array
+    {
+        return $this->getBilling()->calculateCharges($this->actions);
     }
 
     public function performBilling(string $time): void
