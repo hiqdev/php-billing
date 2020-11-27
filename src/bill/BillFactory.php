@@ -31,6 +31,7 @@ class BillFactory implements BillFactoryInterface
             $dto->quantity,
             $dto->customer,
             $dto->target,
+            $dto->requisite,
             $dto->plan,
             $dto->charges ?: [],
             $dto->state

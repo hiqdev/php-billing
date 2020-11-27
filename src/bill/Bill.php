@@ -48,6 +48,9 @@ class Bill implements BillInterface
     /** @var TargetInterface */
     protected $target;
 
+    /** @var BillRequisite */
+    protected $requisite;
+
     /** @var PlanInterface */
     protected $plan;
 
@@ -68,6 +71,7 @@ class Bill implements BillInterface
         QuantityInterface $quantity,
         CustomerInterface $customer,
         TargetInterface $target = null,
+        BillRequisite $requisite = null,
         PlanInterface $plan = null,
         array $charges = [],
         BillState $state = null
@@ -79,6 +83,7 @@ class Bill implements BillInterface
         $this->quantity     = $quantity;
         $this->customer     = $customer;
         $this->target       = $target;
+        $this->requisite    = $requisite;
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
@@ -140,6 +145,11 @@ class Bill implements BillInterface
     public function getTarget(): ?TargetInterface
     {
         return $this->target;
+    }
+
+    public function getRequisite(): ?BillRequisite
+    {
+        return $this->requisite;
     }
 
     public function getCustomer(): CustomerInterface
