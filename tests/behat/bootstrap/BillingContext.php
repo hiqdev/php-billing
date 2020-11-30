@@ -52,7 +52,9 @@ class BillingContext extends BaseContext
      */
     public function plan($prefix, $type, $plan)
     {
-        $this->builder->buildPlan($plan, $prefix.$type, $prefix === 'grouping');
+        $grouping = $prefix === 'grouping';
+        $type = $grouping ? $type : strtr($prefix.$type, ' ', '_');
+        $this->builder->buildPlan($plan, $type, $grouping);
     }
 
     protected function fullPrice(array $data)

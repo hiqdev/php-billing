@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -29,4 +31,8 @@ interface BuilderInterface
     public function findBills(array $data): array;
 
     public function performBilling(string $time): void;
+
+    public function setAction(string $type, int $amount, string $unit, string $target, string $time): void;
+
+    public function performCalculation(string $time): void;
 }
