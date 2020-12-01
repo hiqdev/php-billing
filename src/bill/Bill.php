@@ -48,6 +48,9 @@ class Bill implements BillInterface
     /** @var TargetInterface */
     protected $target;
 
+    /** @var BillRequisite */
+    protected $requisite;
+
     /** @var PlanInterface */
     protected $plan;
 
@@ -140,6 +143,11 @@ class Bill implements BillInterface
     public function getTarget(): ?TargetInterface
     {
         return $this->target;
+    }
+
+    public function getRequisite(): ?BillRequisite
+    {
+        return $this->requisite;
     }
 
     public function getCustomer(): CustomerInterface

@@ -29,6 +29,8 @@ class BillCreationDto
 
     public $target;
 
+    public $requisite;
+
     public $plan;
 
     public $charges;

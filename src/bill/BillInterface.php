@@ -15,6 +15,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\requisite\RequisiteInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -34,6 +35,8 @@ interface BillInterface extends EntityInterface
     public function getTime(): DateTimeImmutable;
 
     public function getTarget(): ?TargetInterface;
+
+    public function getRequisite(): ?BillRequisite;
 
     public function getCustomer(): CustomerInterface;
 
