@@ -71,7 +71,6 @@ class Bill implements BillInterface
         QuantityInterface $quantity,
         CustomerInterface $customer,
         TargetInterface $target = null,
-        BillRequisite $requisite = null,
         PlanInterface $plan = null,
         array $charges = [],
         BillState $state = null
@@ -83,7 +82,6 @@ class Bill implements BillInterface
         $this->quantity     = $quantity;
         $this->customer     = $customer;
         $this->target       = $target;
-        $this->requisite    = $requisite;
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
