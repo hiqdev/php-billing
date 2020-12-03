@@ -34,5 +34,5 @@ interface BuilderInterface
 
     public function setAction(string $type, int $amount, string $unit, string $target, string $time): void;
 
-    public function performCalculation(string $time): void;
+    public function performCalculation(string $time): array;
 }

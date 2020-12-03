@@ -143,7 +143,7 @@ class FactoryBasedBuilder implements BuilderInterface
         ]);
     }
 
-    public function setAction($type, $amount, $unit, $target, $time)
+    public function setAction(string $type, int $amount, string $unit, string $target, string $time): void
     {
         $this->actions[] = $this->buildAction([
             'type' => $type,

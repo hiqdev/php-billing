@@ -162,9 +162,9 @@ class BillingContext extends BaseContext
     /**
      * @Given /perform calculation( at (\S+))?/
      */
-    public function performCalculation(string $at = null, string $time = null): void
+    public function performCalculation(string $at = null, string $time = null): array
     {
-        $this->charges = $this->builder->performCalculation($this->prepareTime($time));
+        return $this->builder->performCalculation($this->prepareTime($time));
     }
 
     /**
