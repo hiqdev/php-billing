@@ -233,17 +233,9 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (\S+)$/
-     */
-    public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target = null)
-    {
-        $this->chargeWithTime($type, $amount, $currency, $quantity, $unit, $target);
-    }
-
-    /**
      * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (.+?)( +at (\S+))?$/
      */
-    public function chargeWithTime($type, $amount, $currency, $quantity, $unit, $target, $at = null, $time = null)
+    public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target, $at = null, $time = null)
     {
         $quantity = $this->prepareQuantity($quantity);
         $amount = $this->prepareSum($amount, $quantity);
