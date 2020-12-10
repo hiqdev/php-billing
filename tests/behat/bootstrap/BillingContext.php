@@ -151,7 +151,7 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /action for (\S+) is +(\S+) (\S+) for target (.+?)( +at (\S+))?$/
+     * @Given /action for (\S+) is +(\S+) (\S+) +for target (.+?)( +at (\S+))?$/
      */
     public function setAction(string $type, int $amount, string $unit, string $target, string $at = null, string $time = null): void
     {
@@ -164,7 +164,8 @@ class BillingContext extends BaseContext
      */
     public function performCalculation(string $at = null, string $time = null): array
     {
-        return $this->builder->performCalculation($this->prepareTime($time));
+        $this->charges = $this->builder->performCalculation($this->prepareTime($time));
+        return $this->charges;
     }
 
     /**
@@ -229,11 +230,11 @@ class BillingContext extends BaseContext
      */
     public function charge($type, $amount, $currency, $quantity, $unit)
     {
-        $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit);
+        $this->chargeWithTarget($type, $amount, $currency, $quantity, $unit, null);
     }
 
     /**
-     * @Given /charge for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (.+?)( +at (\S+))?$/
+     * @Given /charge for (\S+) is +(\S+) (\S+) per +(\S+) (\S+) +for target (.+?)( +at (\S+))?$/
      */
     public function chargeWithTarget($type, $amount, $currency, $quantity, $unit, $target, $at = null, $time = null)
     {
@@ -246,7 +247,7 @@ class BillingContext extends BaseContext
         Assert::assertEquals($amount * 100, $charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
         Assert::assertEquals((float)$quantity, (float)$charge->getUsage()->getQuantity());
-        Assert::assertEquals(strtolower($unit), $charge->getUsage()->getUnit()->getName());
+        Assert::assertEquals(strtolower($unit), strtolower($charge->getUsage()->getUnit()->getName()));
     }
 
     public function findCharge($type, $target): ?ChargeInterface
