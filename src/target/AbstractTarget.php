@@ -34,6 +34,9 @@ abstract class AbstractTarget implements TargetInterface
      */
     protected $name;
 
+    /** @var string */
+    protected $label;
+
     public function __construct($id, $type, $name = null)
     {
         $this->id = $id;
@@ -82,6 +85,11 @@ abstract class AbstractTarget implements TargetInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
     }
 
     public function getFullName(): string
