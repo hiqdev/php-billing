@@ -355,7 +355,11 @@ class Factory implements FactoryInterface
             if (empty($data[$key])) {
                 return null;
             }
-            $values[$key] = $data[$key];
+            $value = $data[$key];
+            if (is_array($value)) {
+                $value = $this->extractUnique($key, $value);
+            }
+            $values[$key] = $value;
         }
 
         return implode(' ', $values);
@@ -366,6 +370,7 @@ class Factory implements FactoryInterface
         'bill'      => [],
         'charge'    => [],
         'customer'  => ['login'],
+        'seller'    => ['login'],
         'money'     => ['amount', 'currency'],
         'plan'      => ['name', 'seller'],
         'price'     => [],
