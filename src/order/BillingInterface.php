@@ -30,7 +30,7 @@ interface BillingInterface
     public function calculate($source, DateTimeImmutable $time = null): array;
 
     /**
-     * @param OrderInterface|ActionInterface|mixed $source
+     * @param OrderInterface|ActionInterface|ActionInterface[]|mixed $source
      * @param DateTimeImmutable|null $time
      * @return BillInterface[] array of charges
      */
