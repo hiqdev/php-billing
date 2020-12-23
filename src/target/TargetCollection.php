@@ -90,6 +90,11 @@ class TargetCollection implements TargetInterface
         return $this->getTarget()->getName();
     }
 
+    public function getLabel(): ?string
+    {
+        return $this->getTarget()->getLabel();
+    }
+
     public function getTarget()
     {
         return reset($this->targets);
