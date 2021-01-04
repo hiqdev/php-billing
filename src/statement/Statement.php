@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\statement;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\customer\CustomerInterface;
 use Money\Money;
 
 /**
@@ -22,6 +23,8 @@ class Statement implements \JsonSerializable
     const PERIOD_MONTH = 'month';
     const PERIOD_YEAR = 'year';
 
+    private CustomerInterface $customer;
+
     private DateTimeImmutable $time;
 
     private Money $balance;
@@ -30,12 +33,23 @@ class Statement implements \JsonSerializable
 
     private string $period = self::PERIOD_MONTH;
 
-    public function __construct(DateTimeImmutable $time, Money $balance, array $charges = [], string $period = self::PERIOD_MONTH)
-    {
+    public function __construct(
+        CustomerInterface $customer,
+        DateTimeImmutable $time,
+        Money $balance,
+        array $charges = [],
+        string $period = self::PERIOD_MONTH
+    ) {
+        $this->customer = $customer;
         $this->time = $time;
         $this->balance = $balance;
         $this->charges = $charges;
         $this->period = $period;
+    }
+
+    public function getCustomer(): CustomerInterface
+    {
+        return $this->customer;
     }
 
     public function getTime(): DateTimeImmutable
