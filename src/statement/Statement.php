@@ -29,7 +29,7 @@ class Statement implements \JsonSerializable
 
     private Money $balance;
 
-    private array $charges = [];
+    private array $bills = [];
 
     private string $period = self::PERIOD_MONTH;
 
@@ -37,13 +37,13 @@ class Statement implements \JsonSerializable
         CustomerInterface $customer,
         DateTimeImmutable $time,
         Money $balance,
-        array $charges = [],
+        array $bills = [],
         string $period = self::PERIOD_MONTH
     ) {
         $this->customer = $customer;
         $this->time = $time;
         $this->balance = $balance;
-        $this->charges = $charges;
+        $this->bills = $bills;
         $this->period = $period;
     }
 
@@ -67,14 +67,14 @@ class Statement implements \JsonSerializable
         return $this->period;
     }
 
-    public function setCharges(array $charges)
+    public function setBills(array $bills)
     {
-        $this->charges = $charges;
+        $this->bills = $bills;
     }
 
-    public function getCharges(): array
+    public function getBills(): array
     {
-        return $this->charges;
+        return $this->bills;
     }
 
     public function jsonSerialize()
