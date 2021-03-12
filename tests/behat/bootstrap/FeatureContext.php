@@ -14,6 +14,7 @@ use Behat\Behat\Context\Context;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Closure;
 use DateTimeImmutable;
+use Exception;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
@@ -136,7 +137,7 @@ class FeatureContext implements Context
 
     /**
      * @When /action date is ([0-9.-]+)/
-     * @throws \Exception
+     * @throws Exception
      */
     public function actionDateIs(string $date): void
     {
@@ -209,7 +210,7 @@ class FeatureContext implements Context
     {
         try {
             call_user_func($closure);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($this->isExpectedError($e)) {
                 $this->expectedError = null;
             } else {
@@ -217,18 +218,13 @@ class FeatureContext implements Context
             }
         }
         if ($this->expectedError) {
-            throw new \Exception('failed receive expected exception');
+            throw new Exception('failed receive expected exception');
         }
     }
 
-    protected function isExpectedError(\Exception $e): bool
+    protected function isExpectedError(Exception $e): bool
     {
-        return $this->startsWith($e->getMessage(), $this->expectedError);
-    }
-
-    protected function startsWith(string $string, string $prefix = null): bool
-    {
-        return $prefix && strncmp($string, $prefix, strlen($prefix)) === 0;
+        return str_starts_with($e->getMessage(), $this->expectedError);
     }
 
     /**
@@ -303,7 +299,7 @@ class FeatureContext implements Context
         $formatter = new NumberFormatter('en_EN', NumberFormatter::SPELLOUT);
         $result = $formatter->parse($numeral);
         if ($result === false) {
-            throw new \Exception("Wrong numeral '$numeral'");
+            throw new Exception("Wrong numeral '$numeral'");
         }
 
         return --$result;
