@@ -45,10 +45,5 @@ interface BuilderInterface
     /**
      * @return SaleInterface[]
      */
-    public function findSales(array $params);
-
-    /**
-     * @return SaleInterface[]
-     */
     public function findHistoricalSales(array $params);
 }
