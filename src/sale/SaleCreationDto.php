@@ -24,4 +24,6 @@ class SaleCreationDto
     public $plan;
 
     public $time;
+
+    public $closeTime;
 }

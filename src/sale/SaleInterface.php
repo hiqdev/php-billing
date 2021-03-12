@@ -13,6 +13,8 @@ namespace hiqdev\php\billing\sale;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
+use hiqdev\php\billing\Exception\ConstraintException;
+use hiqdev\php\billing\Exception\InvariantException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 
@@ -52,4 +54,15 @@ interface SaleInterface extends EntityInterface
      * @return DateTimeImmutable
      */
     public function getTime();
+
+    public function getCloseTime(): ?DateTimeImmutable;
+
+    /**
+     * @param DateTimeImmutable $time
+     * @throws InvariantException
+     * @throws ConstraintException
+     */
+    public function close(DateTimeImmutable $time): void;
+
+    public function cancelClosing(): void;
 }

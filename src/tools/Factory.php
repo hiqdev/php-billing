@@ -308,6 +308,7 @@ class Factory implements FactoryInterface
         'target'    => 'getTarget',
         'targets'   => 'getTargets',
         'time'      => 'getTime',
+        'closeTime' => 'getTime',
         'type'      => 'getType',
         'unit'      => 'getUnit',
         'usage'     => 'getQuantity',
