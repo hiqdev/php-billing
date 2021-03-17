@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\support\sale;
 
+use Exception;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\sale\SaleInterface;
@@ -46,6 +47,11 @@ class SimpleSaleRepository implements SaleRepositoryInterface
 
     public function findByIds(array $ids)
     {
-        throw new \Exception('not implemented');
+        throw new Exception('not implemented');
+    }
+
+    public function findById(string $id): ?object
+    {
+        throw new Exception('not implemented');
     }
 }

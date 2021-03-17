@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use hiqdev\billing\hiapi\plan\PlanFactory;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
-use hiqdev\DataMapper\Query\Specification;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\price\RatePrice;
@@ -21,6 +20,7 @@ use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
+use RuntimeException;
 
 class FactoryBasedBuilder implements BuilderInterface
 {
@@ -241,5 +241,24 @@ class FactoryBasedBuilder implements BuilderInterface
         }
 
         return $this->factory->get('bill', $data);
+    }
+
+    public function targetChangePlan(string $target, string $planName, string $date)
+    {
+        throw new RuntimeException('Not implemented yet');
+    }
+
+    public function findSales(array $params)
+    {
+        $keys = $this->factory->getEntityUniqueKeys('sale');
+
+        return $this->factory->find('sale', $keys);
+    }
+
+    public function findHistoricalSales(array $params)
+    {
+        $keys = $this->factory->getEntityUniqueKeys('sale');
+
+        return $this->factory->find('sale', $keys);
     }
 }

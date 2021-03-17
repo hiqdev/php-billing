@@ -13,6 +13,8 @@ namespace hiqdev\php\billing\sale;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
+use hiqdev\php\billing\Exception\ConstraintException;
+use hiqdev\php\billing\Exception\InvariantException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 
@@ -47,6 +49,8 @@ class Sale implements SaleInterface
      * @var DateTimeImmutable
      */
     protected $time;
+
+    protected ?DateTimeImmutable $closeTime = null;
 
     public function __construct(
                             $id,
@@ -92,6 +96,24 @@ class Sale implements SaleInterface
         return $this->id !== null;
     }
 
+    public function getCloseTime(): ?DateTimeImmutable
+    {
+        return $this->closeTime;
+    }
+
+    public function close(DateTimeImmutable $closeTime): void
+    {
+        if ($this->closeTime !== null) {
+            throw new InvariantException('Sale is already closed');
+        }
+
+        if ($closeTime < $this->time) {
+            throw new ConstraintException('Sale close time MUST be greater than open time');
+        }
+
+        $this->closeTime = $closeTime;
+    }
+
     public function setId($id)
     {
         if ((string) $this->id === (string) $id) {
@@ -106,5 +128,10 @@ class Sale implements SaleInterface
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this));
+    }
+
+    public function cancelClosing(): void
+    {
+        $this->closeTime = null;
     }
 }

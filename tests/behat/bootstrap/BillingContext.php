@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
+use BehatExpectException\ExpectException;
 use DateTimeImmutable;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
@@ -17,6 +18,8 @@ use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
 {
+    use ExpectException;
+
     protected $saleTime;
 
     protected $bill;
@@ -322,5 +325,72 @@ class BillingContext extends BaseContext
         }
 
         return $diff->d/date('t');
+    }
+
+    /**
+     * @When /^tariff plan change is requested for target "([^"]*)" to plan "([^"]*)" at "([^"]*)"$/
+     */
+    public function tariffPlanChangeIsRequestedForTargetToAt(string $target, string $planName, string $date)
+    {
+        $this->mayFail(fn () => $this->builder->targetChangePlan($target, $planName, $this->prepareTime($date)));
+    }
+
+    /**
+     * @Then /^target "([^"]*)" is sold to customer by plan "([^"]*)" since "([^"]*)"(?: till "([^"]*)")?$/
+     */
+    public function targetIsSoldToCustomerByPlanSinceTill(string $target, string $planName, string $saleDate, ?string $saleCloseDate = null)
+    {
+        $sales = $this->builder->findHistoricalSales([
+            'target' => $target,
+        ]);
+
+        $saleDateTime = new DateTimeImmutable($saleDate);
+        $saleCloseDateTime = new DateTimeImmutable($saleCloseDate);
+
+        foreach ($sales as $sale) {
+            /** @noinspection SuspiciousBinaryOperationInspection */
+            $saleExists = true
+                && str_contains($sale->getPlan()->getName(), $planName)
+                && $sale->getTime()->format(DATE_ATOM) === $saleDateTime->format(DATE_ATOM)
+                && (
+                    ($saleCloseDate === null && $sale->getCloseTime() === null)
+                    ||
+                    ($saleCloseDate !== null && $sale->getCloseTime()->format(DATE_ATOM) === $saleCloseDateTime->format(DATE_ATOM))
+                );
+
+            if ($saleExists) {
+                return;
+            }
+        }
+
+        Assert::fail('Requested sale does not exist');
+    }
+
+    /**
+     * @Then /^target "([^"]*)" has exactly (\d+) sales for customer$/
+     */
+    public function targetHasExactlySalesForCustomer(string $target, int $count)
+    {
+        $sales = $this->builder->findHistoricalSales([
+            'target' => $target,
+        ]);
+
+        Assert::assertCount($count, $sales);
+    }
+
+    /**
+     * @Then /^caught error is "([^"]*)"$/
+     */
+    public function caughtErrorIs(string $errorMessage): void
+    {
+        $this->assertCaughtExceptionMatches(\Throwable::class, $errorMessage);
+    }
+
+    /**
+     * @Given /^target "([^"]*)"$/
+     */
+    public function target(string $target)
+    {
+        $this->builder->buildTarget($target);
     }
 }

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
+use hiqdev\php\billing\sale\SaleInterface;
+
 interface BuilderInterface
 {
     public function buildReseller(string $login);
@@ -21,6 +23,8 @@ interface BuilderInterface
     public function buildPlan(string $name, string $type, bool $grouping = false);
 
     public function buildPrice(array $data);
+
+    public function buildTarget(string $name);
 
     public function recreatePlan(string $name);
 
@@ -35,4 +39,11 @@ interface BuilderInterface
     public function setAction(string $type, int $amount, string $unit, string $target, string $time): void;
 
     public function performCalculation(string $time): array;
+
+    public function targetChangePlan(string $target, string $planName, string $date);
+
+    /**
+     * @return SaleInterface[]
+     */
+    public function findHistoricalSales(array $params);
 }
