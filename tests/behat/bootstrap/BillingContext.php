@@ -348,18 +348,18 @@ class BillingContext extends BaseContext
         $saleCloseDateTime = new DateTimeImmutable($saleCloseDate);
 
         foreach ($sales as $sale) {
-            if (str_contains($sale->getPlan()->getName(), $planName)
+            /** @noinspection SuspiciousBinaryOperationInspection */
+            $saleExists = true
+                && str_contains($sale->getPlan()->getName(), $planName)
                 && $sale->getTime()->format(DATE_ATOM) === $saleDateTime->format(DATE_ATOM)
-            ) {
-                if ($saleCloseDate === null && $sale->getCloseTime() === null) {
-                    return;
-                }
+                && (
+                    ($saleCloseDate === null && $sale->getCloseTime() === null)
+                    ||
+                    ($saleCloseDate !== null && $sale->getCloseTime()->format(DATE_ATOM) === $saleCloseDateTime->format(DATE_ATOM))
+                );
 
-                if ($saleCloseDate !== null &&
-                    $sale->getCloseTime()->format(DATE_ATOM) === $saleCloseDateTime->format(DATE_ATOM)
-                ) {
-                    return;
-                }
+            if ($saleExists) {
+                return;
             }
         }
 
