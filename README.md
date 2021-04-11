@@ -19,7 +19,7 @@ Billing library providing:
 
 - one-time, metered and recurring charging
 
-Please see [additional doccumentation in russian](docs/ru.md).
+Please see [additional documentation in russian](docs/ru.md).
 
 ## Installation
 
@@ -65,7 +65,7 @@ Billing operates such ideas:
 ![model](https://raw.githubusercontent.com/hiqdev/php-billing/master/docs/model.png)
 
 [Action]:       /src/action/Action.php
-[Aggregator]:   /src/charge/Aggregator.php
+[Aggregator]:   /src/tools/Aggregator.php
 [Bill]:         /src/bill/Bill.php
 [Calculator]:   /src/order/Calculator.php
 [Charge]:       /src/charge/Charge.php
@@ -77,7 +77,7 @@ Billing operates such ideas:
 [EnumPrice]:    /src/price/EnumPrice.php
 [Sale]:         /src/sale/Sale.php
 [Target]:       /src/target/Target.php
-[Type]:         /src/target/Type.php
+[Type]:         /src/type/Type.php
 
 ## Disclaimer
 
