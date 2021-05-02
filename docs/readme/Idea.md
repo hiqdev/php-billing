@@ -19,7 +19,7 @@ Billing operates such ideas:
 - [Calculator]
 - [Aggregator]
 
-![model](https://raw.githubusercontent.com/hiqdev/php-billing/master/docs/model.png)
+![Model UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/hiqdev/php-billing/master/docs/model.puml)
 
 [Action]:       /src/action/Action.php
 [Aggregator]:   /src/charge/Aggregator.php
