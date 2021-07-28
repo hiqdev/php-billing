@@ -33,7 +33,7 @@ class Statement implements \JsonSerializable
 
     private string $period = self::PERIOD_MONTH;
 
-    private DateTimeImmutable $date;
+    private DateTimeImmutable $month;
 
     private Money $total;
 
@@ -47,7 +47,7 @@ class Statement implements \JsonSerializable
         Money $balance,
         array $bills = [],
         string $period = self::PERIOD_MONTH,
-        DateTimeImmutable $date,
+        DateTimeImmutable $month,
         Money $total,
         Money $payment,
         Money $amount
@@ -57,7 +57,7 @@ class Statement implements \JsonSerializable
         $this->balance = $balance;
         $this->bills = $bills;
         $this->period = $period;
-        $this->date = $date;
+        $this->month = $month;
         $this->total = $total;
         $this->payment = $payment;
         $this->amount = $amount;
@@ -93,9 +93,9 @@ class Statement implements \JsonSerializable
         return $this->bills;
     }
 
-    public function getDate(): DateTimeImmutable
+    public function getMonth(): DateTimeImmutable
     {
-        return $this->date;
+        return $this->month;
     }
 
     public function getTotal(): Money
