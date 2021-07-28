@@ -66,7 +66,7 @@ class Bill implements BillInterface
     /** @var string */
     protected $comment;
 
-    protected ?string $from;
+    protected $from;
 
     public function __construct(
                             $id,
