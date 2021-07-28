@@ -33,7 +33,8 @@ class BillFactory implements BillFactoryInterface
             $dto->target,
             $dto->plan,
             $dto->charges ?: [],
-            $dto->state
+            $dto->state,
+            $dto->from ?? null
         );
     }
 }

@@ -50,4 +50,6 @@ interface BillInterface extends EntityInterface
      * @return ChargeInterface[]
      */
     public function getCharges();
+
+    public function getFrom(): ?string;
 }

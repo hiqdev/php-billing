@@ -63,6 +63,8 @@ class Bill implements BillInterface
     /** @var string */
     protected $comment;
 
+    protected ?string $from;
+
     public function __construct(
                             $id,
         TypeInterface $type,
@@ -73,7 +75,8 @@ class Bill implements BillInterface
         TargetInterface $target = null,
         PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null
+        BillState $state = null,
+        string $from = null
     ) {
         $this->id           = $id;
         $this->type         = $type;
@@ -85,6 +88,7 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
+        $this->from         = $from;
     }
 
     /**
@@ -207,6 +211,11 @@ class Bill implements BillInterface
     public function getState(): ?BillState
     {
         return $this->state;
+    }
+
+    public function getFrom(): ?string
+    {
+        return $this->from;
     }
 
     public function setFinished(): void
