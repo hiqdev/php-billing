@@ -26,6 +26,7 @@ class BillFactory implements BillFactoryInterface
         return new Bill(
             $dto->id,
             $dto->type,
+            $dto->month,
             $dto->time,
             $dto->sum,
             $dto->quantity,
