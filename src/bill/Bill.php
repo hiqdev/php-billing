@@ -34,9 +34,6 @@ class Bill implements BillInterface
     protected $type;
 
     /** @var DateTimeImmutable */
-    protected $month;
-
-    /** @var DateTimeImmutable */
     protected $time;
 
     /** @var Money */
@@ -66,12 +63,9 @@ class Bill implements BillInterface
     /** @var string */
     protected $comment;
 
-    protected $from;
-
     public function __construct(
                             $id,
         TypeInterface $type,
-        DateTimeImmutable $month,
         DateTimeImmutable $time,
         Money $sum,
         QuantityInterface $quantity,
@@ -79,12 +73,10 @@ class Bill implements BillInterface
         TargetInterface $target = null,
         PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null,
-        string $from = null
+        BillState $state = null
     ) {
         $this->id           = $id;
         $this->type         = $type;
-        $this->month        = $month;
         $this->time         = $time;
         $this->sum          = $sum;
         $this->quantity     = $quantity;
@@ -93,7 +85,6 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
-        $this->from         = $from;
     }
 
     /**
@@ -147,11 +138,6 @@ class Bill implements BillInterface
     public function getTime(): DateTimeImmutable
     {
         return $this->time;
-    }
-
-    public function getMonth(): DateTimeImmutable
-    {
-        return $this->month;
     }
 
     public function getTarget(): ?TargetInterface
@@ -221,11 +207,6 @@ class Bill implements BillInterface
     public function getState(): ?BillState
     {
         return $this->state;
-    }
-
-    public function getFrom(): ?string
-    {
-        return $this->from;
     }
 
     public function setFinished(): void
