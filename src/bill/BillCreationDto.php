@@ -36,6 +36,4 @@ class BillCreationDto
     public $charges;
 
     public $state;
-
-    public $from;
 }
