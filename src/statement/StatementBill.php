@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/php-billing
  * @package   php-billing
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017-2021, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\billing\statement;
@@ -21,20 +21,18 @@ use hiqdev\php\units\QuantityInterface;
 use DateTimeImmutable;
 use Money\Money;
 
-
-
 /**
- * Bill.
+ * StatementBill.
  *
- * @author Andrii Vasyliev <sol@hiqdev.com>
+ * @author Yurii Myronchuk <bladeroot@gmail.com>
  */
-class StatementBill extends Bill implements BillInterface
+class StatementBill extends Bill implements StatementBillInterface, BillInterface
 {
     /** @var DateTimeImmutable */
     protected $month;
 
     /** @var string */
-    protected $from
+    protected $from;
 
     public function __construct(
         $id,
