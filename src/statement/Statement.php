@@ -44,8 +44,8 @@ class Statement implements \JsonSerializable
     public function __construct(
         CustomerInterface $customer,
         DateTimeImmutable $time,
-        Money $balance,
         DateTimeImmutable $month,
+        Money $balance,
         Money $total,
         Money $payment,
         Money $amount,
