@@ -31,6 +31,15 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     /** @var DateTimeImmutable */
     protected $month;
 
+    /** @var Money */
+    protected $price;
+
+    /** @var Money */
+    protected $overuse;
+
+    /** @var QuantityInterface */
+    protected $prepaid;
+
     /** @var string */
     protected $from;
 
@@ -42,6 +51,9 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $month,
+        Money $price = null,
+        Money $overuse = null,
+        QuantityInterface $prepaid = null,
         array $charges = [],
         TargetInterface $target = null,
         PlanInterface $plan = null,
@@ -61,6 +73,9 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
             $state
         );
         $this->month        = $month;
+        $this->price        = $price;
+        $this->overuse      = $overuse;
+        $this->prepaid      = $prepaid;
         $this->from         = $from;
     }
 
@@ -72,5 +87,20 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     public function getFrom(): ?string
     {
         return $this->from;
+    }
+
+    public function getPrice(): ?Money
+    {
+        return $this->price;
+    }
+
+    public function getOveruse(): ?Money
+    {
+        return $this->overuse;
+    }
+
+    public function getPrepaid(): QuantityInterface
+    {
+        return $this->prepaid;
     }
 }

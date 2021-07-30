@@ -11,7 +11,9 @@
 namespace hiqdev\php\billing\statement;
 
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\units\QuantityInterface;
 use DateTimeImmutable;
+use Money\Money;
 
 /**
  * StatementBill Interface.
@@ -23,4 +25,10 @@ interface StatementBillInterface extends BillInterface
     public function getMonth(): DateTimeImmutable;
 
     public function getFrom(): ?string;
+
+    public function getPrice(): ?Money;
+
+    public function getOveruse(): ?Money;
+
+    public function getPrepaid(): ?QuantityInterface;
 }
