@@ -45,12 +45,12 @@ class Statement implements \JsonSerializable
         CustomerInterface $customer,
         DateTimeImmutable $time,
         Money $balance,
-        array $bills = [],
-        string $period = self::PERIOD_MONTH,
         DateTimeImmutable $month,
         Money $total,
         Money $payment,
         Money $amount
+        array $bills = [],
+        string $period = self::PERIOD_MONTH,
     ) {
         $this->customer = $customer;
         $this->time = $time;
