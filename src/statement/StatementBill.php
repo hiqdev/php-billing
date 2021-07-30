@@ -41,11 +41,11 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         Money $sum,
         QuantityInterface $quantity,
         CustomerInterface $customer,
+        DateTimeImmutable $month,
+        array $charges = [],
         TargetInterface $target = null,
         PlanInterface $plan = null,
-        array $charges = [],
         BillState $state = null,
-        DateTimeImmutable $month,
         ?string $from = null
     ) {
         parent::__construct(
@@ -69,8 +69,8 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         return $this->month;
     }
 
-    public function getFrom(): string
+    public function getFrom(): ?string
     {
-        return $this->from ?? '';
+        return $this->from;
     }
 }
