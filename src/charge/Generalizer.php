@@ -46,7 +46,7 @@ class Generalizer implements GeneralizerInterface
 
     public function generalizeTime(ChargeInterface $charge): \DateTimeImmutable
     {
-        return $charge->getAction()->getTime()->modify('first day of this month midnight');
+        return $charge->getAction()->getTime();
     }
 
     public function generalizeSum(ChargeInterface $charge): Money
