@@ -25,21 +25,21 @@ class Statement implements \JsonSerializable
 
     private CustomerInterface $customer;
 
+    private DateTimeImmutable $month;
+
     private DateTimeImmutable $time;
 
     private Money $balance;
-
-    private array $bills = [];
-
-    private string $period = self::PERIOD_MONTH;
-
-    private DateTimeImmutable $month;
 
     private Money $total;
 
     private Money $payment;
 
     private Money $amount;
+
+    private array $bills = [];
+
+    private string $period = self::PERIOD_MONTH;
 
     public function __construct(
         CustomerInterface $customer,
