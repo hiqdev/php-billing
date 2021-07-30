@@ -48,9 +48,9 @@ class Statement implements \JsonSerializable
         DateTimeImmutable $month,
         Money $total,
         Money $payment,
-        Money $amount
+        Money $amount,
         array $bills = [],
-        string $period = self::PERIOD_MONTH,
+        string $period = self::PERIOD_MONTH
     ) {
         $this->customer = $customer;
         $this->time = $time;
