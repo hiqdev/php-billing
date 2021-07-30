@@ -22,5 +22,5 @@ interface StatementBillInterface extends BillInterface
 {
     public function getMonth(): DateTimeImmutable;
 
-    public function getFrom(): string;
+    public function getFrom(): ?string;
 }
