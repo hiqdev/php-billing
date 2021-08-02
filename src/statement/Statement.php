@@ -25,9 +25,17 @@ class Statement implements \JsonSerializable
 
     private CustomerInterface $customer;
 
+    private DateTimeImmutable $month;
+
     private DateTimeImmutable $time;
 
     private Money $balance;
+
+    private Money $total;
+
+    private Money $payment;
+
+    private Money $amount;
 
     private array $bills = [];
 
@@ -36,7 +44,11 @@ class Statement implements \JsonSerializable
     public function __construct(
         CustomerInterface $customer,
         DateTimeImmutable $time,
+        DateTimeImmutable $month,
         Money $balance,
+        Money $total,
+        Money $payment,
+        Money $amount,
         array $bills = [],
         string $period = self::PERIOD_MONTH
     ) {
@@ -45,6 +57,10 @@ class Statement implements \JsonSerializable
         $this->balance = $balance;
         $this->bills = $bills;
         $this->period = $period;
+        $this->month = $month;
+        $this->total = $total;
+        $this->payment = $payment;
+        $this->amount = $amount;
     }
 
     public function getCustomer(): CustomerInterface
@@ -75,6 +91,26 @@ class Statement implements \JsonSerializable
     public function getBills(): array
     {
         return $this->bills;
+    }
+
+    public function getMonth(): DateTimeImmutable
+    {
+        return $this->month;
+    }
+
+    public function getTotal(): Money
+    {
+        return $this->total;
+    }
+
+    public function getPayment(): Money
+    {
+        return $this->payment;
+    }
+
+    public function getAmount(): Money
+    {
+        return $this->amount;
     }
 
     public function jsonSerialize()
