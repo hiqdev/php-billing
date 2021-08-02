@@ -23,7 +23,7 @@ Feature: Growing discount
             | 2018-12-01 | monthly 100 USD | discount -100.00 USD |
             | 2019-01-01 | monthly 100 USD | discount -100.00 USD |
 
-    Scenario Outline: relative discount growing 30% every month
+    Scenario Outline: relative discount growing 30% every year
         Given formula is discount.since('08.2000').grows('30%').every('year').max('100%')
          When action date is <date>
          Then first charge is <first>
@@ -40,7 +40,7 @@ Feature: Growing discount
             | 2011-08-01 | monthly 100 USD | discount -98.62 USD |
             | 2024-08-01 | monthly 100 USD | discount -99.99 USD |
 
-    Scenario Outline: relative discount growing 20% every month from given min to max
+    Scenario Outline: relative discount growing 20% every year from given min to max
         Given formula is discount.since('08.2000').grows('20%').every('1 year').min('10%').max('75%')
          When action date is <date>
          Then first charge is <first>
