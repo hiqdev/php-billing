@@ -243,7 +243,7 @@ class FactoryBasedBuilder implements BuilderInterface
         return $this->factory->get('bill', $data);
     }
 
-    public function targetChangePlan(string $target, string $planName, string $date)
+    public function targetChangePlan(string $target, string $planName, string $date, string $wallTime = null)
     {
         throw new RuntimeException('Not implemented yet');
     }
@@ -260,5 +260,10 @@ class FactoryBasedBuilder implements BuilderInterface
         $keys = $this->factory->getEntityUniqueKeys('sale');
 
         return $this->factory->find('sale', $keys);
+    }
+
+    public function flushEntitiesCache(): void
+    {
+        $this->factory->clearEntitiesCache();
     }
 }

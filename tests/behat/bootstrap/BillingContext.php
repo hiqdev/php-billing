@@ -283,6 +283,10 @@ class BillingContext extends BaseContext
      */
     protected function prepareTime(string $time = null)
     {
+        if ($time === null) {
+            return null;
+        }
+
         if ($time === 'midnight second day of this month') {
             return date('Y-m-02');
         }
@@ -330,9 +334,17 @@ class BillingContext extends BaseContext
     /**
      * @When /^tariff plan change is requested for target "([^"]*)" to plan "([^"]*)" at "([^"]*)"$/
      */
-    public function tariffPlanChangeIsRequestedForTargetToAt(string $target, string $planName, string $date)
+    public function tariffPlanChangeIsRequestedForTarget(string $target, string $planName, string $date)
     {
         $this->mayFail(fn () => $this->builder->targetChangePlan($target, $planName, $this->prepareTime($date)));
+    }
+
+    /**
+     * @When /^tariff plan change is requested for target "([^"]*)" to plan "([^"]*)" at "([^"]*)", assuming current time is "([^"]*)"$/
+     */
+    public function tariffPlanChangeIsRequestedForTargetAtSpecificTime(string $target, string $planName, string $date, ?string $wallTime = null)
+    {
+        $this->mayFail(fn () => $this->builder->targetChangePlan($target, $planName, $this->prepareTime($date), $this->prepareTime($wallTime)));
     }
 
     /**
@@ -348,7 +360,7 @@ class BillingContext extends BaseContext
         $saleCloseDateTime = new DateTimeImmutable($saleCloseDate);
 
         foreach ($sales as $sale) {
-            /** @noinspection SuspiciousBinaryOperationInspection */
+            /** @noinspection PhpBooleanCanBeSimplifiedInspection */
             $saleExists = true
                 && str_contains($sale->getPlan()->getName(), $planName)
                 && $sale->getTime()->format(DATE_ATOM) === $saleDateTime->format(DATE_ATOM)
@@ -392,5 +404,13 @@ class BillingContext extends BaseContext
     public function target(string $target)
     {
         $this->builder->buildTarget($target);
+    }
+
+    /**
+     * @Then /^flush entities cache$/
+     */
+    public function flushEntitiesCache()
+    {
+        $this->builder->flushEntitiesCache();
     }
 }

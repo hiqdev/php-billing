@@ -240,6 +240,17 @@ class Factory implements FactoryInterface
         return null;
     }
 
+    /**
+     * @return int how many entities were cleaned
+     */
+    public function clearEntitiesCache(): int
+    {
+        $count = count($this->entities);
+        $this->entities = [];
+
+        return $count;
+    }
+
     public function create(string $entity, $data)
     {
         $method = $this->getMethod($entity, 'create');
