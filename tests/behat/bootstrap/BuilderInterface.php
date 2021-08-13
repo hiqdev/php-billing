@@ -40,10 +40,12 @@ interface BuilderInterface
 
     public function performCalculation(string $time): array;
 
-    public function targetChangePlan(string $target, string $planName, string $date);
+    public function targetChangePlan(string $target, string $planName, string $date, string $wallTime = null);
 
     /**
      * @return SaleInterface[]
      */
     public function findHistoricalSales(array $params);
+
+    public function flushEntitiesCache(): void;
 }
