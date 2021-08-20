@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\statement;
 
 use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
 use DateTimeImmutable;
 use Money\Money;
@@ -31,4 +32,6 @@ interface StatementBillInterface extends BillInterface
     public function getOveruse(): ?Money;
 
     public function getPrepaid(): ?QuantityInterface;
+
+    public function getTariffType(): ?TypeInterface;
 }
