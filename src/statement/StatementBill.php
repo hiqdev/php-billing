@@ -111,6 +111,6 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
 
     public function getTariffType(): ?TypeInterface
     {
-        return $this->tariffType;
+        return $this->tariff_type;
     }
 }
