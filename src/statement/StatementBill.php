@@ -43,6 +43,9 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     /** @var string */
     protected $from;
 
+    /** @var TypeInterface */
+    protected $tariff_type;
+
     public function __construct(
         $id,
         TypeInterface $type,
@@ -58,7 +61,8 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         TargetInterface $target = null,
         PlanInterface $plan = null,
         BillState $state = null,
-        ?string $from = null
+        ?string $from = null,
+        TypeInterface $tariff_type = null
     ) {
         parent::__construct(
             $id,
@@ -77,6 +81,7 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         $this->overuse      = $overuse;
         $this->prepaid      = $prepaid;
         $this->from         = $from;
+        $this->tariff_type   = $tariff_type;
     }
 
     public function getMonth(): DateTimeImmutable
@@ -102,5 +107,10 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     public function getPrepaid(): QuantityInterface
     {
         return $this->prepaid;
+    }
+
+    public function getTariffType(): ?TypeInterface
+    {
+        return $this->tariff_type;
     }
 }
