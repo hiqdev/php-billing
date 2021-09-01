@@ -53,17 +53,17 @@ class Sale implements SaleInterface
     protected ?DateTimeImmutable $closeTime = null;
 
     public function __construct(
-                            $id,
+        $id,
         TargetInterface $target,
         CustomerInterface $customer,
         PlanInterface $plan,
-        DateTimeImmutable $time = null
+        ?DateTimeImmutable $time = null
     ) {
         $this->id = $id;
         $this->target = $target;
         $this->customer = $customer;
         $this->plan = $plan;
-        $this->time = $time;
+        $this->time = $time ?? new DateTimeImmutable();
     }
 
     public function getId()
