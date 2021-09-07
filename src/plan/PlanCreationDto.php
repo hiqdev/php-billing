@@ -26,4 +26,6 @@ class PlanCreationDto
 
     /// XXX should not be here
     public $is_grouping;
+
+    public $type;
 }
