@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\plan;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\type\TypeInterface;
 
 /**
  * Tariff Plan.
@@ -48,6 +49,11 @@ class Plan implements PlanInterface
     protected $prices = [];
 
     /**
+     * @var ?TypeInterface
+     */
+    protected $type;
+
+    /**
      * @param int|string|null $id
      * @param string $name
      * @param PriceInterface[] $prices
@@ -56,12 +62,14 @@ class Plan implements PlanInterface
         $id,
         $name,
         CustomerInterface $seller = null,
-        $prices = []
+        $prices = [],
+        TypeInterface $type = null
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->seller = $seller;
         $this->prices = $prices;
+        $this->type = $type;
     }
 
     public function getUniqueId()
@@ -122,6 +130,11 @@ class Plan implements PlanInterface
             throw new CannotReassignException('plan prices');
         }
         $this->prices = $prices;
+    }
+
+    public function getType(): ?TypeInterface
+    {
+        return $this->type ?? null;
     }
 
     public function jsonSerialize()

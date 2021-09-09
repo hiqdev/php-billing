@@ -14,6 +14,7 @@ use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\type\TypeInterface;
 
 /**
  * Plan Interface.
@@ -47,4 +48,5 @@ interface PlanInterface extends EntityInterface
     public function getSeller(): ?CustomerInterface;
     public function getName(): string;
     public function setName(string $name): void;
+    public function getType(): ?TypeInterface;
 }
