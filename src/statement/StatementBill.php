@@ -43,8 +43,8 @@ class StatementBill extends Bill implements StatementBillInterface
     /** @var string */
     protected $from;
 
-    /** @var int|null */
-    protected ?int $paid_count = 0;
+    /** @var int */
+    protected int $unique_objects_count = 0;
 
     /** @var TypeInterface */
     protected $tariff_type;
@@ -57,7 +57,7 @@ class StatementBill extends Bill implements StatementBillInterface
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $month,
-        ?int $paid_count,
+        int $unique_objects_count,
         Money $price = null,
         Money $overuse = null,
         QuantityInterface $prepaid = null,
@@ -80,13 +80,13 @@ class StatementBill extends Bill implements StatementBillInterface
             $charges,
             $state
         );
-        $this->month        = $month;
-        $this->paid_count   = $paid_count;
-        $this->price        = $price;
-        $this->overuse      = $overuse;
-        $this->prepaid      = $prepaid;
-        $this->from         = $from;
-        $this->tariff_type   = $tariff_type;
+        $this->month                = $month;
+        $this->unique_objects_count = $unique_objects_count;
+        $this->price                = $price;
+        $this->overuse              = $overuse;
+        $this->prepaid              = $prepaid;
+        $this->from                 = $from;
+        $this->tariff_type          = $tariff_type;
     }
 
     public function getMonth(): DateTimeImmutable
@@ -119,8 +119,8 @@ class StatementBill extends Bill implements StatementBillInterface
         return $this->tariff_type;
     }
 
-    public function getPaidCount(): ?int
+    public function getUniqueObjectsCount(): int
     {
-        return $this->paid_count;
+        return $this->unique_objects_count;
     }
 }

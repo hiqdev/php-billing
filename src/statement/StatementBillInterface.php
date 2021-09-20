@@ -27,7 +27,7 @@ interface StatementBillInterface extends BillInterface
 
     public function getFrom(): ?string;
 
-    public function getPaidCount(): ?int;
+    public function getUniqueObjectsCount(): int;
 
     public function getPrice(): ?Money;
 
