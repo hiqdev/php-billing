@@ -26,7 +26,7 @@ use Money\Money;
  *
  * @author Yurii Myronchuk <bladeroot@gmail.com>
  */
-class StatementBill extends Bill implements StatementBillInterface, BillInterface
+class StatementBill extends Bill implements StatementBillInterface
 {
     /** @var DateTimeImmutable */
     protected $month;
@@ -43,6 +43,9 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     /** @var string */
     protected $from;
 
+    /** @var int */
+    protected int $unique_objects_count = 0;
+
     /** @var TypeInterface */
     protected $tariff_type;
 
@@ -54,6 +57,7 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $month,
+        int $unique_objects_count,
         Money $price = null,
         Money $overuse = null,
         QuantityInterface $prepaid = null,
@@ -76,12 +80,13 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
             $charges,
             $state
         );
-        $this->month        = $month;
-        $this->price        = $price;
-        $this->overuse      = $overuse;
-        $this->prepaid      = $prepaid;
-        $this->from         = $from;
-        $this->tariff_type   = $tariff_type;
+        $this->month                = $month;
+        $this->unique_objects_count = $unique_objects_count;
+        $this->price                = $price;
+        $this->overuse              = $overuse;
+        $this->prepaid              = $prepaid;
+        $this->from                 = $from;
+        $this->tariff_type          = $tariff_type;
     }
 
     public function getMonth(): DateTimeImmutable
@@ -112,5 +117,10 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     public function getTariffType(): ?TypeInterface
     {
         return $this->tariff_type;
+    }
+
+    public function getUniqueObjectsCount(): int
+    {
+        return $this->unique_objects_count;
     }
 }
