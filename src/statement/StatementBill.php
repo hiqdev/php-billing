@@ -26,7 +26,7 @@ use Money\Money;
  *
  * @author Yurii Myronchuk <bladeroot@gmail.com>
  */
-class StatementBill extends Bill implements StatementBillInterface, BillInterface
+class StatementBill extends Bill implements StatementBillInterface
 {
     /** @var DateTimeImmutable */
     protected $month;
@@ -43,6 +43,9 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     /** @var string */
     protected $from;
 
+    /** @var int|null */
+    protected ?int $paid_count = 0;
+
     /** @var TypeInterface */
     protected $tariff_type;
 
@@ -54,6 +57,7 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $month,
+        ?int $paid_count,
         Money $price = null,
         Money $overuse = null,
         QuantityInterface $prepaid = null,
@@ -77,6 +81,7 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
             $state
         );
         $this->month        = $month;
+        $this->paid_count   = $paid_count;
         $this->price        = $price;
         $this->overuse      = $overuse;
         $this->prepaid      = $prepaid;
@@ -112,5 +117,10 @@ class StatementBill extends Bill implements StatementBillInterface, BillInterfac
     public function getTariffType(): ?TypeInterface
     {
         return $this->tariff_type;
+    }
+
+    public function getPaidCount(): ?int
+    {
+        return $this->paid_count;
     }
 }
