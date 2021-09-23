@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
+use Behat\Gherkin\Node\TableNode;
 use BehatExpectException\ExpectException;
 use DateTimeImmutable;
 use hiqdev\php\billing\bill\BillInterface;
@@ -129,12 +130,31 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /purchase target (\S+) by plan (\S+) at (.+)$/
+     * @Given /purchase target (\S+) by plan (\S+) at (\S+)$/
      */
     public function purchaseTarget(string $target, string $plan, string $time): void
     {
         $time = $this->prepareTime($time);
         $this->builder->buildPurchase($target, $plan, $time);
+    }
+
+    /**
+     * @Given /^purchase target "([^"]*)" by plan "([^"]*)" at "([^"]*)" with the following initial uses:$/
+     */
+    public function purchaseTargetWithInitialUses(string $target, string $plan, string $time, TableNode $usesTable): void
+    {
+        $time = $this->prepareTime($time);
+        $uses = array_map(static function (array $row) {
+            return [
+                'type' => $row['type'],
+                'unit' => $row['unit'],
+                'amount' => $row['amount'],
+            ];
+        }, $usesTable->getColumnsHash());
+
+        $this->mayFail(
+            fn() => $this->builder->buildPurchase($target, $plan, $time, $uses)
+        );
     }
 
     /**
@@ -412,5 +432,19 @@ class BillingContext extends BaseContext
     public function flushEntitiesCache()
     {
         $this->builder->flushEntitiesCache();
+    }
+
+    /**
+     * @Given /^target "([^"]*)" has the following uses:$/
+     */
+    public function targetHasTheFollowingUses(string $target, TableNode $usesTable)
+    {
+        foreach ($usesTable->getColumnsHash() as $row) {
+            $uses = $this->builder->findUsage($row['time'], $target, $row['type']);
+            Assert::assertCount(1, $uses);
+
+            $use = reset($uses);
+            Assert::assertEquals($row['amount'], $use['total']);
+        }
     }
 }

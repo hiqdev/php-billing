@@ -30,7 +30,7 @@ interface BuilderInterface
 
     public function buildSale(string $target, string $plan, string $time);
 
-    public function buildPurchase(string $target, string $plan, string $time);
+    public function buildPurchase(string $target, string $plan, string $time, ?array $uses = []);
 
     public function findBills(array $data): array;
 
@@ -48,4 +48,6 @@ interface BuilderInterface
     public function findHistoricalSales(array $params);
 
     public function flushEntitiesCache(): void;
+
+    public function findUsage(string $time, string $targetName, string $typeName): array;
 }
