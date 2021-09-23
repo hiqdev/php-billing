@@ -155,13 +155,14 @@ class FactoryBasedBuilder implements BuilderInterface
         ]);
     }
 
-    public function buildPurchase(string $target, string $plan, string $time)
+    public function buildPurchase(string $target, string $plan, string $time, ?array $uses = [])
     {
         $this->performAction([
             'sale' => $this->buildSale($target, $plan, $time),
             'type' => 'monthly,cdn_traf95_max',
             'quantity' => '1 items',
             'target' => $target,
+            'initial_uses' => $uses
         ]);
     }
 
@@ -265,5 +266,10 @@ class FactoryBasedBuilder implements BuilderInterface
     public function flushEntitiesCache(): void
     {
         $this->factory->clearEntitiesCache();
+    }
+
+    public function findUsage(string $time, string $targetName, string $typeName): array
+    {
+        throw new RuntimeException('Not implemented yet');
     }
 }
