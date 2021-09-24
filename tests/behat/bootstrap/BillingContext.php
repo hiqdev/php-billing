@@ -444,7 +444,14 @@ class BillingContext extends BaseContext
             Assert::assertCount(1, $uses);
 
             $use = reset($uses);
-            Assert::assertEquals($row['amount'], $use['total']);
+            Assert::assertSame(
+                $row['unit'], $use['unit'],
+                sprintf('Exptected unit to be %s, got %s instead', $row['unit'], $use['unit'])
+            );
+            Assert::assertEquals(
+                $row['amount'], $use['total'],
+                sprintf('Exptected total to be %s, got %s instead', $row['amount'], $use['total'])
+            );
         }
     }
 }
