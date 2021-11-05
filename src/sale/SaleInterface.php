@@ -46,7 +46,7 @@ interface SaleInterface extends EntityInterface
     public function getCustomer();
 
     /**
-     * @return PlanInterface
+     * @return PlanInterface|null
      */
     public function getPlan();
 
