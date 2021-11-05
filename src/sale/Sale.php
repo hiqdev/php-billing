@@ -56,7 +56,7 @@ class Sale implements SaleInterface
         $id,
         TargetInterface $target,
         CustomerInterface $customer,
-        PlanInterface $plan,
+        ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null
     ) {
         $this->id = $id;
