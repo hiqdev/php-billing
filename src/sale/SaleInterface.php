@@ -46,6 +46,10 @@ interface SaleInterface extends EntityInterface
     public function getCustomer();
 
     /**
+     * Plan is required for sales that imply recurrent charges.
+     * If the sale is one-time and acts as a point-in-time mark of
+     * a single good being sold and billed single time, Plan might be omitted.
+     *
      * @return PlanInterface|null
      */
     public function getPlan();
