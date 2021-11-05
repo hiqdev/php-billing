@@ -41,7 +41,7 @@ class Sale implements SaleInterface
     protected $customer;
 
     /**
-     * @var PlanInterface
+     * @var PlanInterface|null
      */
     protected $plan;
 
