@@ -66,7 +66,7 @@ class Plan implements PlanInterface
         TypeInterface $type = null
     ) {
         $this->id = $id;
-        $this->name = $name;
+        $this->name = (string)$name;
         $this->seller = $seller;
         $this->prices = $prices;
         $this->type = $type;
@@ -90,7 +90,7 @@ class Plan implements PlanInterface
      */
     public function getName(): string
     {
-        return $this->name;
+        return (string)$this->name;
     }
 
     public function setName(string $name): void
