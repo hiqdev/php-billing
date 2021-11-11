@@ -128,6 +128,24 @@ class BillingContext extends BaseContext
         $this->saleTime = $this->prepareTime($time);
         $this->builder->buildSale($target, $plan, $this->saleTime);
     }
+    /**
+     * @When /^sale close is requested for target "([^"]*)" at "([^"]*)", assuming current time is "([^"]*)"$/
+     */
+    public function saleClose(string $target, string $time, ?string $wallTime)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then /^target "([^"]*)" has exactly (\d+) sale for customer$/
+     */
+    public function targetHasExactlyNSaleForCustomer(string $target, string $count)
+    {
+        // TODO: implement
+        // $sales = $this->builder->findSales(['target-name' => $target]);
+
+        Assert::assertCount($count, $sales);
+    }
 
     /**
      * @Given /purchase target (\S+) by plan (\S+) at (\S+)$/
