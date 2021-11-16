@@ -13,6 +13,8 @@ namespace hiqdev\php\billing\statement;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\plan\PlanInterface;
 use Money\Money;
 
 /**
@@ -41,6 +43,8 @@ class Statement implements \JsonSerializable
 
     private string $period = self::PERIOD_MONTH;
 
+    private array $plans = [];
+
     public function __construct(
         CustomerInterface $customer,
         DateTimeImmutable $time,
@@ -50,7 +54,8 @@ class Statement implements \JsonSerializable
         Money $payment,
         Money $amount,
         array $bills = [],
-        string $period = self::PERIOD_MONTH
+        string $period = self::PERIOD_MONTH,
+        array $plans = []
     ) {
         $this->customer = $customer;
         $this->time = $time;
@@ -61,6 +66,7 @@ class Statement implements \JsonSerializable
         $this->total = $total;
         $this->payment = $payment;
         $this->amount = $amount;
+        $this->plans = $plans;
     }
 
     public function getCustomer(): CustomerInterface
@@ -83,14 +89,20 @@ class Statement implements \JsonSerializable
         return $this->period;
     }
 
-    public function setBills(array $bills)
+    /**
+     * @param BillInterface[]
+     */
+    public function setBills(array $bills): void
     {
         $this->bills = $bills;
     }
 
+    /**
+     * @return BillInterface[]
+     */
     public function getBills(): array
     {
-        return $this->bills;
+        return $this->bills ?? [];
     }
 
     public function getMonth(): DateTimeImmutable
@@ -111,6 +123,22 @@ class Statement implements \JsonSerializable
     public function getAmount(): Money
     {
         return $this->amount;
+    }
+
+    /**
+     * @param PlanInterface[]
+     */
+    public function setPlans(array $plans): void
+    {
+        $this->plans = $plans;
+    }
+
+    /**
+     * @return PlanInterface[]
+     */
+    public function getPlans(): array
+    {
+        return $this->plans ?? [];
     }
 
     public function jsonSerialize()
