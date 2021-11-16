@@ -116,11 +116,17 @@ class Statement implements \JsonSerializable
         return $this->amount;
     }
 
-    public function setPlans(array $plans)
+    /**
+     * @param PlanInterface[]
+     */
+    public function setPlans(array $plans): void
     {
         $this->plans = $plans;
     }
 
+    /**
+     * @param PlanInterface[]
+     */
     public function getPlans(): array
     {
         return $this->plans;
