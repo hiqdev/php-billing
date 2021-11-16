@@ -64,6 +64,7 @@ class Statement implements \JsonSerializable
         $this->total = $total;
         $this->payment = $payment;
         $this->amount = $amount;
+        $this->plans = $plans;
     }
 
     public function getCustomer(): CustomerInterface
