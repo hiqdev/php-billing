@@ -13,6 +13,8 @@ namespace hiqdev\php\billing\statement;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\plan\PlanInterface;
 use Money\Money;
 
 /**
@@ -87,14 +89,20 @@ class Statement implements \JsonSerializable
         return $this->period;
     }
 
-    public function setBills(array $bills)
+    /**
+     * @param BillInterface[]
+     */
+    public function setBills(array $bills): void
     {
         $this->bills = $bills;
     }
 
+    /**
+     * @return BillInterface[]
+     */
     public function getBills(): array
     {
-        return $this->bills;
+        return $this->bills ?? [];
     }
 
     public function getMonth(): DateTimeImmutable
@@ -126,11 +134,11 @@ class Statement implements \JsonSerializable
     }
 
     /**
-     * @param PlanInterface[]
+     * @return PlanInterface[]
      */
     public function getPlans(): array
     {
-        return $this->plans;
+        return $this->plans ?? [];
     }
 
     public function jsonSerialize()
