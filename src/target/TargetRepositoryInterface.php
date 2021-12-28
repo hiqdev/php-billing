@@ -21,9 +21,5 @@ interface TargetRepositoryInterface
      */
     public function findOne($specification);
 
-    /**
-     * @param TargetInterface $target
-     * @return void
-     */
-    public function save(TargetInterface $target);
+    public function save(TargetInterface $target): void;
 }
