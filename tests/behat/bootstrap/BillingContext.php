@@ -19,7 +19,11 @@ use PHPUnit\Framework\Assert;
 
 class BillingContext extends BaseContext
 {
-    use ExpectException;
+    use ExpectException {
+        mayFail as protected;
+        shouldFail as protected;
+        assertCaughtExceptionMatches as protected;
+    }
 
     protected $saleTime;
 
@@ -376,8 +380,8 @@ class BillingContext extends BaseContext
             'target' => $target,
         ]);
 
-        $saleDateTime = new DateTimeImmutable($saleDate);
-        $saleCloseDateTime = new DateTimeImmutable($saleCloseDate);
+        $saleDateTime = new DateTimeImmutable('@' . strtotime($saleDate));
+        $saleCloseDateTime = new DateTimeImmutable('@' . ($saleCloseDate ? strtotime($saleCloseDate) : time()));
 
         foreach ($sales as $sale) {
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
