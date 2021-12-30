@@ -11,9 +11,9 @@ Feature: Monthly cap
           And second charge is <second>
         Examples:
             | date       | qty      | first                                  | second                        |
-            | 2020-09-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
-            | 2020-10-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
-            | 2020-11-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
+#            | 2020-09-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
+#            | 2020-10-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
+#            | 2020-11-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
             | 2020-12-01 | 0.6451615 | monthly 35.72 USD for 480.000156 hour |                               |
             | 2020-12-01 | 0.9032   | monthly 50 USD for 671.9808 hour       |                               |
             | 2020-12-01 | 0.949    | monthly 50 USD for 672 hour            | monthly 0 USD for 34.056 hour |

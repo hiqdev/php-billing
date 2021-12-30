@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use DateInterval;
+use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\derivative\ChargeDerivative;
@@ -63,17 +65,22 @@ class MonthlyCap extends Modifier
             return [$charge];
         }
 
-        $chargeInHoursUnderCap = $this->makeMappedCharge($charge, $action);
-        if ($this->capReached($chargeInHoursUnderCap)) {
-            return $this->splitCapFromCharge($chargeInHoursUnderCap);
+        $capRatio = $this->getCapRatio($action->getTime());
+        $usedDurationRation = $this->calculateEffectiveDurationRatio($action);
+        if ($capRatio > $usedDurationRation) {
+            $chargeQuery = new ChargeDerivativeQuery();
+            $chargeQuery->changeSum($charge->getSum()->multiply($usedDurationRation));
+
+            return [$this->chargeDerivative->__invoke($charge, $chargeQuery)];
         }
 
-        return [$chargeInHoursUnderCap];
+        $chargeInHoursUnderCap = $this->makeMappedCharge($charge, $action);
+        return $this->splitCapFromCharge($chargeInHoursUnderCap);
     }
 
-    private function capReached(ChargeInterface $charge): bool
+    private function capReached(ChargeInterface $charge, ChargeInterface $cappedCharge): bool
     {
-        return $charge->getUsage()->compare($this->getCapInHours()) === 1; // Usage is greater than a cap
+        return $charge->getUsage()->compare($cappedCharge->getUsage()) === -1;
     }
 
     private function getCapInHours(): QuantityInterface
@@ -86,17 +93,20 @@ class MonthlyCap extends Modifier
 
     private function splitCapFromCharge(ChargeInterface $charge): array
     {
-        $cappedHours = $this->getCapInHours();
-        $diff = 1-($charge->getUsage()->subtract($cappedHours)->getQuantity()/$charge->getUsage()->getQuantity());
+        $capRatio = $this->getCapRatio($charge->getAction()->getTime());
+        $cappedUsage = $charge->getUsage()->multiply($capRatio);
+
+        $effectiveDurationRatio = $this->calculateEffectiveDurationRatio($charge->getAction());
 
         $chargeQuery = new ChargeDerivativeQuery();
-        $chargeQuery->changeUsage($cappedHours);
-        $chargeQuery->changeSum($charge->getSum()->multiply($diff));
+        $chargeQuery->changeUsage($cappedUsage);
+//        $chargeQuery->changeSum($charge->getSum()->multiply());
         $newCharge = $this->chargeDerivative->__invoke($charge, $chargeQuery);
 
         $zeroChargeQuery = new ChargeDerivativeQuery();
         $zeroChargeQuery->changeSum(new Money(0, $charge->getSum()->getCurrency()));
-        $zeroChargeQuery->changeUsage($charge->getUsage()->subtract($cappedHours));
+        $monthDurationInHours = $this->getMonthDurationInSeconds($charge->getAction()->getTime()) / 3600;
+        $zeroChargeQuery->changeUsage(Quantity::create('hour', ($effectiveDurationRatio-$capRatio) * $monthDurationInHours));
         $zeroChargeQuery->changeParent($newCharge);
         $reason = $this->getReason();
         if ($reason) {
@@ -107,24 +117,67 @@ class MonthlyCap extends Modifier
         return [$newCharge, $newZeroCharge];
     }
 
-    private function getEffectiveCoefficient(ActionInterface $action): float
+    private function getCapRatio(DateTimeImmutable $time): float
     {
-        $hoursInMonth = $action->getTime()->format('t') * 24;
+        $hoursInMonth = $time->format('t') * 24;
 
-        return 1 / ($this->getCapInHours()->getQuantity() / $hoursInMonth);
+        return ($this->getCapInHours()->getQuantity() / $hoursInMonth);
     }
 
     private function makeMappedCharge(ChargeInterface $charge, ActionInterface $action): ChargeInterface
     {
-        $coefficient = $this->getEffectiveCoefficient($action);
-        $quantityUnderCap = $charge->getUsage()->multiply($coefficient);
+        $capRatio = $this->getCapRatio($action->getTime());
+        $usedDurationRatio = $this->calculateEffectiveDurationRatio($action);
+
+        $ratio = min($capRatio, $usedDurationRatio);
 
         $chargeQuery = new ChargeDerivativeQuery();
-        $chargeQuery->changeUsage(
-            $this->getCapInHours()->multiply($quantityUnderCap->getQuantity())
-        );
-        $chargeQuery->changeSum($charge->getSum()->multiply($coefficient));
+
+        $cappedUsage = $charge->getUsage()->divide($ratio);
+        $cappedSum = $charge->getSum()->divide($ratio);
+        if ($action->getQuantity()->getUnit()->getMeasure() === 'item') {
+            $cappedUsage = $this->getCapInHours()->divide($ratio);
+            $cappedSum = $charge->getSum()->divide($capRatio);
+        }
+
+        $chargeQuery->changeSum($cappedSum);
+        $chargeQuery->changeUsage($cappedUsage);
 
         return $this->chargeDerivative->__invoke($charge, $chargeQuery);
+    }
+
+    private function getMonthDurationInSeconds(DateTimeImmutable $time): int
+    {
+        $month = $time->modify('first day of this month midnight');
+        $nextMonth = $time->modify('first day of next month midnight');
+
+        return $this->dateIntervalToSeconds($month->diff($nextMonth));
+    }
+
+    private function calculateEffectiveDurationRatio(ActionInterface $action): float
+    {
+        $month = $action->getTime()->modify('first day of this month midnight');
+        $nextMonth =  $action->getTime()->modify('first day of next month midnight');
+        $monthDurationInSeconds = $this->getMonthDurationInSeconds($action->getTime());
+
+        $sale = $action->getSale();
+        if ($sale === null) {
+            return $this->dateIntervalToSeconds($action->getTime()->diff($nextMonth)) / $monthDurationInSeconds;
+        }
+
+        /** @var DateTimeImmutable $periodStartTime */
+        $periodStartTime = max($action->getTime(), $month);
+        /** @var DateTimeImmutable $periodEndTime */
+        $periodEndTime = min($sale->getCloseTime() ?? new DateTimeImmutable('2199-01-01'), $nextMonth);
+
+        $diff = $periodStartTime->diff($periodEndTime);
+        $diffSeconds = $this->dateIntervalToSeconds($diff);
+
+        return $diffSeconds / $monthDurationInSeconds;
+    }
+
+    private function dateIntervalToSeconds(DateInterval $dateInterval): int
+    {
+        return $dateInterval->format('%a') * 24 * 60 * 60;
     }
 }

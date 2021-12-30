@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Closure;
 use DateTimeImmutable;
@@ -22,6 +23,7 @@ use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
@@ -64,6 +66,7 @@ class FeatureContext implements Context
 
     /** @var string */
     protected $expectedError;
+    protected Target $target;
 
     /**
      * Initializes context.
@@ -104,10 +107,32 @@ class FeatureContext implements Context
     public function actionIs($target, $type, $amount, $unit)
     {
         $type = new Type(Type::ANY, $type);
-        $target = new Target(Target::ANY, $target);
+        $this->target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $amount);
         $time = new DateTimeImmutable();
-        $this->action = new Action(null, $type, $target, $quantity, $this->customer, $time);
+
+        $sale = $this->action ? $this->action->getSale() : null;
+        $this->action = new Action(null, $type, $this->target, $quantity, $this->customer, $time, $sale);
+    }
+
+    /**
+     * @Given /^sale is since "([^"]*)"(?: till "([^"]*)")?$/
+     */
+    public function saleIs(string $startDate, ?string $endDate = null)
+    {
+        if ($this->action === null) {
+            Assert::fail('Create action before creating sale');
+        }
+        if ($this->price === null) {
+            Assert::fail('Create price before creating sale');
+        }
+        $plan = new Plan(null, 'Test', null, [$this->price]);
+        $sale = new Sale(null, $this->target, $this->customer, $plan, new DateTimeImmutable($startDate));
+        if ($endDate) {
+            $sale->close(new DateTimeImmutable($endDate));
+        }
+
+        $this->action->setSale($sale);
     }
 
     /**
