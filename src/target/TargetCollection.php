@@ -32,8 +32,10 @@ class TargetCollection implements TargetInterface
         $ids = [];
         $types = [];
         foreach ($targets as $target) {
-            $ids[] = $target->getId();
-            $types[] = $target->getType();
+            if ($target) {
+                $ids[] = $target->getId();
+                $types[] = $target->getType();
+            }
         }
         $this->ids = array_unique(array_filter($ids));
         $this->types = array_unique(array_filter($types));
