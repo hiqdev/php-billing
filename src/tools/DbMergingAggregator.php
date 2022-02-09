@@ -19,19 +19,9 @@ use hiqdev\php\billing\charge\ChargeInterface;
  */
 class DbMergingAggregator implements AggregatorInterface
 {
-    /**
-     * @var BillRepositoryInterface
-     */
-    protected $billRepository;
-
-    /**
-     * @var MergerInterface
-     */
-    protected $merger;
-    /**
-     * @var AggregatorInterface
-     */
-    private $localAggregator;
+    protected BillRepositoryInterface $billRepository;
+    protected MergerInterface $merger;
+    private AggregatorInterface $localAggregator;
 
     public function __construct(
         AggregatorInterface $localAggregator,
@@ -48,15 +38,46 @@ class DbMergingAggregator implements AggregatorInterface
      * Then merges them with Bills from DB.
      *
      * @param ChargeInterface[]|ChargeInterface[][] $charges
-     * @throws \Exception
      * @return BillInterface[]
+     * @throws \Exception
      */
     public function aggregateCharges(array $charges): array
     {
-        $bills  = $this->localAggregator->aggregateCharges($charges);
-        $fromdb = $this->billRepository->findByUniqueness($bills);
-        $res    = $this->merger->mergeBills(array_merge($bills, $fromdb));
+        $localBills = $this->localAggregator->aggregateCharges($charges);
+        $dbBills = $this->billRepository->findByUniqueness($localBills);
+
+        $filteredLocalBills = $this->excludeLocalOnlyZeroBills($localBills, $dbBills);
+        $res = $this->merger->mergeBills(array_merge($filteredLocalBills, $dbBills));
 
         return $res;
+    }
+
+    /**
+     * When a new Zero bill is being produced, it should not be persisted
+     * unless there is already a bill of this uniqueness in the DBMS.
+     *
+     * @param BillInterface[] $localBills
+     * @param BillInterface[] $dbBills
+     * @return BillInterface[]
+     */
+    private function excludeLocalOnlyZeroBills(array $localBills, array $dbBills): array
+    {
+        foreach ($localBills as $i => $localBill) {
+            $isZeroSum = $localBill->getSum()->getAmount() === "0";
+            if (!$isZeroSum) {
+                continue;
+            }
+
+            $localUniqueString = $localBill->getUniqueString();
+            foreach ($dbBills as $dbBill) {
+                if ($dbBill->getUniqueString() === $localUniqueString) {
+                    continue 2;
+                }
+            }
+
+            unset($localBills[$i]);
+        }
+
+        return $localBills;
     }
 }

@@ -201,6 +201,8 @@ class BillingContext extends BaseContext
      */
     public function billWithTime($type, $sum, $currency, $quantity, $unit, $target, $at = null, $time = null)
     {
+        $this->builder->flushEntitiesCacheByType('bill');
+
         $quantity = $this->prepareQuantity($quantity);
         $sum = $this->prepareSum($sum, $quantity);
         $time = $this->prepareTime($time);

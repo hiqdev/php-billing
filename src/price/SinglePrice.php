@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\price;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 use Money\Money;
 
@@ -69,7 +70,11 @@ class SinglePrice extends AbstractPrice
     {
         $usage = $quantity->convert($this->prepaid->getUnit())->subtract($this->prepaid);
 
-        return $usage->isPositive() ? $usage : null;
+        if ($usage->isPositive()) {
+            return $usage;
+        }
+
+        return Quantity::create($this->prepaid->getUnit()->getName(), 0);
     }
 
     /**
