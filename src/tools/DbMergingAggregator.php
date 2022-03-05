@@ -63,6 +63,11 @@ class DbMergingAggregator implements AggregatorInterface
     private function excludeLocalOnlyZeroBills(array $localBills, array $dbBills): array
     {
         foreach ($localBills as $i => $localBill) {
+            foreach ($localBill->getCharges() as $charge) {
+                if ($charge->hasEvents()) {
+                    continue 2;
+                }
+            }
             $isZeroSum = $localBill->getSum()->getAmount() === "0";
             if (!$isZeroSum) {
                 continue;
