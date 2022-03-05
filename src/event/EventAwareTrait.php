@@ -44,4 +44,9 @@ trait EventAwareTrait
 
         return $events;
     }
+
+    public function hasEvents(): bool
+    {
+        return !empty($this->events);
+    }
 }
