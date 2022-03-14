@@ -111,7 +111,7 @@ class FormulaEngine implements FormulaEngineInterface
         } catch (\Hoa\Ruler\Exception\Interpreter $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
         } catch (\Throwable $exception) {
-            throw FormulaSyntaxError::create($formula, 'Failed to interpret formula');
+            throw FormulaSyntaxError::create($formula, 'Failed to interpret formula: ' . $exception->getMessage());
         }
     }
 
