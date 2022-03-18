@@ -26,14 +26,6 @@ use Yii;
 class PriceChargesEstimator
 {
     /**
-     * @var \yii\i18n\Formatter
-     */
-    protected $yiiFormatter;
-    /**
-     * @var DecimalMoneyFormatter
-     */
-    protected $moneyFormatter;
-    /**
      * @var array
      */
     protected $calculations = [];
@@ -46,8 +38,6 @@ class PriceChargesEstimator
     public function __construct(array $calculations)
     {
         $this->calculations = $calculations;
-        $this->yiiFormatter = Yii::$app->formatter;
-        $this->moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
     }
 
     public function __invoke($periods)
@@ -80,9 +70,6 @@ class PriceChargesEstimator
                 $actionType = $action['type']['name'];
                 $priceType = $charge['price']['type']['name'];
                 $sum = $charge['sum'];
-
-                $money = new Money($sum['amount'], new Currency($sum['currency']));
-                $price = $this->moneyFormatter->format($money);
 
                 $chargesByTargetAndAction['targets'][$targetId][$actionType]['charges'][] = [
                     'sum' => $sum['amount'],
@@ -117,7 +104,6 @@ class PriceChargesEstimator
 
     private function decorateAction(&$action)
     {
-        $action['sum'] = array_sum(array_column($action['charges'], 'price'));
         $action['currency'] = reset($action['charges'])['currency'];
     }
 }
