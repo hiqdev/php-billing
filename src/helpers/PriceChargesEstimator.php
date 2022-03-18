@@ -15,7 +15,6 @@ use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
-use Yii;
 
 /**
  * Class PriceChargesEstimator.
