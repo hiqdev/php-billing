@@ -19,15 +19,17 @@ use Throwable;
  */
 class ChargeOverlappingException extends Exception implements ExceptionInterface
 {
-    private $chargeID;
+    private string $chargeId;
 
-    public function __construct(string $message, int $code = 0, Throwable $previous = null)
+    public static function forCharge(ChargeInterface $charge): self
     {
-        $this->chargeID = $message;
-        parent::__construct("cannot replace charge $message", $code, $previous);
+        $self = new self('Charge being saved overlaps a previously saved one');
+        $self->chargeId = (string)$charge->getId();
+        
+        return $self;
     }
 
-    public function getChargeID()
+    public function getChargeId()
     {
         return $this->chargeID;
     }
