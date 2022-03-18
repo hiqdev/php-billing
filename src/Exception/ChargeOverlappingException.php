@@ -29,7 +29,7 @@ class ChargeOverlappingException extends Exception implements ExceptionInterface
         return $self;
     }
 
-    public function getChargeId()
+    public function getChargeId(): string
     {
         return $this->chargeId;
     }
