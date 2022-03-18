@@ -85,19 +85,18 @@ class PriceChargesEstimator
                 $price = $this->moneyFormatter->format($money);
 
                 $chargesByTargetAndAction['targets'][$targetId][$actionType]['charges'][] = [
+                    'sum' => $sum['amount'],
                     'type' => $priceType,
-                    'price' => $price,
                     'currency' => $sum['currency'],
                     'comment' => $charge['comment'],
-                    'formattedPrice' => $this->yiiFormatter->asCurrency($price, $sum['currency']),
                 ];
 
-                $chargesByTargetAndAction['sum'] += $price;
                 $chargesByTargetAndAction['targets'][$targetId][$actionType]['quantity'] = max(
                     $charge['action']['quantity']['quantity'],
                     $chargesByTargetAndAction['targets'][$targetId][$actionType]['quantity'] ?? 0
                 );
-                $chargesByTargetAndAction['sumFormatted'] = $this->yiiFormatter->asCurrency($chargesByTargetAndAction['sum'], $sum['currency']);
+
+                $chargesByTargetAndAction['currency'] = $sum['currency'];
             }
             unset($action);
 
@@ -110,7 +109,7 @@ class PriceChargesEstimator
             }
             unset($action, $actions);
 
-            $result[$this->yiiFormatter->asDate(strtotime($period), 'php:M Y')] = $chargesByTargetAndAction;
+            $result[date("Y-m-d", strtotime($period))] = $chargesByTargetAndAction;
         }
 
         return $result;
@@ -120,6 +119,5 @@ class PriceChargesEstimator
     {
         $action['sum'] = array_sum(array_column($action['charges'], 'price'));
         $action['currency'] = reset($action['charges'])['currency'];
-        $action['sumFormatted'] = $this->yiiFormatter->asCurrency($action['sum'], $action['currency']);
     }
 }
