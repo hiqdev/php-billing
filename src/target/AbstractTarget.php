@@ -159,7 +159,14 @@ abstract class AbstractTarget implements TargetInterface
 
     public function jsonSerialize()
     {
-        return array_filter(get_object_vars($this));
+        return array_filter(array_merge(
+            get_object_vars($this),
+            [
+                'id'    => $this->getId(),
+                'type'  => $this->getType(),
+                'name'  => $this->getName(),
+            ],
+        ));
     }
 
     protected static $anyTarget;
