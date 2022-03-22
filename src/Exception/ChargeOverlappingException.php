@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\Exception;
 
+use hiqdev\php\billing\charge\ChargeInterface;
 use Exception;
 use hiqdev\php\billing\ExceptionInterface;
 use Throwable;
