@@ -219,6 +219,9 @@ class Calculator implements CalculatorInterface
             $foundSales = $this->saleRepository->findByOrder($lookOrder);
             foreach ($foundSales as $actionKey => $sale) {
                 $sales[$actionKey] = $sale;
+                if ($sale !== false) {
+                    $lookActions[$actionKey]->setSale($sale);
+                }
             }
         }
 
