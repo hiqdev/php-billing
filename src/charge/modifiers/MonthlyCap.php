@@ -91,7 +91,7 @@ class MonthlyCap extends Modifier
 
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage($cappedHours);
-        $chargeQuery->changeSum($charge->getSum()->multiply($diff));
+        $chargeQuery->changeSum($charge->getSum()->multiply((string)$diff));
         $newCharge = $this->chargeDerivative->__invoke($charge, $chargeQuery);
 
         $zeroChargeQuery = new ChargeDerivativeQuery();
@@ -107,11 +107,11 @@ class MonthlyCap extends Modifier
         return [$newCharge, $newZeroCharge];
     }
 
-    private function getEffectiveCoefficient(ActionInterface $action): float
+    private function getEffectiveCoefficient(ActionInterface $action): string
     {
         $hoursInMonth = $action->getTime()->format('t') * 24;
 
-        return 1 / ($this->getCapInHours()->getQuantity() / $hoursInMonth);
+        return sprintf('%.14F', 1 / ($this->getCapInHours()->getQuantity() / $hoursInMonth));
     }
 
     private function makeMappedCharge(ChargeInterface $charge, ActionInterface $action): ChargeInterface

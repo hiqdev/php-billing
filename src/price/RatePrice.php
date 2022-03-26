@@ -65,7 +65,7 @@ class RatePrice extends AbstractPrice
             return null;
         }
 
-        return $sum->divide($usage->getQuantity());
+        return $sum->divide(sprintf('%.14F', $usage->getQuantity()));
     }
 
     public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface

@@ -143,7 +143,7 @@ class Charge implements ChargeInterface
     {
         $usage = $this->usage->getQuantity();
 
-        return $usage ? $this->sum->divide($usage) : $this->sum;
+        return $usage ? $this->sum->divide(sprintf('%.14F', $usage)) : $this->sum;
     }
 
     public function getBill(): ?BillInterface

@@ -114,7 +114,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         //$this->assertSame($this->target, $charge->getTarget());
         $this->assertSame($this->type, $charge->getType());
         $this->assertEquals($this->prepaid, $charge->getUsage());
-        $this->assertEquals($this->money->multiply($this->prepaid->getQuantity()), $charge->getSum());
+        $this->assertEquals($this->money->multiply((string)$this->prepaid->getQuantity()), $charge->getSum());
     }
 
     public function testCalculateChargeNull()

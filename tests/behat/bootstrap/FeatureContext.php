@@ -27,6 +27,7 @@ use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Currencies\ISOCurrencies;
+use Money\Currency;
 use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
@@ -85,7 +86,7 @@ class FeatureContext implements Context
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $quantity);
-        $sum = $this->moneyParser->parse($sum, $currency);
+        $sum = $this->moneyParser->parse($sum, new Currency($currency));
         $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
     }
 
@@ -248,7 +249,7 @@ class FeatureContext implements Context
         Assert::assertSame($type, $this->normalizeType($charge->getType()->getName()), sprintf(
             'Charge type %s does not match expected %s', $type, $this->normalizeType($charge->getType()->getName())
         ));
-        $money = $this->moneyParser->parse($sum, $currency);
+        $money = $this->moneyParser->parse($sum, new Currency($currency));
         Assert::assertTrue($money->equals($charge->getSum()), sprintf(
             'Charge sum %s does not match expected %s', $charge->getSum()->getAmount(), $money->getAmount()
         ));

@@ -104,7 +104,7 @@ class EnumPrice extends AbstractPrice
             return null;
         }
 
-        return $sum->divide($usage->getQuantity());
+        return $sum->divide(sprintf('%.14F', $usage->getQuantity()));
     }
 
     /**

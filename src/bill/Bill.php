@@ -108,7 +108,7 @@ class Bill implements BillInterface
     {
         $quantity = $this->quantity->getQuantity();
 
-        return $quantity ? $this->sum->divide($quantity) : $this->sum;
+        return $quantity ? $this->sum->divide(sprintf('%.14F', $quantity)) : $this->sum;
     }
 
     /**

@@ -169,7 +169,7 @@ class Discount implements AddonInterface
             return $price->calculateSum($compensatedQuantity);
         }
 
-        return $charge->getSum()->multiply($this->value * 0.01);
+        return $charge->getSum()->multiply(sprintf('%.14F', $this->value * 0.01));
     }
 
     private function calculateCompensatedQuantity(ChargeInterface $charge): QuantityInterface
