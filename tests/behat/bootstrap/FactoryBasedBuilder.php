@@ -268,6 +268,11 @@ class FactoryBasedBuilder implements BuilderInterface
         $this->factory->clearEntitiesCache();
     }
 
+    public function flushEntitiesCacheByType(string $type): void
+    {
+        $this->factory->clearEntitiesCacheByType($type);
+    }
+
     public function findUsage(string $time, string $targetName, string $typeName): array
     {
         throw new RuntimeException('Not implemented yet');

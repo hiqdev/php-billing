@@ -48,6 +48,7 @@ interface BuilderInterface
     public function findHistoricalSales(array $params);
 
     public function flushEntitiesCache(): void;
+    public function flushEntitiesCacheByType(string $type): void;
 
     public function findUsage(string $time, string $targetName, string $typeName): array;
 }
