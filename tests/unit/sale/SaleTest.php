@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\unit\sale;
 
 use DateTimeImmutable;
+use DateInterval;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
@@ -32,7 +33,7 @@ class SaleTest extends PlanTest
     {
         parent::setUp();
         $this->time = new DateTimeImmutable('now');
-        $this->sale = new Sale(null, $this->plan->verisign, $this->plan->customer, $this->plan);
+        $this->sale = new Sale(null, $this->plan->verisign, $this->plan->customer, $this->plan, $this->time->sub(new DateInterval('PT1M')));
         $this->repository = new SimpleSaleRepository($this->sale);
     }
 }

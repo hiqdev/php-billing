@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\tests\unit\action;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\customer\CustomerInterface;
@@ -121,7 +122,12 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = $this->createAction($this->prepaid);
         $charge = $this->calculator->calculateCharge($this->price, $action);
-        $this->assertNull($charge);
+        $this->assertZeroCharge($charge);
+    }
+
+    public function assertZeroCharge(ChargeInterface $charge): void
+    {
+        $this->assertSame('0', $charge->getSum()->getAmount());
     }
 
     public function testChargesForNextMonthSalesAreNotCalculated()
