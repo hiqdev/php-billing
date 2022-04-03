@@ -316,6 +316,9 @@ class BillingContext extends BaseContext
         if ($time === 'midnight second day of this month') {
             return date('Y-m-02');
         }
+        if (strncmp($time, 'pY', 1) === 0) {
+            return date(substr($time, 1), strtotime('-1 year'));
+        }
         if (strncmp($time, 'Y', 1) === 0) {
             return date($time);
         }
