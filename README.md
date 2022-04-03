@@ -4,6 +4,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/php-billing/v/stable)](https://packagist.org/packages/hiqdev/php-billing)
 [![Total Downloads](https://poser.pugx.org/hiqdev/php-billing/downloads)](https://packagist.org/packages/hiqdev/php-billing)
+![phpunit-tests](https://github.com/hiqdev/php-billing/actions/workflows/phpunit-tests.yml/badge.svg)
 [![Build Status](https://img.shields.io/travis/hiqdev/php-billing.svg)](https://travis-ci.org/hiqdev/php-billing)
 [![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/php-billing.svg)](https://scrutinizer-ci.com/g/hiqdev/php-billing/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/php-billing.svg)](https://scrutinizer-ci.com/g/hiqdev/php-billing/)
