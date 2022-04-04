@@ -21,6 +21,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
@@ -71,11 +72,13 @@ class FeatureContext implements Context
      */
     public function __construct()
     {
+        error_reporting(E_ALL & ~E_DEPRECATED);
         date_default_timezone_set('UTC');
         $this->customer = new Customer(null, 'somebody');
         $this->moneyParser = new DecimalMoneyParser(new ISOCurrencies());
         $this->plan = new Plan(null, 'plan', $this->customer);
-        $this->billing = SimpleBilling::fromPlan($this->plan);
+        $this->sale = new Sale(null, Target::any(), $this->customer, $this->plan, new DateTimeImmutable('2000-01-01'));
+        $this->billing = SimpleBilling::fromSale($this->sale);
     }
 
     /**
@@ -241,8 +244,7 @@ class FeatureContext implements Context
     public function assertCharge($charge, $type, $sum, $currency, $reason, $qty, $unit, $events): void
     {
         if (empty($type) && empty($sum) && empty($currency)) {
-            Assert::assertNull($charge);
-
+            is_null($charge) || Assert::assertSame('0', $charge->getSum()->getAmount());
             return;
         }
         Assert::assertInstanceOf(Charge::class, $charge);
@@ -259,7 +261,7 @@ class FeatureContext implements Context
             );
         }
         if ($qty !== null && $unit !== null) {
-            Assert::assertSame((string) $qty, (string) $charge->getUsage()->getQuantity(),
+            Assert::assertEqualsWithDelta($qty, $charge->getUsage()->getQuantity(), 1e-7,
                 sprintf('Charge quantity "%s" does not match expected "%s"', $charge->getUsage()->getQuantity(), $qty)
             );
             Assert::assertSame($unit, $charge->getUsage()->getUnit()->getName(),
