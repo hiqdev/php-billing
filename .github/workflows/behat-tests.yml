@@ -1,0 +1,46 @@
+name: behat-tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+   - cron: "0 9 * * 1"
+
+jobs:
+  Behat:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1']
+        coverage-driver: [pcov]
+    name: PHP ${{ matrix.php }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gmp
+          coverage: pcov
+          tools: composer:v2, infection
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Update composer
+        run: composer self-update
+
+      - name: Composer install
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install -n
+
+      - name: Behat
+        run: vendor/bin/behat
+        env:
+          XDEBUG_MODE: coverage
