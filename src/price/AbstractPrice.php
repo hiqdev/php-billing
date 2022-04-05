@@ -132,7 +132,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
         }
 
         /// TODO add configurable rounding mode later
-        return $price->multiply((string)$usage->getQuantity(), Money::ROUND_UP);
+        return $price->multiply(sprintf('%.14F', $usage->getQuantity()), Money::ROUND_UP);
     }
 
     public function jsonSerialize()
