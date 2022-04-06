@@ -13,7 +13,6 @@ namespace hiqdev\php\billing\Exception;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\ExceptionInterface;
 use Exception;
-use Yii;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
