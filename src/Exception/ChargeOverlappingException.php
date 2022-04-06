@@ -11,7 +11,6 @@
 namespace hiqdev\php\billing\Exception;
 
 use hiqdev\php\billing\charge\ChargeInterface;
-use Psr\Log\LoggerInterface;
 use hiqdev\php\billing\ExceptionInterface;
 use Exception;
 use Yii;
@@ -31,24 +30,7 @@ class ChargeOverlappingException extends Exception implements ExceptionInterface
         $self->currentCharge = $charge;
         $self->previousCharge = $previousa;
 
-        self::logError($self);
-
         return $self;
-    }
-
-    public static function logError(ExceptionInterface $e): void
-    {
-        $logger = Yii::createObject(LoggerInterface::class);
-        $logger->error($e->getMessage(), [
-            'exception' => $e,
-            'data' => [
-                'id' => $e->getChargeId(),
-                'current' => $e->getCurrentCharge(),
-                'previous' => $e->getPreviousCharge(),
-            ],
-        ]);
-
-
     }
 
     public function getChargeId(): string
