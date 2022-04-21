@@ -27,7 +27,7 @@ class ChargeOverlappingException extends Exception implements ExceptionInterface
     {
         $self = new self('Charge being saved overlaps a previously saved one');
         $self->currentCharge = $charge;
-        $self->previousCharge = $previousa;
+        $self->previousCharge = $previous;
 
         return $self;
     }
