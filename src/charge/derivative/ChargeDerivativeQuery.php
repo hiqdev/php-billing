@@ -100,7 +100,7 @@ final class ChargeDerivativeQuery implements ChargeDerivativeQueryInterface
 
     public function changeParent(?ChargeInterface $charge): ChargeDerivativeQueryInterface
     {
-        $this->changed['charge'] = $charge;
+        $this->changed['parent'] = $charge;
 
         return $this;
     }
