@@ -74,7 +74,7 @@ class PriceChargesEstimator
                     'sum' => $sum['amount'],
                     'type' => $priceType,
                     'currency' => $sum['currency'],
-                    'comment' => $charge['comment'],
+                    'comment' => $charge['comment'] ?? null,
                 ];
 
                 $chargesByTargetAndAction['targets'][$targetId][$actionType]['quantity'] = max(
