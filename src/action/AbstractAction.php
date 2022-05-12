@@ -221,6 +221,7 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this));

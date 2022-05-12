@@ -84,6 +84,7 @@ class Customer implements CustomerInterface
         return new static($info['id'], $info['login'], $seller);
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this));

@@ -141,6 +141,7 @@ class Statement implements \JsonSerializable
         return $this->plans ?? [];
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this));

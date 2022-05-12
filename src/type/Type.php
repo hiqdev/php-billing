@@ -81,6 +81,7 @@ class Type implements TypeInterface
         return (string) $lhs === (string) $rhs;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this));
