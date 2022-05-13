@@ -53,8 +53,7 @@ class LeasingWasFinished extends AbstractEvent implements \JsonSerializable
      * which is a value of any type other than a resource
      * @since 5.4.0
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'price_id' => $this->charge->getPrice()->getId(),
