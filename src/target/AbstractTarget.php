@@ -157,7 +157,7 @@ abstract class AbstractTarget implements TargetInterface
         return (string) $lhs === (string) $rhs;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_filter(array_merge(
             get_object_vars($this),

@@ -135,7 +135,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
         return $price->multiply(sprintf('%.14F', $usage->getQuantity()), Money::ROUND_UP);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $res = array_filter(get_object_vars($this));
         unset($res['plan']);

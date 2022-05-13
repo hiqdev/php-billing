@@ -74,7 +74,7 @@ class Order implements OrderInterface
         return $this->actions;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this));
     }
