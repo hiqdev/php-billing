@@ -10,14 +10,30 @@
 
 namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 
+use DateTimeImmutable;
+use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\charge\Charge;
+use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\charge\modifiers\FullCombination;
 use hiqdev\php\billing\charge\modifiers\GrowingDiscount;
+use hiqdev\php\billing\charge\modifiers\MonthlyCap;
+use hiqdev\php\billing\customer\Customer;
+use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\type\Type;
+use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\units\Quantity;
+use Money\Currency;
+use Money\Money;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class FullCombinationTest extends \PHPUnit\Framework\TestCase
+class FullCombinationTest extends TestCase
 {
     public function testPlainModifiersArray_forPlainCombination()
     {
@@ -91,5 +107,75 @@ class FullCombinationTest extends \PHPUnit\Framework\TestCase
 
         $plainList = $combination->toPlainModifiersArray();
         $this->assertSame([$a, $b, $c, $d, $e, $f, $g, $h], $plainList);
+    }
+
+    public function testChargeParentPreservesObjectLinks(): void
+    {
+        $combination = new FullCombination(
+            $a = new FixedDiscount('120 USD'),
+            $b = new MonthlyCap('28 days'),
+        );
+
+        $charge = new Charge(
+            null,
+            new Type(TypeInterface::ANY, 'monthly'),
+            new Target(TargetInterface::ANY, 'vps'),
+            $action = new Action(
+                null,
+                new Type(TypeInterface::ANY, 'monthly'),
+                new Target(TargetInterface::ANY, 'vps'),
+                Quantity::create('items', 1),
+                new Customer(1, 'test'),
+                new DateTimeImmutable('2022-05-01 00:00:00'),
+            ),
+            null,
+            Quantity::create('items', 1),
+            new Money(240_00, new Currency('USD')),
+        );
+
+        $result = $combination->modifyCharge($charge, $action);
+        $this->assertCount(2, $result);
+        $this->assertSame('12000', $result[0]->getSum()->getAmount());
+        $this->assertSame($result[1]->getParent(), $result[0], 'Parent should reference the first charge');
+    }
+
+    public function testRightModifierIsIgnoredWhenLeftModifierRemovesOriginalCharge(): void
+    {
+        $combination = new FullCombination(
+            new MonthlyCap('28 days'),
+            new class implements ChargeModifier {
+                public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
+                {
+                    throw new \RuntimeException('Should not be called');
+                }
+
+                public function isSuitable(?ChargeInterface $charge, ActionInterface $action): bool
+                {
+                    return true;
+                }
+            },
+        );
+
+        $charge = new Charge(
+            null,
+            new Type(TypeInterface::ANY, 'monthly'),
+            new Target(TargetInterface::ANY, 'vps'),
+            $action = new Action(
+                null,
+                new Type(TypeInterface::ANY, 'monthly'),
+                new Target(TargetInterface::ANY, 'vps'),
+                Quantity::create('items', 1),
+                new Customer(1, 'test'),
+                new DateTimeImmutable('2022-05-01 00:00:00'),
+            ),
+            null,
+            Quantity::create('items', 1),
+            new Money(240_00, new Currency('USD')),
+        );
+
+        $result = $combination->modifyCharge($charge, $action);
+        $this->assertCount(2, $result);
+        $this->assertSame('24000', $result[0]->getSum()->getAmount());
+        $this->assertSame($result[1]->getParent(), $result[0], 'Parent should reference the first charge');
     }
 }

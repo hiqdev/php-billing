@@ -235,7 +235,7 @@ class Charge implements ChargeInterface
     /**
      * Forcefully changes parent charge
      */
-    public function overwriteParent(ChargeInterface $parent): ChargeInterface
+    public function overwriteParent(?ChargeInterface $parent): ChargeInterface
     {
         $this->parent = $parent;
 

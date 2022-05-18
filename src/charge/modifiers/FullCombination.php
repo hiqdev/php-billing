@@ -10,12 +10,15 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use Exception;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\derivative\ChargeDerivative;
 use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
+
+use function count;
 
 /**
  * Class FullCombination combines charges from all formulas from $left and $right parts of condition
@@ -84,10 +87,15 @@ class FullCombination implements ChargeModifier
                 return $charge !== $leftTotal;
             });
 
-            if (\count($rightCharges) === \count($dirtyRightCharges)) { // Original $leftTotal was not returned
+            if (count($rightCharges) === count($dirtyRightCharges)) {
+                // Original $leftTotal was not returned. Left part will be discarded.
+                // Dereference left charges from right charges parents
+                $leftSplObjectIds = array_map(spl_object_id(...), $leftCharges);
                 foreach ($rightCharges as $rightCharge) {
-                    if ($rightCharge->getParent() !== null) {
-                        $rightCharge->overwriteParent($charge);
+                    if ($rightCharge->getParent() !== null
+                        && in_array(spl_object_id($rightCharge->getParent()), $leftSplObjectIds, true)
+                    ) {
+                        $rightCharge->overwriteParent(null);
                     }
                 }
 
@@ -96,7 +104,7 @@ class FullCombination implements ChargeModifier
         }
 
         if ($charge && $leftTotal) {
-            // If we had both charge and left hand total charge – pass comments and events that were probably generated in left total
+            // If we had both charge and left hand total charge – pass comments and events that were probably generated in left total
             if ($leftTotal->getComment()) {
                 $charge->setComment($leftTotal->getComment());
             }
@@ -144,7 +152,7 @@ class FullCombination implements ChargeModifier
     /**
      * @param ChargeInterface $originalCharge
      * @param ChargeInterface[] $producedCharges
-     * @throws \Exception
+     * @throws Exception
      */
     private function sumCharges(?ChargeInterface $originalCharge, array $producedCharges): ?ChargeInterface
     {
@@ -182,7 +190,6 @@ class FullCombination implements ChargeModifier
 
         foreach ([$this->left, $this->right] as $side) {
             if ($side instanceof FullCombination) {
-                /** @noinspection SlowArrayOperationsInLoopInspection */
                 $result = array_merge($result, $side->toPlainModifiersArray());
             } else {
                 $result[] = $side;
