@@ -14,36 +14,14 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\ExceptionInterface;
 use Exception;
 
-/**
- * @author Andrii Vasyliev <sol@hiqdev.com>
- */
-class ChargeOverlappingException extends Exception implements ExceptionInterface
+final class ChargeOverlappingException extends Exception implements ExceptionInterface
 {
-    private ChargeInterface $currentCharge;
-
-    private ChargeInterface $previousCharge;
-
-    public static function forCharge(ChargeInterface $charge, ChargeInterface $previous): self
+    public static function forCharge(ChargeInterface $charge): self
     {
-        $self = new self('Charge being saved overlaps a previously saved one');
-        $self->currentCharge = $charge;
-        $self->previousCharge = $previous;
-
-        return $self;
-    }
-
-    public function getChargeId(): string
-    {
-        return (string) $this->currentCharge->getId();
-    }
-
-    public function getPreviousCharge(): ChargeInterface
-    {
-        return $this->previousCharge;
-    }
-
-    public function getCurrentCharge(): ChargeInterface
-    {
-        return $this->currentCharge;
+        return new self(sprintf(
+            'Charge %s being saved overlaps a previously saved one. Unique key: %s',
+            $charge->getId(),
+            $charge->getUniqueString()
+        ));
     }
 }
