@@ -16,12 +16,22 @@ use Exception;
 
 final class ChargeOverlappingException extends Exception implements ExceptionInterface
 {
+    private ChargeInterface $charge;
+
     public static function forCharge(ChargeInterface $charge): self
     {
-        return new self(sprintf(
+        $self = new self(sprintf(
             'Charge %s being saved overlaps a previously saved one. Unique key: %s',
             $charge->getId(),
             $charge->getUniqueString()
         ));
+        $self->charge = $charge;
+
+        return $self;
+    }
+
+    public function getCharge(): ChargeInterface
+    {
+        return $this->charge;
     }
 }
