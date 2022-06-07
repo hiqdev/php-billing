@@ -18,6 +18,7 @@ use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\GeneralizerInterface;
+use hiqdev\php\billing\Exception\ActionChargingException;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
@@ -27,6 +28,7 @@ use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
 use hiqdev\php\billing\tools\ActualDateTimeProvider;
 use hiqdev\php\billing\tools\CurrentDateTimeProviderInterface;
+use Throwable;
 
 /**
  * Calculator calculates charges for given order or action.
@@ -65,7 +67,11 @@ class Calculator implements CalculatorInterface
                 continue;
             }
 
-            $charges = array_merge($charges, $this->calculatePlan($plans[$actionKey], $action));
+            try {
+                $charges = array_merge($charges, $this->calculatePlan($plans[$actionKey], $action));
+            } catch (Throwable $e) {
+                throw ActionChargingException::forAction($action, $e);
+            }
         }
 
         return $charges;
