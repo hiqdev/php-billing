@@ -109,7 +109,7 @@ class Discount implements AddonInterface
             throw new FormulaSemanticsError('multiplier for discount must be numeric');
         }
 
-        return new static($this->isAbsolute() ? $this->value->multiply($multiplier) : $this->getValue()*$multiplier);
+        return new static($this->isAbsolute() ? $this->value->multiply((string) $multiplier) : $this->getValue()*$multiplier);
     }
 
     public function add($addend)
@@ -155,7 +155,7 @@ class Discount implements AddonInterface
     public function calculateSum(ChargeInterface $charge): Money
     {
         if ($this->value instanceof Money) {
-            return $this->value->multiply($charge->getUsage()->getQuantity());
+            return $this->value->multiply((string) $charge->getUsage()->getQuantity());
         }
 
         if ($this->value instanceof Quantity) {

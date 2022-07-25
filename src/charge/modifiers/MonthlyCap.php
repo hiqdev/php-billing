@@ -117,13 +117,13 @@ class MonthlyCap extends Modifier
     private function makeMappedCharge(ChargeInterface $charge, ActionInterface $action): ChargeInterface
     {
         $coefficient = $this->getEffectiveCoefficient($action);
-        $quantityUnderCap = $charge->getUsage()->multiply($coefficient);
+        $quantityUnderCap = $charge->getUsage()->multiply((string) $coefficient);
 
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage(
-            $this->getCapInHours()->multiply($quantityUnderCap->getQuantity())
+            $this->getCapInHours()->multiply((string) $quantityUnderCap->getQuantity())
         );
-        $chargeQuery->changeSum($charge->getSum()->multiply($coefficient));
+        $chargeQuery->changeSum($charge->getSum()->multiply((string) $coefficient));
 
         return $this->chargeDerivative->__invoke($charge, $chargeQuery);
     }
