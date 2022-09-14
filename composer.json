@@ -65,7 +65,12 @@
     },
     "suggest": {
         "ext-intl": "intl extension is required for formula support",
-        "hoa/ruler": "version ^2.17 required for formula support",
+        "hiqdev/hoa-ruler": "~1.0",
+        "hiqdev/hoa-compiler": "~1.0",
+        "hiqdev/hoa-iterator": "~1.0",
+        "hiqdev/hoa-protocol": "~1.0",
+        "hiqdev/hoa-stream": "~1.0",
+        "hiqdev/hoa-file": "~1.0",
         "league/event": "required for event-rich billing"
     },
     "autoload": {
