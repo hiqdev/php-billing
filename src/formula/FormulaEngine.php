@@ -96,7 +96,11 @@ class FormulaEngine implements FormulaEngineInterface
     public function interpret(string $formula): Model
     {
         try {
-            $rule = str_replace(self::FORMULAS_SEPARATOR, ' AND ', $this->normalize($formula));
+            $normalize = $this->normalize($formula);
+            if ($normalize === null) {
+                $normalize = '';
+            }
+            $rule = str_replace(self::FORMULAS_SEPARATOR, ' AND ', $normalize);
 
             $key = md5(__METHOD__ . $rule);
             $model = $this->cache->get($key);
