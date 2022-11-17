@@ -12,6 +12,8 @@ namespace hiqdev\php\billing\sale;
 
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\DataMapper\Query\Specification;
+use DateTimeImmutable;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -35,4 +37,10 @@ interface SaleRepositoryInterface
      * @return PlanInterface[] array: actionKey => plan
      */
     public function findByOrder(OrderInterface $order);
+
+    /**
+     * Find all active sales at given time
+     * @return array|null
+     */
+    public function findAllActive(Specification $specification, ?DateTimeImmutable $time): ?array;
 }
