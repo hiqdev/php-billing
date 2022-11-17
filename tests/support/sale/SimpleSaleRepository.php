@@ -15,6 +15,8 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
+use hiqdev\DataMapper\Query\Specification;
+use DateTimeImmutable;
 
 class SimpleSaleRepository implements SaleRepositoryInterface
 {
@@ -43,6 +45,11 @@ class SimpleSaleRepository implements SaleRepositoryInterface
         }
 
         return $sales;
+    }
+
+    public function findAllActive(Specification $specification, ?DateTimeImmutable $time): ?array
+    {
+        throw new Exception('not implemented');
     }
 
     public function findByIds(array $ids)
