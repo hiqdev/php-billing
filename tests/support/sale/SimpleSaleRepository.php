@@ -47,7 +47,7 @@ class SimpleSaleRepository implements SaleRepositoryInterface
         return $sales;
     }
 
-    public function findAllActive(Specification $specification, ?DateTimeImmutable $time): ?array
+    public function findAllActive(Specification $specification, ?DateTimeImmutable $time): array
     {
         throw new Exception('not implemented');
     }
