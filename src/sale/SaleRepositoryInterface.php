@@ -42,5 +42,5 @@ interface SaleRepositoryInterface
      * Find all active sales at given time
      * @return array|null
      */
-    public function findAllActive(Specification $specification, ?DateTimeImmutable $time): ?array;
+    public function findAllActive(Specification $specification, ?DateTimeImmutable $time): array;
 }
