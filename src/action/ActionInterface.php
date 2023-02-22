@@ -14,7 +14,6 @@ use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\SaleInterface;
-use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\QuantityInterface;
@@ -80,4 +79,6 @@ interface ActionInterface extends \JsonSerializable
     public function hasSale();
 
     public function setSale(SaleInterface $sale);
+
+    public function getUsageInterval(): UsageInterval;
 }

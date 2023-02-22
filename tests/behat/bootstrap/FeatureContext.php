@@ -93,6 +93,14 @@ class FeatureContext implements Context
         $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
     }
 
+    /**
+     * @Given /sale close time is ([0-9.-]+)/
+     */
+    public function setActionCloseTime($closeTime): void
+    {
+        $this->sale->close(new DateTimeImmutable($closeTime));
+    }
+
     private function setPrice($price)
     {
         $this->price = $price;
