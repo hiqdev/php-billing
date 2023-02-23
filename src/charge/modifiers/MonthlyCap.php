@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -26,6 +28,7 @@ use Money\Money;
  * that can be charged.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
+ * @author Dmytro Naumenko <silverfire@hiqdev.com>
  */
 class MonthlyCap extends Modifier
 {
@@ -63,17 +66,33 @@ class MonthlyCap extends Modifier
             return [$charge];
         }
 
-        $chargeInHoursUnderCap = $this->makeMappedCharge($charge, $action);
-        if ($this->capReached($chargeInHoursUnderCap)) {
-            return $this->splitCapFromCharge($chargeInHoursUnderCap);
+        if ($this->isMeasured($action)) {
+            return $this->propotionalizeMeasuredCharge($charge, $action);
         }
 
-        return [$chargeInHoursUnderCap];
+        return $this->splitCapFromCharge($charge, $action);
     }
 
-    private function capReached(ChargeInterface $charge): bool
+    /**
+     * @param ChargeInterface $charge
+     * @param ActionInterface $action
+     * @return ChargeInterface[]
+     */
+    private function propotionalizeMeasuredCharge(ChargeInterface $charge, ActionInterface $action): array
     {
-        return $charge->getUsage()->compare($this->getCapInHours()) === 1; // Usage is greater than a cap
+        $usedHours = $action->getUsageInterval()->seconds() / 3600;
+        $capInHours = $this->getCapInHours()->getQuantity();
+
+        if ($usedHours > $capInHours) {
+            return [$charge];
+        }
+
+        $chargeQuery = new ChargeDerivativeQuery();
+        $chargeQuery->changeSum(
+            $charge->getSum()->multiply( (string) ($usedHours / $capInHours))
+        );
+
+        return [$this->chargeDerivative->__invoke($charge, $chargeQuery)];
     }
 
     private function getCapInHours(): QuantityInterface
@@ -84,9 +103,17 @@ class MonthlyCap extends Modifier
         return Quantity::create('hour', $cap->getValue() * 24);
     }
 
-    private function splitCapFromCharge(ChargeInterface $charge): array
+    private function splitCapFromCharge(ChargeInterface $charge, ActionInterface $action): array
     {
+        $charge = $this->makeMappedCharge($charge, $action);
+
+        $usageExceedsCap = $charge->getUsage()->compare($this->getCapInHours()) === 1;
+        if (!$usageExceedsCap) {
+            return [$charge];
+        }
+
         $cappedHours = $this->getCapInHours();
+
         $diff = 1-($charge->getUsage()->subtract($cappedHours)->getQuantity()/$charge->getUsage()->getQuantity());
 
         $chargeQuery = new ChargeDerivativeQuery();
@@ -118,7 +145,6 @@ class MonthlyCap extends Modifier
     {
         $coefficient = $this->getEffectiveCoefficient($action);
         $quantityUnderCap = $charge->getUsage()->multiply((string) $coefficient);
-
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage(
             $this->getCapInHours()->multiply((string) $quantityUnderCap->getQuantity())
@@ -126,5 +152,10 @@ class MonthlyCap extends Modifier
         $chargeQuery->changeSum($charge->getSum()->multiply((string) $coefficient));
 
         return $this->chargeDerivative->__invoke($charge, $chargeQuery);
+    }
+
+    private function isMeasured(ActionInterface $action): bool
+    {
+       return $action->getQuantity()->getUnit()->getMeasure() !== 'item';
     }
 }

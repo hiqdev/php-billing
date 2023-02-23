@@ -42,3 +42,17 @@ Feature: Monthly cap
           | 2020-10-01 | 1        | monthly 50 USD for 1 item              |                               |
           | 2020-11-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
           | 2022-02-01 | 1        | monthly 50 USD for 672 hour            |                               |
+
+    Scenario Outline: monthly cap on overuses
+      Given formula is cap.monthly('28 days').since('11.2020')
+        And server overuse price is 0.15 USD per GB
+        And action is server overuse <qty> gb
+        And action date is <date>
+        And sale close time is 2023-02-20
+       Then first charge is <first>
+        And second charge is <second>
+      Examples:
+        | date       | qty      | first                                  | second                        |
+        | 2020-10-01 | 250      | overuse 37.50 USD for 250 GB           |                               |
+        | 2020-11-01 | 250      | overuse 37.50 USD for 250 GB           |                               |
+        | 2023-02-01 | 250      | overuse 25.45 USD for 250 GB           |                               |

@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\action;
 
+use DateInterval;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
@@ -224,5 +225,14 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this));
+    }
+
+    public function getUsageInterval(): UsageInterval
+    {
+        if ($this->getSale() === null) {
+            return UsageInterval::wholeMonth($this->getTime());
+        }
+
+        return UsageInterval::withinMonth($this->getTime(), $this->getSale()->getTime(), $this->getSale()->getCloseTime());
     }
 }
