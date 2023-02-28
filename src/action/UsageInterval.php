@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\action;
 use DateInterval;
 use DateTimeImmutable;
+use InvalidArgumentException;
 
 /** @readonly */
 final class UsageInterval
@@ -14,7 +15,7 @@ final class UsageInterval
     private DateTimeImmutable $end;
     /** @readonly */
     private DateTimeImmutable $month;
-    public function __construct(
+    private function __construct(
         DateTimeImmutable $start,
         DateTimeImmutable $end
     ) {
@@ -28,7 +29,7 @@ final class UsageInterval
         return $date->modify('first day of this month midnight');
     }
 
-    public static function wholeMonth(DateTimeImmutable $time)
+    public static function wholeMonth(DateTimeImmutable $time): self
     {
         $start = self::toMonth($time);
 
@@ -38,12 +39,35 @@ final class UsageInterval
         );
     }
 
+    /**
+     * Calculates the usage interval for the given month for the given start and end sale dates.
+     *
+     * @param DateTimeImmutable $month the month to calculate the usage interval for
+     * @param DateTimeImmutable $start the start date of the sale
+     * @param DateTimeImmutable|null $end the end date of the sale or null if the sale is active
+     * @return static
+     */
     public static function withinMonth(
         DateTimeImmutable $month,
         DateTimeImmutable $start,
         ?DateTimeImmutable $end
-    ) {
+    ): self {
         $month = self::toMonth($month);
+        $nextMonth = $month->modify('+1 month');
+
+        if ($end !== null && $start > $end) {
+            throw new InvalidArgumentException('Start date must be less than end date');
+        }
+
+        if ($start >= $nextMonth) {
+            $start = $month;
+            $end = $month;
+        }
+
+        if ($end !== null && $end < $month) {
+            $start = $month;
+            $end = $month;
+        }
 
         $effectiveSince = max($start, $month);
         $effectiveTill = min(
@@ -57,21 +81,29 @@ final class UsageInterval
         );
     }
 
-    public function getDateTimeInterval(): DateInterval
+    public function start(): DateTimeImmutable
+    {
+        return $this->start;
+    }
+
+    public function end(): DateTimeImmutable
+    {
+        return $this->end;
+    }
+
+    public function dateTimeInterval(): DateInterval
     {
         return $this->start->diff($this->end);
     }
 
     public function seconds(): int
     {
-        $interval = $this->getDateTimeInterval();
+        $interval = $this->dateTimeInterval();
 
         return $interval->s
                 + $interval->i * 60
                 + $interval->h * 3600
-                + $interval->d * 86400
-                + $interval->m * 2592000
-                + $interval->y * 31104000;
+                + $interval->days * 86400;
     }
 
     public function secondsInMonth(): int
