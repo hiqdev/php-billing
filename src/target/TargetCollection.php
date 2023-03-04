@@ -55,7 +55,7 @@ class TargetCollection implements TargetInterface
      */
     public function getId()
     {
-        return $this->getTarget()->getId();
+        return $this->getTarget()?->getId();
     }
 
     /**
@@ -76,7 +76,7 @@ class TargetCollection implements TargetInterface
      */
     public function getType()
     {
-        return $this->getTarget()->getType();
+        return $this->getTarget()?->getType();
     }
 
     public function getTypes()
@@ -89,12 +89,12 @@ class TargetCollection implements TargetInterface
      */
     public function getName()
     {
-        return $this->getTarget()->getName();
+        return $this->getTarget()?->getName();
     }
 
     public function getLabel(): ?string
     {
-        return $this->getTarget()->getLabel();
+        return $this->getTarget()?->getLabel();
     }
 
     public function getTarget()
@@ -109,7 +109,7 @@ class TargetCollection implements TargetInterface
 
     public function getFullName(): string
     {
-        return $this->getTarget()->getFullName();
+        return $this->getTarget()?->getFullName();
     }
 
     /**
@@ -117,7 +117,7 @@ class TargetCollection implements TargetInterface
      */
     public function getUniqueId()
     {
-        return $this->getTarget()->getUniqueId();
+        return $this->getTarget()?->getUniqueId();
     }
 
     public function equals(TargetInterface $other): bool
