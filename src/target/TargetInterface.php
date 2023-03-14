@@ -34,7 +34,7 @@ use hiqdev\php\billing\EntityInterface;
  */
 interface TargetInterface extends EntityInterface
 {
-    const ANY =  null;
+    const ANY = null;
     const NONE = INF;
 
     /**
@@ -48,6 +48,12 @@ interface TargetInterface extends EntityInterface
      * @return string
      */
     public function getType();
+
+    /**
+     * Get target state.
+     * @return string
+     */
+    public function getState();
 
     /**
      * Get target name.

@@ -26,6 +26,8 @@ class TargetCollection implements TargetInterface
 
     protected $types;
 
+    protected $states;
+
     public function __construct(array $targets)
     {
         $this->targets = $targets;
@@ -154,5 +156,15 @@ class TargetCollection implements TargetInterface
     public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this));
+    }
+
+    public function getState()
+    {
+        return $this->getTarget()?->getState();
+    }
+
+    public function getStates()
+    {
+        return $this->states;
     }
 }

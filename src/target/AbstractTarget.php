@@ -32,6 +32,11 @@ abstract class AbstractTarget implements TargetInterface
     /**
      * @var string
      */
+    protected $state;
+
+    /**
+     * @var string
+     */
     protected $name;
 
     /** @var string */
@@ -77,6 +82,19 @@ abstract class AbstractTarget implements TargetInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): void
+    {
+        $this->state = $state;
     }
 
     /**
@@ -164,6 +182,7 @@ abstract class AbstractTarget implements TargetInterface
             [
                 'id'    => $this->getId(),
                 'type'  => $this->getType(),
+                'state'  => $this->getState(),
                 'name'  => $this->getName(),
             ],
         ));
@@ -178,5 +197,10 @@ abstract class AbstractTarget implements TargetInterface
         }
 
         return static::$anyTarget;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->getState() === 'deleted';
     }
 }
