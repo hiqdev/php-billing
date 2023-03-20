@@ -87,7 +87,7 @@ abstract class AbstractTarget implements TargetInterface
     /**
      * {@inheritdoc}
      */
-    public function getState()
+    public function getState(): ?string
     {
         return $this->state;
     }
@@ -197,10 +197,5 @@ abstract class AbstractTarget implements TargetInterface
         }
 
         return static::$anyTarget;
-    }
-
-    public function isDeleted(): bool
-    {
-        return $this->getState() === 'deleted';
     }
 }

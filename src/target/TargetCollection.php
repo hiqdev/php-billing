@@ -26,21 +26,24 @@ class TargetCollection implements TargetInterface
 
     protected $types;
 
-    protected $states;
+    protected array $states = [];
 
     public function __construct(array $targets)
     {
         $this->targets = $targets;
         $ids = [];
         $types = [];
+        $states = [];
         foreach ($targets as $target) {
             if ($target) {
                 $ids[] = $target->getId();
                 $types[] = $target->getType();
+                $states[] = $target->getState();
             }
         }
         $this->ids = array_unique(array_filter($ids));
         $this->types = array_unique(array_filter($types));
+        $this->states = array_unique(array_filter($states));
     }
 
     public function add(TargetInterface $target)
@@ -48,8 +51,10 @@ class TargetCollection implements TargetInterface
         $this->targets[] = $target;
         $this->ids[] = $target->getId();
         $this->types[] = $target->getType();
+        $this->states[] = $target->getState();
         $this->ids = array_unique(array_filter($this->ids));
         $this->types = array_unique(array_filter($this->types));
+        $this->states = array_unique(array_filter($this->states));
     }
 
     /**
@@ -81,9 +86,19 @@ class TargetCollection implements TargetInterface
         return $this->getTarget()?->getType();
     }
 
+    public function getState(): ?string
+    {
+        return $this->getTarget()?->getState();
+    }
+
     public function getTypes()
     {
         return $this->types;
+    }
+
+    public function getStates(): array
+    {
+        return $this->states;
     }
 
     /**
@@ -153,18 +168,13 @@ class TargetCollection implements TargetInterface
         return $other instanceof static ? $other->types : [$other->getType()];
     }
 
+    public static function takeStates(TargetInterface $other): array
+    {
+        return $other instanceof static ? $other->states : [$other->getState()];
+    }
+
     public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this));
-    }
-
-    public function getState()
-    {
-        return $this->getTarget()?->getState();
-    }
-
-    public function getStates()
-    {
-        return $this->states;
     }
 }
