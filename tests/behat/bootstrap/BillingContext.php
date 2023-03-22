@@ -233,7 +233,7 @@ class BillingContext extends BaseContext
         ]);
         Assert::assertSame($type, $bill->getType()->getName());
         Assert::assertSame($target, $bill->getTarget()->getFullName());
-        Assert::assertEquals($sum * 100, $bill->getSum()->getAmount());
+        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount());
         Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
         Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity());
         Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()));
@@ -292,7 +292,7 @@ class BillingContext extends BaseContext
         Assert::assertNotNull($charge);
         Assert::assertSame($type, $charge->getType()->getName());
         Assert::assertSame($target, $charge->getTarget()->getFullName());
-        Assert::assertEquals($amount * 100, $charge->getSum()->getAmount());
+        Assert::assertEquals(bcmul($amount, 100), (int)$charge->getSum()->getAmount());
         Assert::assertSame($currency, $charge->getSum()->getCurrency()->getCode());
         Assert::assertEquals((float)$quantity, (float)$charge->getUsage()->getQuantity());
         Assert::assertEquals(strtolower($unit), strtolower($charge->getUsage()->getUnit()->getName()));
