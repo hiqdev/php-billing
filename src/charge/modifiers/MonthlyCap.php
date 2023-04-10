@@ -89,7 +89,7 @@ class MonthlyCap extends Modifier
 
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeSum(
-            $charge->getSum()->multiply( (string) ($usedHours / $capInHours))
+            $charge->getSum()->multiply(sprintf('%.14F', ($usedHours / $capInHours)))
         );
 
         return [$this->chargeDerivative->__invoke($charge, $chargeQuery)];
