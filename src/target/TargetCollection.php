@@ -30,15 +30,15 @@ class TargetCollection implements TargetInterface
 
     public function __construct(array $targets)
     {
-        $this->targets = $targets;
         $ids = [];
         $types = [];
         $states = [];
         foreach ($targets as $target) {
-            if ($target) {
+            if ($target instanceof TargetInterface) {
                 $ids[] = $target->getId();
                 $types[] = $target->getType();
                 $states[] = $target->getState();
+                $this->targets[] = $target;
             }
         }
         $this->ids = array_unique(array_filter($ids));
@@ -150,7 +150,7 @@ class TargetCollection implements TargetInterface
     public function checkMatches(TargetInterface $other): bool
     {
         foreach ($this->targets as $target) {
-            if ($target?->checkMatches($other) || $other->checkMatches($target)) {
+            if ($target->checkMatches($other) || $other->checkMatches($target)) {
                 return true;
             }
         }
