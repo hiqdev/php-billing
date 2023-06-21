@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\target;
 
+use RuntimeException;
+
 /**
  * @see TargetInterface
  *
@@ -39,6 +41,8 @@ class TargetCollection implements TargetInterface
                 $types[] = $target->getType();
                 $states[] = $target->getState();
                 $this->targets[] = $target;
+            } else {
+                throw new RuntimeException('Target ' . $target . ' is incorrect');
             }
         }
         $this->ids = array_unique(array_filter($ids));
