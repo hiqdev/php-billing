@@ -10,7 +10,7 @@
 
 namespace hiqdev\php\billing\target;
 
-use RuntimeException;
+use hiqdev\php\billing\Exception\UnknownEntityException;
 
 /**
  * @see TargetInterface
@@ -42,7 +42,7 @@ class TargetCollection implements TargetInterface
                 $states[] = $target->getState();
                 $this->targets[] = $target;
             } else {
-                throw new RuntimeException('Target ' . $target . ' is incorrect');
+                throw new UnknownEntityException('Target ' . $target . ' is incorrect');
             }
         }
         $this->ids = array_unique(array_filter($ids));
