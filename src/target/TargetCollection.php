@@ -10,6 +10,8 @@
 
 namespace hiqdev\php\billing\target;
 
+use hiqdev\php\billing\Exception\UnknownEntityException;
+
 /**
  * @see TargetInterface
  *
@@ -30,15 +32,17 @@ class TargetCollection implements TargetInterface
 
     public function __construct(array $targets)
     {
-        $this->targets = $targets;
         $ids = [];
         $types = [];
         $states = [];
         foreach ($targets as $target) {
-            if ($target) {
+            if ($target instanceof TargetInterface) {
                 $ids[] = $target->getId();
                 $types[] = $target->getType();
                 $states[] = $target->getState();
+                $this->targets[] = $target;
+            } else {
+                throw new UnknownEntityException('The target is invalid');
             }
         }
         $this->ids = array_unique(array_filter($ids));
