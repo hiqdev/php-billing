@@ -42,7 +42,7 @@ class TargetCollection implements TargetInterface
                 $states[] = $target->getState();
                 $this->targets[] = $target;
             } else {
-                throw new UnknownEntityException('Target ' . $target . ' is incorrect');
+                throw new UnknownEntityException('The target is invalid');
             }
         }
         $this->ids = array_unique(array_filter($ids));
