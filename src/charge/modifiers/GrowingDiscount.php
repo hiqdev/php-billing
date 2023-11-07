@@ -45,7 +45,7 @@ class GrowingDiscount extends FixedDiscount
         return $this->getStep()->isAbsolute();
     }
 
-    public function getStep()
+    public function getStep(): Step
     {
         return $this->getAddon(self::STEP);
     }

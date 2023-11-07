@@ -80,7 +80,7 @@ class Discount implements AddonInterface
 
         $name = static::$name;
         if (\is_string($value)) {
-            if (preg_match('/^(\d{1,5}(\.\d+)?)(%|pp| [A-Z]{3})$/', $value, $ms)) {
+            if (preg_match('/^(-?\d{1,5}(\.\d+)?)(%|pp| [A-Z]{3})$/', $value, $ms)) {
                 if ($ms[3] === '%') {
                     return $ms[1];
                 }
@@ -91,7 +91,7 @@ class Discount implements AddonInterface
                 return $this->moneyParser->parse($ms[1], new Currency(trim($ms[3])));
             }
 
-            if (preg_match('/^(\d{1,5}(\.\d+)?) ([a-z]{2,})$/', $value, $ms)) {
+            if (preg_match('/^(-?\d{1,5}(\.\d+)?) ([a-z]{2,})$/', $value, $ms)) {
                 try {
                     return Quantity::create($ms[3], $ms[1]);
                 } catch (\Exception $e) {

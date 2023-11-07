@@ -34,4 +34,9 @@ class Step extends Discount
 
         return new Discount($value*100);
     }
+
+    public function inverted(): self
+    {
+        return new self(-$this->getValue());
+    }
 }
