@@ -90,6 +90,18 @@ class Modifier implements ChargeModifier, AddonsContainerInterface, TimeLimitedM
         return $res;
     }
 
+    public function replaceAddon(string $name, AddonInterface $addon)
+    {
+        if (!$this->hasAddon($name)) {
+            throw new Exception("Addong '$name' is not set");
+        }
+
+        $res = $this->getNext();
+        $res->addons[$name] = $addon;
+
+        return $res;
+    }
+
     public function getAddon(string $name): ?AddonInterface
     {
         return empty($this->addons[$name]) ? null : $this->addons[$name];

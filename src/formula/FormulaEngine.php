@@ -14,6 +14,7 @@ use Exception;
 use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
+use hiqdev\php\billing\charge\modifiers\Increase;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model\Model;
@@ -52,6 +53,11 @@ class FormulaEngine implements FormulaEngineInterface
      * @var ChargeModifier
      */
     protected $leasing;
+
+    /**
+     * @var ChargeModifier
+     */
+    protected $increase;
 
     protected ?Cap $cap = null;
     /**
@@ -194,6 +200,7 @@ class FormulaEngine implements FormulaEngineInterface
         $context = new Context();
         $context['discount'] = $this->getDiscount();
         $context['leasing'] = $this->getLeasing();
+        $context['increase'] = $this->getIncrease();
         $context['cap'] = $this->getCap();
 
         return $context;
@@ -215,6 +222,15 @@ class FormulaEngine implements FormulaEngineInterface
         }
 
         return $this->leasing;
+    }
+
+    public function getIncrease(): ChargeModifier
+    {
+        if ($this->increase === null) {
+            $this->increase = new Increase();
+        }
+
+        return $this->increase;
     }
 
     private function getCap(): ChargeModifier
