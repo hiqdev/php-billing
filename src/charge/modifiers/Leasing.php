@@ -14,6 +14,7 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\event\LeasingWasFinished;
+use hiqdev\php\billing\charge\modifiers\event\LeasingWasStarted;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -67,6 +68,10 @@ class Leasing extends Modifier
 
         $month = $action->getTime()->modify('first day of this month midnight');
         if (!$this->checkPeriod($month)) {
+            if ($this->isFirstMonthInLeasingPassed($month)) {
+                return [$this->createLeasingStartingCharge($charge, $month)];
+            }
+
             if ($this->isFirstMonthAfterLeasingPassed($month)) {
                 return [$this->createLeasingFinishingCharge($charge, $month)];
             }
@@ -88,6 +93,20 @@ class Leasing extends Modifier
         if ($term === null) {
             throw new FormulaSemanticsError('no term given for leasing');
         }
+    }
+
+    private function isFirstMonthInLeasingPassed(\DateTimeImmutable $time): bool
+    {
+        $since = $this->getSince();
+        if ($since && $since->getValue() > $time) {
+            return false;
+        }
+
+        if ($since->getValue()->diff($time)->format('%a') === '0') {
+            return true;
+        }
+
+        return false;
     }
 
     private function isFirstMonthAfterLeasingPassed(\DateTimeImmutable $time): bool
@@ -124,6 +143,25 @@ class Leasing extends Modifier
             new Money(0, $charge->getSum()->getCurrency())
         );
         $result->recordThat(LeasingWasFinished::onCharge($result, $month));
+        if ($charge->getComment()) {
+            $result->setComment($charge->getComment());
+        }
+
+        return $result;
+    }
+
+    private function createLeasingStartingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    {
+        $result = new Charge(
+            null,
+            $this->getType(),
+            $charge->getTarget(),
+            $charge->getAction(),
+            $charge->getPrice(),
+            $charge->getUsage(),
+            new Money(0, $charge->getSum()->getCurrency())
+        );
+        $result->recordThat(LeasingWasStarted::onCharge($result, $month));
         if ($charge->getComment()) {
             $result->setComment($charge->getComment());
         }
