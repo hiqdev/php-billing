@@ -17,7 +17,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class DbMergingAggregator implements AggregatorInterface
+class DbMergingAggregator implements AggregatorInterface, MergerInterface
 {
     protected BillRepositoryInterface $billRepository;
     protected MergerInterface $merger;
@@ -33,6 +33,19 @@ class DbMergingAggregator implements AggregatorInterface
         $this->localAggregator = $localAggregator;
     }
 
+    public function mergeBills(array $bills): array
+    {
+        $dbBills = $this->billRepository->findByUniqueness($bills);
+        $filteredLocalBills = $this->excludeLocalOnlyZeroBills($bills, $dbBills);
+
+        return $this->merger->mergeBills(array_merge($filteredLocalBills, $dbBills));
+    }
+
+    public function mergeBill(BillInterface $first, BillInterface $other): BillInterface
+    {
+        return $this->merger->mergeBill($first, $other);
+    }
+
     /**
      * Aggregates given Charges to Bills.
      * Then merges them with Bills from DB.
@@ -44,12 +57,9 @@ class DbMergingAggregator implements AggregatorInterface
     public function aggregateCharges(array $charges): array
     {
         $localBills = $this->localAggregator->aggregateCharges($charges);
-        $dbBills = $this->billRepository->findByUniqueness($localBills);
+        $bills = $this->mergeBills($localBills);
 
-        $filteredLocalBills = $this->excludeLocalOnlyZeroBills($localBills, $dbBills);
-        $res = $this->merger->mergeBills(array_merge($filteredLocalBills, $dbBills));
-
-        return $res;
+        return $bills;
     }
 
     /**
@@ -85,4 +95,5 @@ class DbMergingAggregator implements AggregatorInterface
 
         return $localBills;
     }
+
 }
