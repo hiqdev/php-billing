@@ -10,9 +10,11 @@
 
 namespace hiqdev\php\billing\charge\modifiers;
 
+use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\event\LeasingWasFinished;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
@@ -147,5 +149,22 @@ class Leasing extends Modifier
         }
 
         return $result;
+    }
+
+    public function getRemainingPeriods(DateTimeImmutable $currentDate): ?Period
+    {
+        $since = $this->getSince();
+        $term = $this->getTerm();
+
+        if ($since === null || $term === null) {
+            return null;
+        }
+
+        $className = get_class($term);
+        $passedRatio = $term->countPeriodsPassed($since->getValue(), $currentDate);
+
+        return new $className(
+            $term->getValue() - ($passedRatio * $term->getValue())
+        );
     }
 }
