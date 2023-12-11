@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * PHP Billing Library
  *
@@ -161,7 +163,7 @@ class Leasing extends Modifier
             $charge->getAction(),
             $charge->getPrice(),
             $charge->getUsage(),
-            new Money(0, $charge->getSum()->getCurrency())
+            $charge->getSum()
         );
         $result->recordThat(LeasingWasStarted::onCharge($result, $month));
         if ($charge->getComment()) {
