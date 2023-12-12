@@ -72,10 +72,6 @@ class Leasing extends Modifier
 
         $month = $action->getTime()->modify('first day of this month midnight');
         if (!$this->checkPeriod($month)) {
-            if ($this->isFirstMonthInLeasingPassed($month)) {
-                return [$this->createLeasingStartingCharge($charge, $month)];
-            }
-
             if ($this->isFirstMonthAfterLeasingPassed($month)) {
                 return [$this->createLeasingFinishingCharge($charge, $month)];
             }
@@ -156,21 +152,9 @@ class Leasing extends Modifier
 
     private function createLeasingStartingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
     {
-        $result = new Charge(
-            null,
-            $this->getType(),
-            $charge->getTarget(),
-            $charge->getAction(),
-            $charge->getPrice(),
-            $charge->getUsage(),
-            $charge->getSum()
-        );
-        $result->recordThat(LeasingWasStarted::onCharge($result, $month));
-        if ($charge->getComment()) {
-            $result->setComment($charge->getComment());
-        }
+        $charge->recordThat(LeasingWasStarted::onCharge($charge, $month));
 
-        return $result;
+        return $charge;
     }
 
     private function createLeasingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
@@ -184,8 +168,13 @@ class Leasing extends Modifier
             $charge->getUsage(),
             $charge->getSum()
         );
+
         if ($charge->getComment()) {
             $result->setComment($charge->getComment());
+        }
+
+        if ($this->isFirstMonthInLeasingPassed($month)) {
+            return $this->createLeasingStartingCharge($result, $month);
         }
 
         return $result;
