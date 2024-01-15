@@ -15,7 +15,7 @@ Feature: Leasing
         Examples:
             | date       | first                       | events                     |
             | 2018-07-01 |                             |                            |
-            | 2018-08-01 | leasing 100 USD reason TEST |                            |
+            | 2018-08-01 | leasing 100 USD reason TEST | LeasingWasStarted          |
             | 2018-09-01 | leasing 100 USD reason TEST |                            |
             | 2018-10-01 | leasing 100 USD reason TEST |                            |
             | 2018-11-01 | leasing 0 USD reason TEST   | LeasingWasFinished         |
@@ -29,7 +29,7 @@ Feature: Leasing
       Examples:
         | date       | first                     | events             |
         | 2018-07-01 |                           |                    |
-        | 2018-08-01 | leasing 0 USD reason TEST |                    |
+        | 2018-08-01 | leasing 0 USD reason TEST | LeasingWasStarted  |
         | 2018-09-01 | leasing 0 USD reason TEST |                    |
         | 2018-10-01 | leasing 0 USD reason TEST |                    |
         | 2018-11-01 | leasing 0 USD reason TEST | LeasingWasFinished |

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * PHP Billing Library
  *
@@ -16,6 +18,7 @@ use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\event\LeasingWasFinished;
+use hiqdev\php\billing\charge\modifiers\event\LeasingWasStarted;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -92,7 +95,21 @@ class Leasing extends Modifier
         }
     }
 
-    private function isFirstMonthAfterLeasingPassed(\DateTimeImmutable $time): bool
+    private function isFirstMonthInLeasingPassed(DateTimeImmutable $time): bool
+    {
+        $since = $this->getSince();
+        if ($since && $since->getValue() > $time) {
+            return false;
+        }
+
+        if ($since->getValue()->diff($time)->format('%a') === '0') {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isFirstMonthAfterLeasingPassed(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
         if ($since && $since->getValue() > $time) {
@@ -114,7 +131,7 @@ class Leasing extends Modifier
         return false;
     }
 
-    private function createLeasingFinishingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    private function createLeasingFinishingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $result = new Charge(
             null,
@@ -133,7 +150,14 @@ class Leasing extends Modifier
         return $result;
     }
 
-    private function createLeasingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    private function createLeasingStartingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
+    {
+        $charge->recordThat(LeasingWasStarted::onCharge($charge, $month));
+
+        return $charge;
+    }
+
+    private function createLeasingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $result = new Charge(
             null,
@@ -144,8 +168,13 @@ class Leasing extends Modifier
             $charge->getUsage(),
             $charge->getSum()
         );
+
         if ($charge->getComment()) {
             $result->setComment($charge->getComment());
+        }
+
+        if ($this->isFirstMonthInLeasingPassed($month)) {
+            return $this->createLeasingStartingCharge($result, $month);
         }
 
         return $result;
