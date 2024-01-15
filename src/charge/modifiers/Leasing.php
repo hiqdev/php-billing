@@ -95,7 +95,7 @@ class Leasing extends Modifier
         }
     }
 
-    private function isFirstMonthInLeasingPassed(\DateTimeImmutable $time): bool
+    private function isFirstMonthInLeasingPassed(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
         if ($since && $since->getValue() > $time) {
@@ -109,7 +109,7 @@ class Leasing extends Modifier
         return false;
     }
 
-    private function isFirstMonthAfterLeasingPassed(\DateTimeImmutable $time): bool
+    private function isFirstMonthAfterLeasingPassed(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
         if ($since && $since->getValue() > $time) {
@@ -131,7 +131,7 @@ class Leasing extends Modifier
         return false;
     }
 
-    private function createLeasingFinishingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    private function createLeasingFinishingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $result = new Charge(
             null,
@@ -150,14 +150,14 @@ class Leasing extends Modifier
         return $result;
     }
 
-    private function createLeasingStartingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    private function createLeasingStartingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $charge->recordThat(LeasingWasStarted::onCharge($charge, $month));
 
         return $charge;
     }
 
-    private function createLeasingCharge(ChargeInterface $charge, \DateTimeImmutable $month): ChargeInterface
+    private function createLeasingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $result = new Charge(
             null,
