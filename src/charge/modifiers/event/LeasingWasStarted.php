@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\charge\modifiers\event;
 
 use hiqdev\php\billing\charge\ChargeInterface;
 use League\Event\AbstractEvent;
+use DateTimeImmutable;
 
 class LeasingWasStarted extends AbstractEvent implements \JsonSerializable
 {
@@ -25,13 +26,13 @@ class LeasingWasStarted extends AbstractEvent implements \JsonSerializable
      */
     private $time;
 
-    private function __construct(ChargeInterface $charge, \DateTimeImmutable $time)
+    private function __construct(ChargeInterface $charge, DateTimeImmutable $time)
     {
         $this->charge = $charge;
         $this->time = $time;
     }
 
-    public static function onCharge(ChargeInterface $charge, \DateTimeImmutable $time): self
+    public static function onCharge(ChargeInterface $charge, DateTimeImmutable $time): self
     {
         return new self($charge, $time);
     }
