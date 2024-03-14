@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Closure;
 use DateTimeImmutable;
@@ -111,15 +112,38 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /action is (\S+) ([\w_,]+) ([0-9.]+) (\S+)/
+     * @Given /action is (\S+) ([\w_,]+)(?: ([0-9.]+) (\S+))?(?: in (.+))?/
      */
-    public function actionIs($target, $type, $amount, $unit)
+    public function actionIs(string $target, string $type, float $amount, string $unit, ?string $date = null): void
     {
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);
+        $time = new DateTimeImmutable($date);
+        if ($this->sale->getCloseTime() instanceof DateTimeImmutable) {
+            $amount = $amount * $this->getFractionOfMonth(
+                $time, $time, $this->sale->getCloseTime()
+            );
+        }
         $quantity = Quantity::create($unit, $amount);
-        $time = new DateTimeImmutable();
+
         $this->action = new Action(null, $type, $target, $quantity, $this->customer, $time);
+    }
+
+    private function getFractionOfMonth(DateTimeImmutable $month, DateTimeImmutable $startTime, DateTimeImmutable $endTime): float
+    {
+        // SQL function: days2quantity()
+
+        $month = $month->modify('first day of this month 00:00');
+        if ($startTime < $month) {
+            $startTime = $month;
+        }
+        if ($endTime > $month->modify('first day of next month 00:00')) {
+            $endTime = $month->modify('first day of next month 00:00');
+        }
+
+        $secondsInMonth = $month->format('t') * 24 * 60 * 60;
+
+        return ($endTime->getTimestamp() - $startTime->getTimestamp()) / $secondsInMonth;
     }
 
     /**
@@ -148,12 +172,20 @@ class FeatureContext implements Context
     }
 
     /**
-     * @When /action date is ([0-9.-]+)/
+     * @When /action date is (.+)/
      * @throws Exception
      */
     public function actionDateIs(string $date): void
     {
         $this->action->setTime(new DateTimeImmutable($date));
+    }
+
+    /**
+     * @Given /^client rejected service at (.+)$/
+     */
+    public function actionCloseDateIs(string $close_date): void
+    {
+        $this->sale->close(new DateTimeImmutable($close_date));
     }
 
     /**
@@ -213,7 +245,9 @@ class FeatureContext implements Context
     public function calculatePrice(): void
     {
         $this->expectError(function () {
-            $this->price->setModifier($this->getFormulaEngine()->build($this->formula));
+            if ($this->formula !== null) {
+                $this->price->setModifier($this->getFormulaEngine()->build($this->formula));
+            }
             $this->charges = $this->billing->calculateCharges($this->action);
         });
     }

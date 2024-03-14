@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
+use hiqdev\php\billing\charge\modifiers\event\LeasingWasStarted;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
@@ -74,6 +75,8 @@ class LeasingTest extends ActionTest
         $action = $this->createAction($this->prepaid->multiply(2));
         $charge = $this->calculator->calculateCharge($this->price, $action);
         $charges = $leasing->modifyCharge($charge, $action);
+        $event = $charges[0]->releaseEvents()[0];
+        $this->assertInstanceOf(LeasingWasStarted::class, $event);
         $this->assertIsArray($charges);
         $this->assertSame(1, count($charges));
         $this->assertEquals($charge, $charges[0]);
