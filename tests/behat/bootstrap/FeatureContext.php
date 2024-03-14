@@ -114,7 +114,7 @@ class FeatureContext implements Context
     /**
      * @Given /action is (\S+) ([\w_,]+)(?: ([0-9.]+) (\S+))?(?: in (.+))?/
      */
-    public function actionIs(string $target, string $type, float $amount, string $unit, ?string $date): void
+    public function actionIs(string $target, string $type, float $amount, string $unit, ?string $date = null): void
     {
         $type = new Type(Type::ANY, $type);
         $target = new Target(Target::ANY, $target);

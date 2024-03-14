@@ -3,6 +3,22 @@ Feature: Monthly cap
         Given server monthly price is 50 USD per item
           And action is server monthly 1 item
 
+  Scenario Outline: Monthly fee for fraction of month
+    Given server monthly price is 1488 USD per item
+      And formula is cap.monthly('28 days')
+      And client rejected service at <unsale_time>
+      And action is server monthly 1 item in <sale_time>
+     Then first charge is <charge>
+      And second charge is <second>
+    Examples:
+      | description    | sale_time           | unsale_time         | charge                                          | second                                 |
+      | Almost 1 month | 2024-02-01 11:50:00 | 2024-02-29 15:15:00 | monthly 1488.00 USD for 672 hour                | monthly 0 USD for 3.4166666666496 hour |
+      | A few weeks    | 2024-02-01 11:50:00 | 2024-02-16 15:15:00 | monthly 804.71 USD for 363.41666666666595 hour  |                                        |
+      | A few hours    | 2024-02-10 11:50:00 | 2024-02-10 15:15:00 | monthly 7.57 USD for 3.4166666666666687 hour    |                                        |
+      | A few minutes  | 2024-02-10 11:50:00 | 2024-02-10 11:55:00 | monthly 0.19 USD for 0.08333333333333567 hour   |                                        |
+      | Just a second  | 2024-02-10 11:50:00 | 2024-02-10 11:50:01 | monthly 0.01 USD for 0.0002777777777777789 hour |                                        |
+
+
     Scenario Outline: monthly cap for the fixed number of days
         Given formula is cap.monthly('28 days')
           And action is server monthly <qty> item
