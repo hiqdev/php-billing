@@ -44,7 +44,11 @@ class Leasing extends Modifier
 
     public function getType()
     {
-        return new Type(Type::ANY, 'monthly,leasing');
+        $since = $this->getSince();
+        if ($since->getValue()->format('Y-m-d') < '2024-01-01') {
+            return new Type(Type::ANY, 'monthly,leasing');
+        }
+        return new Type(Type::ANY, 'monthly,installment');
     }
 
     public function getTarget()
