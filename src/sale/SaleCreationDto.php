@@ -26,4 +26,6 @@ class SaleCreationDto
     public $time;
 
     public $closeTime;
+
+    public $data;
 }
