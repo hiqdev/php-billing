@@ -28,7 +28,7 @@ Feature: Leasing
       Examples:
         | date       | first                            | events                     |
         | 2023-12-01 |                                  |                            |
-        | 2024-01-01 | installment 100 USD reason TEST  | LeasingWasStarted          |
+        | 2024-01-01 | installment 100 USD reason TEST  | InstallmentWasStarted          |
         | 2024-02-01 | installment 100 USD reason TEST  |                            |
         | 2024-03-01 | installment 100 USD reason TEST  |                            |
         | 2024-04-01 | installment 0 USD reason TEST    | LeasingWasFinished         |
