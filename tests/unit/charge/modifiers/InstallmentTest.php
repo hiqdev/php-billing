@@ -13,7 +13,7 @@ namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
-use hiqdev\php\billing\charge\modifiers\event\LeasingWasStarted;
+use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
@@ -22,28 +22,28 @@ use hiqdev\php\billing\type\Type;
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class LeasingTest extends ActionTest
+class InstallmentTest extends ActionTest
 {
     protected $reason = 'test reason string';
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->type = new Type(Type::ANY, 'monthly,leasing');
+        $this->type = new Type(Type::ANY, 'monthly,installment');
         $this->price = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
     }
 
-    protected function buildLeasing($term)
+    protected function buildInstallment($term)
     {
         $month = (new DateTimeImmutable())->modify('first day of this month midnight');
 
-        return (new Leasing())->since($month)->lasts($term);
+        return (new Installment())->since($month)->lasts($term);
     }
 
     public function testCreateMonth()
     {
-        $leasing = $this->buildLeasing('12 months');
-        $period = $leasing->getTerm();
+        $installment = $this->buildInstallment('12 months');
+        $period = $installment->getTerm();
         $this->assertInstanceOf(MonthPeriod::class, $period);
         $this->assertSame(12, $period->getValue());
     }
@@ -51,32 +51,32 @@ class LeasingTest extends ActionTest
     public function testTill()
     {
         $this->expectException(\Exception::class);
-        $this->buildLeasing('month')->till('08.2018');
+        $this->buildInstallment('month')->till('08.2024');
     }
 
     public function testReason()
     {
-        $leasing = $this->buildLeasing('12 months');
-        $leasing = $leasing->reason($this->reason);
-        $this->assertSame($this->reason, $leasing->getReason()->getValue());
+        $installment = $this->buildInstallment('12 months');
+        $installment = $installment->reason($this->reason);
+        $this->assertSame($this->reason, $installment->getReason()->getValue());
     }
 
     public function testCreateYear()
     {
-        $leasing = $this->buildLeasing('1 year');
-        $period = $leasing->getTerm();
+        $installment = $this->buildInstallment('1 year');
+        $period = $installment->getTerm();
         $this->assertInstanceOf(YearPeriod::class, $period);
         $this->assertSame(1, $period->getValue());
     }
 
     public function testModifyCharge()
     {
-        $leasing = $this->buildLeasing('6 months');
+        $installment = $this->buildInstallment('6 months');
         $action = $this->createAction($this->prepaid->multiply(2));
         $charge = $this->calculator->calculateCharge($this->price, $action);
-        $charges = $leasing->modifyCharge($charge, $action);
+        $charges = $installment->modifyCharge($charge, $action);
         $event = $charges[0]->releaseEvents()[0];
-        $this->assertInstanceOf(LeasingWasStarted::class, $event);
+        $this->assertInstanceOf(InstallmentWasStarted::class, $event);
         $this->assertIsArray($charges);
         $this->assertSame(1, count($charges));
         $this->assertEquals($charge, $charges[0]);
