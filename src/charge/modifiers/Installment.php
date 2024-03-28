@@ -17,8 +17,8 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
-use hiqdev\php\billing\charge\modifiers\event\LeasingWasFinished;
-use hiqdev\php\billing\charge\modifiers\event\LeasingWasStarted;
+use hiqdev\php\billing\charge\modifiers\event\InstallmentWasFinished;
+use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -27,11 +27,11 @@ use hiqdev\php\units\Quantity;
 use Money\Money;
 
 /**
- * Leasing.
+ * Installment.
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class Leasing extends Modifier
+class Installment extends Modifier
 {
     public function buildPrice(Money $sum)
     {
@@ -58,13 +58,13 @@ class Leasing extends Modifier
 
     public function till($dummy)
     {
-        throw new FormulaSemanticsError('till can not be defined for leasing');
+        throw new FormulaSemanticsError('till can not be defined for installment');
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
         if ($charge === null) {
-            throw new \Exception('unexpected null charge in Leasing, to be implemented');
+            throw new \Exception('unexpected null charge in Installment, to be implemented');
         }
 
         $this->ensureIsValid();
@@ -76,30 +76,30 @@ class Leasing extends Modifier
 
         $month = $action->getTime()->modify('first day of this month midnight');
         if (!$this->checkPeriod($month)) {
-            if ($this->isFirstMonthAfterLeasingPassed($month)) {
-                return [$this->createLeasingFinishingCharge($charge, $month)];
+            if ($this->isFirstMonthAfterInstallmentPassed($month)) {
+                return [$this->createInstallmentFinishingCharge($charge, $month)];
             }
 
             return [];
         }
 
-        return [$this->createLeasingCharge($charge, $month)];
+        return [$this->createInstallmentCharge($charge, $month)];
     }
 
     protected function ensureIsValid(): void
     {
         $since = $this->getSince();
         if ($since === null) {
-            throw new FormulaSemanticsError('no since given for leasing');
+            throw new FormulaSemanticsError('no since given for installment');
         }
 
         $term = $this->getTerm();
         if ($term === null) {
-            throw new FormulaSemanticsError('no term given for leasing');
+            throw new FormulaSemanticsError('no term given for installment');
         }
     }
 
-    private function isFirstMonthInLeasingPassed(DateTimeImmutable $time): bool
+    private function isFirstMonthInInstallmentPassed(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
         if ($since && $since->getValue() > $time) {
@@ -113,7 +113,7 @@ class Leasing extends Modifier
         return false;
     }
 
-    private function isFirstMonthAfterLeasingPassed(DateTimeImmutable $time): bool
+    private function isFirstMonthAfterInstallmentPassed(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
         if ($since && $since->getValue() > $time) {
@@ -135,7 +135,7 @@ class Leasing extends Modifier
         return false;
     }
 
-    private function createLeasingFinishingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
+    private function createInstallmentFinishingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $result = new Charge(
             null,
@@ -146,7 +146,7 @@ class Leasing extends Modifier
             $charge->getUsage(),
             new Money(0, $charge->getSum()->getCurrency())
         );
-        $result->recordThat(LeasingWasFinished::onCharge($result, $month));
+        $result->recordThat(InstallmentWasFinished::onCharge($result, $month));
         if ($charge->getComment()) {
             $result->setComment($charge->getComment());
         }
@@ -154,14 +154,14 @@ class Leasing extends Modifier
         return $result;
     }
 
-    private function createLeasingStartingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
+    private function createInstallmentStartingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
-        $charge->recordThat(LeasingWasStarted::onCharge($charge, $month));
+        $charge->recordThat(InstallmentWasStarted::onCharge($charge, $month));
 
         return $charge;
     }
 
-    private function createLeasingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
+    private function createInstallmentCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
     {
         $result = new Charge(
             null,
@@ -177,8 +177,8 @@ class Leasing extends Modifier
             $result->setComment($charge->getComment());
         }
 
-        if ($this->isFirstMonthInLeasingPassed($month)) {
-            return $this->createLeasingStartingCharge($result, $month);
+        if ($this->isFirstMonthInInstallmentPassed($month)) {
+            return $this->createInstallmentStartingCharge($result, $month);
         }
 
         return $result;
