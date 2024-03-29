@@ -62,6 +62,11 @@ interface SaleInterface extends EntityInterface
     public function getCloseTime(): ?DateTimeImmutable;
 
     /**
+     * @return string|array|null
+     */
+    public function getData();
+
+    /**
      * @param DateTimeImmutable $time
      * @throws InvariantException
      * @throws ConstraintException
