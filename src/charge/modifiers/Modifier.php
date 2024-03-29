@@ -69,9 +69,9 @@ class Modifier implements ChargeModifier, AddonsContainerInterface, TimeLimitedM
         return new Cap($this->addons);
     }
 
-    public function leasing()
+    public function installment()
     {
-        return new Leasing($this->addons);
+        return new Installment($this->addons);
     }
 
     public function getNext()

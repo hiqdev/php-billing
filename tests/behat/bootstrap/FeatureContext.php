@@ -334,6 +334,8 @@ class FeatureContext implements Context
                 return 'discount';
             case 'monthly,leasing':
                 return 'leasing';
+            case 'monthly,installment':
+                return 'installment';
             default:
                 return $string;
         }

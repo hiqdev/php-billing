@@ -15,7 +15,7 @@ use hiqdev\php\billing\charge\ChargeModifier;
 use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Increase;
-use hiqdev\php\billing\charge\modifiers\Leasing;
+use hiqdev\php\billing\charge\modifiers\Installment;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model\Model;
 use Hoa\Ruler\Ruler;
@@ -52,7 +52,7 @@ class FormulaEngine implements FormulaEngineInterface
     /**
      * @var ChargeModifier
      */
-    protected $leasing;
+    protected $installment;
 
     /**
      * @var ChargeModifier
@@ -199,7 +199,7 @@ class FormulaEngine implements FormulaEngineInterface
     {
         $context = new Context();
         $context['discount'] = $this->getDiscount();
-        $context['leasing'] = $this->getLeasing();
+        $context['installment'] = $this->getInstallment();
         $context['increase'] = $this->getIncrease();
         $context['cap'] = $this->getCap();
 
@@ -215,13 +215,13 @@ class FormulaEngine implements FormulaEngineInterface
         return $this->discount;
     }
 
-    public function getLeasing(): ChargeModifier
+    public function getInstallment(): ChargeModifier
     {
-        if ($this->leasing === null) {
-            $this->leasing = new Leasing();
+        if ($this->installment === null) {
+            $this->installment = new Installment();
         }
 
-        return $this->leasing;
+        return $this->installment;
     }
 
     public function getIncrease(): ChargeModifier

@@ -16,7 +16,7 @@ use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
-use hiqdev\php\billing\charge\modifiers\Leasing;
+use hiqdev\php\billing\charge\modifiers\Installment;
 use hiqdev\php\billing\formula\FormulaEngine;
 use PHPUnit\Framework\TestCase;
 
@@ -52,17 +52,17 @@ class FormulaEngineTest extends TestCase
         $this->assertNull($formula->getTill());
     }
 
-    public function testSimpleLeasing()
+    public function testSimpleInstallment()
     {
-        $this->checkSimpleLeasing('2018-08-01', 2, 'test reason');
-        $this->checkSimpleLeasing('2018-09-01', 3, 'test reason');
+        $this->checkSimpleInstallment('2024-08-01', 2, 'test reason');
+        $this->checkSimpleInstallment('2024-09-01', 3, 'test reason');
     }
 
-    protected function checkSimpleLeasing($date, $num, $reason)
+    protected function checkSimpleInstallment($date, $num, $reason)
     {
-        $formula = $this->engine->build("leasing.since('$date').lasts('$num months').reason('$reason')");
+        $formula = $this->engine->build("installment.since('$date').lasts('$num months').reason('$reason')");
 
-        $this->assertInstanceOf(Leasing::class, $formula);
+        $this->assertInstanceOf(Installment::class, $formula);
         $this->assertInstanceOf(MonthPeriod::class, $formula->getTerm());
         $this->assertSame($num, $formula->getTerm()->getValue());
         $this->assertInstanceOf(Since::class, $formula->getSince());
