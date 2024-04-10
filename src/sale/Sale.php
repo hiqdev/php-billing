@@ -134,7 +134,7 @@ class Sale implements SaleInterface
         if (is_null($data) || empty($data)) {
             return ;
         }
-        if ($is_string($data)) {
+        if (is_string($data)) {
             $this->data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
             return ;
         }
