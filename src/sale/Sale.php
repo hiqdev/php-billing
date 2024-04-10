@@ -52,7 +52,7 @@ class Sale implements SaleInterface
 
     protected ?DateTimeImmutable $closeTime = null;
 
-    protected ?array $data = null;
+    protected mixed $data = null;
 
     public function __construct(
         $id,
@@ -60,14 +60,14 @@ class Sale implements SaleInterface
         CustomerInterface $customer,
         ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null,
-        ?array $data = null,
+        mixed $data = null,
     ) {
         $this->id = $id;
         $this->target = $target;
         $this->customer = $customer;
         $this->plan = $plan;
         $this->time = $time ?? new DateTimeImmutable();
-        $this->data = $data;
+        $this->data = $this->setData($data);
     }
 
     public function getId()
@@ -127,6 +127,23 @@ class Sale implements SaleInterface
             throw new CannotReassignException('sale id');
         }
         $this->id = $id;
+    }
+
+    public function setData(mixed $data = null)
+    {
+        if (is_null($data) || empty($data)) {
+            return ;
+        }
+        if ($is_string($data)) {
+            $this->data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+            return ;
+        }
+
+        if (is_object($data)) {
+            $this->data = json_decode(json_encode($data), true, 512, JSON_THROW_ON_ERROR);
+        }
+
+        $this->data = $data;
     }
 
     public function getData()
