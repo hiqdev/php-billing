@@ -52,7 +52,7 @@ class Sale implements SaleInterface
 
     protected ?DateTimeImmutable $closeTime = null;
 
-    protected ?array $data = null;
+    protected ?string $data = null;
 
     public function __construct(
         $id,
@@ -60,7 +60,7 @@ class Sale implements SaleInterface
         CustomerInterface $customer,
         ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null,
-        ?array $data = null,
+        ?string $data = null,
     ) {
         $this->id = $id;
         $this->target = $target;
@@ -129,7 +129,7 @@ class Sale implements SaleInterface
         $this->id = $id;
     }
 
-    public function getData()
+    public function getData(): ?string
     {
         return $this->data;
     }
