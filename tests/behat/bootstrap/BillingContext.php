@@ -337,6 +337,10 @@ class BillingContext extends BaseContext
         if (strncmp($time, 'pY', 1) === 0) {
             return date(substr($time, 1), strtotime('-1 year'));
         }
+        if (str_contains($time, 'pm')) {
+            $time = str_replace('pm', 'm', $time);
+            $time = date($time, strtotime('-1 month'));
+        }
         if (strncmp($time, 'Y', 1) === 0) {
             return date($time);
         }
