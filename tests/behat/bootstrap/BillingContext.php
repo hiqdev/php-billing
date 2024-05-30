@@ -231,14 +231,14 @@ class BillingContext extends BaseContext
             'quantity' => "$quantity $unit",
             'time' => $time,
         ]);
-        Assert::assertSame($type, $bill->getType()->getName());
-        Assert::assertSame($target, $bill->getTarget()->getFullName());
-        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount());
-        Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
-        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity());
-        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()));
+        Assert::assertSame($type, $bill->getType()->getName(), "Bill type mismatch: expected $type, got {$bill->getType()->getName()}");
+        Assert::assertSame($target, $bill->getTarget()->getFullName(), "Bill target mismatch: expected $target, got {$bill->getTarget()->getFullName()}");
+        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount(), "Bill sum mismatch: expected $sum, got {$bill->getSum()->getAmount()}");
+        Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode(), "Bill currency mismatch: expected $currency, got {$bill->getSum()->getCurrency()->getCode()}");
+        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity(), "Bill quantity mismatch: expected $quantity, got {$bill->getQuantity()->getQuantity()}");
+        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()), "Bill unit mismatch: expected $unit, got {$bill->getQuantity()->getUnit()->getName()}");
         if ($time) {
-            Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime());
+            Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime(), "Bill time mismatch: expected $time, got {$bill->getTime()->format(DATE_ATOM)}");
         }
     }
 
