@@ -189,6 +189,14 @@ class BillingContext extends BaseContext
     }
 
     /**
+     * @Given /recalculate autotariff for target (\S+)( +at (\S+))?$/
+     */
+    public function recalculateAutoTariff(string $target, string $time = null): void
+    {
+        $this->builder->clientSetAutoTariff($target, $time);
+    }
+
+    /**
      * @Given /perform billing at (\S+)/
      */
     public function performBilling(string $time): void
