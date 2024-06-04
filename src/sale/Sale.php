@@ -17,6 +17,7 @@ use hiqdev\php\billing\Exception\ConstraintException;
 use hiqdev\php\billing\Exception\InvariantException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
+use yii\helpers\Json;
 
 /**
  * Sale.
@@ -52,7 +53,7 @@ class Sale implements SaleInterface
 
     protected ?DateTimeImmutable $closeTime = null;
 
-    protected ?array $data = null;
+    protected ?string $data = null;
 
     public function __construct(
         $id,
@@ -60,7 +61,7 @@ class Sale implements SaleInterface
         CustomerInterface $customer,
         ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null,
-        ?array $data = null,
+        ?string $data = null,
     ) {
         $this->id = $id;
         $this->target = $target;
@@ -129,9 +130,9 @@ class Sale implements SaleInterface
         $this->id = $id;
     }
 
-    public function getData()
+    public function getData(): ?array
     {
-        return $this->data;
+        return !empty($this->data) ? Json::decode($this->data, true) : null;
     }
 
     public function jsonSerialize(): array

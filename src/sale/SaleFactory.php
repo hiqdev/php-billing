@@ -23,7 +23,7 @@ class SaleFactory implements SaleFactoryInterface
      */
     public function create(SaleCreationDto $dto)
     {
-        $sale = new Sale($dto->id, $dto->target, $dto->customer, $dto->plan, $dto->time);
+        $sale = new Sale($dto->id, $dto->target, $dto->customer, $dto->plan, $dto->time, $dto->data);
 
         if ($dto->closeTime !== null) {
             $sale->close($dto->closeTime);
