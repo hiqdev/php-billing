@@ -61,14 +61,14 @@ class Sale implements SaleInterface
         CustomerInterface $customer,
         ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null,
-        ?string $data = null,
+        $data = null,
     ) {
         $this->id = $id;
         $this->target = $target;
         $this->customer = $customer;
         $this->plan = $plan;
         $this->time = $time ?? new DateTimeImmutable();
-        $this->data = $data;
+        $this->data = $this->setData($data);
     }
 
     public function getId()
@@ -128,6 +128,26 @@ class Sale implements SaleInterface
             throw new CannotReassignException('sale id');
         }
         $this->id = $id;
+    }
+
+    public function setData($data): self
+    {
+        if (empty($data)) {
+            $this->data = null;
+            return $this;
+        }
+
+        if (is_string($data) && json_validate($data)) {
+            $this->data = $data;
+            return $this;
+        }
+
+        if (is_array($data)) {
+            $this->data = Json::encode($data);
+            return $this;
+        }
+
+        throw new \Exception("Cannot assign data");
     }
 
     public function getData(): ?array
