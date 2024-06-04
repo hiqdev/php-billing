@@ -53,7 +53,7 @@ class Sale implements SaleInterface
 
     protected ?DateTimeImmutable $closeTime = null;
 
-    protected ?string $data = null;
+    protected ?array $data = null;
 
     public function __construct(
         $id,
@@ -61,14 +61,14 @@ class Sale implements SaleInterface
         CustomerInterface $customer,
         ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null,
-        $data = null,
+        ?array $data = null,
     ) {
         $this->id = $id;
         $this->target = $target;
         $this->customer = $customer;
         $this->plan = $plan;
         $this->time = $time ?? new DateTimeImmutable();
-        $this->data = $this->setData($data);
+        $this->data = $data;
     }
 
     public function getId()
@@ -130,29 +130,9 @@ class Sale implements SaleInterface
         $this->id = $id;
     }
 
-    public function setData($data): self
-    {
-        if (empty($data)) {
-            $this->data = null;
-            return $this;
-        }
-
-        if (is_string($data) && json_validate($data)) {
-            $this->data = $data;
-            return $this;
-        }
-
-        if (is_array($data)) {
-            $this->data = Json::encode($data);
-            return $this;
-        }
-
-        throw new \Exception("Cannot assign data");
-    }
-
     public function getData(): ?array
     {
-        return !empty($this->data) ? Json::decode($this->data, true) : null;
+        return !empty($this->data) ? $this->data : null;
     }
 
     public function jsonSerialize(): array
