@@ -17,7 +17,6 @@ use hiqdev\php\billing\Exception\ConstraintException;
 use hiqdev\php\billing\Exception\InvariantException;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\target\TargetInterface;
-use yii\helpers\Json;
 
 /**
  * Sale.
