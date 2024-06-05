@@ -28,4 +28,6 @@ class SaleCreationDto
     public $closeTime;
 
     public $data;
+
+    public $reason;
 }

@@ -129,9 +129,9 @@ class Sale implements SaleInterface
         $this->id = $id;
     }
 
-    public function getData()
+    public function getData(): ?array
     {
-        return $this->data;
+        return !empty($this->data) ? $this->data : null;
     }
 
     public function jsonSerialize(): array
