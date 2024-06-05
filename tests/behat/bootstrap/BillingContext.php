@@ -189,6 +189,14 @@ class BillingContext extends BaseContext
     }
 
     /**
+     * @Given /recalculate autotariff for target (\S+)( +at (\S+))?$/
+     */
+    public function recalculateAutoTariff(string $target, string $time = null): void
+    {
+        $this->builder->clientSetAutoTariff($target, $time);
+    }
+
+    /**
      * @Given /perform billing at (\S+)/
      */
     public function performBilling(string $time): void
@@ -231,14 +239,14 @@ class BillingContext extends BaseContext
             'quantity' => "$quantity $unit",
             'time' => $time,
         ]);
-        Assert::assertSame($type, $bill->getType()->getName());
-        Assert::assertSame($target, $bill->getTarget()->getFullName());
-        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount());
-        Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode());
-        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity());
-        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()));
+        Assert::assertSame($type, $bill->getType()->getName(), "Bill type mismatch: expected $type, got {$bill->getType()->getName()}");
+        Assert::assertSame($target, $bill->getTarget()->getFullName(), "Bill target mismatch: expected $target, got {$bill->getTarget()->getFullName()}");
+        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount(), "Bill sum mismatch: expected $sum, got {$bill->getSum()->getAmount()}");
+        Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode(), "Bill currency mismatch: expected $currency, got {$bill->getSum()->getCurrency()->getCode()}");
+        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity(), "Bill quantity mismatch: expected $quantity, got {$bill->getQuantity()->getQuantity()}");
+        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()), "Bill unit mismatch: expected $unit, got {$bill->getQuantity()->getUnit()->getName()}");
         if ($time) {
-            Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime());
+            Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime(), "Bill time mismatch: expected $time, got {$bill->getTime()->format(DATE_ATOM)}");
         }
     }
 
@@ -336,6 +344,10 @@ class BillingContext extends BaseContext
         }
         if (strncmp($time, 'pY', 1) === 0) {
             return date(substr($time, 1), strtotime('-1 year'));
+        }
+        if (str_contains($time, 'pm')) {
+            $time = str_replace('pm', 'm', $time);
+            $time = date($time, strtotime('-1 month'));
         }
         if (strncmp($time, 'Y', 1) === 0) {
             return date($time);
