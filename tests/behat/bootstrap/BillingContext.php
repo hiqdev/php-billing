@@ -345,6 +345,10 @@ class BillingContext extends BaseContext
         if (strncmp($time, 'pY', 1) === 0) {
             return date(substr($time, 1), strtotime('-1 year'));
         }
+        if (str_contains($time, 'nm')) {
+            $format = str_replace('nm', 'm', $time);
+            return date($format, strtotime('next month'));
+        }
         if (str_contains($time, 'pm')) {
             $time = str_replace('pm', 'm', $time);
             $time = date($time, strtotime('-1 month'));
@@ -415,8 +419,8 @@ class BillingContext extends BaseContext
             'target' => $target,
         ]);
 
-        $saleDateTime = new DateTimeImmutable('@' . strtotime($saleDate));
-        $saleCloseDateTime = new DateTimeImmutable('@' . ($saleCloseDate ? strtotime($saleCloseDate) : time()));
+        $saleDateTime = new DateTimeImmutable('@' . strtotime($this->prepareTime($saleDate)));
+        $saleCloseDateTime = $saleCloseDate ? new DateTimeImmutable('@' . strtotime($this->prepareTime($saleCloseDate))) : null;
 
         foreach ($sales as $sale) {
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
