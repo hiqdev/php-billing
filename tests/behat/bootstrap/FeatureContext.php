@@ -22,6 +22,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\price\ProgressivePrice;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -39,6 +40,18 @@ use PHPUnit\Framework\Assert;
  */
 class FeatureContext implements Context
 {
+    private const PROGRESSIVE_SIGN_LESS = 'less';
+    private const PROGRESSIVE_SIGN_LESS_EQUAL = 'less_equal';
+    private const PROGRESSIVE_SIGN_GREAT = 'great';
+    private const PROGRESSIVE_SIGN_GREAT_EQUAL = 'great_equal';
+    private const PROGRESSIVE_SIGN_EQUAL = 'equal';
+    private const PROGRESSIVE_SIGNS = [
+        self::PROGRESSIVE_SIGN_LESS => ProgressivePrice::SIGN_LESS,
+        self::PROGRESSIVE_SIGN_LESS_EQUAL => ProgressivePrice::SIGN_LESS_EQUAL,
+        self::PROGRESSIVE_SIGN_GREAT => ProgressivePrice::SIGN_GREATER,
+        self::PROGRESSIVE_SIGN_GREAT_EQUAL => ProgressivePrice::SIGN_GREATER_EQUAL,
+        self::PROGRESSIVE_SIGN_EQUAL => ProgressivePrice::SIGN_EQUAL,
+    ];
     protected $engine;
 
     /** @var Customer */
@@ -92,6 +105,96 @@ class FeatureContext implements Context
         $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, new Currency($currency));
         $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
+    }
+
+    /**
+     * @Given /(\S+) progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+)$/
+     */
+    public function progressivePrice($target, $type, $price, $currency, $unit, $sign, $quantity, $perUnit): void
+    {
+        if (empty($this->progressivePrice[$type])) {
+            $this->progressivePrice[$type] = [
+                'target' => $target,
+                'unit' => $unit,
+                'condition' =>[
+                    [
+                        'price' => $price,
+                        'currency' => $currency,
+                        'sign_till' => self::PROGRESSIVE_SIGNS[$sign],
+                        'value_till' => $quantity,
+                    ],
+                ] ,
+            ];
+        } else {
+            array_push(
+                $this->progressivePrice[$type]['condition'],
+                [
+                    'price' => $price,
+                    'currency' => $currency,
+                    'sign_till' => self::PROGRESSIVE_SIGNS[$sign],
+                    'value_till' => $quantity,
+                ]
+            );
+        }
+    }
+
+    /**
+     * @Given /(\S+) progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+) and (\S+) (\S+) (\S+)$/
+     */
+    public function progressivePriceWithInterval(
+        $target,
+        $type,
+        $price,
+        $currency,
+        $unit,
+        $signFrom,
+        $quantityFrom,
+        $perUnit,
+        $signTill,
+        $quantityTill,
+        $perUnit1
+    ) {
+        if (empty($this->progressivePrice[$type])) {
+            $this->progressivePrice[$type] = [
+                'target' => $target,
+                'unit' => $unit,
+                'condition' =>[
+                    [
+                        'price' => $price,
+                        'currency' => $currency,
+                        'sign_from' => self::PROGRESSIVE_SIGNS[$signFrom],
+                        'value_from' => $quantityFrom,
+                        'sign_till' => self::PROGRESSIVE_SIGNS[$signTill],
+                        'value_till' => $quantityTill,
+                    ],
+                ] ,
+            ];
+        } else {
+            array_push(
+                $this->progressivePrice[$type]['condition'],
+                [
+                    'price' => $price,
+                    'currency' => $currency,
+                    'sign_from' => self::PROGRESSIVE_SIGNS[$signFrom],
+                    'value_from' => $quantityFrom,
+                    'sign_till' => self::PROGRESSIVE_SIGNS[$signTill],
+                    'value_till' => $quantityTill,
+                ]
+            );
+        }
+    }
+
+    /**
+     * @Given /^create progressive price/
+     */
+    public function createProgressivePrices()
+    {
+        foreach ($this->progressivePrice as $type => $price) {
+            $type = new Type(Type::ANY, $type);
+            $target = new Target(Target::ANY, $price['target']);
+            $quantity = Quantity::create($price['unit'], 1);
+            $this->setPrice(new ProgressivePrice(null, $type, $target, $quantity, $price['condition']));
+        }
     }
 
     /**
