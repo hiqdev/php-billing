@@ -152,7 +152,7 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /purchase target (\S+) by plan (\S+) at (\S+)$/
+     * @Given /purchase target (\S+) by plan (\S+) at ([-:\w\s]+)$/
      */
     public function purchaseTarget(string $target, string $plan, string $time): void
     {
