@@ -9,24 +9,15 @@ use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
+use Money\Currency;
 use Money\Money;
 
 class ProgressivePrice extends AbstractPrice
 {
-
-    public const SIGN_GREATER = '>';
-    public const SIGN_LESS = '<';
-    public const SIGN_GREATER_EQUAL = '>=';
-    public const SIGN_LESS_EQUAL = '<=';
-    public const SIGN_EQUAL = '=';
-
     /* @psalm-var array{array{
      * "price": numeric,
      * "currency": string,
-     * "sign_from": string,
-     * "value_from": numeric,
-     * "sign_till": string,
-     * "value_till", numeric
+     * "value": numeric,
      * }} $condition
      */
     protected array $condition;
@@ -67,10 +58,10 @@ class ProgressivePrice extends AbstractPrice
 
     private function prepareCondition(): void
     {
-        uksort($this->condition, function($a, $b)
-        {
-            return $b['value_till'] - $a['value_till'];
-        }
+        usort($this->condition, function($a, $b)
+            {
+                return $b['value'] <=> $a['value'];
+            }
         );
     }
 
@@ -97,30 +88,22 @@ class ProgressivePrice extends AbstractPrice
         $this->prepareCondition();
         $usage = $this->calculateUsage($quantity);
         $quantity = $usage->getQuantity();
-        foreach ($this->condition as $condition) {
-            $quantity = $usage->getQuantity();
-            if (isset($condition['sign_from'])) {
-                if ($condition['sign_till'] === self::SIGN_EQUAL) {
-                    $result = $usage->getQuantity();
-                }
-            } else {
-                if ($condition['sign_till'] === self::SIGN_EQUAL || $condition['sign_till'] === self::SIGN_GREATER) {
-
+        foreach ($this->condition as $key => $condition) {
+            if  ($condition['value'] < $quantity) {
+                if ($key !== count($this->condition) - 1) {
+                    $boundary = $quantity - $condition['value'];
+                    $result += $boundary * $condition['price'];
+                    $quantity = $quantity - $boundary;
+                } else {
+                    $result += $quantity * $condition['price'];
                 }
             }
         }
-        return $result;
+        return new Money((int)($result * 100), new Currency($condition['currency']));
     }
 
-    private function getIntervalBoundary(string $sign, int $value): float
+    public function calculateSum(QuantityInterface $quantity): ?Money
     {
-        switch ($sign) {
-            case self::SIGN_GREATER:
-                return $value + 0.01;
-            case self::SIGN_LESS:
-                return $value - 0.01;
-            default:
-                return $value;
-        }
+        return $this->calculatePrice($quantity);
     }
 }

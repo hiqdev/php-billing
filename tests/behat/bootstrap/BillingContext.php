@@ -192,7 +192,13 @@ class BillingContext extends BaseContext
     public function createProgressivePrices()
     {
         foreach ($this->progressivePrice as $type => $price) {
-            $this->fullPrice([$type, $price['price'], $price['currency'], $price['unit'], $price['condition']]);
+            $this->fullPrice([
+                'type' => $type,
+                'price' => $price['price'],
+                'currency' => $price['currency'],
+                'unit' => $price['unit'],
+                'condition' => $price['condition']
+            ]);
         }
     }
 
