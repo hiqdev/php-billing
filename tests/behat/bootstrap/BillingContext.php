@@ -125,62 +125,24 @@ class BillingContext extends BaseContext
     {
         if (empty($this->progressivePrice[$type])) {
             $this->progressivePrice[$type] = [
-                'price' => $price,
+                'price' => 0,
                 'currency' => $currency,
                 'unit' => $unit,
-                'condition' =>[
+                'thresholds' =>[
                     [
-                        'sign_till' => $sign,
-                        'value_till' => $quantity,
+                        'price' => $price,
+                        'currency' => $currency,
+                        'value' => $quantity,
                     ],
                 ] ,
             ];
         } else {
             array_push(
-                $this->progressivePrice[$type]['condition'],
+                $this->progressivePrice[$type]['thresholds'],
                 [
-                    'sign_till' => $sign,
-                    'value_till' => $quantity,
-                ]
-            );
-        }
-    }
-
-    /**
-     * @Given /progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+) and (\S+) (\S+) (\S+)$/
-     */
-    public function progressivePriceWithInterval(
-        $type,
-        $price,
-        $currency,
-        $unit,
-        $signFrom,
-        $quantityFrom,
-        $perUnit,
-        $signTill,
-        $quantityTill,
-        $perUnit1
-    ) {
-        if (empty($this->progressivePrice[$type])) {
-            $this->progressivePrice[$type] = [
-                'price' => $price,
-                'currency' => $currency,
-                'unit' => $unit,
-                'condition' =>[
-                    [
-                        'sign_till' => $signFrom,
-                        'value_till' => $quantityFrom,
-                    ],
-                ] ,
-            ];
-        } else {
-            array_push(
-                $this->progressivePrice[$type]['condition'],
-                [
-                    'sign_from' => $signFrom,
-                    'value_from' => $quantityFrom,
-                    'sign_till' => $signTill,
-                    'value_till' => $quantityTill,
+                    'price' => $price,
+                    'currency' => $currency,
+                    'value' => $quantity,
                 ]
             );
         }
@@ -194,10 +156,10 @@ class BillingContext extends BaseContext
         foreach ($this->progressivePrice as $type => $price) {
             $this->fullPrice([
                 'type' => $type,
-                'price' => $price['price'],
+                'price' => 0,
                 'currency' => $price['currency'],
                 'unit' => $price['unit'],
-                'condition' => $price['condition']
+                'data' => ['thresholds' => $price['thresholds'], 'class' => 'progressive'],
             ]);
         }
     }

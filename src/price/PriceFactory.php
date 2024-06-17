@@ -21,11 +21,13 @@ class PriceFactory implements PriceFactoryInterface
         EnumPrice::class    => 'createEnumPrice',
         RatePrice::class    => 'createRatePrice',
         SinglePrice::class  => 'createSinglePrice',
+        ProgressivePrice::class => 'createProgressivePrice',
     ];
 
     protected $types = [
         'enum'      => EnumPrice::class,
         'single'    => SinglePrice::class,
+        'progressive' => ProgressivePrice::class,
     ];
 
     /**
@@ -88,5 +90,10 @@ class PriceFactory implements PriceFactoryInterface
     public function createSinglePrice(PriceCreationDto $dto)
     {
         return new SinglePrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->prepaid, $dto->price);
+    }
+
+    public function createProgressivePrice(PriceCreationDto $dto): ProgressivePrice
+    {
+        return new ProgressivePrice($dto->id, $dto->type, $dto->target, $dto->prepaid, $dto->thresholds, $dto->plan);
     }
 }

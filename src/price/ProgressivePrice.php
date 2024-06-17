@@ -14,13 +14,8 @@ use Money\Money;
 
 class ProgressivePrice extends AbstractPrice
 {
-    /* @psalm-var array{array{
-     * "price": numeric,
-     * "currency": string,
-     * "value": numeric,
-     * }} $condition
-     */
-    protected array $condition;
+    /* @var ProgressivePriceConditionDto[] $thresholds */
+    protected array $thresholds;
     /**
      * @var QuantityInterface prepaid quantity also implies Unit
      * XXX cannot be null cause Unit is required
@@ -32,12 +27,12 @@ class ProgressivePrice extends AbstractPrice
         TypeInterface $type,
         TargetInterface $target,
         QuantityInterface $prepaid,
-        array $condition,
-        PlanInterface $plan = null,
+        array $thresholds,
+        ?PlanInterface $plan = null
     ) {
         parent::__construct($id, $type, $target, $plan);
         $this->prepaid = $prepaid;
-        $this->condition = $condition;
+        $this->thresholds = $thresholds;
     }
 
     public function getPrepaid()
@@ -45,22 +40,16 @@ class ProgressivePrice extends AbstractPrice
         return $this->prepaid;
     }
 
-    public function getCondition(): array
+    public function getThresholds(): array
     {
-        return $this->condition;
+        return $this->thresholds;
     }
 
-    public function setCondition(string $key, array $condition): self
+    private function prepareThresholds(): void
     {
-        $this->condition[] = $condition;
-        return $this;
-    }
-
-    private function prepareCondition(): void
-    {
-        usort($this->condition, function($a, $b)
+        usort($this->thresholds, function($a, $b)
             {
-                return $b['value'] <=> $a['value'];
+                return $b->value <=> $a->value;
             }
         );
     }
@@ -85,21 +74,21 @@ class ProgressivePrice extends AbstractPrice
     public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         $result = null;
-        $this->prepareCondition();
+        $this->prepareThresholds();
         $usage = $this->calculateUsage($quantity);
         $quantity = $usage->getQuantity();
-        foreach ($this->condition as $key => $condition) {
-            if  ($condition['value'] < $quantity) {
-                if ($key !== count($this->condition) - 1) {
-                    $boundary = $quantity - $condition['value'];
-                    $result += $boundary * $condition['price'];
+        foreach ($this->thresholds as $key => $threshold) {
+            if  ($threshold->value < $quantity) {
+                if ($key !== count($this->thresholds) - 1) {
+                    $boundary = $quantity - $threshold->value;
+                    $result += $boundary * $threshold->price;
                     $quantity = $quantity - $boundary;
                 } else {
-                    $result += $quantity * $condition['price'];
+                    $result += $quantity * $threshold->price;
                 }
             }
         }
-        return new Money((int)($result * 100), new Currency($condition['currency']));
+        return new Money((int)($result * 100), $threshold->currency);
     }
 
     public function calculateSum(QuantityInterface $quantity): ?Money
