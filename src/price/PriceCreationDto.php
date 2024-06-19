@@ -71,6 +71,6 @@ class PriceCreationDto
     /** @var float */
     public $rate;
 
-    /** @var ProgressivePriceThresholdsDto[]  */
+    /** @var ProgressivePriceThreshold[]  */
     public array $thresholds = [];
 }

@@ -12,46 +12,29 @@ use hiqdev\php\units\QuantityInterface;
 use Money\Currency;
 use Money\Money;
 
-class ProgressivePrice extends AbstractPrice
+class ProgressivePrice extends SinglePrice
 {
-    /* @var ProgressivePriceConditionDto[] $thresholds */
-    protected array $thresholds;
-    /**
-     * @var QuantityInterface prepaid quantity also implies Unit
-     * XXX cannot be null cause Unit is required
-     */
-    protected $prepaid;
+    protected ProgressivePriceThresholds $thresholds;
 
     public function __construct(
         $id,
         TypeInterface $type,
         TargetInterface $target,
         QuantityInterface $prepaid,
+        Money $price,
         array $thresholds,
         ?PlanInterface $plan = null
     ) {
-        parent::__construct($id, $type, $target, $plan);
-        $this->prepaid = $prepaid;
-        $this->thresholds = $thresholds;
+        parent::__construct($id, $type, $target, $plan, $prepaid, $price);
+        $this->thresholds = new ProgressivePriceThresholds($thresholds);
     }
 
-    public function getPrepaid()
-    {
-        return $this->prepaid;
-    }
-
+    /**
+     * @return ProgressivePriceThresholds
+     */
     public function getThresholds(): array
     {
         return $this->thresholds;
-    }
-
-    private function prepareThresholds(): void
-    {
-        usort($this->thresholds, function($a, $b)
-            {
-                return $b->value <=> $a->value;
-            }
-        );
     }
 
     /**
@@ -59,36 +42,51 @@ class ProgressivePrice extends AbstractPrice
      */
     public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface
     {
-        $usage = $quantity->convert($this->prepaid->getUnit())->subtract($this->prepaid);
+        $usage = $quantity->convert($this->prepaid->getUnit());
 
         if ($usage->isPositive()) {
             return $usage;
         }
 
-        return Quantity::create($this->prepaid->getUnit()->getName(), 0);
+        return Quantity::create($this->prepaid->getUnit()->getName(), $quantity->getQuantity());
     }
 
     /**
      * @inheritDoc
      */
-    public function calculatePrice(QuantityInterface $quantity): ?Money
+    public function calculatePrice(QuantityInterface $quantity): Money
     {
-        $result = null;
-        $this->prepareThresholds();
+        $result = new Money(0, $this->price->getCurrency());
         $usage = $this->calculateUsage($quantity);
-        $quantity = $usage->getQuantity();
-        foreach ($this->thresholds as $key => $threshold) {
-            if  ($threshold->value < $quantity) {
-                if ($key !== count($this->thresholds) - 1) {
-                    $boundary = $quantity - $threshold->value;
-                    $result += $boundary * $threshold->price;
-                    $quantity = $quantity - $boundary;
+        $thresholds = $this->thresholds->get();
+        $usageCur = null;
+        foreach ($thresholds as $key => $threshold) {
+            if (is_null($usageCur)) {
+                $usageCur = PriceHelper::buildQuantityByMoneyPrice(
+                    $threshold->getBasePrice(),
+                    $usage->getUnit()->getName(),
+                    (string)$usage->getQuantity()
+                );
+            }
+            if  ($threshold->quantity()->compare($usageCur) < 0) {
+                if ($key !== count($thresholds) - 1) {
+                    $boundary = $usageCur->subtract($threshold->quantity());
+                    $result = $result->add(new Money(
+                            $boundary->multiply($threshold->price()->getAmount())->getQuantity(),
+                            $threshold->price()->getCurrency()
+                        )
+                    );
+                    $usageCur = $usageCur->subtract($boundary);
                 } else {
-                    $result += $quantity * $threshold->price;
+                    $result = $result->add(new Money(
+                            (int) $usage->multiply($threshold->price()->getAmount())->getQuantity(),
+                            $threshold->price()->getCurrency()
+                        )
+                    );
                 }
             }
         }
-        return new Money((int)($result * 100), $threshold->currency);
+        return $result;
     }
 
     public function calculateSum(QuantityInterface $quantity): ?Money
