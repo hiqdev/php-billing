@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\units\Unit;
 use Money\Money;
 use hiqdev\php\units\Quantity;
 
 class ProgressivePriceThreshold
 {
-    private string $price;
+    public string $price;
 
-    private string $currency;
+    public string $currency;
 
-    private string $quantity;
+    public string $quantity;
 
-    private string $unit;
+    public string $unit;
 
     private function __construct(string $price, string $currency, string $quantity, string $unit)
     {
@@ -57,7 +58,7 @@ class ProgressivePriceThreshold
      */
     public function quantity(): Quantity
     {
-        return PriceHelper::buildQuantityByMoneyPrice($this->price, $this->unit, $this->quantity);
+        return Quantity::create(Unit::create($this->unit), $this->quantity);
     }
 
     public function getBasePrice(): string

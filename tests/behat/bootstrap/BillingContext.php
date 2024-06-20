@@ -132,7 +132,8 @@ class BillingContext extends BaseContext
                     [
                         'price' => $price,
                         'currency' => $currency,
-                        'value' => $quantity,
+                        'quantity' => $quantity,
+                        'unit' => $unit,
                     ],
                 ] ,
             ];
@@ -142,7 +143,8 @@ class BillingContext extends BaseContext
                 [
                     'price' => $price,
                     'currency' => $currency,
-                    'value' => $quantity,
+                    'quantity' => $quantity,
+                    'unit' => $unit,
                 ]
             );
         }
@@ -159,7 +161,7 @@ class BillingContext extends BaseContext
                 'price' => 0,
                 'currency' => $price['currency'],
                 'unit' => $price['unit'],
-                'data' => ['thresholds' => $price['thresholds'], 'class' => 'progressive'],
+                'data' => ['thresholds' => $price['thresholds'], 'class' => 'ProgressivePrice'],
             ]);
         }
     }

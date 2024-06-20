@@ -9,12 +9,18 @@ use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
+use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
+use Money\Parser\DecimalMoneyParser;
 
-class ProgressivePrice extends SinglePrice
+class ProgressivePrice extends AbstractPrice
 {
     protected ProgressivePriceThresholds $thresholds;
+
+    protected Money $price;
+
+    protected QuantityInterface $prepaid;
 
     public function __construct(
         $id,
@@ -25,16 +31,28 @@ class ProgressivePrice extends SinglePrice
         array $thresholds,
         ?PlanInterface $plan = null
     ) {
-        parent::__construct($id, $type, $target, $plan, $prepaid, $price);
+        parent::__construct($id, $type, $target, $plan);
         $this->thresholds = new ProgressivePriceThresholds($thresholds);
+        $this->price = $price;
+        $this->prepaid = $prepaid;
     }
 
     /**
      * @return ProgressivePriceThresholds
      */
-    public function getThresholds(): array
+    public function getThresholds(): ProgressivePriceThresholds
     {
         return $this->thresholds;
+    }
+
+    public function getPrepaid(): QuantityInterface
+    {
+        return $this->prepaid;
+    }
+
+    public function getPrice(): Money
+    {
+        return $this->price;
     }
 
     /**
@@ -54,43 +72,28 @@ class ProgressivePrice extends SinglePrice
     /**
      * @inheritDoc
      */
-    public function calculatePrice(QuantityInterface $quantity): Money
+    public function calculatePrice(QuantityInterface $quantity): ?Money
     {
-        $result = new Money(0, $this->price->getCurrency());
-        $usage = $this->calculateUsage($quantity);
-        $thresholds = $this->thresholds->get();
-        $usageCur = null;
-        foreach ($thresholds as $key => $threshold) {
-            if (is_null($usageCur)) {
-                $usageCur = PriceHelper::buildQuantityByMoneyPrice(
-                    $threshold->getBasePrice(),
-                    $usage->getUnit()->getName(),
-                    (string)$usage->getQuantity()
-                );
-            }
-            if  ($threshold->quantity()->compare($usageCur) < 0) {
-                if ($key !== count($thresholds) - 1) {
-                    $boundary = $usageCur->subtract($threshold->quantity());
-                    $result = $result->add(new Money(
-                            $boundary->multiply($threshold->price()->getAmount())->getQuantity(),
-                            $threshold->price()->getCurrency()
-                        )
-                    );
-                    $usageCur = $usageCur->subtract($boundary);
-                } else {
-                    $result = $result->add(new Money(
-                            (int) $usage->multiply($threshold->price()->getAmount())->getQuantity(),
-                            $threshold->price()->getCurrency()
-                        )
-                    );
-                }
-            }
-        }
-        return $result;
+        return $this->price;
     }
 
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
-        return $this->calculatePrice($quantity);
+        $result = new Money(0, $this->price->getCurrency());
+        $usage = $this->calculateUsage($quantity);
+        $thresholds = $this->thresholds->get();
+        foreach ($thresholds as $key => $threshold) {
+            if  ($threshold->quantity()->compare($usage) < 0) {
+                    $boundary = $usage->subtract($threshold->quantity());
+                    $result = $result->add(new Money(
+                            (int) $boundary->multiply($threshold->price()->getAmount())->getQuantity(),
+                            $threshold->price()->getCurrency()
+                        )
+                    );
+                    $usage = $usage->subtract($boundary);
+            }
+        }
+        $result = (new DecimalMoneyParser(new ISOCurrencies()))->parse($result->getAmount(), $result->getCurrency());
+        return $result->divide($this->thresholds->getPriceRate());
     }
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\price;
 
-use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
+use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
+use Money\Parser\DecimalMoneyParser;
 
 class PriceHelper
 {
@@ -16,35 +16,37 @@ class PriceHelper
         if (!is_numeric($price)) {
             throw new \InvalidArgumentException('price of the Money must be numeric');
         }
-        if (is_int($price)) {
+        if (!self::checkFloat($price)) {
             return new Money($price, new Currency($currency));
         }
         if (!is_int($price) && ($price * 100) == ((int) ($price * 100))) {
-            return new Money((int) $price * 100, new Currency($currency));
+            return (new DecimalMoneyParser(new ISOCurrencies()))->parse($price, new Currency($currency));
         }
-        list($int, $float) = explode('.', $price);
         return new Money(
-            (int) ($price * (int) (1 . implode(array_fill(0, strlen($float),0)))),
+            (int) ($price * self::calculatePriceRate($price)),
             new Currency($currency)
         );
     }
 
-    public static function buildQuantityByMoneyPrice(string $price, string $unit, string $quantity): ?Quantity
+    public static function calculatePriceRate(string $price): int
     {
-        if (!is_numeric($price)) {
-            throw new \InvalidArgumentException('price of the Money must be numeric');
+        $price = self::divide($price);
+        if (!is_array($price)) {
+            return 1;
         }
-        if (is_int($price)) {
-            return Quantity::create(Unit::create($unit), $quantity);
-        }
-        if (!is_int((int) $price) && ($price * 100) == ((int) ($price * 100))) {
-            return Quantity::create(Unit::create($unit), $quantity * 100);
-        }
-        list($int, $float) = explode('.', $price);
-        return Quantity::create(
-            Unit::create($unit),
-            $quantity * (int) (1 . implode(array_fill(0, strlen($float),0)))
-        );
+        return (int) (1 . implode(array_fill(0, strlen($price[1]),0)));
     }
 
+    private static function divide(string $number): array | string
+    {
+        if (self::checkFloat($number)) {
+            return explode('.', $number);
+        }
+        return $number;
+    }
+
+    private static function checkFloat(string $number): bool
+    {
+        return strpos($number, '.') > 0;
+    }
 }

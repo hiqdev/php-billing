@@ -22,16 +22,19 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\price\PriceHelper;
 use hiqdev\php\billing\price\ProgressivePrice;
-use hiqdev\php\billing\price\ProgressivePriceThresholdsDto;
+use hiqdev\php\billing\price\ProgressivePriceThreshold;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\Unit;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
+use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
@@ -105,15 +108,26 @@ class FeatureContext implements Context
             $this->progressivePrice[$type] = [
                 'target' => $target,
                 'unit' => $unit,
+                'price' => $price,
                 'currency' => $currency,
                 'thresholds' =>[
-                    new ProgressivePriceThresholdsDto($price, new Currency($currency), $quantity)
+                    [
+                        'price' => $price,
+                        'currency' => $currency,
+                        'unit' => $unit,
+                        'quantity' => $quantity,
+                    ]
                 ],
             ];
         } else {
             array_push(
                 $this->progressivePrice[$type]['thresholds'],
-                new ProgressivePriceThresholdsDto($price, new Currency($currency), $quantity)
+                [
+                    'price' => $price,
+                    'currency' => $currency,
+                    'unit' => $unit,
+                    'quantity' => $quantity,
+                ]
             );
         }
     }
@@ -126,8 +140,9 @@ class FeatureContext implements Context
         foreach ($this->progressivePrice as $type => $price) {
             $type = new Type(Type::ANY, $type);
             $target = new Target(Target::ANY, $price['target']);
-            $quantity = Quantity::create($price['unit'], 1);
-            $this->setPrice(new ProgressivePrice(null, $type, $target, $quantity, $price['thresholds']));
+            $quantity = Quantity::create(Unit::create($price['unit']), 1);
+            $money = PriceHelper::buildMoney($price['price'], $price['currency']);
+            $this->setPrice(new ProgressivePrice(null, $type, $target, $quantity, $money, $price['thresholds']));
         }
     }
 

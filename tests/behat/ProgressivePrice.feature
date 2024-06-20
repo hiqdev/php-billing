@@ -14,4 +14,4 @@ Feature: Progressive price fee
      Then first charge is <first>
     Examples:
       | date       | overuse   | first                            |
-      | 2024-01-01 | 720 Mbps  | overuse,cdn_traf95_max 5.93 USD  |
+      | 2024-01-01 | 720 Mbps  | overuse,cdn_traf95_max 5.94 USD  |

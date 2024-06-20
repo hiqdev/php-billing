@@ -11,7 +11,9 @@ use Money\Money;
 final class ProgressivePriceThresholds
 {
     /** @var ProgressivePriceThreshold[] */
-   private array $thresholds;
+    public array $thresholds;
+
+    private int $priceRate = 0;
 
     /**
      * @param ProgressivePriceThreshold[] $thresholds
@@ -20,13 +22,14 @@ final class ProgressivePriceThresholds
    {
        foreach ($thresholds as $threshold) {
            $this->add(ProgressivePriceThreshold::createFromScalar(
-                   $threshold['price'],
-                   $threshold['currency'],
-                   $threshold['quantity'],
-                   $threshold['unit'],
+                    (string) $threshold['price'],
+                    (string) $threshold['currency'],
+                    (string) $threshold['quantity'],
+                    (string) $threshold['unit'],
                )
            );
        }
+       $this->priceRate = PriceHelper::calculatePriceRate((string)$threshold['price']);
    }
 
    public function add(ProgressivePriceThreshold $threshold): void
@@ -40,6 +43,11 @@ final class ProgressivePriceThresholds
     {
         $this->prepareThresholds();
         return $this->thresholds;
+    }
+
+    public function getPriceRate(): int
+    {
+        return $this->priceRate;
     }
 
     private function prepareThresholds(): void
