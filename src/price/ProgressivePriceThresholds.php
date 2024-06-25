@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\price;
 
+use JsonSerializable;
 use hiqdev\php\units\Quantity;
 use InvalidArgumentException;
 use Money\Money;
 
-final class ProgressivePriceThresholds
+final class ProgressivePriceThresholds implements JsonSerializable
 {
     /** @var ProgressivePriceThreshold[] */
-    public array $thresholds;
+    private array $thresholds;
 
     private int $priceRate = 0;
 
@@ -109,5 +110,11 @@ final class ProgressivePriceThresholds
             $result[] = $threshold->__toArray();
         }
         return $result;
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->thresholds;
     }
 }

@@ -44,9 +44,7 @@ class ProgressivePriceTest extends \PHPUnit\Framework\TestCase
                     'type' => 'overuse,cdn_traf95_max',
                     'name' => 'ProgressivePrice'
                 ],
-                'thresholds' => [
-                    'thresholds' => $thresholds,
-                ],
+                'thresholds' => $thresholds,
                 'price' => [
                     "amount" => (string) (MoneyBuilder::calculatePriceMultiplier($startPrice) * $startPrice),
                     "currency" =>"EUR",

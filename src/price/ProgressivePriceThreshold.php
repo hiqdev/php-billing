@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\price;
 
 use InvalidArgumentException;
+use JsonSerializable;
 use hiqdev\php\units\Unit;
 use Money\Money;
 use hiqdev\php\units\Quantity;
 
-class ProgressivePriceThreshold
+class ProgressivePriceThreshold implements JsonSerializable
 {
-    public string $price;
+    private string $price;
 
-    public string $currency;
+    private string $currency;
 
-    public string $quantity;
+    private string $quantity;
 
-    public string $unit;
+    private string $unit;
 
     private function __construct(string $price, string $currency, string $quantity, string $unit)
     {
@@ -69,5 +70,11 @@ class ProgressivePriceThreshold
             'quantity' => $this->quantity,
             'unit' => $this->unit,
         ];
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
