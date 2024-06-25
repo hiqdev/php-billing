@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\price;
 
+use InvalidArgumentException;
 use hiqdev\php\units\Unit;
 use Money\Money;
 use hiqdev\php\units\Quantity;
@@ -21,11 +22,11 @@ class ProgressivePriceThreshold
     private function __construct(string $price, string $currency, string $quantity, string $unit)
     {
         if ($quantity < 0) {
-            throw new \InvalidArgumentException('Quantity of the progressive price threshold must be positive');
+            throw new InvalidArgumentException('Quantity of the progressive price threshold must be positive');
         }
 
         $this->price = $price;
-        $this->currency = $currency;
+        $this->currency = strtoupper($currency);
         $this->quantity = $quantity;
         $this->unit = $unit;
     }
@@ -45,17 +46,11 @@ class ProgressivePriceThreshold
         );
     }
 
-    /**
-     * @return Money
-     */
-    public function price(): Money
+    public function price(): ?Money
     {
-        return PriceHelper::buildMoney($this->price, $this->currency);
+        return MoneyBuilder::buildMoney($this->price, $this->currency);
     }
 
-    /**
-     * @return Quantity
-     */
     public function quantity(): Quantity
     {
         return Quantity::create(Unit::create($this->unit), $this->quantity);
@@ -64,5 +59,15 @@ class ProgressivePriceThreshold
     public function getBasePrice(): string
     {
         return $this->price;
+    }
+
+    public function __toArray(): array
+    {
+        return [
+            'price' => $this->price,
+            'currency' => $this->currency,
+            'quantity' => $this->quantity,
+            'unit' => $this->unit,
+        ];
     }
 }

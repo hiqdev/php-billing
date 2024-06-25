@@ -18,7 +18,9 @@ final class ProgressivePriceThresholds
     /**
      * @param ProgressivePriceThreshold[] $thresholds
      */
-   public function __construct(array $thresholds)
+   public function __construct(
+       array $thresholds
+   )
    {
        foreach ($thresholds as $threshold) {
            $this->add(ProgressivePriceThreshold::createFromScalar(
@@ -29,7 +31,7 @@ final class ProgressivePriceThresholds
                )
            );
        }
-       $this->priceRate = PriceHelper::calculatePriceRate((string)$threshold['price']);
+       $this->priceRate = MoneyBuilder::calculatePriceMultiplier((string)$threshold['price']);
    }
 
    public function add(ProgressivePriceThreshold $threshold): void
@@ -98,5 +100,14 @@ final class ProgressivePriceThresholds
     private function appendThresholds(ProgressivePriceThreshold $threshold): void
     {
         $this->thresholds[] = $threshold;
+    }
+
+    public function __toArray(): array
+    {
+        $result = [];
+        foreach ($this->thresholds as $threshold) {
+            $result[] = $threshold->__toArray();
+        }
+        return $result;
     }
 }

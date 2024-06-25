@@ -28,6 +28,15 @@ class ProgressivePrice extends AbstractPrice
         TargetInterface $target,
         QuantityInterface $prepaid,
         Money $price,
+        /* @psalm-var array{
+         *     array{
+         *         'price': string,
+         *         'currency': string,
+         *         'quantity': string,
+         *         'unit': string
+         *     }
+         * } $thresholds
+         */
         array $thresholds,
         ?PlanInterface $plan = null
     ) {
@@ -37,12 +46,9 @@ class ProgressivePrice extends AbstractPrice
         $this->prepaid = $prepaid;
     }
 
-    /**
-     * @return ProgressivePriceThresholds
-     */
-    public function getThresholds(): ProgressivePriceThresholds
+    public function getThresholds(): array
     {
-        return $this->thresholds;
+        return $this->thresholds->__toArray();
     }
 
     public function getPrepaid(): QuantityInterface
@@ -66,7 +72,7 @@ class ProgressivePrice extends AbstractPrice
             return $usage;
         }
 
-        return Quantity::create($this->prepaid->getUnit()->getName(), $quantity->getQuantity());
+        return Quantity::create($this->prepaid->getUnit()->getName(), 0);
     }
 
     /**

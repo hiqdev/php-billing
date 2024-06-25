@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\tests\unit\price;
 
-use hiqdev\php\billing\price\PriceHelper;
+use hiqdev\php\billing\price\MoneyBuilder;
 use hiqdev\php\billing\price\ProgressivePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
@@ -20,7 +20,7 @@ class ProgressivePriceTest extends \PHPUnit\Framework\TestCase
         $type = new Type('2222', 'cdn_traf95_max');
         $target = new Target('2222', 'overuse,cdn_traf95_max', 'ProgressivePrice');
         $prepaid = Quantity::mbps(0);
-        $money = PriceHelper::buildMoney((string)$startPrice, 'EUR');
+        $money = MoneyBuilder::buildMoney((string)$startPrice, 'EUR');
         $price = new ProgressivePrice('2222', $type, $target, $prepaid, $money, $thresholds);
         $this->assertSame(720, $price->calculateUsage(Quantity::mbps(720))->getQuantity());
         usort($thresholds, function($a, $b)
@@ -48,7 +48,7 @@ class ProgressivePriceTest extends \PHPUnit\Framework\TestCase
                     'thresholds' => $thresholds,
                 ],
                 'price' => [
-                    "amount" => (string) (PriceHelper::calculatePriceRate($startPrice) * $startPrice),
+                    "amount" => (string) (MoneyBuilder::calculatePriceMultiplier($startPrice) * $startPrice),
                     "currency" =>"EUR",
                 ],
                 'prepaid' => [

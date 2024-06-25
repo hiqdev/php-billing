@@ -9,7 +9,7 @@ use Money\Currency;
 use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 
-class PriceHelper
+class MoneyBuilder
 {
     public static function buildMoney(string $price, string $currency): ?Money
     {
@@ -23,12 +23,12 @@ class PriceHelper
             return (new DecimalMoneyParser(new ISOCurrencies()))->parse($price, new Currency($currency));
         }
         return new Money(
-            (int) ($price * self::calculatePriceRate($price)),
+            (int) ($price * self::calculatePriceMultiplier($price)),
             new Currency($currency)
         );
     }
 
-    public static function calculatePriceRate(string $price): int
+    public static function calculatePriceMultiplier(string $price): int
     {
         $price = self::divide($price);
         if (!is_array($price)) {
@@ -47,6 +47,6 @@ class PriceHelper
 
     private static function checkFloat(string $number): bool
     {
-        return strpos($number, '.') > 0;
+        return is_float($number + 0);
     }
 }

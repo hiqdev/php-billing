@@ -22,6 +22,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\price\MoneyBuilder;
 use hiqdev\php\billing\price\PriceHelper;
 use hiqdev\php\billing\price\ProgressivePrice;
 use hiqdev\php\billing\price\ProgressivePriceThreshold;
@@ -133,15 +134,15 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /^create progressive price/
+     * @Given /^build progressive price/
      */
-    public function createProgressivePrices()
+    public function buildProgressivePrices()
     {
         foreach ($this->progressivePrice as $type => $price) {
             $type = new Type(Type::ANY, $type);
             $target = new Target(Target::ANY, $price['target']);
             $quantity = Quantity::create(Unit::create($price['unit']), 1);
-            $money = PriceHelper::buildMoney($price['price'], $price['currency']);
+            $money = MoneyBuilder::buildMoney($price['price'], $price['currency']);
             $this->setPrice(new ProgressivePrice(null, $type, $target, $quantity, $money, $price['thresholds']));
         }
     }

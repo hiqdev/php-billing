@@ -151,9 +151,9 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /^create progressive price/
+     * @Given /^build progressive price/
      */
-    public function createProgressivePrices()
+    public function buildProgressivePrices()
     {
         foreach ($this->progressivePrice as $type => $price) {
             $this->fullPrice([
