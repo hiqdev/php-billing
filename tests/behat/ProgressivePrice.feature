@@ -8,7 +8,7 @@ Feature: Progressive price fee
       And target progressive price for overuse,cdn_traf95_max is     0.0065 USD per Mbps over 800 Mbps
      Then build progressive price
 
-  Scenario Outline: Monthly fee for fraction of month
+  Scenario Outline: Monthly fee per month
     Given action is target overuse,cdn_traf95_max <overuse>
      When action date is <date>
      Then first charge is <first>
