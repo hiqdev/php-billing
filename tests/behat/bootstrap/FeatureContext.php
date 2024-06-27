@@ -22,14 +22,20 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\formula\FormulaEngine;
 use hiqdev\php\billing\plan\Plan;
+use hiqdev\php\billing\price\MoneyBuilder;
+use hiqdev\php\billing\price\PriceHelper;
+use hiqdev\php\billing\price\ProgressivePrice;
+use hiqdev\php\billing\price\ProgressivePriceThreshold;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\Unit;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
+use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
@@ -92,6 +98,53 @@ class FeatureContext implements Context
         $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, new Currency($currency));
         $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
+    }
+
+    /**
+     * @Given /(\S+) progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+)$/
+     */
+    public function progressivePrice($target, $type, $price, $currency, $unit, $sign, $quantity, $perUnit): void
+    {
+        if (empty($this->progressivePrice[$type])) {
+            $this->progressivePrice[$type] = [
+                'target' => $target,
+                'unit' => $unit,
+                'price' => $price,
+                'currency' => $currency,
+                'thresholds' =>[
+                    [
+                        'price' => $price,
+                        'currency' => $currency,
+                        'unit' => $unit,
+                        'quantity' => $quantity,
+                    ]
+                ],
+            ];
+        } else {
+            array_push(
+                $this->progressivePrice[$type]['thresholds'],
+                [
+                    'price' => $price,
+                    'currency' => $currency,
+                    'unit' => $unit,
+                    'quantity' => $quantity,
+                ]
+            );
+        }
+    }
+
+    /**
+     * @Given /^build progressive price/
+     */
+    public function buildProgressivePrices()
+    {
+        foreach ($this->progressivePrice as $type => $price) {
+            $type = new Type(Type::ANY, $type);
+            $target = new Target(Target::ANY, $price['target']);
+            $quantity = Quantity::create(Unit::create($price['unit']), 1);
+            $money = MoneyBuilder::buildMoney($price['price'], $price['currency']);
+            $this->setPrice(new ProgressivePrice(null, $type, $target, $quantity, $money, $price['thresholds']));
+        }
     }
 
     /**

@@ -31,6 +31,8 @@ class BillingContext extends BaseContext
 
     protected $charges = [];
 
+    protected array $progressivePrice = [];
+
     /**
      * @Given reseller :reseller
      */
@@ -114,6 +116,54 @@ class BillingContext extends BaseContext
         $sums = [1 => $price, 2 => $price2];
 
         return $this->fullPrice(compact('type', 'sums', 'currency', 'unit', 'target'));
+    }
+
+    /**
+     * @Given /progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+)$/
+     */
+    public function progressivePrice($type, $price, $currency, $unit, $sign, $quantity, $perUnit): void
+    {
+        if (empty($this->progressivePrice[$type])) {
+            $this->progressivePrice[$type] = [
+                'price' => 0,
+                'currency' => $currency,
+                'unit' => $unit,
+                'thresholds' =>[
+                    [
+                        'price' => $price,
+                        'currency' => $currency,
+                        'quantity' => $quantity,
+                        'unit' => $unit,
+                    ],
+                ] ,
+            ];
+        } else {
+            array_push(
+                $this->progressivePrice[$type]['thresholds'],
+                [
+                    'price' => $price,
+                    'currency' => $currency,
+                    'quantity' => $quantity,
+                    'unit' => $unit,
+                ]
+            );
+        }
+    }
+
+    /**
+     * @Given /^build progressive price/
+     */
+    public function buildProgressivePrices()
+    {
+        foreach ($this->progressivePrice as $type => $price) {
+            $this->fullPrice([
+                'type' => $type,
+                'price' => 0,
+                'currency' => $price['currency'],
+                'unit' => $price['unit'],
+                'data' => ['thresholds' => $price['thresholds'], 'class' => 'ProgressivePrice'],
+            ]);
+        }
     }
 
     /**
