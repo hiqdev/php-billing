@@ -4,66 +4,93 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\Money\MultipliedMoney;
 use JsonSerializable;
 use hiqdev\php\units\Quantity;
 use InvalidArgumentException;
-use Money\Money;
 
 final class ProgressivePriceThresholds implements JsonSerializable
 {
     /** @var ProgressivePriceThreshold[] */
     private array $thresholds;
 
-    private int $priceRate = 0;
-
     /**
      * @param ProgressivePriceThreshold[] $thresholds
      */
-   public function __construct(
-       array $thresholds
-   )
-   {
-       foreach ($thresholds as $threshold) {
-           $this->add(ProgressivePriceThreshold::createFromScalar(
-                    (string) $threshold['price'],
-                    (string) $threshold['currency'],
-                    (string) $threshold['quantity'],
-                    (string) $threshold['unit'],
-               )
-           );
-       }
-       $this->priceRate = MoneyBuilder::calculatePriceMultiplier((string)$threshold['price']);
-   }
+    public function __construct(array $thresholds)
+    {
+        foreach ($thresholds as $threshold) {
+            $this->checkCanBeAdded($threshold);
+            $this->appendThresholds($threshold);
+        }
 
-   public function add(ProgressivePriceThreshold $threshold): void
-   {
-      $this->checkCurrency($threshold->price());
-      $this->checkUnit($threshold->quantity());
-      $this->appendThresholds($threshold);
-   }
+        if (empty($this->thresholds)) {
+            throw new InvalidArgumentException('Progressive price thresholds must not be empty');
+        }
+    }
 
+    /**
+     * @param array{
+     *     price: numeric-string,
+     *     currency: string,
+     *     quantity: numeric-string,
+     *     unit: string
+     * } $thresholds
+     */
+    public static function fromScalarsArray(array $thresholds): self
+    {
+        return new self(array_map(function ($threshold) {
+            return ProgressivePriceThreshold::createFromScalar(
+                $threshold['price'],
+                $threshold['currency'],
+                $threshold['quantity'],
+                $threshold['unit']
+            );
+        }, $thresholds));
+    }
+
+    private function checkCanBeAdded(ProgressivePriceThreshold $threshold): void
+    {
+        $this->checkCurrency($threshold->price());
+        $this->checkUnit($threshold->quantity());
+    }
+
+    public function withAdded(ProgressivePriceThreshold $threshold): self
+    {
+        $this->checkCanBeAdded($threshold);
+
+        $self = clone $this;
+        $self->appendThresholds($threshold);
+
+        return $self;
+    }
+
+    /**
+     * @return ProgressivePriceThreshold[]
+     */
     public function get(): array
     {
         $this->prepareThresholds();
+
         return $this->thresholds;
     }
 
-    public function getPriceRate(): int
+    public function least(): ProgressivePriceThreshold
     {
-        return $this->priceRate;
+        return $this->thresholds[0];
     }
 
     private function prepareThresholds(): void
     {
         usort($this->thresholds, function (ProgressivePriceThreshold $a, ProgressivePriceThreshold $b) {
-            if ($b->quantity()->equals($a->quantity())) {
+            if ($b->quantity()->convert($a->quantity()->getUnit())->equals($a->quantity())) {
                 return $b->price()->getAmount() <=> $a->price()->getAmount();
             }
-            return $b->quantity()->getQuantity() <=> $a->quantity()->getQuantity();
+            return $b->quantity()->convert($a->quantity()->getUnit())->getQuantity() <=> $a->quantity()->getQuantity();
         });
     }
 
-    private function checkCurrency(Money $price): void
+    private function checkCurrency(MultipliedMoney $price): void
     {
         if (empty($this->thresholds)) {
             return;
@@ -71,13 +98,14 @@ final class ProgressivePriceThresholds implements JsonSerializable
 
         $last = $this->thresholds[array_key_last($this->thresholds)];
 
-        if (!$last->price()->getCurrency()->equals($price->getCurrency())
-        ) {
-            throw new InvalidArgumentException(sprintf(
-                "Progressive price with threshold currency %s is not valid to other threshold currency %s",
-                $last->price()->getCurrency()->getCode(),
-                $price->getCurrency()->getCode()
-            ));
+        if (!$last->price()->getCurrency()->equals($price->getCurrency())) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Progressive price thresholds must have the same currency, last is %s, new is %s",
+                    $last->price()->getCurrency()->getCode(),
+                    $price->getCurrency()->getCode()
+                )
+            );
         }
     }
 
@@ -90,11 +118,13 @@ final class ProgressivePriceThresholds implements JsonSerializable
         $last = $this->thresholds[array_key_last($this->thresholds)];
 
         if (!$last->quantity()->getUnit()->isConvertible($prepaid->getUnit())) {
-            throw new InvalidArgumentException(sprintf(
-                "Progressive price with threshold unit %s is not convertible to other threshold unit %s",
-                $last->quantity()->getUnit()->getName(),
-                $prepaid->getUnit()->getName()
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Progressive price thresholds must be of the same unit family, last is %s, new is %s",
+                    $last->quantity()->getUnit()->getName(),
+                    $prepaid->getUnit()->getName()
+                )
+            );
         }
     }
 
