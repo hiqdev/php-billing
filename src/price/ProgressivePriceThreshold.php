@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\price;
 
+use hiqdev\php\billing\Money\MultipliedMoney;
+use hiqdev\php\units\Unit;
+use hiqdev\php\units\UnitInterface;
 use InvalidArgumentException;
 use JsonSerializable;
-use hiqdev\php\units\Unit;
 use Money\Money;
 use hiqdev\php\units\Quantity;
 
 class ProgressivePriceThreshold implements JsonSerializable
 {
+    /**
+     * @var numeric-string $price The price of the progressive price threshold in currency (not cents)
+     */
     private string $price;
 
     private string $currency;
@@ -37,24 +42,29 @@ class ProgressivePriceThreshold implements JsonSerializable
         return new self($price, $currency, $quantity, $unit);
     }
 
-    public static function createFromObjects(Money $price, Quantity $quantity)
+    public static function createFromObjects(Money $price, Quantity $quantity): self
     {
         return new self(
-            $price->getAmount(),
+            (string)((int)$price->getAmount() / 100), // TODO: Might be not 100 for some currencies
             $price->getCurrency()->getCode(),
-            $quantity->getQuantity(),
+            (string)$quantity->getQuantity(),
             $quantity->getUnit()->getName()
         );
     }
 
-    public function price(): ?Money
+    public function price(): ?MultipliedMoney
     {
-        return MoneyBuilder::buildMoney($this->price, $this->currency);
+        return MultipliedMoney::create($this->price, $this->currency);
     }
 
     public function quantity(): Quantity
     {
-        return Quantity::create(Unit::create($this->unit), $this->quantity);
+        return Quantity::create($this->unit, $this->quantity);
+    }
+
+    public function unit(): UnitInterface
+    {
+        return Unit::create($this->unit);
     }
 
     public function getBasePrice(): string
@@ -75,6 +85,6 @@ class ProgressivePriceThreshold implements JsonSerializable
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
-        return get_object_vars($this);
+        return $this->__toArray();
     }
 }
