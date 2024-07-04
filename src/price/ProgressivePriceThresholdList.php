@@ -9,7 +9,7 @@ use JsonSerializable;
 use hiqdev\php\units\Quantity;
 use InvalidArgumentException;
 
-final class ProgressivePriceThresholds implements JsonSerializable
+final class ProgressivePriceThresholdList implements JsonSerializable
 {
     /** @var ProgressivePriceThreshold[] */
     private array $thresholds;

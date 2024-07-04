@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\tests\unit\price;
 
 use hiqdev\php\billing\price\ProgressivePriceThreshold;
-use hiqdev\php\billing\price\ProgressivePriceThresholds;
+use hiqdev\php\billing\price\ProgressivePriceThresholdList;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -13,13 +13,13 @@ use PHPUnit\Framework\TestCase;
  * Class ProgressivePriceThresholdsTest
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- * @covers \hiqdev\php\billing\price\ProgressivePriceThresholds
+ * @covers \hiqdev\php\billing\price\ProgressivePriceThresholdList
  */
 class ProgressivePriceThresholdsTest extends TestCase
 {
     public function testCreateFromScalarsArray(): void
     {
-        $thresholds = ProgressivePriceThresholds::fromScalarsArray([
+        $thresholds = ProgressivePriceThresholdList::fromScalarsArray([
             [
                 'price' => '10.22',
                 'currency' => 'USD',
@@ -39,7 +39,7 @@ class ProgressivePriceThresholdsTest extends TestCase
 
     public function testWithAdded(): void
     {
-        $thresholds = new ProgressivePriceThresholds([
+        $thresholds = new ProgressivePriceThresholdList([
             ProgressivePriceThreshold::createFromScalar(
                 '10.22',
                 'USD',
@@ -72,7 +72,7 @@ class ProgressivePriceThresholdsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Progressive price thresholds must have the same currency');
-        new ProgressivePriceThresholds([
+        new ProgressivePriceThresholdList([
             ProgressivePriceThreshold::createFromScalar(
                 '10.22',
                 'USD',
@@ -92,7 +92,7 @@ class ProgressivePriceThresholdsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Progressive price thresholds must be of the same unit family');
-        new ProgressivePriceThresholds([
+        new ProgressivePriceThresholdList([
             ProgressivePriceThreshold::createFromScalar(
                 '10.22',
                 'USD',
@@ -110,7 +110,7 @@ class ProgressivePriceThresholdsTest extends TestCase
 
     public function testToArray(): void
     {
-        $thresholds = new ProgressivePriceThresholds([
+        $thresholds = new ProgressivePriceThresholdList([
             ProgressivePriceThreshold::createFromScalar(
                 '10.22',
                 'USD',
@@ -143,7 +143,7 @@ class ProgressivePriceThresholdsTest extends TestCase
 
     public function testJsonSerializable(): void
     {
-        $thresholds = new ProgressivePriceThresholds([
+        $thresholds = new ProgressivePriceThresholdList([
             ProgressivePriceThreshold::createFromScalar(
                 '10.22',
                 'USD',

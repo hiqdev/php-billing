@@ -94,7 +94,7 @@ class PriceFactory implements PriceFactoryInterface
 
     public function createProgressivePrice(PriceCreationDto $dto): ProgressivePrice
     {
-        $thresholds = ProgressivePriceThresholds::fromScalarsArray($dto->thresholds);
+        $thresholds = ProgressivePriceThresholdList::fromScalarsArray($dto->thresholds);
 
         return new ProgressivePrice($dto->id, $dto->type, $dto->target, $dto->prepaid, $dto->price, $thresholds, $dto->plan);
     }

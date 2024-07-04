@@ -6,7 +6,7 @@ namespace hiqdev\php\billing\tests\unit\price;
 
 use Generator;
 use hiqdev\php\billing\price\ProgressivePrice;
-use hiqdev\php\billing\price\ProgressivePriceThresholds;
+use hiqdev\php\billing\price\ProgressivePriceThresholdList;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
@@ -35,9 +35,30 @@ class ProgressivePriceTest extends TestCase
         $target = new Target('2222', 'overuse,cdn_traf95_max', 'ProgressivePrice');
         $prepaid = Quantity::mbps($prepaid);
         $money = $this->moneyParser->parse($startPrice, new Currency('EUR'));
-        $thresholds = ProgressivePriceThresholds::fromScalarsArray($thresholdsArray);
+        $thresholds = ProgressivePriceThresholdList::fromScalarsArray($thresholdsArray);
 
         return new ProgressivePrice('2222', $type, $target, $prepaid, $money, $thresholds);
+    }
+
+    /** @dataProvider progressivePriceProvider */
+    public function testUsageIsConvertedToThresholdUnits(
+        array $thresholdsArray,
+        int $expectedAmount,
+        string $startPrice,
+        string $prepaid = '0',
+        array $expectedTrace = [],
+    ): void {
+        $this->usage = Quantity::gbps(0.72);
+        $price = $this->createProgressivePrice(
+            prepaid: $prepaid,
+            startPrice: $startPrice,
+            thresholdsArray: $thresholdsArray
+        );
+
+        $amount = $price->calculateSum($this->usage);
+        $this->assertEquals($expectedAmount, $amount->getAmount());
+        $trace = array_map(fn($trace) => $trace->__toString(), $price->getCalculationTraces());
+        $this->assertSame($expectedTrace, $trace);
     }
 
     /** @dataProvider progressivePriceProvider */
@@ -45,7 +66,8 @@ class ProgressivePriceTest extends TestCase
         array $thresholdsArray,
         int $expectedAmount,
         string $startPrice,
-        string $prepaid = '0'
+        string $prepaid = '0',
+        array $expectedTrace = [],
     ): void {
         $price = $this->createProgressivePrice(
             prepaid: $prepaid,
@@ -58,6 +80,9 @@ class ProgressivePriceTest extends TestCase
 
         $amount = $price->calculateSum($this->usage);
         $this->assertEquals($expectedAmount, $amount->getAmount());
+
+        $trace = array_map(fn($trace) => $trace->__toString(), $price->getCalculationTraces());
+        $this->assertSame($expectedTrace, $trace);
     }
 
     /**
@@ -122,22 +147,34 @@ class ProgressivePriceTest extends TestCase
             ],
             'money' => 594,
             'price' => '0.0085',
+            'prepaid' => '0',
+            'trace' => [
+                '0mbps * 0.0065 = 0.00',
+                '20mbps * 0.0070 = 0.14',
+                '100mbps * 0.0075 = 0.75',
+                '100mbps * 0.0080 = 0.80',
+                '500mbps * 0.0085 = 4.25',
+                '0mbps * 0.01 = 0.00',
+            ],
         ];
 
-       yield 'Different prices for the same quantity – take higher price' => [
+        yield 'Different prices for the same quantity – take higher price' => [
             'thresholds' => [
                 ['price' => '6', 'currency' => 'EUR', 'quantity' => '0', 'unit' => 'mbps'],
                 ['price' => '4', 'currency' => 'EUR', 'quantity' => '100', 'unit' => 'mbps'], // Here the qty is the same
-                ['price' => '5', 'currency' => 'EUR', 'quantity' => '0.1', 'unit' => 'gbps'], // as here, despite units are different
+                ['price' => '5000', 'currency' => 'EUR', 'quantity' => '0.1', 'unit' => 'gbps'], // as here, despite units are different
                 ['price' => '3', 'currency' => 'EUR', 'quantity' => '200', 'unit' => 'mbps'],
             ],
             'money' => 266000,
             'price' => '6',
-
-            // 100mbps * 6 = 600
-            // 100mbps * 5 = 500
-            // 520mbps * 3 = 1560
-            //             = 2660
+            'prepaid' => '0',
+            'trace' => [
+                '520mbps * 3 = 1,560.00',
+                '0.1gbps * 5000 = 500.00',
+                '0mbps * 4 = 0.00',
+                '100mbps * 6 = 600.00',
+                '0mbps * 6 = 0.00',
+            ],
         ];
 
         yield 'Bill without prepaid amount' => [
@@ -150,35 +187,32 @@ class ProgressivePriceTest extends TestCase
             'money' => 306000,
             'price' => '6',
             'prepaid' => '0',
-
-            //   100mbps * 6 = 600 // No prepaid, fully billed
-            // + 100mbps * 6 = 600
-            // + 100mbps * 5 = 500
-            // + 100mbps * 4 = 400
-            // + 320mbps * 3 = 960
-            // = 720mbps     = 3060
+            'trace' => [
+                '320mbps * 3 = 960.00',
+                '100mbps * 4 = 400.00',
+                '100mbps * 5 = 500.00',
+                '100mbps * 6 = 600.00',
+                '100mbps * 6 = 600.00',
+            ],
         ];
 
         yield 'Bill with prepaid amount' => [
             'thresholds' => [
                 ['price' => '1', 'currency' => 'EUR', 'quantity' => '20', 'unit' => 'mbps'],
                 ['price' => '0.9', 'currency' => 'EUR', 'quantity' => '30', 'unit' => 'mbps'],
-                ['price' => '0.856', 'currency' => 'EUR', 'quantity' => '0.1', 'unit' => 'gbps'],
+                ['price' => '856.00', 'currency' => 'EUR', 'quantity' => '0.1', 'unit' => 'gbps'],
                 ['price' => '0.5521', 'currency' => 'EUR', 'quantity' => '130.5', 'unit' => 'mbps'],
             ],
             'result' => 43487,
             'price' => '1.03',
             'prepaid' => '10',
-
-            // TOTAL consumption 720mbps
-            //   10mbps * 0         = 0   // prepaid, not billable
-            // + 10mbps * 1.03      = 10.3
-            // + 10mbps * 1         = 10
-            // + 70mbps * 0.90      = 63
-            // + 30.5mbps * 0.856   = 26.11
-            // + 589.5mbps * 0.5521 = 325.46
-            //                      = 434.87
-            // Total billed 710mbps
+            'trace' => [
+                '589.5mbps * 0.5521 = 325.46',
+                '0.0305gbps * 856.00 = 26.11',
+                '70mbps * 0.9 = 63.00',
+                '10mbps * 1 = 10.00',
+                '10mbps * 1.03 = 10.30',
+            ],
         ];
     }
 }

@@ -26,7 +26,7 @@ class ProgressivePriceThresholdTest extends TestCase
     public function testCreateFromScalar(string $price, string $currency, string $quantity, string $unit): void
     {
         $threshold = ProgressivePriceThreshold::createFromScalar($price, $currency, $quantity, $unit);
-        $this->assertSame($price, $threshold->getBasePrice());
+        $this->assertSame($price, $threshold->getRawPrice());
         $this->assertSame($unit, $threshold->quantity()->getUnit()->getName());
         $this->assertSame($unit, $threshold->unit()->getName());
         $this->assertSame($quantity, $threshold->quantity()->getQuantity());

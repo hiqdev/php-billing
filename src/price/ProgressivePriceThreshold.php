@@ -67,7 +67,7 @@ class ProgressivePriceThreshold implements JsonSerializable
         return Unit::create($this->unit);
     }
 
-    public function getBasePrice(): string
+    public function getRawPrice(): string
     {
         return $this->price;
     }
