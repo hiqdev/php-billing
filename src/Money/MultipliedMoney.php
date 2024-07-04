@@ -28,8 +28,8 @@ use Money\Parser\DecimalMoneyParser;
 final class MultipliedMoney
 {
     private function __construct(
-        private Money $money,
-        private int $multiplier = 1
+        private readonly Money $money,
+        private readonly int $multiplier = 1
     ) {
     }
 
