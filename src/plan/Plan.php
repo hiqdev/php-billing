@@ -34,7 +34,6 @@ class Plan implements PlanInterface
 
     /**
      * @var Plan|null
-     * XXX not sure to implement
      */
     protected $parent;
 
@@ -63,13 +62,15 @@ class Plan implements PlanInterface
         $name,
         CustomerInterface $seller = null,
         $prices = [],
-        TypeInterface $type = null
+        TypeInterface $type = null,
+        PlanInterface $parent = null
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->seller = $seller;
         $this->prices = $prices;
         $this->type = $type;
+        $this->parent = $parent;
     }
 
     public function getUniqueId()
@@ -135,6 +136,11 @@ class Plan implements PlanInterface
     public function getType(): ?TypeInterface
     {
         return $this->type ?? null;
+    }
+
+    public function setParent(PlanInterface $parent): void
+    {
+        $this->parent = $parent;
     }
 
     public function jsonSerialize(): array
