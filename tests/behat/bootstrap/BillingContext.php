@@ -151,22 +151,6 @@ class BillingContext extends BaseContext
     }
 
     /**
-     * @Given /^build progressive price/
-     */
-    public function buildProgressivePrices()
-    {
-        foreach ($this->progressivePrice as $type => $price) {
-            $this->fullPrice([
-                'type' => $type,
-                'price' => 0,
-                'currency' => $price['currency'],
-                'unit' => $price['unit'],
-                'data' => ['thresholds' => $price['thresholds'], 'class' => 'ProgressivePrice'],
-            ]);
-        }
-    }
-
-    /**
      * @Given /^remove and recreate tariff plan (\S+)/
      */
     public function recreatePlan($plan)

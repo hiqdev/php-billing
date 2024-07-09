@@ -26,6 +26,7 @@ use hiqdev\php\billing\price\MoneyBuilder;
 use hiqdev\php\billing\price\PriceHelper;
 use hiqdev\php\billing\price\ProgressivePrice;
 use hiqdev\php\billing\price\ProgressivePriceThreshold;
+use hiqdev\php\billing\price\ProgressivePriceThresholdList;
 use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -100,6 +101,7 @@ class FeatureContext implements Context
         $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
     }
 
+    protected array $progressivePrice = [];
     /**
      * @Given /(\S+) progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+)$/
      */
@@ -108,28 +110,19 @@ class FeatureContext implements Context
         if (empty($this->progressivePrice[$type])) {
             $this->progressivePrice[$type] = [
                 'target' => $target,
-                'unit' => $unit,
                 'price' => $price,
                 'currency' => $currency,
-                'thresholds' =>[
-                    [
-                        'price' => $price,
-                        'currency' => $currency,
-                        'unit' => $unit,
-                        'quantity' => $quantity,
-                    ]
-                ],
+                'prepaid' => $quantity,
+                'unit' => $unit,
+                'thresholds' => [],
             ];
         } else {
-            array_push(
-                $this->progressivePrice[$type]['thresholds'],
-                [
-                    'price' => $price,
-                    'currency' => $currency,
-                    'unit' => $unit,
-                    'quantity' => $quantity,
-                ]
-            );
+            $this->progressivePrice[$type]['thresholds'][] = [
+                'price' => $price,
+                'currency' => $currency,
+                'unit' => $unit,
+                'quantity' => $quantity,
+            ];
         }
     }
 
@@ -141,9 +134,11 @@ class FeatureContext implements Context
         foreach ($this->progressivePrice as $type => $price) {
             $type = new Type(Type::ANY, $type);
             $target = new Target(Target::ANY, $price['target']);
-            $quantity = Quantity::create(Unit::create($price['unit']), 1);
-            $money = MoneyBuilder::buildMoney($price['price'], $price['currency']);
-            $this->setPrice(new ProgressivePrice(null, $type, $target, $quantity, $money, $price['thresholds']));
+            $quantity = Quantity::create($price['unit'], $price['prepaid']);
+            $money = new Money($price['price'], new Currency($price['currency']));
+            $thresholds = ProgressivePriceThresholdList::fromScalarsArray($price['thresholds']);
+            $price = new ProgressivePrice(null, $type, $target, $quantity, $money, $thresholds);
+            $this->setPrice($price);
         }
     }
 
@@ -403,5 +398,19 @@ class FeatureContext implements Context
         }
 
         return --$result;
+    }
+
+    /**
+     * @Given /^progressive price calculation steps are (.*)$/
+     */
+    public function progressivePriceCalculationStepsAre($explanation)
+    {
+        if (!$this->price instanceof ProgressivePrice) {
+            throw new Exception('Price is not progressive');
+        }
+
+        $traces = array_map(fn($trace) => $trace->toShortString(), $this->price->getCalculationTraces());
+        $billed = implode(' + ', $traces);
+        Assert::assertSame($explanation, $billed, 'Progressive price calculation steps mismatch. Expected: ' . $explanation . ', got: ' . $billed);
     }
 }

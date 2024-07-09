@@ -16,7 +16,7 @@ use Money\Parser\DecimalMoneyParser;
 
 class ProgressivePrice extends AbstractPrice
 {
-    protected ProgressivePriceThresholds $thresholds;
+    protected ProgressivePriceThresholdList $thresholds;
 
     protected Money $price;
 
@@ -28,27 +28,18 @@ class ProgressivePrice extends AbstractPrice
         TargetInterface $target,
         QuantityInterface $prepaid,
         Money $price,
-        /* @psalm-var array{
-         *     array{
-         *         'price': string,
-         *         'currency': string,
-         *         'quantity': string,
-         *         'unit': string
-         *     }
-         * } $thresholds
-         */
-        array $thresholds,
+        ProgressivePriceThresholdList $thresholds,
         ?PlanInterface $plan = null
     ) {
         parent::__construct($id, $type, $target, $plan);
-        $this->thresholds = new ProgressivePriceThresholds($thresholds);
+        $this->thresholds = $thresholds;
         $this->price = $price;
         $this->prepaid = $prepaid;
     }
 
-    public function getThresholds(): array
+    public function getThresholds(): ProgressivePriceThresholdList
     {
-        return $this->thresholds->__toArray();
+        return $this->thresholds;
     }
 
     public function getPrepaid(): QuantityInterface
@@ -66,10 +57,10 @@ class ProgressivePrice extends AbstractPrice
      */
     public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface
     {
-        $usage = $quantity->convert($this->prepaid->getUnit());
+        $usage = $quantity->subtract($this->prepaid);
 
         if ($usage->isPositive()) {
-            return $usage;
+            return $quantity;
         }
 
         return Quantity::create($this->prepaid->getUnit()->getName(), 0);
@@ -83,23 +74,57 @@ class ProgressivePrice extends AbstractPrice
         return $this->price;
     }
 
+    /**
+     * @var ProgressivePriceCalculationTrace[]
+     */
+    private array $calculationTraces = [];
+
+    /**
+     * @return ProgressivePriceCalculationTrace[]
+     * @internal A debug method to see intermediate calculations
+     * after the latest call to calculateSum()
+     */
+    public function getCalculationTraces(): array
+    {
+        return $this->calculationTraces;
+    }
+
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
-        $result = new Money(0, $this->price->getCurrency());
-        $usage = $this->calculateUsage($quantity);
-        $thresholds = $this->thresholds->get();
-        foreach ($thresholds as $key => $threshold) {
-            if  ($threshold->quantity()->compare($usage) < 0) {
-                    $boundary = $usage->subtract($threshold->quantity());
-                    $result = $result->add(new Money(
-                            (int) $boundary->multiply($threshold->price()->getAmount())->getQuantity(),
-                            $threshold->price()->getCurrency()
-                        )
-                    );
-                    $usage = $usage->subtract($boundary);
-            }
+        $this->calculationTraces = [];
+
+        $result = $this->price->multiply(0);
+        $remainingUsage = $this->calculateUsage($quantity);
+        if ($remainingUsage->getQuantity() === 0) {
+            return $result;
         }
-        $result = (new DecimalMoneyParser(new ISOCurrencies()))->parse($result->getAmount(), $result->getCurrency());
-        return $result->divide($this->thresholds->getPriceRate());
+
+        $totalBilledUsage = $this->prepaid;
+        $thresholds = $this->thresholds->withAdded(
+            ProgressivePriceThreshold::createFromObjects($this->price, $this->prepaid)
+        )->get();
+
+        foreach ($thresholds as $threshold) {
+            $quantity = $threshold->quantity();
+            if ($quantity->compare($remainingUsage) >= 0) {
+                $quantity = $remainingUsage;
+            }
+            $billedUsage = $remainingUsage->subtract($quantity)->convert($threshold->unit());
+            $price = $threshold->price();
+
+            $chargedAmount = $price->money()
+                                   ->multiply((string)$billedUsage->getQuantity())
+                                   ->divide((string)($price->multiplier()));
+
+            $this->calculationTraces[] = new ProgressivePriceCalculationTrace(
+                $threshold, $billedUsage, $chargedAmount
+            );
+
+            $result = $result->add($chargedAmount);
+            $remainingUsage = $remainingUsage->subtract($billedUsage);
+            $totalBilledUsage = $totalBilledUsage->add($billedUsage);
+        }
+
+        return $result;
     }
 }
