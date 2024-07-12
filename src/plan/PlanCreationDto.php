@@ -28,4 +28,6 @@ class PlanCreationDto
     public $is_grouping;
 
     public $type;
+    
+    public ?int $parent_id;
 }
