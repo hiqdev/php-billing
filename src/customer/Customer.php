@@ -100,7 +100,7 @@ class Customer implements CustomerInterface
             $seller = null;
         }
 
-        return new static($info['id'], $info['login'], $seller);
+        return new static($info['id'], $info['login'], $seller, $info['state'] ?? null);
     }
 
     public function jsonSerialize(): array
