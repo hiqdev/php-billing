@@ -37,11 +37,17 @@ class Customer implements CustomerInterface
      */
     protected $sellers = [];
 
-    public function __construct($id, $login, CustomerInterface $seller = null)
+    /**
+     * @var string|null
+     */
+    protected ?string $state;
+
+    public function __construct($id, $login, CustomerInterface $seller = null, ?string $state = null)
     {
         $this->id = $id;
         $this->login = $login;
         $this->seller = $seller;
+        $this->state = $state;
     }
 
     public function getId()
@@ -71,6 +77,19 @@ class Customer implements CustomerInterface
     public function getSeller()
     {
         return $this->seller;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->state === 'deleted';
     }
 
     public static function fromArray(array $info)
