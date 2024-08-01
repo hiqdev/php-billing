@@ -89,7 +89,7 @@ class Customer implements CustomerInterface
 
     public function isDeleted(): bool
     {
-        return $this->state === 'deleted';
+        return CustomerState::isDeleted($this);
     }
 
     public static function fromArray(array $info)
