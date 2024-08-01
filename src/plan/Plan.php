@@ -32,7 +32,7 @@ class Plan implements PlanInterface
      */
     protected $name;
 
-    protected ?int $parent_id;
+    protected ?int $parent_id = null;
 
     /**
      * @var CustomerInterface
