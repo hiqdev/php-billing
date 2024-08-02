@@ -49,4 +49,6 @@ interface PlanInterface extends EntityInterface
     public function getName(): string;
     public function setName(string $name): void;
     public function getType(): ?TypeInterface;
+    public function getParentId(): ?int;
+    public function setParentId(int $parentId): void;
 }
