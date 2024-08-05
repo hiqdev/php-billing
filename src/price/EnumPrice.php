@@ -28,29 +28,20 @@ use Money\Money;
  */
 class EnumPrice extends AbstractPrice
 {
-    /**
-     * @var UnitInterface
-     */
-    protected $unit;
+    protected UnitInterface $unit;
 
-    /**
-     * @var Currency
-     */
-    protected $currency;
+    protected Currency $currency;
 
-    /**
-     * @var array quantity => total sum for the quantity
-     */
-    protected $sums;
+    protected Sums $sums;
 
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
         ?PlanInterface $plan,
         UnitInterface $unit,
         Currency $currency,
-        array $sums
+        Sums $sums,
     ) {
         parent::__construct($id, $type, $target, $plan);
         $this->unit = $unit;
@@ -68,7 +59,7 @@ class EnumPrice extends AbstractPrice
         return $this->currency;
     }
 
-    public function getSums()
+    public function getSums(): Sums
     {
         return $this->sums;
     }
@@ -80,7 +71,7 @@ class EnumPrice extends AbstractPrice
     {
         $usage = $this->calculateUsage($quantity)->getQuantity();
 
-        foreach ($this->sums as $value => $price) {
+        foreach ($this->sums->values() as $value => $price) {
             if ((string) $value === (string) $usage) {
                 return new Money($price, $this->currency);
             }
