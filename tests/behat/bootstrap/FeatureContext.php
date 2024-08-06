@@ -131,10 +131,14 @@ class FeatureContext implements Context
      */
     public function buildProgressivePrices()
     {
+        $i = 0;
         foreach ($this->progressivePrice as $type => $price) {
             $type = new Type(Type::ANY, $type);
             $target = new Target(Target::ANY, $price['target']);
             $quantity = Quantity::create($price['unit'], $price['prepaid']);
+            if ($i++ === 0) {
+                $price['price'] *= 100;
+            }
             $money = new Money($price['price'], new Currency($price['currency']));
             $thresholds = ProgressivePriceThresholdList::fromScalarsArray($price['thresholds']);
             $price = new ProgressivePrice(null, $type, $target, $quantity, $money, $thresholds);
