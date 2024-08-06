@@ -2,6 +2,8 @@
 
 namespace hiqdev\php\billing\price;
 
-class PriceInvalidArgumentException extends \InvalidArgumentException
+use hiapi\exceptions\HiapiException;
+
+class PriceInvalidArgumentException extends HiapiException
 {
 }
