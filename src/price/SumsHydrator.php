@@ -8,7 +8,10 @@ class SumsHydrator extends GeneratedHydrator
 {
     public function hydrate(array $data, $object): object
     {
-        return new Sums($data['sums'] ?? null);
+        if (!isset($data['sums'])) {
+            throw new PriceInvalidArgumentException('Missing required key: sums');
+        }
+        return new Sums($data['sums']);
     }
 
     /**
