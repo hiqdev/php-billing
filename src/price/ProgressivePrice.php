@@ -14,11 +14,14 @@ use Money\Currency;
 use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 
-class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInterface, PriceWithMoneyInterface, PriceWithQuantityInterface
+class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInterface,
+    PriceWithMoneyInterface,
+    PriceWithQuantityInterface,
+    PriceWithCurrencyInterface
 {
-    protected ProgressivePriceThresholdList $thresholds;
+    use HasMoney;
 
-    protected Money $price;
+    protected ProgressivePriceThresholdList $thresholds;
 
     protected QuantityInterface $prepaid;
 
@@ -30,7 +33,8 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
         Money $price,
         ProgressivePriceThresholdList $thresholds,
         ?PlanInterface $plan = null
-    ) {
+    )
+    {
         parent::__construct($id, $type, $target, $plan);
         $this->thresholds = $thresholds;
         $this->price = $price;
@@ -45,11 +49,6 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
     public function getPrepaid(): QuantityInterface
     {
         return $this->prepaid;
-    }
-
-    public function getPrice(): Money
-    {
-        return $this->price;
     }
 
     /**
