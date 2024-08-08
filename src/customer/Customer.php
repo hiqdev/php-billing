@@ -40,7 +40,7 @@ class Customer implements CustomerInterface
     /**
      * @var string|null
      */
-    protected ?string $state;
+    protected ?string $state = null;
 
     public function __construct($id, $login, CustomerInterface $seller = null, ?string $state = null)
     {
