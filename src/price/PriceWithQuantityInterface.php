@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\price;
 
 use hiqdev\php\units\QuantityInterface;
 
-interface PriceWithQuantityInterface
+interface PriceWithQuantityInterface extends PriceWithUnitInterface
 {
     public function getPrepaid(): QuantityInterface;
 }

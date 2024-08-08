@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\price;
 
 use Money\Money;
 
-interface PriceWithMoneyInterface
+interface PriceWithMoneyInterface extends PriceWithCurrencyInterface
 {
     public function getPrice(): Money;
 }
