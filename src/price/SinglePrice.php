@@ -27,7 +27,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SinglePrice extends AbstractPrice implements PriceWithMoneyInterface, PriceWIthQuantityInterface
+class SinglePrice extends AbstractPrice implements PriceWithMoneyInterface, PriceWithQuantityInterface
 {
     /**
      * @var QuantityInterface prepaid quantity also implies Unit
