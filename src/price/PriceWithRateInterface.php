@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\price;
 
-interface PricedWithRateInterface
+interface PriceWithRateInterface
 {
     public function getRate(): float;
 }

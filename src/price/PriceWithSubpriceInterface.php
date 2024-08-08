@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\price;
 
 use hiqdev\billing\hiapi\price\SubPrices;
 
-interface PricedWithSubpriceInterface
+interface PriceWithSubpriceInterface
 {
     public function getSubprices(): SubPrices;
 
