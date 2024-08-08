@@ -14,7 +14,7 @@ use Money\Currency;
 use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 
-class ProgressivePrice extends AbstractPrice
+class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInterface, PriceWithMoneyInterface, PriceWIthQuantityInterface
 {
     protected ProgressivePriceThresholdList $thresholds;
 

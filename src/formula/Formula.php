@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\formula;
 
 class Formula
 {
-    public function __construct(private ?string $value, private readonly FormulaEngine $formulaEngine)
+    public function __construct(private ?string $value, private readonly FormulaEngineInterface $formulaEngine)
     {
         if (!empty($this->value)) {
             $this->value = $this->formulaEngine->normalize($this->value);

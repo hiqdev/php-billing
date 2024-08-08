@@ -26,7 +26,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class EnumPrice extends AbstractPrice
+class EnumPrice extends AbstractPrice implements PriceWithSumsInterface, PriceWithCurrencyInterface, PriceWithUnitInterface
 {
     protected UnitInterface $unit;
 
@@ -49,12 +49,12 @@ class EnumPrice extends AbstractPrice
         $this->sums = $sums;
     }
 
-    public function getUnit()
+    public function getUnit(): UnitInterface
     {
         return $this->unit;
     }
 
-    public function getCurrency()
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }

@@ -24,7 +24,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class RatePrice extends AbstractPrice
+class RatePrice extends AbstractPrice implements PricedWithRateInterface
 {
     /** @var float */
     protected $rate;

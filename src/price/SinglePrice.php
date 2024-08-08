@@ -27,7 +27,7 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SinglePrice extends AbstractPrice
+class SinglePrice extends AbstractPrice implements PriceWithMoneyInterface, PriceWIthQuantityInterface
 {
     /**
      * @var QuantityInterface prepaid quantity also implies Unit
@@ -41,7 +41,7 @@ class SinglePrice extends AbstractPrice
     protected $price;
 
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
         PlanInterface $plan = null,
@@ -53,12 +53,12 @@ class SinglePrice extends AbstractPrice
         $this->price    = $price;
     }
 
-    public function getPrepaid()
+    public function getPrepaid(): QuantityInterface
     {
         return $this->prepaid;
     }
 
-    public function getPrice()
+    public function getPrice(): Money
     {
         return $this->price;
     }

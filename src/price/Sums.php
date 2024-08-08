@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\price;
 
-final readonly class Sums
+final readonly class Sums implements \JsonSerializable
 {
     /**
      * @param int[]|null $values quantity => total sum for the quantity
@@ -33,5 +33,12 @@ final readonly class Sums
     public function getMinSum(): int|string
     {
         return min($this->values);
+    }
+
+    public function jsonSerialize(): ?array
+    {
+        return [
+            'values' => $this->values,
+        ];
     }
 }

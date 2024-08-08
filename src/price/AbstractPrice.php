@@ -53,7 +53,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     protected $plan;
 
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
         PlanInterface $plan = null
