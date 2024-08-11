@@ -17,51 +17,82 @@ namespace hiqdev\php\billing\action;
  */
 class ActionState
 {
-    const STATE_NEW      = 'new';
-    const STATE_FINISHED = 'finished';
-    const STATE_FAILED   = 'failed';
+    private const STATE_NEW       = 'new';
 
-    /** @var string */
-    protected $state;
+    private const STATE_FINISHED  = 'finished';
 
-    private function __construct(string $state = self::STATE_NEW)
+    private const STATE_PREMATURE = 'premature';
+
+    private const STATE_FUTURE    = 'future';
+
+    private const STATE_CANCELED  = 'canceled';
+
+    private const STATE_EXPIRED   = 'expired';
+
+    private function __construct(protected string $state = self::STATE_NEW)
     {
-        $this->state = $state;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->state;
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->state === self::STATE_NEW;
     }
 
-    public function isFinished()
+    public function isFinished(): bool
     {
-        return $this->state === self::STATE_FINISHED;
+        return !$this->isNew();
     }
 
-    public static function new()
+    public static function new(): self
     {
         return new self(self::STATE_NEW);
     }
 
-    public static function finished()
+    /**
+     * @deprecated use ActionState::expired()
+     * @return self
+     */
+    public static function finished(): self
     {
         return new self(self::STATE_FINISHED);
     }
 
-    public static function failed()
+    public static function premature(): self
     {
-        return new self(self::STATE_FAILED);
+        return new self(self::STATE_PREMATURE);
     }
 
-    public static function fromString(string $name)
+    public static function future(): self
     {
-        foreach ([self::STATE_NEW, self::STATE_FINISHED, self::STATE_FAILED] as $state) {
+        return new self(self::STATE_FUTURE);
+    }
+
+    public static function canceled(): self
+    {
+        return new self(self::STATE_CANCELED);
+    }
+
+    public static function expired(): self
+    {
+        return new self(self::STATE_EXPIRED);
+    }
+
+    public static function fromString(string $name): self
+    {
+        $allowedStates = [
+            self::STATE_NEW,
+            self::STATE_FINISHED,
+            self::STATE_PREMATURE,
+            self::STATE_FUTURE,
+            self::STATE_CANCELED,
+            self::STATE_EXPIRED,
+        ];
+        foreach ($allowedStates as $state) {
             if ($state === $name) {
                 return new self($state);
             }
