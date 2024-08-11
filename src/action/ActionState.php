@@ -100,4 +100,9 @@ class ActionState
 
         throw new \Exception("wrong action state '$name'");
     }
+
+    public function equals(ActionState $other): bool
+    {
+        return $this->state === $other->getName();
+    }
 }
