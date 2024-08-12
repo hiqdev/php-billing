@@ -27,8 +27,6 @@ class ActionState
 
     private const STATE_CANCELED  = 'canceled';
 
-    private const STATE_EXPIRED   = 'expired';
-
     private function __construct(protected string $state = self::STATE_NEW)
     {
     }
@@ -43,7 +41,7 @@ class ActionState
         return $this->state === self::STATE_NEW;
     }
 
-    public function isFinished(): bool
+    public function isNotActive(): bool
     {
         return !$this->isNew();
     }
@@ -53,10 +51,6 @@ class ActionState
         return new self(self::STATE_NEW);
     }
 
-    /**
-     * @deprecated use ActionState::expired()
-     * @return self
-     */
     public static function finished(): self
     {
         return new self(self::STATE_FINISHED);
@@ -77,11 +71,6 @@ class ActionState
         return new self(self::STATE_CANCELED);
     }
 
-    public static function expired(): self
-    {
-        return new self(self::STATE_EXPIRED);
-    }
-
     public static function fromString(string $name): self
     {
         $allowedStates = [
@@ -90,7 +79,6 @@ class ActionState
             self::STATE_PREMATURE,
             self::STATE_FUTURE,
             self::STATE_CANCELED,
-            self::STATE_EXPIRED,
         ];
         foreach ($allowedStates as $state) {
             if ($state === $name) {

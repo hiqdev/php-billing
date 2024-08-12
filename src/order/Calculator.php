@@ -106,7 +106,7 @@ class Calculator implements CalculatorInterface
             $charges = [$charge];
         }
 
-        if ($action->isFinished()) {
+        if ($action->isNotActive()) {
             foreach ($charges as $charge) {
                 $charge->setFinished();
             }
