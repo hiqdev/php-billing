@@ -11,6 +11,11 @@ enum CustomerState: string
 
     public static function isDeleted(CustomerInterface $customer): bool
     {
-        return self::tryFrom((string)$customer->getState()) === self::DELETED;
+        return $customer->getState() === self::DELETED;
+    }
+
+    public static function deleted(): CustomerState
+    {
+        return self::DELETED;
     }
 }
