@@ -203,6 +203,13 @@ class Factory implements FactoryInterface
         return $this->get('customer', $data);
     }
 
+    /**
+     * @deprecated In the future the function will be private.
+     * Please use a specific method instead (e.g., getSale)
+     * @param string $entity
+     * @param $data
+     * @return mixed
+     */
     public function get(string $entity, $data)
     {
         if (is_scalar($data)) {
