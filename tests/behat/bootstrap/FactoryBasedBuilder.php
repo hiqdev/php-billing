@@ -18,6 +18,7 @@ use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\price\RatePrice;
 use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\tests\support\tools\SimpleFactory;
@@ -33,11 +34,12 @@ class FactoryBasedBuilder implements BuilderInterface
 
     private $plan;
 
-    private $sale;
+    private SaleInterface $sale;
 
     private $prices = [];
 
-    private $actions = [];
+    /** @var ActionInterface[] */
+    private array $actions = [];
 
     private $factory;
 
@@ -122,13 +124,18 @@ class FactoryBasedBuilder implements BuilderInterface
         $plan->setPrices($this->prices);
     }
 
-    public function buildSale(string $target, $plan, string $time = null, ?string $closeTime = null)
+    public function buildSale(string $target, $planName, string $time = null, ?string $closeTime = null)
+    {
+        return $this->createSale($target, $planName, $time, $closeTime);
+    }
+
+    public function createSale(string $target, $planName, string $time = null, ?string $closeTime = null)
     {
         $this->time = $time;
         $this->sale = $this->factory->getSale(array_filter([
             'customer' => $this->customer,
             'target' => $target,
-            'plan' => $plan,
+            'plan' => $planName,
             'time' => $time,
             'closeTime' => $closeTime,
         ]));
@@ -198,10 +205,10 @@ class FactoryBasedBuilder implements BuilderInterface
         $data['time'] = $data['time'] ?? $this->time;
         $data['customer'] = $data['customer'] ?? $this->customer;
         if (!empty($data['targets'])) {
-            $data['target'] = $this->factory->get('targets', $data['targets']);
+            $data['target'] = $this->factory->getTargets($data['targets']);
         }
 
-        return $this->factory->get('action', $data);
+        return $this->factory->getAction($data);
     }
 
     public function findBills(array $data): array
