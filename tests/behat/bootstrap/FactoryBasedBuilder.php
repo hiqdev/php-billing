@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use hiqdev\billing\hiapi\plan\PlanFactory;
 use hiqdev\billing\hiapi\tests\support\order\SimpleCalculator;
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\price\PriceFactory;
 use hiqdev\php\billing\price\RatePrice;
@@ -121,14 +122,15 @@ class FactoryBasedBuilder implements BuilderInterface
         $plan->setPrices($this->prices);
     }
 
-    public function buildSale(string $target, $plan, string $time = null)
+    public function buildSale(string $target, $plan, string $time = null, ?string $closeTime = null)
     {
         $this->time = $time;
-        $this->sale = $this->factory->get('sale', array_filter([
+        $this->sale = $this->factory->getSale(array_filter([
             'customer' => $this->customer,
             'target' => $target,
             'plan' => $plan,
             'time' => $time,
+            'closeTime' => $closeTime,
         ]));
 
         return $this->sale;
@@ -191,7 +193,7 @@ class FactoryBasedBuilder implements BuilderInterface
         $this->getBilling()->perform($action);
     }
 
-    public function buildAction(array $data)
+    public function buildAction(array $data): ActionInterface
     {
         $data['time'] = $data['time'] ?? $this->time;
         $data['customer'] = $data['customer'] ?? $this->customer;

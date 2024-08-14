@@ -17,12 +17,18 @@ namespace hiqdev\php\billing\action;
  */
 class ActionFactory implements ActionFactoryInterface
 {
-    /**
-     * Creates action object.
-     * @return Action
-     */
-    public function create(ActionCreationDto $dto)
+    public function create(ActionCreationDto $dto): AbstractAction
     {
-        return new Action($dto->id, $dto->type, $dto->target, $dto->quantity, $dto->customer, $dto->time, $dto->sale, $dto->state, $dto->parent);
+        return new Action(
+            $dto->id,
+            $dto->type,
+            $dto->target,
+            $dto->quantity,
+            $dto->customer,
+            $dto->time,
+            $dto->sale,
+            $dto->state,
+            $dto->parent,
+        );
     }
 }
