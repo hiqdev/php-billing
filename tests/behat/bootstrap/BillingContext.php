@@ -27,6 +27,8 @@ class BillingContext extends BaseContext
 
     protected $saleTime;
 
+    protected $saleCloseTime;
+
     protected $bill;
 
     protected $charges = [];
@@ -164,8 +166,19 @@ class BillingContext extends BaseContext
     public function sale($target, $plan, $time): void
     {
         $this->saleTime = $this->prepareTime($time);
-        $this->builder->buildSale($target, $plan, $this->saleTime);
+        $this->sale = $this->builder->buildSale($target, $plan, $this->saleTime);
     }
+
+    /**
+     * @Given /sale target (\S+) by plan (\S+) at (\S+) and close at (\S+)/
+     */
+    public function saleWithCloseTime($target, $plan, $time, $closeTime): void
+    {
+        $this->saleTime = $this->prepareTime($time);
+        $this->saleCloseTime = $this->prepareTime($closeTime);
+        $this->builder->buildSale($target, $plan, $this->saleTime, $this->saleCloseTime);
+    }
+
     /**
      * @When /^sale close is requested for target "([^"]*)" at "([^"]*)", assuming current time is "([^"]*)"$/
      */

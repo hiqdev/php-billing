@@ -171,7 +171,7 @@ class FactoryBasedBuilder implements BuilderInterface
             'type' => 'monthly,cdn_traf95_max',
             'quantity' => '1 items',
             'target' => $target,
-            'initial_uses' => $uses
+            'initial_uses' => $uses,
         ]);
     }
 
