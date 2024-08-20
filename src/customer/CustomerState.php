@@ -31,6 +31,21 @@ class CustomerState
         return new self(self::DELETED);
     }
 
+    public static function blocked(): CustomerState
+    {
+        return new self(self::BLOCKED);
+    }
+
+    public static function new(): CustomerState
+    {
+        return new self(self::NEW);
+    }
+
+    public static function ok(): CustomerState
+    {
+        return new self(self::OK);
+    }
+
     public static function fromString(string $name): self
     {
         $allowedStates = [

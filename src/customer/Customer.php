@@ -108,7 +108,7 @@ class Customer implements CustomerInterface
             $info['id'],
             $info['login'],
             $seller,
-            isset($info['state']) ? CustomerState::from($info['state']) : null,
+            isset($info['state']) ? CustomerState::fromString($info['state']) : null,
         );
     }
 
