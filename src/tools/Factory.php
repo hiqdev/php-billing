@@ -60,7 +60,7 @@ class Factory implements FactoryInterface
         return $res;
     }
 
-    public function parseMoney($str): array
+    public function parseMoney(string $str): array
     {
         [$amount, $currency] = explode(' ', $str);
 
@@ -85,7 +85,7 @@ class Factory implements FactoryInterface
         return $this->get('quantity', $data);
     }
 
-    public function parseQuantity(string$str): array
+    public function parseQuantity(string $str): array
     {
         [$quantity, $unit] = explode(' ', $str);
 
