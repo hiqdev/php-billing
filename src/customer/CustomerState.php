@@ -2,12 +2,24 @@
 
 namespace hiqdev\php\billing\customer;
 
-enum CustomerState: string
+class CustomerState
 {
-    case BLOCKED = 'blocked';
-    case DELETED = 'deleted';
-    case NEW = 'new';
-    case OK = 'ok';
+    public const BLOCKED = 'blocked';
+
+    public const DELETED = 'deleted';
+
+    public const NEW = 'new';
+
+    public const OK = 'ok';
+
+    private function __construct(protected string $state = self::NEW)
+    {
+    }
+
+    public function getName(): string
+    {
+        return $this->state;
+    }
 
     public static function isDeleted(CustomerInterface $customer): bool
     {
@@ -16,6 +28,23 @@ enum CustomerState: string
 
     public static function deleted(): CustomerState
     {
-        return self::DELETED;
+        return new self(self::DELETED);
+    }
+
+    public static function fromString(string $name): self
+    {
+        $allowedStates = [
+            self::BLOCKED,
+            self::DELETED,
+            self::NEW,
+            self::OK,
+        ];
+        foreach ($allowedStates as $state) {
+            if ($state === $name) {
+                return new self($state);
+            }
+        }
+
+        throw new \Exception("wrong customer state '$name'");
     }
 }
