@@ -23,7 +23,7 @@ class CustomerState
 
     public static function isDeleted(CustomerInterface $customer): bool
     {
-        return $customer->getState() === self::DELETED;
+        return $customer->getState()?->getName() === self::DELETED;
     }
 
     public static function deleted(): CustomerState
