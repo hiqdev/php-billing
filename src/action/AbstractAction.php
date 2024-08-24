@@ -10,10 +10,8 @@
 
 namespace hiqdev\php\billing\action;
 
-use DateInterval;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
-use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -27,7 +25,7 @@ use hiqdev\php\units\QuantityInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class AbstractAction implements ActionInterface, EntityInterface
+abstract class AbstractAction implements ActionInterface
 {
     /** @var int */
     protected $id;

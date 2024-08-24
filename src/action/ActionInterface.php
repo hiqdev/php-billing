@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\action;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
+use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -30,7 +31,7 @@ use hiqdev\php\units\QuantityInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface ActionInterface extends \JsonSerializable
+interface ActionInterface extends EntityInterface
 {
     /**
      * Returns if the given price applicable to this action.
