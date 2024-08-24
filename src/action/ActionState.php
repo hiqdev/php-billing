@@ -83,6 +83,7 @@ class ActionState
         $allowedStates = [
             self::STATE_NEW,
             self::STATE_FINISHED,
+            self::STATE_FAILED,
             self::STATE_PREMATURE,
             self::STATE_FUTURE,
             self::STATE_CANCELED,
