@@ -21,6 +21,8 @@ class ActionState
 
     private const STATE_FINISHED  = 'finished';
 
+    private const STATE_FAILED    = 'failed';
+
     private const STATE_PREMATURE = 'premature';
 
     private const STATE_FUTURE    = 'future';
@@ -54,6 +56,11 @@ class ActionState
     public static function finished(): self
     {
         return new self(self::STATE_FINISHED);
+    }
+
+    public static function failed(): self
+    {
+        return new self(self::STATE_FAILED);
     }
 
     public static function premature(): self
