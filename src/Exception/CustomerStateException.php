@@ -6,5 +6,4 @@ use hiqdev\php\billing\ExceptionInterface;
 
 class CustomerStateException extends RuntimeException implements ExceptionInterface
 {
-
 }
