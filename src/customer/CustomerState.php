@@ -2,6 +2,8 @@
 
 namespace hiqdev\php\billing\customer;
 
+use hiqdev\php\billing\Exception\CustomerStateException;
+
 class CustomerState
 {
     public const BLOCKED = 'blocked';
@@ -60,6 +62,6 @@ class CustomerState
             }
         }
 
-        throw new \Exception("wrong customer state '$name'");
+        throw new CustomerStateException("wrong customer state '$name'");
     }
 }
