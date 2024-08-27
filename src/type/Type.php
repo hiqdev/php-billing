@@ -85,4 +85,9 @@ class Type implements TypeInterface
     {
         return array_filter(get_object_vars($this));
     }
+
+    public function isDefined(): bool
+    {
+        return $this->id !== null || $this->name !== null;
+    }
 }

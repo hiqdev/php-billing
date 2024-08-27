@@ -57,4 +57,6 @@ interface TypeInterface extends \JsonSerializable
      * @param TypeInterface $other other type to match against
      */
     public function matches(self $other): bool;
+
+    public function isDefined(): bool;
 }
