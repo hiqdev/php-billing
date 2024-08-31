@@ -26,8 +26,7 @@ use Money\Money;
  */
 class RatePrice extends AbstractPrice implements PriceWithRateInterface
 {
-    /** @var float */
-    protected $rate;
+    protected float $rate;
 
     public function __construct(
         $id,
