@@ -137,7 +137,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
 
     public function jsonSerialize(): array
     {
-        return [
+        $data = [
             'id' => $this->id,
             'class' => (new \ReflectionClass($this))->getShortName(),
             'type' => $this->getType()->getName(),
@@ -149,13 +149,33 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
                 'type' => $this->getTarget()->getType(),
             ],
             'plan_id' => $this->getPlan()?->getId(),
-            'subprices' => $this instanceof PriceWithSubpriceInterface ? $this->getSubprices()->values() : null,
-            'rate' => $this instanceof PriceWithRateInterface ? $this->getRate() : null,
-            'unit' => $this instanceof PriceWithUnitInterface ? $this->getUnit()->getName() : null,
-            'currency' => $this instanceof PriceWithCurrencyInterface ? $this->getCurrency()->getCode() : null,
-            'sums' => $this instanceof PriceWithSumsInterface ? $this->getSums()->values() : null,
-            'quantity' => $this instanceof PriceWithQuantityInterface ? $this->getPrepaid()->getQuantity() : 0,
         ];
+
+        if ($this instanceof PriceWithSubpriceInterface) {
+            $data['subprice'] = $this->getSubprices()->values();
+        }
+
+        if ($this instanceof PriceWithRateInterface) {
+            $data['rate'] = $this->getRate();
+        }
+
+        if ($this instanceof PriceWithUnitInterface) {
+            $data['unit'] = $this->getUnit()->getName();
+        }
+
+        if ($this instanceof PriceWithCurrencyInterface) {
+            $data['currency'] = $this->getCurrency()->getCode();
+        }
+
+        if ($this instanceof PriceWithSumsInterface) {
+            $data['sums'] = $this->getSums()->values();
+        }
+
+        if ($this instanceof PriceWithQuantityInterface) {
+            $data['quantity'] = $this->getPrepaid()->getQuantity();
+        }
+
+        return $data;
     }
 
     /**
