@@ -40,6 +40,7 @@ use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
+use ReflectionClass;
 
 /**
  * Defines application features from the specific context.
@@ -147,17 +148,33 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /sale close time is ([0-9.-]+)/
+     * @Given /sale close time is ([0-9.-]+)?/
      */
     public function setActionCloseTime($closeTime): void
     {
+        if ($closeTime === null) {
+            return;
+        }
+
         $this->sale->close(new DateTimeImmutable($closeTime));
+    }
+
+    /**
+     * @Given /sale time is (.+)$/
+     */
+    public function setSaleTime($time): void
+    {
+        $ref = new ReflectionClass($this->sale);
+        $prop = $ref->getProperty('time');
+        $prop->setAccessible(true);
+        $prop->setValue($this->sale, new DateTimeImmutable($time));
+        $prop->setAccessible(false);
     }
 
     private function setPrice($price)
     {
         $this->price = $price;
-        $ref = new \ReflectionClass($this->plan);
+        $ref = new ReflectionClass($this->plan);
         $prop = $ref->getProperty('prices');
         $prop->setAccessible(true);
         $prop->setValue($this->plan, [$price]);

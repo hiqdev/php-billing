@@ -15,6 +15,7 @@ final class UsageInterval
     private DateTimeImmutable $end;
     /** @readonly */
     private DateTimeImmutable $month;
+
     private function __construct(
         DateTimeImmutable $start,
         DateTimeImmutable $end
@@ -104,6 +105,16 @@ final class UsageInterval
                 + $interval->i * 60
                 + $interval->h * 3600
                 + $interval->days * 86400;
+    }
+
+    public function minutes(): float
+    {
+        return $this->seconds() / 60;
+    }
+
+    public function hours(): float
+    {
+        return $this->seconds() / 60 / 60;
     }
 
     public function secondsInMonth(): int

@@ -8,6 +8,7 @@ Feature: Monthly cap
       And formula is cap.monthly('28 days')
       And client rejected service at <unsale_time>
       And action is server monthly 1 item in <sale_time>
+      And sale time is <sale_time>
      Then first charge is <charge>
       And second charge is <second>
     Examples:
@@ -23,6 +24,7 @@ Feature: Monthly cap
         Given formula is cap.monthly('28 days')
           And action is server monthly <qty> item
           And action date is <date>
+          And sale time is <date>
          Then first charge is <first>
           And second charge is <second>
         Examples:
@@ -30,9 +32,9 @@ Feature: Monthly cap
             | 2020-09-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
             | 2020-10-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
             | 2020-11-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
-            | 2020-12-01 | 0.6451615 | monthly 35.72 USD for 480.000156 hour |                               |
-            | 2020-12-01 | 0.9032   | monthly 50 USD for 671.9808 hour       |                               |
-            | 2020-12-01 | 0.949    | monthly 50 USD for 672 hour            | monthly 0 USD for 34.056 hour |
+            | 2020-12-10 | 0.6451615 | monthly 35.72 USD for 480.000156 hour |                               |
+            | 2020-12-04 | 0.9032258 | monthly 50.01 USD for 671.9999952 hour |                               |
+            | 2020-12-03 14:00:00 | 0.916666666 | monthly 50.01 USD for 672 hour | monthly 0 USD for 10 hour |
             | 2022-02-01 | 1        | monthly 50 USD for 672 hour            |                               |
 
     Scenario Outline: monthly cap for the fixed number of days when cap is longer then the shortest month
@@ -60,7 +62,7 @@ Feature: Monthly cap
           | 2022-02-01 | 1        | monthly 50 USD for 672 hour            |                               |
 
     Scenario Outline: monthly cap on overuses
-      Given formula is cap.monthly('28 days').since('11.2020')
+      Given formula is cap.monthly('28 days').since('11.2020').forNonProportionalizedQuantity()
         And server overuse price is 0.15 USD per GB
         And action is server overuse <qty> gb
         And action date is <date>
@@ -68,7 +70,23 @@ Feature: Monthly cap
        Then first charge is <first>
         And second charge is <second>
       Examples:
-        | date       | qty      | first                                  | second                        |
-        | 2020-10-01 | 250      | overuse 37.50 USD for 250 GB           |                               |
-        | 2020-11-01 | 250      | overuse 37.50 USD for 250 GB           |                               |
-        | 2023-02-01 | 250      | overuse 25.45 USD for 250 GB           |                               |
+        | date       | qty            | first                                  | second                        |
+        | 2020-10-01 | 250            | overuse 37.50 USD for 250 GB           |                               |
+        | 2020-11-01 | 250            | overuse 37.50 USD for 250 GB           |                               |
+        | 2023-02-01 | 250            | overuse 25.45 USD for 250 GB           |                               |
+
+    Scenario Outline: monthly cap on item overuses
+      # Use case: A service with pre-defined quantity of items, where overuse is charged per item
+      Given formula is cap.monthly('28 days')
+        And server overuse price is 12 USD per item
+        And action is server overuse <qty> items
+        And action date is <date>
+        And sale time is <date>
+       Then first charge is <first>
+        And second charge is <second>
+      Examples:
+        | date                | qty                | first                                    | second                                 |
+        | 2023-09-01          | 2                  | overuse 24 USD for 672 hour              | overuse 0 USD for 48 hour              |
+        | 2023-09-02 09:41:16 | 1.9064228395061729 | overuse 24 USD for 672 hour              | overuse 0 USD for 14.312222222222 hour |
+        | 2023-09-03 12:41:16 | 1.8314228395       | overuse 23.55 USD for 1318.62444444 hour |                                        |
+        | 2023-09-01          | 1.5                | overuse 18 USD for 672 hour              |                                        |
