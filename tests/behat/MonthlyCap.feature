@@ -28,14 +28,14 @@ Feature: Monthly cap
          Then first charge is <first>
           And second charge is <second>
         Examples:
-            | date       | qty      | first                                  | second                        |
-            | 2020-09-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
-            | 2020-10-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
-            | 2020-11-01 | 1        | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
-            | 2020-12-10 | 0.6451615 | monthly 35.72 USD for 480.000156 hour |                               |
-            | 2020-12-04 | 0.9032258 | monthly 50.01 USD for 671.9999952 hour |                               |
-            | 2020-12-03 14:00:00 | 0.916666666 | monthly 50.01 USD for 672 hour | monthly 0 USD for 10 hour |
-            | 2022-02-01 | 1        | monthly 50 USD for 672 hour            |                               |
+            | date                  | qty         | first                                  | second                        |
+            | 2020-09-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
+            | 2020-10-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
+            | 2020-11-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
+            | 2020-12-10            | 0.6451615   | monthly 35.72 USD for 480.000156 hour  |                               |
+            | 2020-12-04            | 0.9032258   | monthly 50.01 USD for 671.9999952 hour |                               |
+            | 2020-12-03 14:00:00   | 0.916666666 | monthly 50.01 USD for 672 hour         | monthly 0 USD for 10 hour     |
+            | 2022-02-01            | 1           | monthly 50 USD for 672 hour            |                               |
 
     Scenario Outline: monthly cap for the fixed number of days when cap is longer then the shortest month
         Given formula is cap.monthly('30 days')
