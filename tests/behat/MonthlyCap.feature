@@ -13,9 +13,9 @@ Feature: Monthly cap
       And second charge is <second>
     Examples:
       | description    | sale_time           | unsale_time         | charge                                          | second                                 |
-      | Almost 1 month | 2024-02-01 11:50:00 | 2024-02-29 15:15:00 | monthly 1488.00 USD for 672 hour                | monthly 0 USD for 3.4166666666496 hour |
+      | Almost 1 month | 2024-02-01 11:50:00 | 2024-02-29 15:15:00 | monthly 1487.99 USD for 672 hour                | monthly 0 USD for 3.4166666666496 hour |
       | A few weeks    | 2024-02-01 11:50:00 | 2024-02-16 15:15:00 | monthly 804.71 USD for 363.41666666666595 hour  |                                        |
-      | A few hours    | 2024-02-10 11:50:00 | 2024-02-10 15:15:00 | monthly 7.57 USD for 3.4166666666666687 hour    |                                        |
+      | A few hours    | 2024-02-10 11:50:00 | 2024-02-10 15:15:00 | monthly 7.56 USD for 3.4166666666666687 hour    |                                        |
       | A few minutes  | 2024-02-10 11:50:00 | 2024-02-10 11:55:00 | monthly 0.19 USD for 0.08333333333333567 hour   |                                        |
       | Just a second  | 2024-02-10 11:50:00 | 2024-02-10 11:50:01 | monthly 0.01 USD for 0.0002777777777777789 hour |                                        |
 
@@ -33,8 +33,8 @@ Feature: Monthly cap
             | 2020-10-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
             | 2020-11-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
             | 2020-12-10            | 0.6451615   | monthly 35.72 USD for 480.000156 hour  |                               |
-            | 2020-12-04            | 0.9032258   | monthly 50.01 USD for 671.9999952 hour |                               |
-            | 2020-12-03 14:00:00   | 0.916666666 | monthly 50.01 USD for 672 hour         | monthly 0 USD for 10 hour     |
+            | 2020-12-04            | 0.9032258   | monthly 50.00 USD for 671.9999952 hour |                               |
+            | 2020-12-03 14:00:00   | 0.9166665   | monthly 50.00 USD for 672 hour         | monthly 0 USD for 10 hour     |
             | 2022-02-01            | 1           | monthly 50 USD for 672 hour            |                               |
 
     Scenario Outline: monthly cap for the fixed number of days when cap is longer then the shortest month
