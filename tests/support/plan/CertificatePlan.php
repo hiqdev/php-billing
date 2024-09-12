@@ -15,6 +15,8 @@ use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\EnumPrice;
 use hiqdev\php\billing\target\Target;
+use hiqdev\php\billing\tests\support\customer\Client;
+use hiqdev\php\billing\tests\support\customer\Seller;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Unit;
 use Money\Currency;
@@ -54,8 +56,8 @@ class CertificatePlan extends Plan
         if (static::$instance === null) {
             static::$instance = $this;
         }
-        $this->seller   = new Customer(1, 'seller');
-        $this->customer = new Customer(2, 'client', $this->seller);
+        $this->seller   = new Seller();
+        $this->customer = new Client();
         $this->purchase = new Type(1, 'certificate_purchase');
         $this->renewal  = new Type(2, 'certificate_renewal');
         $this->rapidssl = new Target('rapidssl_standard', 'certificate_type');

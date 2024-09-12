@@ -17,14 +17,14 @@ namespace hiqdev\php\billing\type;
  */
 class Type implements TypeInterface
 {
+    public const string MONTHLY = 'monthly';
+
     /**
      * @var int|string
      */
     protected $id;
 
-    /**
-     * @var string
-     */
+    /** @var null|string|float */
     protected $name;
 
     public function __construct($id, $name = null)
@@ -89,5 +89,50 @@ class Type implements TypeInterface
     public function isDefined(): bool
     {
         return $this->id !== null || $this->name !== null;
+    }
+
+    public function isMonthly(): bool
+    {
+        return $this->belongsToGroup(self::MONTHLY);
+    }
+
+    public function belongsToGroup(string $group): bool
+    {
+        return $this->groupName() === $group;
+    }
+
+    public function groupName(): string
+    {
+        $groupIndex = 0;
+
+        return $this->extractNamePart($groupIndex);
+    }
+
+    /**
+     * @param int $index - 0 - group index, 1 - local index
+     * @return string
+     */
+    private function extractNamePart(int $index): string
+    {
+        $name = $this->getName();
+        if (strpos($name, ',') > 0) {
+            $parts = explode(',', $name, 2);
+        } else {
+            return $name;
+        }
+
+        return $parts[$index] ?? '';
+    }
+
+    public function belongsToLocalCategory(string $local): bool
+    {
+        return $this->localName() === $local;
+    }
+
+    public function localName(): string
+    {
+        $localIndex = 1;
+
+        return $this->extractNamePart($localIndex);
     }
 }

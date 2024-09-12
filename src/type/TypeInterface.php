@@ -28,8 +28,9 @@ namespace hiqdev\php\billing\type;
  */
 interface TypeInterface extends \JsonSerializable
 {
-    const ANY  = null;
-    const NONE = INF;
+    const null ANY  = null;
+
+    const float NONE = INF;
 
     /**
      * Returns type id.
@@ -59,4 +60,14 @@ interface TypeInterface extends \JsonSerializable
     public function matches(self $other): bool;
 
     public function isDefined(): bool;
+
+    public function isMonthly(): bool;
+
+    public function belongsToGroup(string $group): bool;
+
+    public function groupName(): string;
+
+    public function belongsToLocalCategory(string $local): bool;
+
+    public function localName(): string;
 }

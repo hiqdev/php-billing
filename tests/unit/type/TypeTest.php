@@ -59,16 +59,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->domain2_ = new Type($this->did2,  Type::ANY);
     }
 
-    protected function tearDown(): void
-    {
-    }
-
-    protected function copy(TypeInterface $type)
+    protected function copy(TypeInterface $type): TypeInterface
     {
         return new Type($type->getId(), $type->getName());
     }
 
-    public function testGetUniqueId()
+    public function testGetUniqueId(): void
     {
         $this->assertSame($this->sop1,  $this->server11->getUniqueId());
         $this->assertSame($this->sop1,  $this->server_1->getUniqueId());
@@ -78,7 +74,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->sid2,  $this->server2_->getUniqueId());
     }
 
-    public function testEquals()
+    public function testEquals(): void
     {
         $all = [$this->server11, $this->server_1, $this->server1_];
         $copies = [];
@@ -94,7 +90,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function checkEquals(bool $expect, $lhs, $rhs)
+    protected function checkEquals(bool $expect, $lhs, $rhs): void
     {
         $check = $lhs->equals($rhs);
         /*if ($check !== $expect) {
@@ -103,7 +99,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $check);
     }
 
-    public function testMatches()
+    public function testMatches(): void
     {
         $this->checkMatches([$this->server11, $this->server_1]);
         $this->checkMatches([$this->server_1, $this->serverN1], false);
@@ -125,7 +121,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    protected function checkDoesntMatch(array $types)
+    protected function checkDoesntMatch(array $types): void
     {
         foreach ($types as $k => $v) {
             foreach ($types as $j => $w) {
@@ -136,7 +132,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function checkMatches(array $types, bool $self = true)
+    protected function checkMatches(array $types, bool $self = true): void
     {
         $all = $types;
         if ($self) {
@@ -153,12 +149,109 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function checkSingleMatch(bool $expect, $lhs, $rhs)
+    protected function checkSingleMatch(bool $expect, $lhs, $rhs): void
     {
         $check = $lhs->matches($rhs);
         /*if ($check !== $expect) {
             var_dump('no match', $expect, $lhs, $rhs);
         }*/
         $this->assertSame($expect, $check);
+    }
+
+    public function testGetId(): void
+    {
+        $type = new Type(1, 'monthly');
+        $this->assertEquals(1, $type->getId());
+
+        $type = new Type('customId', 'discount');
+        $this->assertEquals('customId', $type->getId());
+    }
+
+    public function testGetName(): void
+    {
+        $type = new Type(1, 'monthly');
+        $this->assertEquals('monthly', $type->getName());
+
+        $type = new Type(2);
+        $this->assertNull($type->getName());
+    }
+
+    public function testHasName(): void
+    {
+        $type = new Type(1, 'monthly');
+        $this->assertTrue($type->hasName());
+
+        $type = new Type(2, '');
+        $this->assertFalse($type->hasName());
+
+        $type = new Type(3, TypeInterface::ANY);
+        $this->assertFalse($type->hasName());
+
+        $type = new Type(4, TypeInterface::NONE);
+        $this->assertFalse($type->hasName());
+    }
+
+    public function testJsonSerialize(): void
+    {
+        $type = new Type(1, 'monthly');
+        $expectedJson = [
+            'id' => 1,
+            'name' => 'monthly',
+        ];
+        $this->assertEquals($expectedJson, $type->jsonSerialize());
+    }
+
+    public function testIsDefined(): void
+    {
+        $type = new Type(1, 'monthly');
+        $this->assertTrue($type->isDefined());
+
+        $type = new Type(null, null);
+        $this->assertFalse($type->isDefined());
+    }
+
+    public function testIsMonthly(): void
+    {
+        $type = new Type(1, 'monthly,leasing');
+        $this->assertTrue($type->isMonthly());
+
+        $type = new Type(2, 'discount');
+        $this->assertFalse($type->isMonthly());
+    }
+
+    public function testBelongsToGroup(): void
+    {
+        $type = new Type(1, 'monthly,leasing');
+        $this->assertTrue($type->belongsToGroup('monthly'));
+
+        $type = new Type(2, 'discount');
+        $this->assertFalse($type->belongsToGroup('monthly'));
+    }
+
+    public function testGroupName(): void
+    {
+        $type = new Type(1, 'monthly,leasing');
+        $this->assertEquals('monthly', $type->groupName());
+
+        $type = new Type(2, 'discount');
+        $this->assertEquals('discount', $type->groupName());
+    }
+
+    public function testLocalName(): void
+    {
+        $type = new Type(1, 'monthly,leasing');
+        $this->assertEquals('leasing', $type->localName());
+
+        $type = new Type(2, 'discount');
+        $this->assertEquals('discount', $type->localName());
+    }
+
+    public function testBelongsToLocalCategory(): void
+    {
+        $type = new Type(1, 'monthly,leasing');
+        $this->assertTrue($type->belongsToLocalCategory('leasing'));
+
+        $type = new Type(2, 'discount');
+        $this->assertFalse($type->belongsToLocalCategory('leasing'));
     }
 }
