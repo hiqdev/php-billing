@@ -22,7 +22,7 @@ use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
-use hiqdev\php\billing\type\Type;
+use hiqdev\php\billing\type\AnyIdType;
 use hiqdev\php\units\Quantity;
 use Money\Money;
 
@@ -46,9 +46,9 @@ class Installment extends Modifier
     {
         $since = $this->getSince();
         if ($since->getValue() < new DateTimeImmutable('2024-01-01')) {
-            return new Type(Type::ANY, 'monthly,leasing');
+            return new AnyIdType('monthly,leasing');
         }
-        return new Type(Type::ANY, 'monthly,installment');
+        return new AnyIdType('monthly,installment');
     }
 
     public function getTarget()

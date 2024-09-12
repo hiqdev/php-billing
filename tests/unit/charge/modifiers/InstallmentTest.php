@@ -17,7 +17,7 @@ use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
 use hiqdev\php\billing\charge\modifiers\Leasing;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
-use hiqdev\php\billing\type\Type;
+use hiqdev\php\billing\type\AnyIdType;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -29,7 +29,7 @@ class InstallmentTest extends ActionTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->type = new Type(Type::ANY, 'monthly,installment');
+        $this->type = new AnyIdType('monthly,installment');
         $this->price = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
     }
 

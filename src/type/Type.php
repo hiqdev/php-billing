@@ -20,14 +20,21 @@ class Type implements TypeInterface
     public const string MONTHLY = 'monthly';
 
     /**
-     * @var int|string
+     * @var int|string|null|float The unique identifier of the type. Can be an integer or string.
+     *                            Special values:
+     *                            - `Type::ANY` indicates that the type can match any ID.
+     *                            - `Type::NONE` indicates that there is no valid ID.
      */
     protected $id;
 
-    /** @var null|string|float */
+    /**
+     * @var string|null|float The name of the type. Can be a specific name or one of the special values:
+     *                        - `Type::ANY` indicates that the type can match any name.
+     *                        - `Type::NONE` indicates that there is no valid name.
+     */
     protected $name;
 
-    public function __construct($id, $name = null)
+    public function __construct($id, $name = self::ANY)
     {
         $this->id = $id;
         $this->name = $name;

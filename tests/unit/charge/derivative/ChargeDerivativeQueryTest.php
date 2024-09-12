@@ -11,8 +11,7 @@ use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\target\TargetInterface;
-use hiqdev\php\billing\type\Type;
-use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\billing\type\AnyIdType;
 use Money\Currency;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
@@ -100,7 +99,7 @@ class ChargeDerivativeQueryTest extends TestCase
     {
         $query = $this->query;
         $this->assertFalse($query->isChanged('type'));
-        $type = new Type(TypeInterface::ANY, 'foo');
+        $type = new AnyIdType('foo');
         $query->changeType($type);
         $this->assertTrue($query->isChanged('type'));
         $this->assertEquals($type, $query->getType());

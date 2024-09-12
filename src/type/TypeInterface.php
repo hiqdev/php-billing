@@ -28,6 +28,9 @@ namespace hiqdev\php\billing\type;
  */
 interface TypeInterface extends \JsonSerializable
 {
+    /**
+     * @var null - any type can be used as ID or type name
+     */
     const null ANY  = null;
 
     const float NONE = INF;
