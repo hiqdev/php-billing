@@ -31,7 +31,7 @@ use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
-use hiqdev\php\billing\type\AnyIdType;
+use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\Unit;
 use Money\Currencies\ISOCurrencies;
@@ -95,7 +95,7 @@ class FeatureContext implements Context
      */
     public function priceIs($target, $type, $sum, $currency, $unit, $quantity = 0)
     {
-        $type = new AnyIdType($type);
+        $type = Type::anyId($type);
         $target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, new Currency($currency));
@@ -134,7 +134,7 @@ class FeatureContext implements Context
     {
         $i = 0;
         foreach ($this->progressivePrice as $type => $price) {
-            $type = new AnyIdType($type);
+            $type = Type::anyId($type);
             $target = new Target(Target::ANY, $price['target']);
             $quantity = Quantity::create($price['unit'], $price['prepaid']);
             if ($i++ === 0) {
@@ -185,7 +185,7 @@ class FeatureContext implements Context
      */
     public function actionIs(string $target, string $type, float $amount, string $unit, ?string $date = null): void
     {
-        $type = new AnyIdType($type);
+        $type = Type::anyId($type);
         $target = new Target(Target::ANY, $target);
         $time = new DateTimeImmutable($date);
         if ($this->sale->getCloseTime() instanceof DateTimeImmutable) {

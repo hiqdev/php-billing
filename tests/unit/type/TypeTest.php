@@ -254,4 +254,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $type = new Type(2, 'discount');
         $this->assertFalse($type->belongsToLocalCategory('leasing'));
     }
+
+    public function testTypeWithAnyIdHasAnyId(): void
+    {
+        $type = Type::anyId('monthly,leasing');
+
+        $this->assertSame(TypeInterface::ANY, $type->getId());
+        $this->assertSame('monthly,leasing', $type->getName());
+    }
 }

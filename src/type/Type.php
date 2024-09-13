@@ -98,6 +98,11 @@ class Type implements TypeInterface
         return $this->id !== null || $this->name !== null;
     }
 
+    public static function anyId($name): TypeInterface
+    {
+        return new self(self::ANY, $name);
+    }
+
     public function isMonthly(): bool
     {
         return $this->belongsToGroup(self::MONTHLY);
