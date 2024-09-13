@@ -17,8 +17,6 @@ namespace hiqdev\php\billing\type;
  */
 class Type implements TypeInterface
 {
-    public const string MONTHLY = 'monthly';
-
     /**
      * @var int|string|null|float The unique identifier of the type. Can be an integer or string.
      *                            Special values:
