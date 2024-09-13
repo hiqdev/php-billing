@@ -210,51 +210,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($type->isDefined());
     }
 
-    public function testIsMonthly(): void
-    {
-        $type = new Type(1, 'monthly,leasing');
-        $this->assertTrue($type->isMonthly());
-
-        $type = new Type(2, 'discount');
-        $this->assertFalse($type->isMonthly());
-    }
-
-    public function testBelongsToGroup(): void
-    {
-        $type = new Type(1, 'monthly,leasing');
-        $this->assertTrue($type->belongsToGroup('monthly'));
-
-        $type = new Type(2, 'discount');
-        $this->assertFalse($type->belongsToGroup('monthly'));
-    }
-
-    public function testGroupName(): void
-    {
-        $type = new Type(1, 'monthly,leasing');
-        $this->assertEquals('monthly', $type->groupName());
-
-        $type = new Type(2, 'discount');
-        $this->assertEquals('discount', $type->groupName());
-    }
-
-    public function testLocalName(): void
-    {
-        $type = new Type(1, 'monthly,leasing');
-        $this->assertEquals('leasing', $type->localName());
-
-        $type = new Type(2, 'discount');
-        $this->assertEquals('discount', $type->localName());
-    }
-
-    public function testBelongsToLocalCategory(): void
-    {
-        $type = new Type(1, 'monthly,leasing');
-        $this->assertTrue($type->belongsToLocalCategory('leasing'));
-
-        $type = new Type(2, 'discount');
-        $this->assertFalse($type->belongsToLocalCategory('leasing'));
-    }
-
     public function testTypeWithAnyIdHasAnyId(): void
     {
         $type = Type::anyId('monthly,leasing');

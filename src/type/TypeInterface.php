@@ -63,14 +63,4 @@ interface TypeInterface extends \JsonSerializable
     public function matches(self $other): bool;
 
     public function isDefined(): bool;
-
-    public function isMonthly(): bool;
-
-    public function belongsToGroup(string $group): bool;
-
-    public function groupName(): string;
-
-    public function belongsToLocalCategory(string $local): bool;
-
-    public function localName(): string;
 }

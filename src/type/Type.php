@@ -102,49 +102,4 @@ class Type implements TypeInterface
     {
         return new self(self::ANY, $name);
     }
-
-    public function isMonthly(): bool
-    {
-        return $this->belongsToGroup(self::MONTHLY);
-    }
-
-    public function belongsToGroup(string $group): bool
-    {
-        return $this->groupName() === $group;
-    }
-
-    public function groupName(): string
-    {
-        $groupIndex = 0;
-
-        return $this->extractNamePart($groupIndex);
-    }
-
-    /**
-     * @param int $index - 0 - group index, 1 - local index
-     * @return string
-     */
-    private function extractNamePart(int $index): string
-    {
-        $name = $this->getName();
-        if (strpos($name, ',') > 0) {
-            $parts = explode(',', $name, 2);
-        } else {
-            return $name;
-        }
-
-        return $parts[$index] ?? '';
-    }
-
-    public function belongsToLocalCategory(string $local): bool
-    {
-        return $this->localName() === $local;
-    }
-
-    public function localName(): string
-    {
-        $localIndex = 1;
-
-        return $this->extractNamePart($localIndex);
-    }
 }
