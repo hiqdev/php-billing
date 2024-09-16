@@ -98,6 +98,6 @@ class Type implements TypeInterface
 
     public static function anyId($name): TypeInterface
     {
-        return new self(self::ANY, $name);
+        return new static(self::ANY, $name);
     }
 }
