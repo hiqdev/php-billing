@@ -29,7 +29,7 @@ class InstallmentTest extends ActionTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->type = new Type(Type::ANY, 'monthly,installment');
+        $this->type = Type::anyId('monthly,installment');
         $this->price = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
     }
 

@@ -46,9 +46,9 @@ class Installment extends Modifier
     {
         $since = $this->getSince();
         if ($since->getValue() < new DateTimeImmutable('2024-01-01')) {
-            return new Type(Type::ANY, 'monthly,leasing');
+            return Type::anyId('monthly,leasing');
         }
-        return new Type(Type::ANY, 'monthly,installment');
+        return Type::anyId('monthly,installment');
     }
 
     public function getTarget()
