@@ -27,7 +27,7 @@ class ActionState
 
     private const STATE_FUTURE    = 'future';
 
-    private const STATE_CANCELED  = 'canceled';
+    private const STATE_CANCELED  = 'cancelled';
 
     private function __construct(protected string $state = self::STATE_NEW)
     {
