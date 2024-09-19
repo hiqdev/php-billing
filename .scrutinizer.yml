@@ -11,7 +11,9 @@ tools:
     external_code_coverage:
         timeout: 600
 build:
-    image: php:8.3-cli
+    environment:
+        docker:
+            image: php:8.3-cli
     nodes:
         analysis:
             tests:
