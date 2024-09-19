@@ -1,9 +1,6 @@
 before_commands:
     - composer self-update --2  # Upgrade to Composer 2
     - composer install --no-interaction --no-scripts  # Install dependencies
-environment:
-    php:
-        version: 8.3
 checks:
     php:
         code_rating: true
