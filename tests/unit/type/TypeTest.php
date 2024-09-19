@@ -30,6 +30,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected $dop1 = 'domain1';
     protected $dop2 = 'domain2';
 
+    private Type $nonenone;
+
     private Type $server11;
     private Type $server12;
     private Type $server_1;
