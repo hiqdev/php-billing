@@ -31,6 +31,8 @@ class PlanTest extends \PHPUnit\Framework\TestCase
 
     protected DateTimeImmutable $time;
 
+    private Calculator $calculator;
+
     protected function setUp(): void
     {
         $this->plan = CertificatePlan::get();
