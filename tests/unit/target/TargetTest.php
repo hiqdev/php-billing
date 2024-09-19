@@ -20,9 +20,48 @@ use hiqdev\php\billing\target\TargetInterface;
 class TargetTest extends \PHPUnit\Framework\TestCase
 {
     protected $id1 = 1;
+
     protected $id2 = 2;
+
     protected $idA = 8;
+
     protected $idB = 9;
+
+    private \hiqdev\php\billing\target\AbstractTarget $target_;
+
+    private Target $target1;
+
+    private Target $target2;
+
+    private Target $targetA;
+
+    private Target $targetB;
+
+    private TargetCollection $targets;
+
+    private Target $server_;
+
+    private Target $server1;
+
+    private Target $server2;
+
+    private Target $serverA;
+
+    private Target $serverB;
+
+    private Target $serverN;
+
+    private TargetCollection $servers;
+
+    private Target $domain_;
+
+    private Target $domain1;
+
+    private Target $domain2;
+
+    private Target $domainN;
+
+    private TargetCollection $domains;
 
     protected function setUp(): void
     {
