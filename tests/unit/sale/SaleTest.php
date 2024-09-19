@@ -20,14 +20,11 @@ use hiqdev\php\billing\tests\unit\plan\PlanTest;
 
 class SaleTest extends PlanTest
 {
-    /**
-     * @var Sale|SaleInterface
-     */
-    protected $sale;
-    /**
-     * @var SaleRepositoryInterface|SimpleSaleRepository
-     */
-    protected $repository;
+    protected DateTimeImmutable $time;
+
+    protected SaleInterface $sale;
+
+    protected SaleRepositoryInterface $repository;
 
     protected function setUp(): void
     {
