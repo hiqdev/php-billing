@@ -14,6 +14,7 @@ use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\EnumPrice;
+use hiqdev\php\billing\price\Sums;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\customer\Client;
 use hiqdev\php\billing\tests\support\customer\Seller;
@@ -112,9 +113,9 @@ class CertificatePlan extends Plan
         return $this->getRawPrices($action->getType(), $action->getTarget())[$years];
     }
 
-    public function getRawPrices($type, $target)
+    public function getRawPrices($type, $target): Sums
     {
-        return $this->rawPrices[$this->getRawPriceKey($type, $target)];
+        return new Sums($this->rawPrices[$this->getRawPriceKey($type, $target)]);
     }
 
     /**
