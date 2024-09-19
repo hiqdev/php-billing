@@ -1,4 +1,9 @@
 before_commands:
+    # Install PHP 8.3 manually
+    - sudo add-apt-repository ppa:ondrej/php -y
+    - sudo apt-get update -y
+    - sudo apt-get install php8.3-cli -y
+    - php -v # Check PHP version to ensure 8.3 is installed
     - composer self-update --2  # Upgrade to Composer 2
     - composer install --no-interaction --no-scripts  # Install dependencies
 checks:
@@ -11,9 +16,9 @@ tools:
     external_code_coverage:
         timeout: 600
 build:
+    image: default-bionic
     environment:
-        docker:
-            image: php:8.3-cli
+        php: 8.3    # Specify PHP version
     nodes:
         analysis:
             tests:
