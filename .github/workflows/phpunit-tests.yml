@@ -41,6 +41,6 @@ jobs:
         run: composer install -n
 
       - name: PHPUnit
-        run: vendor/bin/phpunit --exclude vendor
+        run: vendor/bin/phpunit
         env:
           XDEBUG_MODE: coverage
