@@ -1,5 +1,6 @@
-before_scripts:
+before_commands:
     - composer self-update --2  # Upgrade to Composer 2
+    - composer install --no-interaction --no-scripts  # Install dependencies
 environment:
     php:
         version: 8.3
@@ -15,5 +16,8 @@ tools:
 build:
     nodes:
         analysis:
+            environment:
+                php:
+                    version: 8.3  # Specify PHP version
             tests:
                 override: [php-scrutinizer-run]
