@@ -8,9 +8,9 @@
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
+            <exclude>
+                <directory suffix=".php">./vendor/</directory>
+            </exclude>
         </whitelist>
-        <blacklist>
-            <directory>./vendor/</directory>
-        </blacklist>
     </filter>
 </phpunit>
