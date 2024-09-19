@@ -11,9 +11,7 @@ tools:
     external_code_coverage:
         timeout: 600
 build:
-    image: default-bionic
-    environment:
-        php: 8.3    # Specify PHP version
+    image: php:8.3-cli
     nodes:
         analysis:
             tests:
