@@ -17,18 +17,6 @@ tools:
         timeout: 600
 build:
     image: default-bionic
-    steps:
-        - before_commands:
-              # Install PHP 8.3 manually
-              - sudo add-apt-repository ppa:ondrej/php -y
-              - sudo apt-get update -y
-              - sudo apt-get install php8.3-cli -y
-              - php -v # Check PHP version to ensure 8.3 is installed
-              - composer install --no-interaction --no-scripts
-        - commands:
-              # Continue with the usual steps
-              - vendor/bin/phpunit --coverage-text
-              - php-scrutinizer-run
     nodes:
         analysis:
             tests:
