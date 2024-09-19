@@ -14,5 +14,11 @@ build:
     image: default-bionic
     nodes:
         analysis:
+            environment:
+                php: 8.3
+            dependencies:
+                before:
+                    - composer self-update --2  # Upgrade to Composer 2
+                    - composer install --no-interaction --no-scripts  # Install dependencies
             tests:
                 override: [php-scrutinizer-run]
