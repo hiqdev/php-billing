@@ -21,9 +21,14 @@ use Money\Money;
  */
 class FixedDiscountTest extends ActionTest
 {
+    private Money $value;
+
+    private string $rate;
+
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->value = Money::USD(1000);
         $this->rate = '10';
     }
