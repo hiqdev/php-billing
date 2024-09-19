@@ -17,8 +17,6 @@ tools:
         timeout: 600
 build:
     image: default-bionic
-    environment:
-        php: 8.3    # Specify PHP version
     nodes:
         analysis:
             tests:
