@@ -24,10 +24,9 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class RatePrice extends AbstractPrice
+class RatePrice extends AbstractPrice implements PriceWithRateInterface
 {
-    /** @var float */
-    protected $rate;
+    protected float $rate;
 
     public function __construct(
         $id,

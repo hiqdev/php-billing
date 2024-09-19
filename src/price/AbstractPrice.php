@@ -53,7 +53,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     protected $plan;
 
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
         PlanInterface $plan = null
@@ -148,10 +148,45 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
 
     public function jsonSerialize(): array
     {
-        $res = array_filter(get_object_vars($this));
-        unset($res['plan']);
+        $data = [
+            'id' => $this->id,
+            'class' => (new \ReflectionClass($this))->getShortName(),
+            'type' => $this->getType()->getName(),
+            'type_id' => $this->getType()->getId(),
+            'object_id' => $this->getTarget()->getId(),
+            'object' => [
+                'id' => $this->getTarget()->getId(),
+                'name' => $this->getTarget()->getName(),
+                'type' => $this->getTarget()->getType(),
+            ],
+            'plan_id' => $this->getPlan()?->getId(),
+        ];
 
-        return $res;
+        if ($this instanceof PriceWithSubpriceInterface) {
+            $data['subprice'] = $this->getSubprices()->values();
+        }
+
+        if ($this instanceof PriceWithRateInterface) {
+            $data['rate'] = $this->getRate();
+        }
+
+        if ($this instanceof PriceWithUnitInterface) {
+            $data['unit'] = $this->getUnit()->getName();
+        }
+
+        if ($this instanceof PriceWithCurrencyInterface) {
+            $data['currency'] = $this->getCurrency()->getCode();
+        }
+
+        if ($this instanceof PriceWithSumsInterface) {
+            $data['sums'] = $this->getSums()->values();
+        }
+
+        if ($this instanceof PriceWithQuantityInterface) {
+            $data['quantity'] = $this->getPrepaid()->getQuantity();
+        }
+
+        return $data;
     }
 
     /**
