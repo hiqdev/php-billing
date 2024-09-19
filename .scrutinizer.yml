@@ -1,3 +1,8 @@
+before_scripts:
+    - composer self-update --2  # Upgrade to Composer 2
+environment:
+    php:
+        version: 8.3
 checks:
     php:
         code_rating: true
