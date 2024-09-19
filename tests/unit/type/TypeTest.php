@@ -30,6 +30,30 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     protected $dop1 = 'domain1';
     protected $dop2 = 'domain2';
 
+    private Type $server11;
+    private Type $server12;
+    private Type $server_1;
+    private Type $server1_;
+    private Type $serverN1;
+    private Type $server1N;
+    private Type $serverN_;
+    private Type $server_N;
+    private Type $server22;
+    private Type $server21;
+    private Type $server_2;
+    private Type $server2_;
+    private Type $serverN2;
+    private Type $server2N;
+
+    private Type $domain11;
+    private Type $domain_1;
+    private Type $domain1_;
+    private Type $domainN1;
+    private Type $domain1N;
+    private Type $domain22;
+    private Type $domain_2;
+    private Type $domain2_;
+
     protected function setUp(): void
     {
         $this->nonenone = new Type(Type::NONE,   Type::NONE);
