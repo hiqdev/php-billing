@@ -5,12 +5,13 @@
             <directory>./tests/unit/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+
+    <coverage>
+        <include>
             <directory suffix=".php">./src/</directory>
-            <exclude>
-                <directory suffix=".php">./vendor/</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+        <exclude>
+            <directory suffix=".php">./vendor/</directory>
+        </exclude>
+    </coverage>
 </phpunit>
