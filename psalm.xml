@@ -26,7 +26,6 @@
         <MissingReturnType errorLevel="info" />
         <MissingPropertyType errorLevel="info" />
         <InvalidDocblock errorLevel="info" />
-        <MisplacedRequiredParam errorLevel="info" />
 
         <PropertyNotSetInConstructor errorLevel="info" />
         <MissingConstructor errorLevel="info" />
@@ -46,7 +45,6 @@
 
         <MoreSpecificReturnType errorLevel="info" />
         <LessSpecificReturnStatement errorLevel="info" />
-        <TypeCoercion errorLevel="info" />
 
         <PossiblyFalseArgument errorLevel="info" />
         <PossiblyFalseIterator errorLevel="info" />
