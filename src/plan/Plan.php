@@ -109,9 +109,9 @@ class Plan implements PlanInterface
         return $this->parent_id;
     }
 
-    public function setParentId(int $id): void
+    public function setParentId(int $parentId): void
     {
-        $this->parent_id = $id;
+        $this->parent_id = $parentId;
     }
 
     public function hasPrices(): bool
