@@ -74,5 +74,5 @@ abstract class Period implements AddonInterface
      *
      * @return DateTimeImmutable time of period end
      */
-    abstract public function addTo(DateTimeImmutable $startTime): DateTimeImmutable;
+    abstract public function addTo(DateTimeImmutable $since): DateTimeImmutable;
 }
