@@ -56,7 +56,7 @@ class Installment extends Modifier
         return new Target(Target::ANY, Target::ANY);
     }
 
-    public function till($dummy)
+    public function till($time)
     {
         throw new FormulaSemanticsError('till can not be defined for installment');
     }
