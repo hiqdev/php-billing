@@ -59,6 +59,7 @@
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-behat": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
+        "hiqdev/php-data-mapper": "dev-master",
         "vimeo/psalm": "^5.0",
         "cache/array-adapter": "*",
         "matthiasnoback/behat-expect-exception": "^v0.3.0"
