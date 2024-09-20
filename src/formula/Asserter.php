@@ -36,10 +36,10 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
 
     public function visitModel(Model $element, &$handle = null, $eldnah = null)
     {
-        return $this->getExpression($element)->accept($this, $handle, $eldnah);
+        return $this->_getExpression($element)->accept($this, $handle, $eldnah);
     }
 
-    private function getExpression(Model $element): Operator
+    private function _getExpression(Model $element): Operator
     {
         return $element->getExpression();
     }
