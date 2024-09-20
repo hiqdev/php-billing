@@ -154,7 +154,7 @@ class Installment extends Modifier
         return $result;
     }
 
-    private function createInstallmentStartingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
+    private function createInstallmentStartingCharge(Charge $charge, DateTimeImmutable $month): ChargeInterface
     {
         $charge->recordThat(InstallmentWasStarted::onCharge($charge, $month));
 
