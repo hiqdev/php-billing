@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\Money;
 
-use Laminas\Code\Reflection\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
