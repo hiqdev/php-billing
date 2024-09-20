@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * Class ChargeDerivativeQueryTest
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- * @covers ChargeDerivativeQuery
+ * @covers \hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery
  */
 class ChargeDerivativeQueryTest extends TestCase
 {
