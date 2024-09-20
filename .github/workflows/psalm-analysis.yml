@@ -1,0 +1,44 @@
+name: Psalm Static Analysis
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 9 * * 1"
+
+jobs:
+  psalm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '8.3' ]
+        coverage-driver: [ pcov ]
+    name: PHP ${{ matrix.php }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gmp
+          coverage: pcov
+          tools: composer:v2, infection
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json', 'composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Update composer
+        run: composer self-update
+
+      - name: Composer install
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install -n
+
+      - name: Run Psalm
+        run: vendor/bin/psalm
