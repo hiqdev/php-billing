@@ -190,7 +190,7 @@ class Calculator implements CalculatorInterface
 
         if ($lookPlanIds) {
             $foundPlans = $this->planRepository->findByIds($lookPlanIds);
-            foreach ($foundPlans as $actionKey => $plan) {
+            foreach ($foundPlans as $plan) {
                 $foundPlans[$plan->getId()] = $plan;
             }
             foreach ($lookPlanIds as $actionKey => $planId) {
