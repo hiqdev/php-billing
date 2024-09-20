@@ -11,7 +11,6 @@
 namespace hiqdev\php\billing\order;
 
 use Exception;
-use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\action\TemporaryActionInterface;
 use hiqdev\php\billing\charge\Charge;
@@ -23,7 +22,6 @@ use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\plan\PlanRepositoryInterface;
 use hiqdev\php\billing\price\PriceInterface;
-use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
 use hiqdev\php\billing\tools\ActualDateTimeProvider;
@@ -63,14 +61,12 @@ class Calculator implements CalculatorInterface
         $plans = $this->findPlans($order);
         $charges = [];
         foreach ($order->getActions() as $actionKey => $action) {
-            if ($plans[$actionKey] === null) {
-                continue;
-            }
-
-            try {
-                $charges = array_merge($charges, $this->calculatePlan($plans[$actionKey], $action));
-            } catch (Throwable $e) {
-                throw ActionChargingException::forAction($action, $e);
+            if (!empty($plans[$actionKey])) {
+                try {
+                    $charges = array_merge($charges, $this->calculatePlan($plans[$actionKey], $action));
+                } catch (Throwable $e) {
+                    throw ActionChargingException::forAction($action, $e);
+                }
             }
         }
 
@@ -157,19 +153,15 @@ class Calculator implements CalculatorInterface
 
     /**
      * @throws Exception
-     * @return PlanInterface[]|Plan
+     * @return PlanInterface[]
      */
-    private function findPlans(OrderInterface $order)
+    private function findPlans(OrderInterface $order): array
     {
         $sales = $this->findSales($order);
         $plans = [];
         $lookPlanIds = [];
         foreach ($order->getActions() as $actionKey => $action) {
-            /** @var Action $action */
-            if ($sales[$actionKey] === false) {
-                /// it is ok when no sale found for upper resellers
-                $plans[$actionKey] = null;
-            } else {
+            if (!empty($sales[$actionKey])) {
                 $sale = $sales[$actionKey];
                 /** @var Plan|PlanInterface[] $plan */
                 $plan = $sale->getPlan();
@@ -185,6 +177,9 @@ class Calculator implements CalculatorInterface
                 } else {
                     $plans[$actionKey] = null;
                 }
+            } else {
+                // It is ok when no sale found for upper resellers
+                $plans[$actionKey] = null;
             }
         }
 
@@ -205,9 +200,10 @@ class Calculator implements CalculatorInterface
     }
 
     /**
-     * @return SaleInterface[]|Sale
+     * @param OrderInterface $order
+     * @return SaleInterface[]
      */
-    private function findSales(OrderInterface $order)
+    private function findSales(OrderInterface $order): array
     {
         $sales = [];
         $lookActions = [];
