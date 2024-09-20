@@ -38,9 +38,9 @@ jobs:
 
       - name: Composer install
         if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: |
-          composer install -n
+        run: |          
           composer require scrutinizer/ocular --no-update --no-interaction
+          composer update --prefer-dist --no-progress --prefer-${{ matrix.setup }} --ignore-platform-req=php
 
       - name: PHPUnit
         run: vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text --coverage-html=coverage
