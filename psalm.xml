@@ -22,8 +22,6 @@
         </ignoreFiles>
     </projectFiles>
 
-    <requireFile>vendor/autoload.php</requireFile>
-
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
 
