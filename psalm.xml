@@ -22,9 +22,7 @@
         </ignoreFiles>
     </projectFiles>
 
-    <autoloadFiles>
-        <file>vendor/autoload.php</file>
-    </autoloadFiles>
+    <requireFile>vendor/autoload.php</requireFile>
 
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
