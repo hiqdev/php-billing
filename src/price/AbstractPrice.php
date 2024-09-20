@@ -146,47 +146,20 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
         return $sum;
     }
 
+    /**
+     * What purpose of this method? Because it looks like duplicate of PriceHydrator::extract()
+     * Where we are using the result of this method?
+     * Magic calls can't be determined and I don't know what can be broken if we change the method result.
+     * Which structure must have the result, because array can contain anything?
+     *
+     * @return array
+     */
     public function jsonSerialize(): array
     {
-        $data = [
-            'id' => $this->id,
-            'class' => (new \ReflectionClass($this))->getShortName(),
-            'type' => $this->getType()->getName(),
-            'type_id' => $this->getType()->getId(),
-            'object_id' => $this->getTarget()->getId(),
-            'object' => [
-                'id' => $this->getTarget()->getId(),
-                'name' => $this->getTarget()->getName(),
-                'type' => $this->getTarget()->getType(),
-            ],
-            'plan_id' => $this->getPlan()?->getId(),
-        ];
+        $res = array_filter(get_object_vars($this));
+        unset($res['plan']);
 
-        if ($this instanceof PriceWithSubpriceInterface) {
-            $data['subprice'] = $this->getSubprices()->values();
-        }
-
-        if ($this instanceof PriceWithRateInterface) {
-            $data['rate'] = $this->getRate();
-        }
-
-        if ($this instanceof PriceWithUnitInterface) {
-            $data['unit'] = $this->getUnit()->getName();
-        }
-
-        if ($this instanceof PriceWithCurrencyInterface) {
-            $data['currency'] = $this->getCurrency()->getCode();
-        }
-
-        if ($this instanceof PriceWithSumsInterface) {
-            $data['sums'] = $this->getSums()->values();
-        }
-
-        if ($this instanceof PriceWithQuantityInterface) {
-            $data['quantity'] = $this->getPrepaid()->getQuantity();
-        }
-
-        return $data;
+        return $res;
     }
 
     /**
