@@ -1,9 +1,19 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="false"
+    errorLevel="5"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     xmlns="https://getpsalm.org/schema/config"
+    strictBinaryOperands="true"
+    allowStringToStandInForClass="true"
+    usePhpDocPropertiesWithoutMagicCall="true"
+    usePhpDocMethodsWithoutMagicCall="true"
+    ignoreInternalFunctionNullReturn="false"
+    findUnusedVariablesAndParams="true"
+    findUnusedPsalmSuppress="true"
+    ensureArrayStringOffsetsExist="true"
+    ensureArrayIntOffsetsExist="true"
+    ignoreInternalFunctionFalseReturn="false"
 >
     <projectFiles>
         <directory name="src" />
