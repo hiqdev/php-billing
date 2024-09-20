@@ -17,6 +17,8 @@ build:
             dependencies:
                 before:
                     # Install PHP 8.3 manually
+                    - sudo apt-get update
+                    - sudo apt-get install -y software-properties-common
                     - sudo add-apt-repository ppa:ondrej/php -y
                     - sudo apt-get update -y
                     - sudo apt-get install php8.3-cli -y
