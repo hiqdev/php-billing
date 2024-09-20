@@ -16,6 +16,8 @@ build:
         analysis:
             dependencies:
                 before:
+                    - composer self-update --2  # Upgrade to Composer 2
+                    - composer install --no-interaction --no-scripts  # Install dependencies
                     # Install PHP 8.3 manually
                     - sudo apt-get update
                     - sudo apt-get install -y software-properties-common
@@ -23,7 +25,5 @@ build:
                     - sudo apt-get update -y
                     - sudo apt-get install php8.3 php8.3-cli -y
                     - php -v # Check PHP version to ensure 8.3 is installed
-                    - composer self-update --2  # Upgrade to Composer 2
-                    - composer install --no-interaction --no-scripts  # Install dependencies
             tests:
                 override: [php-scrutinizer-run]
