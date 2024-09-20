@@ -20,10 +20,11 @@
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
-        <autoloadFiles>
-            <file>vendor/autoload.php</file>
-        </autoloadFiles>
     </projectFiles>
+
+    <autoloadFiles>
+        <file>vendor/autoload.php</file>
+    </autoloadFiles>
 
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
