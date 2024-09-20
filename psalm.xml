@@ -20,6 +20,9 @@
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
+        <autoloadFiles>
+            <file>vendor/autoload.php</file>
+        </autoloadFiles>
     </projectFiles>
 
     <issueHandlers>
