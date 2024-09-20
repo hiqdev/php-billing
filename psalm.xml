@@ -2,11 +2,14 @@
 <psalm
     totallyTyped="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config file:///Users/silverfire/prj/github/hiqdev/php-billing/vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
         <directory name="src" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
