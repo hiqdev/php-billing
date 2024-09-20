@@ -26,12 +26,12 @@ jobs:
           coverage: pcov
           tools: composer:v2, infection
 
-      - name: Cache Composer dependencies
+      - name: Cache Composer packages
+        id: composer-cache
         uses: actions/cache@v2
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json', 'composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Update composer
         run: composer self-update
