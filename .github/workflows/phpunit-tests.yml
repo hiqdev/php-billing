@@ -38,21 +38,9 @@ jobs:
 
       - name: Composer install
         if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: |          
-          composer require scrutinizer/ocular --no-update --no-interaction
-          composer update --prefer-dist --no-progress --prefer-${{ matrix.setup }} --ignore-platform-req=php
+        run: composer install -n
 
       - name: PHPUnit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text --coverage-html=coverage
+        run: vendor/bin/phpunit
         env:
           XDEBUG_MODE: coverage
-
-      - name: Archive Code Coverage Results
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./coverage.xml
-          disable_search: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload Code Coverage To Scrutinizer
-        run: vendor/bin/ocular code-coverage:upload --format=php-clover coverage.xml
