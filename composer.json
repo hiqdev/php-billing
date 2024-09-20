@@ -60,7 +60,6 @@
         "hiqdev/hidev-behat": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
         "hiqdev/php-data-mapper": "dev-master",
-        "hiqdev/hiapi": "dev-master",
         "advancedhosters/billing-hiapi": "dev-master",
         "vimeo/psalm": "^5.0",
         "cache/array-adapter": "*",
