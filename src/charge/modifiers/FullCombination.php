@@ -78,7 +78,6 @@ class FullCombination implements ChargeModifier
 
             $lastLeftCharge = end($leftCharges);
             $rightCharges = array_filter($dirtyRightCharges, function (ChargeInterface $charge) use ($leftTotal, $lastLeftCharge) {
-                /** @var Charge $charge */
                 if ($charge->getParent() === $leftTotal) {
                     $charge->overwriteParent($lastLeftCharge);
                 }
