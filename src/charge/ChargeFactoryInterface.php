@@ -17,9 +17,5 @@ namespace hiqdev\php\billing\charge;
  */
 interface ChargeFactoryInterface
 {
-    /**
-     * Creates charge object.
-     * @return Charge
-     */
-    public function create(ChargeCreationDto $dto);
+    public function create(ChargeCreationDto $dto): ChargeInterface;
 }

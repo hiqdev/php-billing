@@ -17,9 +17,5 @@ namespace hiqdev\php\billing\customer;
  */
 interface CustomerFactoryInterface
 {
-    /**
-     * Creates customer object.
-     * @return Customer
-     */
-    public function create(CustomerCreationDto $dto);
+    public function create(CustomerCreationDto $dto): CustomerInterface;
 }
