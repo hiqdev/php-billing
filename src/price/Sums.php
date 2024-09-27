@@ -37,8 +37,6 @@ final readonly class Sums implements \JsonSerializable
 
     public function jsonSerialize(): ?array
     {
-        return [
-            'values' => $this->values,
-        ];
+        return $this->values;
     }
 }
