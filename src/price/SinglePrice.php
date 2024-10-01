@@ -63,7 +63,7 @@ class SinglePrice extends AbstractPrice implements PriceWithQuantityInterface, P
      * {@inheritdoc}
      * Same price for any usage.
      */
-    public function calculatePrice(QuantityInterface $usage): ?Money
+    public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         return $this->price;
     }

@@ -13,6 +13,7 @@ namespace hiqdev\php\billing\formula;
 use hiqdev\php\billing\charge\modifiers\FullCombination;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model\Model;
+use Hoa\Visitor\Element;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -35,6 +36,11 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
 
     public function visitModel(Model $element, &$handle = null, $eldnah = null)
     {
-        return $element->getExpression()->accept($this, $handle, $eldnah);
+        return $this->getExpression($element)->accept($this, $handle, $eldnah);
+    }
+
+    private function getExpression(Model $element): Element
+    {
+        return $element->getExpression();
     }
 }

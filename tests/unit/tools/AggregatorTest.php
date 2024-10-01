@@ -70,7 +70,7 @@ class AggregatorTest extends SaleTest
         $this->assertCount(4, $bills);
 
         foreach ($bills as $bill) {
-            $prices = $this->plan->getRawPrices($bill->getType(), $bill->getTarget());
+            $prices = $this->plan->getRawPrices($bill->getType(), $bill->getTarget())->values();
             $sum = Money::USD(array_sum($prices));
             $this->assertTrue($sum->negative()->equals($bill->getSum()));
             $this->assertEquals(6, $bill->getQuantity()->getQuantity());

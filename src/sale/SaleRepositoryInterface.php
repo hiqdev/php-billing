@@ -34,7 +34,7 @@ interface SaleRepositoryInterface
 
     /**
      * Finds suitable sales for given order.
-     * @return PlanInterface[] array: actionKey => plan
+     * @return SaleInterface[] array: actionKey => sale
      */
     public function findByOrder(OrderInterface $order);
 

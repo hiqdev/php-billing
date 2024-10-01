@@ -22,20 +22,17 @@ use Money\Money;
  */
 class SinglePriceTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var SinglePrice
-     */
-    protected $price;
+    protected SinglePrice $price;
 
-    /**
-     * @var Action
-     */
-    protected $action;
+    protected Action $action;
 
-    /**
-     * @var Money
-     */
-    protected $money;
+    protected Money $money;
+
+    private Target $target;
+
+    private Type $type;
+
+    private $quantity;
 
     protected function setUp(): void
     {

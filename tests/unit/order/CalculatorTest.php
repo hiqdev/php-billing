@@ -54,7 +54,7 @@ class CalculatorTest extends SaleTest
         $this->order = new Order(null, $this->plan->customer, $actions);
     }
 
-    public function testCalculateCharges()
+    public function testCalculateCharges(): void
     {
         $charges = $this->calculator->calculateOrder($this->order);
         foreach ($this->order->getActions() as $actionKey => $action) {

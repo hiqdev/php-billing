@@ -67,11 +67,11 @@ interface SaleInterface extends EntityInterface
     public function getData(): ?array;
 
     /**
-     * @param DateTimeImmutable $time
+     * @param DateTimeImmutable $closeTime
      * @throws InvariantException
      * @throws ConstraintException
      */
-    public function close(DateTimeImmutable $time): void;
+    public function close(DateTimeImmutable $closeTime): void;
 
     public function cancelClosing(): void;
 }

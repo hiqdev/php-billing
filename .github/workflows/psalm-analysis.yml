@@ -1,22 +1,22 @@
-name: phpunit-tests
+name: Psalm Static Analysis
 
 on:
   push:
   pull_request:
   schedule:
-   - cron: "0 9 * * 1"
+    - cron: "0 9 * * 1"
 
 jobs:
-  PHPUnit:
+  psalm:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.3']
-        coverage-driver: [pcov]
+        php: [ '8.3' ]
+        coverage-driver: [ pcov ]
     name: PHP ${{ matrix.php }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -28,7 +28,7 @@ jobs:
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
@@ -40,7 +40,5 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install -n
 
-      - name: PHPUnit
-        run: vendor/bin/phpunit
-        env:
-          XDEBUG_MODE: coverage
+      - name: Run Psalm
+        run: vendor/bin/psalm

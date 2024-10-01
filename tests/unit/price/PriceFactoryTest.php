@@ -25,6 +25,24 @@ use Money\Money;
  */
 class PriceFactoryTest extends \PHPUnit\Framework\TestCase
 {
+    private string $id;
+
+    private Type $single;
+
+    private Type $enum;
+
+    private Target $target;
+
+    private $prepaid;
+
+    private Money $price;
+
+    private $unit;
+
+    private array $sums;
+
+    private PriceFactory $factory;
+
     protected function setUp(): void
     {
         $this->id       = 'foo:bar';
