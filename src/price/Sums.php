@@ -5,24 +5,30 @@ namespace hiqdev\php\billing\price;
 final readonly class Sums implements \JsonSerializable
 {
     /**
-     * @param int[]|null $values quantity => total sum for the quantity
-     * Quantity of what?
-     * Sum of what?
-     * If you know answers please write in the comment
+     * @param array<int, float|int>|null $quantityToSumMap An associative array where:
+     *   - The key represents the **quantity** of the action being charged for
+     *     (e.g., the number of years for an SSL certificate).
+     *   - The value represents the **total sum** or **price** for the given quantity.
+     *
+     * Example (If used to denote bulk prices):
+     * E.g. when you buy an SSL certificate for 1 year – it costs 10$
+     * But for 2 years you pay 15$.
+     *
+     * It will be is stored as
+     *
+     * [1 => 10, 2 => 15]
      */
-    public function __construct(private ?array $values)
+    public function __construct(private ?array $quantityToSumMap)
     {
-        if (!empty($this->values)) {
-            $this->validate($this->values);
-        }
+        $this->validateSums($this->quantityToSumMap);
     }
 
-    private function validate(array $sums): void
+    private function validateSums(?array $sums): void
     {
-        if ($sums) {
+        if (!empty($sums)) {
             foreach ($sums as $value) {
                 if (!is_numeric($value)) {
-                    throw new PriceInvalidArgumentException('Invalid value for sums parameter');
+                    throw new PriceInvalidArgumentException('All sums must be numeric values.');
                 }
             }
         }
@@ -30,21 +36,25 @@ final readonly class Sums implements \JsonSerializable
 
     public function values(): ?array
     {
-        return $this->values;
+        return $this->quantityToSumMap;
     }
 
     public function getSum(int $quantity)
     {
-        return $this->values[$quantity] ?? null;
+        return $this->quantityToSumMap[$quantity] ?? null;
     }
 
-    public function getMinSum(): int|string
+    public function getMinSum()
     {
-        return min($this->values);
+        if (empty($this->quantityToSumMap)) {
+            return null;
+        }
+
+        return min($this->quantityToSumMap);
     }
 
     public function jsonSerialize(): ?array
     {
-        return $this->values;
+        return $this->quantityToSumMap;
     }
 }
