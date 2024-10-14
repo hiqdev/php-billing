@@ -40,6 +40,7 @@ use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
+use ReflectionClass;
 
 /**
  * Defines application features from the specific context.
@@ -94,7 +95,7 @@ class FeatureContext implements Context
      */
     public function priceIs($target, $type, $sum, $currency, $unit, $quantity = 0)
     {
-        $type = new Type(Type::ANY, $type);
+        $type = Type::anyId($type);
         $target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, new Currency($currency));
@@ -131,10 +132,14 @@ class FeatureContext implements Context
      */
     public function buildProgressivePrices()
     {
+        $i = 0;
         foreach ($this->progressivePrice as $type => $price) {
-            $type = new Type(Type::ANY, $type);
+            $type = Type::anyId($type);
             $target = new Target(Target::ANY, $price['target']);
             $quantity = Quantity::create($price['unit'], $price['prepaid']);
+            if ($i++ === 0) {
+                $price['price'] *= 100;
+            }
             $money = new Money($price['price'], new Currency($price['currency']));
             $thresholds = ProgressivePriceThresholdList::fromScalarsArray($price['thresholds']);
             $price = new ProgressivePrice(null, $type, $target, $quantity, $money, $thresholds);
@@ -143,17 +148,33 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /sale close time is ([0-9.-]+)/
+     * @Given /sale close time is ([0-9.-]+)?/
      */
     public function setActionCloseTime($closeTime): void
     {
+        if ($closeTime === null) {
+            return;
+        }
+
         $this->sale->close(new DateTimeImmutable($closeTime));
+    }
+
+    /**
+     * @Given /sale time is (.+)$/
+     */
+    public function setSaleTime($time): void
+    {
+        $ref = new ReflectionClass($this->sale);
+        $prop = $ref->getProperty('time');
+        $prop->setAccessible(true);
+        $prop->setValue($this->sale, new DateTimeImmutable($time));
+        $prop->setAccessible(false);
     }
 
     private function setPrice($price)
     {
         $this->price = $price;
-        $ref = new \ReflectionClass($this->plan);
+        $ref = new ReflectionClass($this->plan);
         $prop = $ref->getProperty('prices');
         $prop->setAccessible(true);
         $prop->setValue($this->plan, [$price]);
@@ -164,7 +185,7 @@ class FeatureContext implements Context
      */
     public function actionIs(string $target, string $type, float $amount, string $unit, ?string $date = null): void
     {
-        $type = new Type(Type::ANY, $type);
+        $type = Type::anyId($type);
         $target = new Target(Target::ANY, $target);
         $time = new DateTimeImmutable($date);
         if ($this->sale->getCloseTime() instanceof DateTimeImmutable) {

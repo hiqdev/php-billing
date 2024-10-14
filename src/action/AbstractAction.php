@@ -227,7 +227,7 @@ abstract class AbstractAction implements ActionInterface
 
     public function getUsageInterval(): UsageInterval
     {
-        if ($this->getSale() === null) {
+        if ($this->getSale()?->getTime() === null) {
             return UsageInterval::wholeMonth($this->getTime());
         }
 

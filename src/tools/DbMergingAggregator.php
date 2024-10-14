@@ -12,6 +12,7 @@ namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 
 /**
@@ -74,6 +75,7 @@ class DbMergingAggregator implements AggregatorInterface, MergerInterface
     {
         foreach ($localBills as $i => $localBill) {
             foreach ($localBill->getCharges() as $charge) {
+                /** @var Charge $charge */
                 if ($charge->hasEvents()) {
                     continue 2;
                 }

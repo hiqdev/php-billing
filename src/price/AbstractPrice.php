@@ -53,7 +53,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     protected $plan;
 
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
         PlanInterface $plan = null
@@ -131,10 +131,29 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
             return null;
         }
 
-        /// TODO add configurable rounding mode later
-        return $price->multiply(sprintf('%.14F', $usage->getQuantity()), Money::ROUND_UP);
+        if ($price->isZero()) {
+            return $price;
+        }
+
+        $stringQty = sprintf('%.14F', $usage->getQuantity());
+
+        $sum = $price->multiply($stringQty, Money::ROUND_HALF_UP);
+        if ($sum->isZero() && !$quantity->isZero()) {
+            // If there is any usage, but sum is zero, we should charge at least 1 cent
+            $sum = $price->multiply($stringQty, Money::ROUND_UP);
+        }
+
+        return $sum;
     }
 
+    /**
+     * What purpose of this method? Because it looks like duplicate of PriceHydrator::extract()
+     * Where we are using the result of this method?
+     * Magic calls can't be determined and I don't know what can be broken if we change the method result.
+     * Which structure must have the result, because array can contain anything?
+     *
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $res = array_filter(get_object_vars($this));

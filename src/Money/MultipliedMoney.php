@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\Money;
 
-use Laminas\Code\Reflection\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -86,7 +86,7 @@ final class MultipliedMoney
             return 1;
         }
 
-        [$integer, $fraction] = explode('.', $amount, 2);
+        [, $fraction] = explode('.', $amount, 2);
         return (int)('1' . implode(array_fill(0, strlen($fraction), 0)));
     }
 

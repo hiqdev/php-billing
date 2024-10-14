@@ -24,7 +24,6 @@ use hiqdev\php\billing\customer\Customer;
 use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\target\TargetInterface;
 use hiqdev\php\billing\type\Type;
-use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Quantity;
 use Money\Currency;
 use Money\Money;
@@ -118,11 +117,11 @@ class FullCombinationTest extends TestCase
 
         $charge = new Charge(
             null,
-            new Type(TypeInterface::ANY, 'monthly'),
+            Type::anyId('monthly'),
             new Target(TargetInterface::ANY, 'vps'),
             $action = new Action(
                 null,
-                new Type(TypeInterface::ANY, 'monthly'),
+                Type::anyId('monthly'),
                 new Target(TargetInterface::ANY, 'vps'),
                 Quantity::create('items', 1),
                 new Customer(1, 'test'),
@@ -158,11 +157,11 @@ class FullCombinationTest extends TestCase
 
         $charge = new Charge(
             null,
-            new Type(TypeInterface::ANY, 'monthly'),
+            Type::anyId('monthly'),
             new Target(TargetInterface::ANY, 'vps'),
             $action = new Action(
                 null,
-                new Type(TypeInterface::ANY, 'monthly'),
+                Type::anyId('monthly'),
                 new Target(TargetInterface::ANY, 'vps'),
                 Quantity::create('items', 1),
                 new Customer(1, 'test'),

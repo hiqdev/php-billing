@@ -57,7 +57,7 @@ class FullCombination implements ChargeModifier
                 return []; // If there was at least one charge, but it disappeared – modifier does not want this charge to happen. Stop.
             }
 
-            $originalChargeExists = array_reduce($leftCharges, function ($result, Charge $item) use ($charge) {
+            $originalChargeExists = array_reduce($leftCharges, static function ($result, Charge $item) use ($charge) {
                 return $result || $charge === $item;
             }, false);
             if ($charge && !$originalChargeExists) {
@@ -66,7 +66,6 @@ class FullCombination implements ChargeModifier
             // $leftCharge will contain original charge and 0+ additional charges (discounts)
         }
 
-        /** @var Charge $leftTotal */
         /** @var Charge $charge */
         $leftTotal = $this->sumCharges($charge, $leftCharges);
         if ($this->right->isSuitable($leftTotal, $action)) {
@@ -78,7 +77,6 @@ class FullCombination implements ChargeModifier
 
             $lastLeftCharge = end($leftCharges);
             $rightCharges = array_filter($dirtyRightCharges, function (ChargeInterface $charge) use ($leftTotal, $lastLeftCharge) {
-                /** @var Charge $charge */
                 if ($charge->getParent() === $leftTotal) {
                     $charge->overwriteParent($lastLeftCharge);
                 }
@@ -109,6 +107,7 @@ class FullCombination implements ChargeModifier
                 $charge->setComment($leftTotal->getComment());
             }
 
+            /** @var Charge $leftTotal */
             $events = $leftTotal->releaseEvents();
             if (!empty($events)) {
                 foreach ($events as $event) {

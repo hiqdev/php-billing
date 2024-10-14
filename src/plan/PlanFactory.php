@@ -31,7 +31,8 @@ class PlanFactory implements PlanFactoryInterface
             $dto->name,
             $dto->seller,
             $dto->prices ?? [],
-            $dto->type ?? null
+            $dto->type ?? null,
+            $dto->parent_id ?? null
         );
     }
 }

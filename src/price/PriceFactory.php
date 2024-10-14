@@ -74,9 +74,9 @@ class PriceFactory implements PriceFactoryInterface
         throw new FailedCreatePriceException("unknown class: $class");
     }
 
-    public function createEnumPrice(PriceCreationDto $dto)
+    public function createEnumPrice(PriceCreationDto $dto): EnumPrice
     {
-        return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->unit, $dto->currency, $dto->sums);
+        return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->unit, $dto->currency, new Sums($dto->sums));
     }
 
     public function createRatePrice(PriceCreationDto $dto)

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -16,6 +17,7 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\derivative\ChargeDerivative;
 use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
+use hiqdev\php\billing\charge\modifiers\addons\Boolean;
 use hiqdev\php\billing\charge\modifiers\addons\DayPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\Exception\NotSupportedException;
@@ -49,6 +51,11 @@ class MonthlyCap extends Modifier
         $this->chargeDerivative = new ChargeDerivative();
     }
 
+    public function forNonProportionalizedQuantity(): Modifier
+    {
+        return $this->addAddon('non-proportionalized', new Boolean(true));
+    }
+
     public function getNext()
     {
         return $this;
@@ -66,8 +73,8 @@ class MonthlyCap extends Modifier
             return [$charge];
         }
 
-        if ($this->isMeasured($action)) {
-            return $this->propotionalizeMeasuredCharge($charge, $action);
+        if ($this->quantityIsNotProportionalized()) {
+            return $this->propotionalizeCharge($charge, $action);
         }
 
         return $this->splitCapFromCharge($charge, $action);
@@ -78,9 +85,9 @@ class MonthlyCap extends Modifier
      * @param ActionInterface $action
      * @return ChargeInterface[]
      */
-    private function propotionalizeMeasuredCharge(ChargeInterface $charge, ActionInterface $action): array
+    private function propotionalizeCharge(ChargeInterface $charge, ActionInterface $action): array
     {
-        $usedHours = $action->getUsageInterval()->seconds() / 3600;
+        $usedHours = $action->getUsageInterval()->hours();
         $capInHours = $this->getCapInHours()->getQuantity();
 
         if ($usedHours > $capInHours) {
@@ -107,23 +114,23 @@ class MonthlyCap extends Modifier
     {
         $charge = $this->makeMappedCharge($charge, $action);
 
-        $usageExceedsCap = $charge->getUsage()->compare($this->getCapInHours()) === 1;
+        $usageHours = Quantity::create('hour', $action->getUsageInterval()->hours());
+        $cappedHours = $this->getCapInHours();
+        $usageExceedsCap = $usageHours->compare($cappedHours) === 1;
         if (!$usageExceedsCap) {
             return [$charge];
         }
 
-        $cappedHours = $this->getCapInHours();
-
-        $diff = 1-($charge->getUsage()->subtract($cappedHours)->getQuantity()/$charge->getUsage()->getQuantity());
+        $diffRatio = 1 - ($usageHours->subtract($cappedHours)->getQuantity() / $usageHours->getQuantity());
 
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage($cappedHours);
-        $chargeQuery->changeSum($charge->getSum()->multiply(sprintf('%.14F', $diff)));
+        $chargeQuery->changeSum($charge->getSum()->multiply(sprintf('%.14F', $diffRatio), Money::ROUND_HALF_DOWN));
         $newCharge = $this->chargeDerivative->__invoke($charge, $chargeQuery);
 
         $zeroChargeQuery = new ChargeDerivativeQuery();
         $zeroChargeQuery->changeSum(new Money(0, $charge->getSum()->getCurrency()));
-        $zeroChargeQuery->changeUsage($charge->getUsage()->subtract($cappedHours));
+        $zeroChargeQuery->changeUsage($usageHours->subtract($cappedHours));
         $zeroChargeQuery->changeParent($newCharge);
         $reason = $this->getReason();
         if ($reason) {
@@ -144,18 +151,25 @@ class MonthlyCap extends Modifier
     private function makeMappedCharge(ChargeInterface $charge, ActionInterface $action): ChargeInterface
     {
         $coefficient = $this->getEffectiveCoefficient($action);
-        $quantityUnderCap = $charge->getUsage()->multiply((string) $coefficient);
+        $quantityUnderCap = $charge->getUsage()->multiply((string)$coefficient);
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage(
-            $this->getCapInHours()->multiply((string) $quantityUnderCap->getQuantity())
+            $this->getCapInHours()->multiply((string)$quantityUnderCap->getQuantity())
         );
-        $chargeQuery->changeSum($charge->getSum()->multiply((string) $coefficient));
+        $chargeQuery->changeSum($charge->getSum()->multiply((string)$coefficient));
 
         return $this->chargeDerivative->__invoke($charge, $chargeQuery);
     }
 
-    private function isMeasured(ActionInterface $action): bool
+    private function quantityIsNotProportionalized(): bool
     {
-       return $action->getQuantity()->getUnit()->getMeasure() !== 'item';
+        if (!$this->hasAddon('non-proportionalized')) {
+            return false;
+        }
+
+        /** @var Boolean $addon */
+        $addon = $this->getAddon('non-proportionalized');
+
+        return $addon->value;
     }
 }

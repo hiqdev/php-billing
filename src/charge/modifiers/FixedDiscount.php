@@ -45,7 +45,7 @@ class FixedDiscount extends Modifier
 
     public function isAbsolute()
     {
-        return $this->getAddon(self::VALUE)->isAbsolute();
+        return $this->getValue()->isAbsolute();
     }
 
     public function isRelative()
