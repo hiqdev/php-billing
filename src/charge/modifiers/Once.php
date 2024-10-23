@@ -43,8 +43,11 @@ class Once extends Modifier
 
     private function isInvalidInterval(string $interval): bool
     {
-        // Checking for invalid fractions like '1.5 months' or non-month units like 'day'
-        return (bool)preg_match('/day|0.5|1.5/', $interval);
+        return preg_match('/(\d+(\.\d+)?)\s*([a-z]+)/', $interval, $matches)
+            && (
+                floatval($matches[1]) != intval($matches[1]) ||   // Check for fractional values
+                !preg_match('/months?|years?/', $matches[3])      // Ensure only 'months' or 'years' are allowed
+            );
     }
 
     private function isSupportedInterval(string $interval): bool

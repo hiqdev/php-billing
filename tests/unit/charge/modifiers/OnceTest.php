@@ -73,6 +73,13 @@ class OnceTest extends ActionTest
     {
         yield ['1.5 months'];
         yield ['day'];
+        yield ['days'];
+        yield ['1 day'];
+        yield ['1.5 day'];
+        yield ['2.5 days'];
+        yield ['3.5 month'];
+        yield ['1.5 years'];
+        yield ['1.5 year'];
     }
 
     public function testOverusePricingException(): void
