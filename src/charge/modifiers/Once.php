@@ -124,8 +124,8 @@ class Once extends Modifier
 
     private function calculateMonthsDifference(DateTimeImmutable $start, DateTimeImmutable $end): int
     {
-        return ($end->format('Y') - $start->format('Y')) * self::MONTHS_IN_YEAR
-            + ($end->format('m') - $start->format('m'));
+        $interval = $end->diff($start);
+        return ($interval->y * self::MONTHS_IN_YEAR) + $interval->m;
     }
 
     private function getIntervalMonthsFromPeriod(Period $period): int

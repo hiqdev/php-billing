@@ -38,25 +38,28 @@ class OnceTest extends ActionTest
         return new SinglePrice(5, $type, $this->target, null, $this->prepaid, $this->money);
     }
 
-    public function testCreateYear(): void
+    /**
+     * @dataProvider periodCreationProvider
+     */
+    public function testPeriodCreation(string $interval, string $expectedClass, int $expectedValue): void
     {
-        $oncePeriod = $this->buildOnce('1 year');
+        $oncePeriod = $this->buildOnce($interval);
         $period = $oncePeriod->getPer();
-        $this->assertInstanceOf(YearPeriod::class, $period);
-        $this->assertSame(1, $period->getValue());
+        $this->assertInstanceOf($expectedClass, $period);
+        $this->assertSame($expectedValue, $period->getValue());
+    }
+
+    public function periodCreationProvider(): array
+    {
+        return [
+            'yearly' => ['1 year', YearPeriod::class, 1],
+            'quarterly' => ['3 months', MonthPeriod::class, 3],
+        ];
     }
 
     protected function buildOnce(string $interval): Once
     {
         return (new Once())->per($interval);
-    }
-
-    public function testCreateOnePerThreeMonths(): void
-    {
-        $oncePeriod = $this->buildOnce('3 months');
-        $period = $oncePeriod->getPer();
-        $this->assertInstanceOf(MonthPeriod::class, $period);
-        $this->assertSame(3, $period->getValue());
     }
 
     /**
