@@ -108,6 +108,7 @@ class Once extends Modifier
     private function getIntervalMonthsFromPeriod(Period $period): int
     {
         if ($period instanceof YearPeriod) {
+            // TODO: is it possible to avoid hardcoding 12?
             return 12;
         } elseif ($period instanceof MonthPeriod) {
             return $period->getValue();

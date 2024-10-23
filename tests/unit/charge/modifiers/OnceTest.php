@@ -4,10 +4,10 @@ namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 
 use DateTimeImmutable;
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use hiqdev\php\billing\charge\modifiers\exception\OnceException;
-use hiqdev\php\billing\charge\modifiers\Installment;
 use hiqdev\php\billing\charge\modifiers\Once;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\PriceInterface;
@@ -91,14 +91,11 @@ class OnceTest extends ActionTest
     {
         $once = $this->buildOnce('1 year');
 
-        $time = new DateTimeImmutable('22-11-2024');
-        $action = $this->createActionWithCustomTime($this->prepaid->multiply(2), $time);
+        $saleTime = new DateTimeImmutable('22-11-2023');
+        $actionTime = new DateTimeImmutable('22-11-2024');
+        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
-
-        $plan = new Plan(null, '', $this->customer, [$this->price]);
-        $sale = new Sale(null, $this->target, $this->customer, $plan, new DateTimeImmutable('22-11-2023'));
-        $action->setSale($sale);
 
         $charge = $this->calculator->calculateCharge($price, $action);
 
@@ -117,14 +114,11 @@ class OnceTest extends ActionTest
     {
         $once = $this->buildOnce('1 year');
 
-        $time = new DateTimeImmutable('22-11-2024');
-        $action = $this->createActionWithCustomTime($this->prepaid->multiply(2), $time);
+        $saleTime = new DateTimeImmutable('22-10-2023');
+        $actionTime = new DateTimeImmutable('22-11-2024');
+        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
-
-        $plan = new Plan(null, '', $this->customer, [$this->price]);
-        $sale = new Sale(null, $this->target, $this->customer, $plan, new DateTimeImmutable('22-10-2023'));
-        $action->setSale($sale);
 
         $charge = $this->calculator->calculateCharge($price, $action);
 
@@ -145,24 +139,52 @@ class OnceTest extends ActionTest
         $once->modifyCharge($charge, $action);
     }
 
-    // TODO: test action without sale time
-
-    public function testPerThreeMonths(): void
+    public function testPerThreeMonths_After3Months_ShouldApplyCharge(): void
     {
-        $once = new Once();
-        $once->per('3 months');
+        $once = $this->buildOnce('3 months');
 
-        // After 3 months, should apply charge
-        $this->moveSaleDateByMonths(3);
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertSame($this->charge, $chargeResult[0]);
+        $saleTime = new DateTimeImmutable('22-01-2024');
+        $actionTime = new DateTimeImmutable('22-04-2024');
+        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
+        $type = $this->createType('monthly,monthly');
+        $price = $this->createPrice($type);
 
-        // After 2 months, should return zero charge
-        $this->moveSaleDateByMonths(2);
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertEquals(0, $chargeResult[0]->getPrice());
+        $charge = $this->calculator->calculateCharge($price, $action);
+
+        $charges = $once->modifyCharge($charge, $action);
+        $this->assertIsArray($charges);
+        $this->assertCount(1, $charges);
+        $this->assertSame($charge, $charges[0]);
+    }
+
+    private function createActionWithSale(
+        QuantityInterface $quantity,
+        DateTimeImmutable $actionTime,
+        DateTimeImmutable $saleTime
+    ): ActionInterface {
+        $action = $this->createActionWithCustomTime($quantity, $actionTime);
+
+        $plan = new Plan(null, '', $this->customer, [$this->price]);
+        $sale = new Sale(null, $this->target, $this->customer, $plan, $saleTime);
+        $action->setSale($sale);
+
+        return $action;
+    }
+
+    public function testPerThreeMonths_After2Months_ShouldReturnZeroCharge(): void
+    {
+        $once = $this->buildOnce('3 months');
+
+        $saleTime = new DateTimeImmutable('22-01-2024');
+        $actionTime = new DateTimeImmutable('22-03-2024');
+        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
+        $type = $this->createType('monthly,monthly');
+        $price = $this->createPrice($type);
+
+        $charge = $this->calculator->calculateCharge($price, $action);
+
+        $charges = $once->modifyCharge($charge, $action);
+        $this->assertCount(0, $charges);
     }
 
     public function testSaleReopen(): void
