@@ -3,16 +3,20 @@
 namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use hiqdev\php\billing\charge\modifiers\exception\OnceException;
 use hiqdev\php\billing\charge\modifiers\Installment;
 use hiqdev\php\billing\charge\modifiers\Once;
+use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\price\SinglePrice;
+use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\units\QuantityInterface;
 
 class OnceTest extends ActionTest
 {
@@ -20,8 +24,13 @@ class OnceTest extends ActionTest
     {
         parent::setUp();
 
-        $this->type = Type::anyId('monthly,monthly');
+        $this->type = $this->createType('monthly,monthly');
         $this->price = $this->createPrice($this->type);
+    }
+
+    private function createType(string $name): TypeInterface
+    {
+        return Type::anyId($name);
     }
 
     private function createPrice(TypeInterface $type): PriceInterface
@@ -80,11 +89,28 @@ class OnceTest extends ActionTest
 
     public function testPerOneYear_WithOneYearLaterShouldApplyCharge(): void
     {
-        $once = $this->createOnceWithInterval('1 year');
+        $once = $this->buildOnce('1 year');
 
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertSame($this->charge, $chargeResult[0]);
+        $time = new DateTimeImmutable('22-11-2024');
+        $action = $this->createActionWithCustomTime($this->prepaid->multiply(2), $time);
+        $type = $this->createType('monthly,monthly');
+        $price = $this->createPrice($type);
+
+        $plan = new Plan(null, '', $this->customer, [$this->price]);
+        $sale = new Sale(null, $this->target, $this->customer, $plan, new DateTimeImmutable('22-11-2023'));
+        $action->setSale($sale);
+
+        $charge = $this->calculator->calculateCharge($price, $action);
+
+        $charges = $once->modifyCharge($charge, $action);
+        $this->assertIsArray($charges);
+        $this->assertCount(1, $charges);
+        $this->assertSame($charge, $charges[0]);
+    }
+
+    private function createActionWithCustomTime(QuantityInterface $quantity, DateTimeImmutable $time): Action
+    {
+        return new Action(null, $this->type, $this->target, $quantity, $this->customer, $time);
     }
 
     public function testPerOneYear_WithOneYearLaterShouldApplyChar(): void
@@ -102,6 +128,21 @@ class OnceTest extends ActionTest
         $this->assertCount(1, $chargeResult);
         $this->assertEquals(0, $chargeResult[0]->getPrice());
     }
+
+    public function testModifyCharge_WithActionWithoutSale_ThrowsException(): void
+    {
+        $once = $this->buildOnce('1 year');
+
+        $action = $this->createAction($this->prepaid->multiply(2));
+        $type = $this->createType('monthly,monthly');
+        $price = $this->createPrice($type);
+        $charge = $this->calculator->calculateCharge($price, $action);
+
+        $this->expectException(OnceException::class);
+        $once->modifyCharge($charge, $action);
+    }
+
+    // TODO: test action without sale time
 
     public function testPerThreeMonths(): void
     {
