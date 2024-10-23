@@ -31,7 +31,7 @@ class Once extends Modifier
     private function createInterval(string $interval): Period
     {
         if ($this->isInvalidInterval($interval)) {
-            throw new OnceException("Interval cannot be a fraction of a month.");
+            throw new OnceException("The interval cannot be a fraction.");
         }
 
         if ($this->isSupportedInterval($interval)) {
