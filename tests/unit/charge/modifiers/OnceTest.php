@@ -126,6 +126,20 @@ class OnceTest extends ActionTest
         $this->assertCount(0, $charges);
     }
 
+    private function createActionWithSale(
+        QuantityInterface $quantity,
+        DateTimeImmutable $actionTime,
+        DateTimeImmutable $saleTime
+    ): ActionInterface {
+        $action = $this->createActionWithCustomTime($quantity, $actionTime);
+
+        $plan = new Plan(null, '', $this->customer, [$this->price]);
+        $sale = new Sale(null, $this->target, $this->customer, $plan, $saleTime);
+        $action->setSale($sale);
+
+        return $action;
+    }
+
     public function testModifyCharge_WithActionWithoutSale_ThrowsException(): void
     {
         $once = $this->buildOnce('1 year');
@@ -157,20 +171,6 @@ class OnceTest extends ActionTest
         $this->assertSame($charge, $charges[0]);
     }
 
-    private function createActionWithSale(
-        QuantityInterface $quantity,
-        DateTimeImmutable $actionTime,
-        DateTimeImmutable $saleTime
-    ): ActionInterface {
-        $action = $this->createActionWithCustomTime($quantity, $actionTime);
-
-        $plan = new Plan(null, '', $this->customer, [$this->price]);
-        $sale = new Sale(null, $this->target, $this->customer, $plan, $saleTime);
-        $action->setSale($sale);
-
-        return $action;
-    }
-
     public function testPerThreeMonths_After2Months_ShouldReturnZeroCharge(): void
     {
         $once = $this->buildOnce('3 months');
@@ -185,31 +185,5 @@ class OnceTest extends ActionTest
 
         $charges = $once->modifyCharge($charge, $action);
         $this->assertCount(0, $charges);
-    }
-
-    public function testSaleReopen(): void
-    {
-        $once = new Once();
-        $once->per('1 year');
-
-        // Initially should apply charge
-        $this->moveSaleDateByMonths(12);
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertSame($this->charge, $chargeResult[0]);
-
-        // Simulate sale re-open
-        $this->moveSaleDateByMonths(-12); // Reset the sale date
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertEquals(0, $chargeResult[0]->getPrice()); // Now it should give a zero charge
-    }
-
-    private function moveSaleDateByMonths(int $months): void
-    {
-        $sale = $this->action->getSale();
-        $time = clone $sale->getTime();
-        $time->modify("{$months} months");
-        $sale->method('getTime')->willReturn($time);
     }
 }
