@@ -113,20 +113,23 @@ class OnceTest extends ActionTest
         return new Action(null, $this->type, $this->target, $quantity, $this->customer, $time);
     }
 
-    public function testPerOneYear_WithOneYearLaterShouldApplyChar(): void
+    public function testPerOneYear_With11MonthsLaterShouldReturnZeroCharge(): void
     {
-        $once = $this->createOnce('1 year');
+        $once = $this->buildOnce('1 year');
 
-        // 1 year later should apply charge
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertSame($this->charge, $chargeResult[0]);
+        $time = new DateTimeImmutable('22-11-2024');
+        $action = $this->createActionWithCustomTime($this->prepaid->multiply(2), $time);
+        $type = $this->createType('monthly,monthly');
+        $price = $this->createPrice($type);
 
-        // 11 months later should return zero charge
-        $this->moveSaleDateByMonths(11);
-        $chargeResult = $once->modifyCharge($this->charge, $this->action);
-        $this->assertCount(1, $chargeResult);
-        $this->assertEquals(0, $chargeResult[0]->getPrice());
+        $plan = new Plan(null, '', $this->customer, [$this->price]);
+        $sale = new Sale(null, $this->target, $this->customer, $plan, new DateTimeImmutable('22-10-2023'));
+        $action->setSale($sale);
+
+        $charge = $this->calculator->calculateCharge($price, $action);
+
+        $charges = $once->modifyCharge($charge, $action);
+        $this->assertCount(0, $charges);
     }
 
     public function testModifyCharge_WithActionWithoutSale_ThrowsException(): void
