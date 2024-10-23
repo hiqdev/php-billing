@@ -92,7 +92,7 @@ class OnceTest extends ActionTest
         $once = $this->buildOnce('1 year');
 
         $saleTime = new DateTimeImmutable('22-11-2023');
-        $actionTime = new DateTimeImmutable('22-11-2024');
+        $actionTime = $saleTime->modify('+1 year');
         $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
@@ -115,7 +115,7 @@ class OnceTest extends ActionTest
         $once = $this->buildOnce('1 year');
 
         $saleTime = new DateTimeImmutable('22-10-2023');
-        $actionTime = new DateTimeImmutable('22-11-2024');
+        $actionTime = $saleTime->modify('+11 months');
         $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
@@ -158,7 +158,7 @@ class OnceTest extends ActionTest
         $once = $this->buildOnce('3 months');
 
         $saleTime = new DateTimeImmutable('22-01-2024');
-        $actionTime = new DateTimeImmutable('22-04-2024');
+        $actionTime = $saleTime->modify('+3 months');
         $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
@@ -176,7 +176,7 @@ class OnceTest extends ActionTest
         $once = $this->buildOnce('3 months');
 
         $saleTime = new DateTimeImmutable('22-01-2024');
-        $actionTime = new DateTimeImmutable('22-03-2024');
+        $actionTime = $saleTime->modify('+2 months');
         $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
