@@ -59,16 +59,11 @@ class Once extends Modifier
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        if ($charge === null) {
-            throw new OnceException('Charge cannot be null in Once');
-        }
-
         $period = $this->getPer();
-        if ($period === null) {
-            throw new OnceException('Period cannot be null in Once');
-        }
 
-        $this->validateForOverusePricing($charge);
+        $this->assertPeriod($period);
+        $this->assertCharge($charge);
+        $this->assertNoOverusePricing($charge);
 
         // Apply the charge if applicable based on the action and interval period
         if ($this->isApplicable($action, $period)) {
@@ -79,7 +74,21 @@ class Once extends Modifier
         return [];
     }
 
-    private function validateForOverusePricing(ChargeInterface $charge): void
+    private function assertPeriod(?Period $period)
+    {
+        if ($period === null) {
+            throw new OnceException('Period cannot be null in Once');
+        }
+    }
+
+    private function assertCharge(?ChargeInterface $charge)
+    {
+        if ($charge === null) {
+            throw new OnceException('Charge cannot be null in Once');
+        }
+    }
+
+    private function assertNoOverusePricing(ChargeInterface $charge): void
     {
         // TODO: can I determine overuse prices form $charge->getType()?
         $chargeTypeName = $charge->getType()->getName();
