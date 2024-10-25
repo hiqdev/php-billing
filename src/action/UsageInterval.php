@@ -51,7 +51,8 @@ final class UsageInterval
     public static function withinMonth(
         DateTimeImmutable $month,
         DateTimeImmutable $start,
-        ?DateTimeImmutable $end
+        ?DateTimeImmutable $end,
+        float $fractionOfMonth
     ): self {
         $month = self::toMonth($month);
         $nextMonth = $month->modify('+1 month');
@@ -71,10 +72,16 @@ final class UsageInterval
         }
 
         $effectiveSince = max($start, $month);
-        $effectiveTill = min(
-            $end ?? new DateTimeImmutable('2999-01-01'),
-            $month->modify('+1 month')
-        );
+
+        if ($fractionOfMonth === 1.0) {
+            $calcEnd = $month->modify('+1 month');
+        } else {
+            $startTime = strtotime(($month->format('D, d M Y H:i:s O')));
+            $finishTime = strtotime($nextMonth->format('D, d M Y H:i:s O'));
+            $interval = 'PT' . (($finishTime - $startTime) * $fractionOfMonth) . 'S';
+            $calcEnd = $effectiveSince->add(new \DateInterval($interval));
+        }
+        $effectiveTill = (!empty($end) && $end < $calcEnd) ? $end : $calcEnd;
 
         return new self(
             $effectiveSince,

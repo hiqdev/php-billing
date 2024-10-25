@@ -35,7 +35,7 @@ class UsageIntervalTest extends TestCase
             $this->expectExceptionMessage($expectations['expectedExceptionMessage']);
         }
 
-        $interval = UsageInterval::withinMonth($month, $start, $end);
+        $interval = UsageInterval::withinMonth($month, $start, $end, $constructor['fraction']);
 
         $this->assertEquals($expectations['start'], $interval->start()->format("Y-m-d H:i:s"));
         $this->assertEquals($expectations['end'], $interval->end()->format("Y-m-d H:i:s"));
@@ -47,7 +47,7 @@ class UsageIntervalTest extends TestCase
     public function provideWithinMonth()
     {
         yield 'For a start and end dates outside the month, the interval is the whole month' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2023-01-01 00:00:00', 'end' => '2023-10-01 00:00:00'],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2023-01-01 00:00:00', 'end' => '2023-10-01 00:00:00', 'fraction' => 1],
             [
                 'start' => '2023-02-01 00:00:00',
                 'end' => '2023-03-01 00:00:00',
@@ -58,7 +58,7 @@ class UsageIntervalTest extends TestCase
         ];
 
         yield 'When start date is greater than a month, the interval is a fraction of month' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2023-02-15 00:00:00', 'end' => null],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2023-02-15 00:00:00', 'end' => null,  'fraction' => 0.5],
             [
                 'start' => '2023-02-15 00:00:00',
                 'end' => '2023-03-01 00:00:00',
@@ -69,7 +69,7 @@ class UsageIntervalTest extends TestCase
         ];
 
         yield 'When end date is less than a month, the interval is a fraction of month' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2021-10-02 19:01:10', 'end' => '2023-02-15 00:00:00'],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2021-10-02 19:01:10', 'end' => '2023-02-15 00:00:00',  'fraction' => 0.5],
             [
                 'start' => '2023-02-01 00:00:00',
                 'end' => '2023-02-15 00:00:00',
@@ -80,7 +80,7 @@ class UsageIntervalTest extends TestCase
         ];
 
         yield 'When start and end dates are within a month, the interval is a fraction of month' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2023-02-15 00:00:00', 'end' => '2023-02-20 00:00:00'],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2023-02-15 00:00:00', 'end' => '2023-02-20 00:00:00', 'fraction' => 0.17857142857142858],
             [
                 'start' => '2023-02-15 00:00:00',
                 'end' => '2023-02-20 00:00:00',
@@ -91,7 +91,7 @@ class UsageIntervalTest extends TestCase
         ];
 
         yield 'When start date is greater than current month, the interval is zero' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2023-03-15 00:00:00', 'end' => null],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2023-03-15 00:00:00', 'end' => null, 'fraction' => 0],
             [
                 'start' => '2023-02-01 00:00:00',
                 'end' => '2023-02-01 00:00:00',
@@ -102,7 +102,7 @@ class UsageIntervalTest extends TestCase
         ];
 
         yield 'When end date is less than current month, the interval is zero' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2021-10-02 19:01:10', 'end' => '2023-01-15 00:00:00'],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2021-10-02 19:01:10', 'end' => '2023-01-15 00:00:00', 'fraction' => 0],
             [
                 'start' => '2023-02-01 00:00:00',
                 'end' => '2023-02-01 00:00:00',
@@ -113,7 +113,7 @@ class UsageIntervalTest extends TestCase
         ];
 
         yield 'When a start date is greater than the end an exception is thrown' => [
-            ['month' => '2023-02-01 00:00:00', 'start' => '2023-03-15 00:00:00', 'end' => '2023-02-15 00:00:00'],
+            ['month' => '2023-02-01 00:00:00', 'start' => '2023-03-15 00:00:00', 'end' => '2023-02-15 00:00:00', 'fraction' => 0],
             [
                 'expectedException' => InvalidArgumentException::class,
                 'expectedExceptionMessage' => 'Start date must be less than end date',

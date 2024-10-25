@@ -82,4 +82,6 @@ interface ActionInterface extends EntityInterface
     public function setSale(SaleInterface $sale);
 
     public function getUsageInterval(): UsageInterval;
+
+    public function getFractionOfMonth(): float;
 }
