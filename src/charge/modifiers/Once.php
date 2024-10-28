@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\charge\modifiers;
 
 use DateTimeImmutable;
+use hiapi\legacy\lib\deps\dbc;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\derivative\ChargeDerivative;
@@ -37,34 +38,24 @@ class Once extends Modifier
 
     public function per(string $interval): self
     {
-        return $this->addAddon('per', $this->createInterval($interval));
+        return $this->addAddon('per', $this->createPeriod($interval));
     }
 
-    private function createInterval(string $interval): Period
+    private function createPeriod(string $interval): Period
     {
-        if ($this->isInvalidInterval($interval)) {
-            throw new FormulaEngineException("The interval cannot be a fraction.");
-        }
+        $period = Period::fromString($interval);
 
-        if ($this->isSupportedInterval($interval)) {
-            return Period::fromString($interval);
+        if ($this->isSupportedPeriod($period)) {
+            return $period;
         }
 
         throw new FormulaEngineException("Invalid interval. Supported: whole months or years.");
     }
 
-    private function isInvalidInterval(string $interval): bool
-    {
-        return preg_match('/(\d+(\.\d+)?)\s*([a-z]+)/', $interval, $matches)
-            && (
-                floatval($matches[1]) != intval($matches[1]) ||   // Check for fractional values
-                !preg_match('/months?|years?/', $matches[3])      // Ensure only 'months' or 'years' are allowed
-            );
-    }
 
-    private function isSupportedInterval(string $interval): bool
+    private function isSupportedPeriod(Period $period): bool
     {
-        return str_contains($interval, 'month') || str_contains($interval, 'year');
+        return $period instanceof MonthPeriod || $period instanceof YearPeriod;
     }
 
     public function getPer(): ?Period
