@@ -42,8 +42,4 @@ interface SaleRepositoryInterface
      * Find all active sales at given time
      */
     public function findAllActive(Specification $specification, ?DateTimeImmutable $time): array;
-
-    public function isTariffInUse(int $tariffId): bool;
-
-    public function deleteByTariffId(int $tariffId): void;
 }
