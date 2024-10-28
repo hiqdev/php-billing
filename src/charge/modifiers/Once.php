@@ -78,7 +78,6 @@ class Once extends Modifier
 
         $this->assertPeriod($period);
         $this->assertCharge($charge);
-        $this->assertNoOverusePricing($charge);
 
         // Apply the charge if applicable based on the action and interval period
         if ($this->isApplicable($action, $period)) {
@@ -112,15 +111,6 @@ class Once extends Modifier
     {
         if ($charge === null) {
             throw new FormulaEngineException('Charge cannot be null in Once');
-        }
-    }
-
-    private function assertNoOverusePricing(ChargeInterface $charge): void
-    {
-        // TODO: can I determine overuse prices form $charge->getType()?
-        $chargeTypeName = $charge->getType()->getName();
-        if ($chargeTypeName && str_contains($chargeTypeName, 'overuse')) {
-            throw new FormulaEngineException("Overuse pricing is not compatible with once.per() billing.");
         }
     }
 

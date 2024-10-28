@@ -86,18 +86,6 @@ class OnceTest extends ActionTest
         yield ['invalid'];
     }
 
-    public function testOverusePricingException(): void
-    {
-        $oncePeriod = $this->buildOnce('6 months');
-        $action = $this->createAction($this->prepaid->multiply(2));
-        $type = Type::anyId('overuse,cloud_ip_regular_max');
-        $price = $this->createPrice($type);
-        $charge = $this->calculator->calculateCharge($price, $action);
-
-        $this->expectException(FormulaEngineException::class);
-        $oncePeriod->modifyCharge($charge, $action);
-    }
-
     public function testPerOneYear_WithOneYearLaterShouldApplyCharge(): void
     {
         $once = $this->buildOnce('1 year');
