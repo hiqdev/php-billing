@@ -100,7 +100,7 @@ class Once extends Modifier
         }
     }
 
-    public function isApplicable(ActionInterface $action, Period $period): bool
+    private function isApplicable(ActionInterface $action, Period $period): bool
     {
         $saleTime = $this->getSaleTime($action);
         $actionTime = $action->getTime();
