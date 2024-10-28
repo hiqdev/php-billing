@@ -8,7 +8,7 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
-use hiqdev\php\billing\charge\modifiers\exception\OnceException;
+use hiqdev\php\billing\formula\FormulaEngineException;
 
 /**
  * 1. API:
@@ -31,14 +31,14 @@ class Once extends Modifier
     private function createInterval(string $interval): Period
     {
         if ($this->isInvalidInterval($interval)) {
-            throw new OnceException("The interval cannot be a fraction.");
+            throw new FormulaEngineException("The interval cannot be a fraction.");
         }
 
         if ($this->isSupportedInterval($interval)) {
             return Period::fromString($interval);
         }
 
-        throw new OnceException("Invalid interval. Supported: whole months or years.");
+        throw new FormulaEngineException("Invalid interval. Supported: whole months or years.");
     }
 
     private function isInvalidInterval(string $interval): bool
@@ -80,14 +80,14 @@ class Once extends Modifier
     private function assertPeriod(?Period $period)
     {
         if ($period === null) {
-            throw new OnceException('Period cannot be null in Once');
+            throw new FormulaEngineException('Period cannot be null in Once');
         }
     }
 
     private function assertCharge(?ChargeInterface $charge)
     {
         if ($charge === null) {
-            throw new OnceException('Charge cannot be null in Once');
+            throw new FormulaEngineException('Charge cannot be null in Once');
         }
     }
 
@@ -96,7 +96,7 @@ class Once extends Modifier
         // TODO: can I determine overuse prices form $charge->getType()?
         $chargeTypeName = $charge->getType()->getName();
         if ($chargeTypeName && str_contains($chargeTypeName, 'overuse')) {
-            throw new OnceException("Overuse pricing is not compatible with once.per() billing.");
+            throw new FormulaEngineException("Overuse pricing is not compatible with once.per() billing.");
         }
     }
 
@@ -116,7 +116,7 @@ class Once extends Modifier
     {
         $sale = $action->getSale();
         if ($sale === null || $sale->getTime() === null) {
-            throw new OnceException('Sale or sale time cannot be null in Once');
+            throw new FormulaEngineException('Sale or sale time cannot be null in Once');
         }
 
         return $sale->getTime();
@@ -136,6 +136,6 @@ class Once extends Modifier
             return $period->getValue();
         }
 
-        throw new OnceException('Unsupported interval period in Once');
+        throw new FormulaEngineException('Unsupported interval period in Once');
     }
 }

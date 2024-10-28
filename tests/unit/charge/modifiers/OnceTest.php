@@ -7,8 +7,8 @@ use hiqdev\php\billing\action\Action;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
-use hiqdev\php\billing\charge\modifiers\exception\OnceException;
 use hiqdev\php\billing\charge\modifiers\Once;
+use hiqdev\php\billing\formula\FormulaEngineException;
 use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\price\SinglePrice;
@@ -67,7 +67,7 @@ class OnceTest extends ActionTest
      */
     public function testFraction(string $interval): void
     {
-        $this->expectException(OnceException::class);
+        $this->expectException(FormulaEngineException::class);
 
         $this->buildOnce($interval);
     }
@@ -94,7 +94,7 @@ class OnceTest extends ActionTest
         $price = $this->createPrice($type);
         $charge = $this->calculator->calculateCharge($price, $action);
 
-        $this->expectException(OnceException::class);
+        $this->expectException(FormulaEngineException::class);
         $oncePeriod->modifyCharge($charge, $action);
     }
 
@@ -160,7 +160,7 @@ class OnceTest extends ActionTest
         $price = $this->createPrice($type);
         $charge = $this->calculator->calculateCharge($price, $action);
 
-        $this->expectException(OnceException::class);
+        $this->expectException(FormulaEngineException::class);
         $once->modifyCharge($charge, $action);
     }
 
