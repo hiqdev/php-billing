@@ -5,10 +5,13 @@ namespace hiqdev\php\billing\charge\modifiers;
 use DateTimeImmutable;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\derivative\ChargeDerivative;
+use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use hiqdev\php\billing\formula\FormulaEngineException;
+use Money\Money;
 
 /**
  * 1. API:
@@ -21,7 +24,16 @@ use hiqdev\php\billing\formula\FormulaEngineException;
  */
 class Once extends Modifier
 {
-    private const MONTHS_IN_YEAR = 12;
+    private const MONTHS_IN_YEAR_ON_EARTH = 12;
+
+    protected ChargeDerivative $chargeDerivative;
+
+    public function __construct(array $addons = [])
+    {
+        parent::__construct($addons);
+
+        $this->chargeDerivative = new ChargeDerivative();
+    }
 
     public function per(string $interval): self
     {
@@ -74,7 +86,19 @@ class Once extends Modifier
         }
 
         // Return zero charge if the period is not applicable
-        return [];
+        return [$this->createNewZeroCharge($charge)];
+    }
+
+    private function createNewZeroCharge(ChargeInterface $charge): ChargeInterface
+    {
+        $zeroChargeQuery = new ChargeDerivativeQuery();
+        $zeroChargeQuery->changeSum(new Money(0, $charge->getSum()->getCurrency()));
+        $reason = $this->getReason();
+        if ($reason) {
+            $zeroChargeQuery->changeComment($reason->getValue());
+        }
+
+        return $this->chargeDerivative->__invoke($charge, $zeroChargeQuery);
     }
 
     private function assertPeriod(?Period $period)
@@ -125,13 +149,13 @@ class Once extends Modifier
     private function calculateMonthsDifference(DateTimeImmutable $start, DateTimeImmutable $end): int
     {
         $interval = $end->diff($start);
-        return ($interval->y * self::MONTHS_IN_YEAR) + $interval->m;
+        return ($interval->y * self::MONTHS_IN_YEAR_ON_EARTH) + $interval->m;
     }
 
     private function getIntervalMonthsFromPeriod(Period $period): int
     {
         if ($period instanceof YearPeriod) {
-            return self::MONTHS_IN_YEAR;
+            return self::MONTHS_IN_YEAR_ON_EARTH;
         } elseif ($period instanceof MonthPeriod) {
             return $period->getValue();
         }

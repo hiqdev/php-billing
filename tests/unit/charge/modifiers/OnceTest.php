@@ -134,7 +134,8 @@ class OnceTest extends ActionTest
         $charge = $this->calculator->calculateCharge($price, $action);
 
         $charges = $once->modifyCharge($charge, $action);
-        $this->assertCount(0, $charges);
+        $this->assertCount(1, $charges);
+        $this->assertZeroCharge($charges[0]);
     }
 
     private function createActionWithSale(
@@ -195,6 +196,7 @@ class OnceTest extends ActionTest
         $charge = $this->calculator->calculateCharge($price, $action);
 
         $charges = $once->modifyCharge($charge, $action);
-        $this->assertCount(0, $charges);
+        $this->assertCount(1, $charges);
+        $this->assertZeroCharge($charges[0]);
     }
 }
