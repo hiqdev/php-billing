@@ -21,7 +21,6 @@ use Money\Money;
  * - once.per('day'), once.per('1.5 months') – throws an interpret-time exception, a value must NOT be a fraction of the month
  * 2. In months where the formula should NOT bill, it should produce a ZERO charge.
  * 3. If the sale is re-opened, the formula starts over.
- * 4. It should throw exception for overuse prices.
  */
 class Once extends Modifier
 {
