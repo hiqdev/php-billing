@@ -51,8 +51,7 @@ final class UsageInterval
     public static function withinMonth(
         DateTimeImmutable $month,
         DateTimeImmutable $start,
-        ?DateTimeImmutable $end,
-        float $fractionOfMonth
+        ?DateTimeImmutable $end
     ): self {
         $month = self::toMonth($month);
         $nextMonth = $month->modify('+1 month');
@@ -72,16 +71,47 @@ final class UsageInterval
         }
 
         $effectiveSince = max($start, $month);
+        $effectiveTill = min(
+            $end ?? new DateTimeImmutable('2999-01-01'),
+            $month->modify('+1 month')
+        );
+
+        return new self(
+            $effectiveSince,
+            $effectiveTill,
+        );
+    }
+
+    /**
+     * Calculates the usage interval for the given month for the given start date and fraction of month value.
+     *
+     * @param DateTimeImmutable $month the month to calculate the usage interval for
+     * @param DateTimeImmutable $start the start date of the sale
+     * @param float $fractionOfMonth the fraction of manth
+     * @return static
+     */
+    public static function withMonthAndFraction(
+        DateTimeImmutable $month,
+        DateTimeImmutable $start,
+        float $fractionOfMonth
+    ): self {
+        $month = self::toMonth($month);
+        $nextMonth = $month->modify('+1 month');
+
+        if ($start >= $nextMonth) {
+            $start = $month;
+        }
+
+        $effectiveSince = max($start, $month);
 
         if ($fractionOfMonth === 1.0) {
-            $calcEnd = $month->modify('+1 month');
+            $effectiveTill = $month->modify('+1 month');
         } else {
             $startTime = strtotime(($month->format('D, d M Y H:i:s O')));
             $finishTime = strtotime($nextMonth->format('D, d M Y H:i:s O'));
             $interval = 'PT' . (($finishTime - $startTime) * $fractionOfMonth) . 'S';
-            $calcEnd = $effectiveSince->add(new \DateInterval($interval));
+            $effectiveTill = $effectiveSince->add(new \DateInterval($interval));
         }
-        $effectiveTill = (!empty($end) && $end < $calcEnd) ? $end : $calcEnd;
 
         return new self(
             $effectiveSince,

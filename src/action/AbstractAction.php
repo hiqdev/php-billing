@@ -55,7 +55,7 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
     /** @var ActionInterface */
     protected $parent;
 
-    protected float $fraction_of_month;
+    protected float $fractionOfMonth;
 
     /**
      * @param SaleInterface $sale
@@ -71,7 +71,7 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
         SaleInterface $sale = null,
         ActionState $state = null,
         ActionInterface $parent = null,
-        $fractionOfMonth = 0.0
+        float $fractionOfMonth = 0.0
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -82,7 +82,7 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
         $this->sale     = $sale;
         $this->state    = $state;
         $this->parent   = $parent;
-        $this->fraction_of_month = $fractionOfMonth;
+        $this->fractionOfMonth = $fractionOfMonth;
     }
 
     /**
@@ -240,11 +240,17 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
             return UsageInterval::wholeMonth($this->getTime());
         }
 
+        if ($this->getFractionOfMonth() > 0) {
+            return UsageInterval::withMonthAndFraction(
+                $this->getTime(),
+                $this->getSale()->getTime(),
+                $this->getFractionOfMonth()
+            );
+        }
         return UsageInterval::withinMonth(
             $this->getTime(),
             $this->getSale()->getTime(),
-            $this->getSale()->getCloseTime(),
-            $this->getFractionOfMonth()
+            $this->getSale()->getCloseTime()
         );
     }
 }
