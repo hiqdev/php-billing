@@ -55,7 +55,7 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
     /** @var ActionInterface */
     protected $parent;
 
-    protected float $fractionOfMonth;
+    protected float $fractionOfMonth = 0.0;
 
     /**
      * @param SaleInterface $sale
