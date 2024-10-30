@@ -16,6 +16,7 @@ use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Increase;
 use hiqdev\php\billing\charge\modifiers\Installment;
+use hiqdev\php\billing\charge\modifiers\Once;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model\Model;
 use Hoa\Ruler\Ruler;
@@ -60,6 +61,8 @@ class FormulaEngine implements FormulaEngineInterface
     protected $increase;
 
     protected ?Cap $cap = null;
+
+    protected ?Once $once = null;
     /**
      * @var CacheInterface
      */
@@ -202,6 +205,7 @@ class FormulaEngine implements FormulaEngineInterface
         $context['installment'] = $this->getInstallment();
         $context['increase'] = $this->getIncrease();
         $context['cap'] = $this->getCap();
+        $context['once'] = $this->getOnce();
 
         return $context;
     }
@@ -240,5 +244,14 @@ class FormulaEngine implements FormulaEngineInterface
         }
 
         return $this->cap;
+    }
+
+    private function getOnce(): ChargeModifier
+    {
+        if ($this->once === null) {
+            $this->once = new Once();
+        }
+
+        return $this->once;
     }
 }
