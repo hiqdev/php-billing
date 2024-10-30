@@ -224,7 +224,7 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
 
     public function getFractionOfMonth(): float
     {
-        return $this->fraction_of_month;
+        return $this->fractionOfMonth;
     }
     /**
      * {@inheritdoc}
