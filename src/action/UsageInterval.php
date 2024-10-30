@@ -82,6 +82,45 @@ final class UsageInterval
         );
     }
 
+    /**
+     * Calculates the usage interval for the given month for the given start date and fraction of month value.
+     *
+     * @param DateTimeImmutable $month the month to calculate the usage interval for
+     * @param DateTimeImmutable $start the start date of the sale
+     * @param float $fractionOfMonth the fraction of manth
+     * @return static
+     */
+    public static function withMonthAndFraction(
+        DateTimeImmutable $month,
+        DateTimeImmutable $start,
+        float $fractionOfMonth
+    ): self {
+        if ($fractionOfMonth < 0 || $fractionOfMonth > 1) {
+            throw new InvalidArgumentException('Fraction of month must be between 0 and 1');
+        }
+        $month = self::toMonth($month);
+        $nextMonth = $month->modify('+1 month');
+
+        if ($start >= $nextMonth) {
+            $start = $month;
+        }
+
+        $effectiveSince = max($start, $month);
+
+        if ($fractionOfMonth === 1.0) {
+            $effectiveTill = $month->modify('+1 month');
+        } else {
+            $monthDays = (int) $month->format('t');
+            $days = (int) round($monthDays * $fractionOfMonth);
+            $effectiveTill = $effectiveSince->modify(sprintf('+%d days', $days));
+        }
+
+        return new self(
+            $effectiveSince,
+            $effectiveTill,
+        );
+    }
+
     public function start(): DateTimeImmutable
     {
         return $this->start;

@@ -188,14 +188,27 @@ class FeatureContext implements Context
         $type = Type::anyId($type);
         $target = new Target(Target::ANY, $target);
         $time = new DateTimeImmutable($date);
+        $fractionOfMonth = 1;
         if ($this->sale->getCloseTime() instanceof DateTimeImmutable) {
-            $amount = $amount * $this->getFractionOfMonth(
+            $fractionOfMonth = $this->getFractionOfMonth(
                 $time, $time, $this->sale->getCloseTime()
             );
+            $amount = $amount * $fractionOfMonth;
         }
         $quantity = Quantity::create($unit, $amount);
 
-        $this->action = new Action(null, $type, $target, $quantity, $this->customer, $time);
+        $this->action = new Action(
+            null,
+            $type,
+            $target,
+            $quantity,
+            $this->customer,
+            $time,
+            null,
+            null,
+            null,
+            $fractionOfMonth
+        );
     }
 
     private function getFractionOfMonth(DateTimeImmutable $month, DateTimeImmutable $startTime, DateTimeImmutable $endTime): float
