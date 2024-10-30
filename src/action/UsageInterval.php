@@ -95,6 +95,9 @@ final class UsageInterval
         DateTimeImmutable $start,
         float $fractionOfMonth
     ): self {
+        if ($fractionOfMonth < 0 || $fractionOfMonth > 1) {
+            throw new InvalidArgumentException('Fraction of month must be between 0 and 1');
+        }
         $month = self::toMonth($month);
         $nextMonth = $month->modify('+1 month');
 
@@ -107,10 +110,9 @@ final class UsageInterval
         if ($fractionOfMonth === 1.0) {
             $effectiveTill = $month->modify('+1 month');
         } else {
-            $startTime = strtotime(($month->format('D, d M Y H:i:s O')));
-            $finishTime = strtotime($nextMonth->format('D, d M Y H:i:s O'));
-            $interval = 'PT' . (($finishTime - $startTime) * $fractionOfMonth) . 'S';
-            $effectiveTill = $effectiveSince->add(new \DateInterval($interval));
+            $monthDays = (int) $month->format('t');
+            $days = (int) round($monthDays * $fractionOfMonth);
+            $effectiveTill = $effectiveSince->modify(sprintf('+%d days', $days));
         }
 
         return new self(

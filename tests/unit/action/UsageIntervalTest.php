@@ -211,4 +211,27 @@ class UsageIntervalTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * @dataProvider provideInvalidFractionOfMonthValues
+     */
+    public function testWithMonthAndFractionInvalidValues(float $fractionOfMonth): void
+    {
+        $month = new DateTimeImmutable('2023-01-01');
+        $start = new DateTimeImmutable('2023-01-15');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fraction of month must be between 0 and 1');
+
+        UsageInterval::withMonthAndFraction($month, $start, $fractionOfMonth);
+    }
+
+    public function provideInvalidFractionOfMonthValues(): array
+    {
+        return [
+            [-0.1],
+            [1.1],
+            [2.0],
+        ];
+    }
 }
