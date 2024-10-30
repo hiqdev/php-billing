@@ -17,11 +17,7 @@ namespace hiqdev\php\billing\charge;
  */
 class ChargeFactory implements ChargeFactoryInterface
 {
-    /**
-     * Creates charge object.
-     * @return Charge
-     */
-    public function create(ChargeCreationDto $dto)
+    public function create(ChargeCreationDto $dto): ChargeInterface
     {
         return new Charge(
             $dto->id,

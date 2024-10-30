@@ -17,10 +17,7 @@ namespace hiqdev\php\billing\target;
  */
 interface TargetFactoryInterface
 {
-    /**
-     * @return Target
-     */
-    public function create(TargetCreationDto $dto);
+    public function create(TargetCreationDto $dto): TargetInterface;
 
     /**
      * Returns class that represents target with $type.

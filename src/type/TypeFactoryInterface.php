@@ -17,8 +17,5 @@ namespace hiqdev\php\billing\type;
  */
 interface TypeFactoryInterface
 {
-    /**
-     * @return Type
-     */
-    public function create(TypeCreationDto $dto);
+    public function create(TypeCreationDto $dto): TypeInterface;
 }
