@@ -151,7 +151,6 @@ class MonthlyCap extends Modifier
     private function makeMappedCharge(ChargeInterface $charge, ActionInterface $action): ChargeInterface
     {
         $coefficient = $this->getEffectiveCoefficient($action);
-        $quantityUnderCap = $charge->getUsage()->multiply($coefficient);
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage(
             $this->getCapInHours()->multiply($coefficient)->multiply($action->getUsageInterval()->ratioOfMonth())
