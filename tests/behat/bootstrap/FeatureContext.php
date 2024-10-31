@@ -263,10 +263,15 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /^client rejected service at (.+)$/
+     * @Given /^client rejected service at ?(.+?)$/
      */
-    public function actionCloseDateIs(string $close_date): void
+    public function actionCloseDateIs(?string $close_date): void
     {
+        $close_date = trim($close_date);
+        if (empty($close_date)) {
+            return;
+        }
+
         $this->sale->close(new DateTimeImmutable($close_date));
     }
 

@@ -119,6 +119,17 @@ class UsageIntervalTest extends TestCase
                 'expectedExceptionMessage' => 'Start date must be less than end date',
             ]
         ];
+
+        yield 'When start date is greater than start of month' => [
+            ['month' => '2024-02-01 00:00:00', 'start' => '2024-02-01 11:50:00', 'end' => '2024-02-29 18:15:00'],
+            [
+                'start' => '2024-02-01 11:50:00',
+                'end' => '2024-02-29 18:15:00',
+                'ratioOfMonth' => 0.9747365900383141,
+                'seconds' => 2_442_300,
+                'secondsInMonth' => 2_505_600,
+            ]
+        ];
     }
 
     /**
@@ -207,6 +218,17 @@ class UsageIntervalTest extends TestCase
                 'end' => '2023-02-01 00:00:00',
                 'ratioOfMonth' => 0.0,
                 'seconds' => 0,
+                'secondsInMonth' => 2_419_200,
+            ]
+        ];
+
+        yield 'When start date is greater than start of month' => [
+            ['month' => '2024-02-01 00:00:00', 'start' => '2024-02-01 11:50:00', 'fraction' => 0.9747365900383141],
+            [
+                'start' => '2024-02-01 11:50:00',
+                'end' => '2024-02-29 18:15:00',
+                'ratioOfMonth' => 0.97473659003831,
+                'seconds' => 2_419_200,
                 'secondsInMonth' => 2_419_200,
             ]
         ];

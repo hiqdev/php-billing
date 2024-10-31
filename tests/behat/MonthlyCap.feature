@@ -32,8 +32,8 @@ Feature: Monthly cap
             | 2020-09-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
             | 2020-10-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 72 hour     |
             | 2020-11-01            | 1           | monthly 50 USD for 672 hour            | monthly 0 USD for 48 hour     |
-            | 2020-12-10            | 0.6451615   | monthly 35.72 USD for 480.000156 hour  |                               |
-            | 2020-12-04            | 0.9032258   | monthly 50.00 USD for 671.9999952 hour |                               |
+            | 2020-12-10            | 0.6451615   | monthly 35.72 USD for 528 hour         |                               |
+            | 2020-12-04            | 0.9032258   | monthly 50.00 USD for 672 hour         |                               |
             | 2020-12-03 14:00:00   | 0.9166665   | monthly 50.00 USD for 672 hour         | monthly 0 USD for 10 hour     |
             | 2022-02-01            | 1           | monthly 50 USD for 672 hour            |                               |
 
@@ -85,8 +85,30 @@ Feature: Monthly cap
        Then first charge is <first>
         And second charge is <second>
       Examples:
-        | date                | qty                | first                                    | second                                 |
-        | 2023-09-01          | 2                  | overuse 24 USD for 672 hour              | overuse 0 USD for 48 hour              |
-        | 2023-09-02 09:41:16 | 1.9064228395061729 | overuse 24 USD for 672 hour              | overuse 0 USD for 14.312222222222 hour |
-        | 2023-09-03 12:41:16 | 1.8314228395       | overuse 23.55 USD for 1318.62444444 hour |                                        |
-        | 2023-09-01          | 1.5                | overuse 18 USD for 672 hour              |                                        |
+        | date                | qty                | first                                      | second                                 |
+        | 2023-09-01          | 2                  | overuse 24 USD for 672 hour                | overuse 0 USD for 48 hour              |
+        | 2023-09-02 09:41:16 | 1.9064228395061729 | overuse 24 USD for 672 hour                | overuse 0 USD for 14.312222222222 hour |
+        | 2023-09-03 12:41:16 | 1.8314228395       | overuse 23.55 USD for 659.31222222222 hour |                                        |
+        | 2023-09-01          | 1.5                | overuse 18 USD for 672 hour                |                                        |
+
+    # Use case: Volume DU should be billed for byte*months under monthly cap.
+    # The use.amount is stored in bytes;
+    # The action.amount is proportionalized and stored in byte*months;
+    # The bill and charge qty should be in hours under monthly cap.
+    # When need to extract the effective bytes qty, use action.amount/fraction_of_month
+    # TODO: It would be nice to introduce a new unit tree for byte*time, then we will be able to store charge.qty in byte*hours,
+    Scenario Outline: monthly cap on volume overuses
+      Given formula is cap.monthly('28 days')
+        And server overuse price is 0.02 USD per GB
+        And action is server overuse <action_amount> bytes
+        And action date is <date>
+        And sale time is <date>
+        And client rejected service at <unsale_time>
+       Then first charge is <first>
+        And second charge is <second>
+      Examples:
+        | date                | unsale_time         | action_amount | first                                      | second                    |
+        | 2024-10-01          |                     | 5500000000000 | overuse 110 USD for 672 hour               | overuse 0 USD for 72 hour |
+        | 2024-10-16 10:55:15 | 2024-10-23 06:58:09 | 1212722894265 | overuse 26.85 USD for 164.04833333333 hour |                           |
+        | 2024-10-23 06:58:09 |                     | 1685732526881 | overuse 37.32 USD for 209.03083333333 hour |                           |
+
