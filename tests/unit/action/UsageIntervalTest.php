@@ -227,9 +227,9 @@ class UsageIntervalTest extends TestCase
             [
                 'start' => '2024-02-01 11:50:00',
                 'end' => '2024-02-29 18:15:00',
-                'ratioOfMonth' => 0.97473659003831,
-                'seconds' => 2_419_200,
-                'secondsInMonth' => 2_419_200,
+                'ratioOfMonth' => 0.9747365900383141,
+                'seconds' => 2_442_300,
+                'secondsInMonth' => 2_505_600,
             ]
         ];
     }

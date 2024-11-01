@@ -110,9 +110,9 @@ final class UsageInterval
         if ($fractionOfMonth === 1.0) {
             $effectiveTill = $month->modify('+1 month');
         } else {
-            $monthDays = (int) $month->format('t');
-            $days = (int) round($monthDays * $fractionOfMonth);
-            $effectiveTill = $effectiveSince->modify(sprintf('+%d days', $days));
+            $interval = new self($month, $nextMonth);
+            $seconds = $interval->secondsInMonth() * $fractionOfMonth;
+            $effectiveTill = $effectiveSince->modify(sprintf('+%d seconds', $seconds));
         }
 
         return new self(
