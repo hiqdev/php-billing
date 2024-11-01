@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tools;
 
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
@@ -77,7 +78,7 @@ class Aggregator implements AggregatorInterface
 
     protected function aggregateBill(BillInterface $first, BillInterface $other): BillInterface
     {
-        return new Bill(
+        $bill = new Bill(
             $this->aggregateId($first, $other),
             $first->getType(),
             $first->getTime(),
@@ -88,6 +89,15 @@ class Aggregator implements AggregatorInterface
             $first->getPlan(),
             array_merge($first->getCharges(), $other->getCharges())
         );
+
+        $bill->setUsageInterval($this->aggregateUsageInterval($first, $other));
+
+        return $bill;
+    }
+
+    protected function aggregateUsageInterval(BillInterface $first, BillInterface $other): UsageInterval
+    {
+        return $first->getUsageInterval()->extend($other->getUsageInterval());
     }
 
     /**

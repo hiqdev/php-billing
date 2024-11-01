@@ -11,6 +11,7 @@
 namespace hiqdev\php\billing\bill;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
@@ -63,6 +64,9 @@ class Bill implements BillInterface
     /** @var string */
     protected $comment;
 
+    /** @var UsageInterval */
+    protected $usageInterval;
+
     public function __construct(
                             $id,
         TypeInterface $type,
@@ -85,6 +89,7 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
+        $this->setUsageInterval(UsageInterval::wholeMonth($time));
     }
 
     /**
@@ -102,6 +107,10 @@ class Bill implements BillInterface
         ];
 
         return implode('-', $parts);
+    }
+
+    public function getUsageInterval(): UsageInterval
+    {
     }
 
     public function calculatePrice()
@@ -232,5 +241,10 @@ class Bill implements BillInterface
     public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this));
+    }
+
+    public function setUsageInterval(UsageInterval $usageInterval): void
+    {
+        $this->usageInterval = $usageInterval;
     }
 }

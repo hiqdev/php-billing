@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\charge;
 
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
@@ -26,7 +27,7 @@ class Generalizer implements GeneralizerInterface
 {
     public function createBill(ChargeInterface $charge): BillInterface
     {
-        return new Bill(
+        $bill = new Bill(
             null,
             $this->generalizeType($charge),
             $this->generalizeTime($charge),
@@ -35,8 +36,12 @@ class Generalizer implements GeneralizerInterface
             $this->generalizeCustomer($charge),
             $this->generalizeTarget($charge),
             $this->generalizePlan($charge),
-            [$charge]
+            [$charge],
         );
+
+        $bill->setUsageInterval($this->generalizeUsageInterval($charge));
+
+        return $bill;
     }
 
     public function generalizeType(ChargeInterface $charge): TypeInterface
@@ -82,5 +87,10 @@ class Generalizer implements GeneralizerInterface
     public function specializeTarget(TargetInterface $first, TargetInterface $other): TargetInterface
     {
         return $first;
+    }
+
+    private function generalizeUsageInterval(ChargeInterface $charge): UsageInterval
+    {
+        return $charge->getAction()->getUsageInterval();
     }
 }
