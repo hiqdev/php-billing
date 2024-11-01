@@ -46,6 +46,7 @@ final class UsageInterval
      * @param DateTimeImmutable $month the month to calculate the usage interval for
      * @param DateTimeImmutable $start the start date of the sale
      * @param DateTimeImmutable|null $end the end date of the sale or null if the sale is active
+     * @throws InvalidArgumentException if the start date is greater than the end date
      * @return static
      */
     public static function withinMonth(

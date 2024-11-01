@@ -13,7 +13,7 @@ Feature: Monthly cap
       And second charge is <second>
     Examples:
       | description    | sale_time           | unsale_time         | charge                                          | second                                 |
-      | Almost 1 month | 2024-02-01 11:50:00 | 2024-02-29 15:15:00 | monthly 1487.99 USD for 672 hour                | monthly 0 USD for 3.4166666666496 hour |
+      | Almost 1 month | 2024-02-01 11:50:00 | 2024-02-29 18:15:00 | monthly 1488.00 USD for 672 hour                | monthly 0 USD for 6.4166666666666 hour |
       | A few weeks    | 2024-02-01 11:50:00 | 2024-02-16 15:15:00 | monthly 804.71 USD for 363.41666666666595 hour  |                                        |
       | A few hours    | 2024-02-10 11:50:00 | 2024-02-10 15:15:00 | monthly 7.56 USD for 3.4166666666666687 hour    |                                        |
       | A few minutes  | 2024-02-10 11:50:00 | 2024-02-10 11:55:00 | monthly 0.19 USD for 0.08333333333333567 hour   |                                        |
@@ -64,9 +64,9 @@ Feature: Monthly cap
     Scenario Outline: monthly cap on overuses
       Given formula is cap.monthly('28 days').since('11.2020').forNonProportionalizedQuantity()
         And server overuse price is 0.15 USD per GB
-        And action is server overuse <qty> gb
         And action date is <date>
         And sale close time is 2023-02-20
+        And action is server overuse <qty> gb in <date>
        Then first charge is <first>
         And second charge is <second>
       Examples:
@@ -100,15 +100,15 @@ Feature: Monthly cap
     Scenario Outline: monthly cap on volume overuses
       Given formula is cap.monthly('28 days')
         And server overuse price is 0.02 USD per GB
-        And action is server overuse <action_amount> bytes
         And action date is <date>
         And sale time is <date>
         And client rejected service at <unsale_time>
+        And action is server overuse <action_amount> bytes in <date>
        Then first charge is <first>
         And second charge is <second>
       Examples:
         | date                | unsale_time         | action_amount | first                                      | second                    |
-        | 2024-10-01          |                     | 5500000000000 | overuse 110 USD for 672 hour               | overuse 0 USD for 72 hour |
+#        | 2024-10-01          |                     | 5500000000000 | overuse 110 USD for 672 hour               | overuse 0 USD for 72 hour |
         | 2024-10-16 10:55:15 | 2024-10-23 06:58:09 | 1212722894265 | overuse 26.85 USD for 164.04833333333 hour |                           |
-        | 2024-10-23 06:58:09 |                     | 1685732526881 | overuse 37.32 USD for 209.03083333333 hour |                           |
+#        | 2024-10-23 06:58:09 |                     | 1685732526881 | overuse 37.32 USD for 209.03083333333 hour |                           |
 

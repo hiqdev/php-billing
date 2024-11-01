@@ -17,6 +17,7 @@ use Closure;
 use DateTimeImmutable;
 use Exception;
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
@@ -193,7 +194,10 @@ class FeatureContext implements Context
             $fractionOfMonth = $this->getFractionOfMonth(
                 $time, $time, $this->sale->getCloseTime()
             );
-            $amount = $amount * $fractionOfMonth;
+            if ($type->getName() !== 'overuse') {
+                // Overuses should be prepared in the test case
+                $amount = $amount * $fractionOfMonth;
+            }
         }
         $quantity = Quantity::create($unit, $amount);
 
@@ -213,19 +217,11 @@ class FeatureContext implements Context
 
     private function getFractionOfMonth(DateTimeImmutable $month, DateTimeImmutable $startTime, DateTimeImmutable $endTime): float
     {
-        // SQL function: days2quantity()
-
-        $month = $month->modify('first day of this month 00:00');
-        if ($startTime < $month) {
-            $startTime = $month;
+        try {
+            return UsageInterval::withinMonth($month, $startTime, $endTime)->ratioOfMonth();
+        } catch (\InvalidArgumentException $e) {
+            return 1;
         }
-        if ($endTime > $month->modify('first day of next month 00:00')) {
-            $endTime = $month->modify('first day of next month 00:00');
-        }
-
-        $secondsInMonth = $month->format('t') * 24 * 60 * 60;
-
-        return ($endTime->getTimestamp() - $startTime->getTimestamp()) / $secondsInMonth;
     }
 
     /**

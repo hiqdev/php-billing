@@ -153,7 +153,9 @@ class MonthlyCap extends Modifier
         $coefficient = $this->getEffectiveCoefficient($action);
         $chargeQuery = new ChargeDerivativeQuery();
         $chargeQuery->changeUsage(
-            $this->getCapInHours()->multiply($coefficient)->multiply($action->getUsageInterval()->ratioOfMonth())
+            $this->getCapInHours()
+                 ->multiply($coefficient)
+                 ->multiply($action->getUsageInterval()->ratioOfMonth())
         );
         $chargeQuery->changeSum($charge->getSum()->multiply($coefficient));
 
