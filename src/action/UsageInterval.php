@@ -169,4 +169,18 @@ final class UsageInterval
 
         return $usageSeconds / $secondsInCurrentMonth;
     }
+
+    /**
+     * Extends the usage interval to include both current and other intervals.
+     *
+     * @param UsageInterval $other
+     * @return self
+     */
+    public function extend(self $other): self
+    {
+        return new self(
+            min($this->start, $other->start),
+            max($this->end, $other->end),
+        );
+    }
 }
