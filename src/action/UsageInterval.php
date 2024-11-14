@@ -178,9 +178,15 @@ final class UsageInterval
      */
     public function extend(self $other): self
     {
+        $newStart = min($this->start, $other->start);
+        $newEnd = max($this->end, $other->end);
+
+        if ($newStart > $newEnd) {
+            throw new InvalidArgumentException('Cannot extend intervals: resulting interval would be invalid');
+        }
         return new self(
-            min($this->start, $other->start),
-            max($this->end, $other->end),
+            $newStart,
+            $newEnd,
         );
     }
 }

@@ -111,6 +111,7 @@ class Bill implements BillInterface
 
     public function getUsageInterval(): UsageInterval
     {
+        return $this->usageInterval;
     }
 
     public function calculatePrice()
