@@ -17,11 +17,7 @@ namespace hiqdev\php\billing\customer;
  */
 class CustomerFactory implements CustomerFactoryInterface
 {
-    /**
-     * Creates customer object.
-     * @return Customer
-     */
-    public function create(CustomerCreationDto $dto)
+    public function create(CustomerCreationDto $dto): CustomerInterface
     {
         return new Customer($dto->id, $dto->login, $dto->seller);
     }

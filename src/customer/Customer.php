@@ -37,11 +37,14 @@ class Customer implements CustomerInterface
      */
     protected $sellers = [];
 
-    public function __construct($id, $login, CustomerInterface $seller = null)
+    protected ?CustomerState $state = null;
+
+    public function __construct($id, $login, CustomerInterface $seller = null, ?CustomerState $state = null)
     {
         $this->id = $id;
         $this->login = $login;
         $this->seller = $seller;
+        $this->state = $state;
     }
 
     public function getId()
@@ -73,6 +76,26 @@ class Customer implements CustomerInterface
         return $this->seller;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getState(): ?CustomerState
+    {
+        return $this->state;
+    }
+
+    public function setState(CustomerState $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return CustomerState::isDeleted($this);
+    }
+
     public static function fromArray(array $info)
     {
         if (!empty($info['seller_id']) && !empty($info['seller'])) {
@@ -81,7 +104,12 @@ class Customer implements CustomerInterface
             $seller = null;
         }
 
-        return new static($info['id'], $info['login'], $seller);
+        return new static(
+            $info['id'],
+            $info['login'],
+            $seller,
+            isset($info['state']) ? CustomerState::fromString($info['state']) : null,
+        );
     }
 
     public function jsonSerialize(): array

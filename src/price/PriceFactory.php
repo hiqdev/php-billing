@@ -42,9 +42,6 @@ class PriceFactory implements PriceFactoryInterface
     }
 
 
-    /**
-     * Creates price object.
-     */
     public function create(PriceCreationDto $dto): PriceInterface
     {
         $class = $this->findClassForTypes([
