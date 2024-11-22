@@ -89,7 +89,6 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
-        $this->setUsageInterval(UsageInterval::wholeMonth($time));
     }
 
     /**
@@ -111,7 +110,16 @@ class Bill implements BillInterface
 
     public function getUsageInterval(): UsageInterval
     {
+        if ($this->usageInterval === null) {
+            $this->initializeWholeMonthUsageInterval();
+        }
+
         return $this->usageInterval;
+    }
+
+    private function initializeWholeMonthUsageInterval(): void
+    {
+        $this->setUsageInterval(UsageInterval::wholeMonth($this->time));
     }
 
     public function calculatePrice()
