@@ -2,11 +2,13 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\billing\registry\product\Product;
+
 class TariffType
 {
     private string $name;
 
-    private string $productClass;
+    private Product $product;
 
     private PriceTypesCollection $prices;
 
@@ -18,9 +20,9 @@ class TariffType
         $this->prices = new PriceTypesCollection();
     }
 
-    public function ofProduct(string $productClass): self
+    public function ofProduct(Product $product): self
     {
-        $this->productClass = $productClass;
+        $this->product = $product;
 
         return $this;
     }
