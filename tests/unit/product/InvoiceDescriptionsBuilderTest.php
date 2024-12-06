@@ -2,6 +2,9 @@
 
 namespace hiqdev\php\billing\tests\unit\product;
 
+use hiqdev\billing\registry\invoice\InvoiceRepresentation;
+use hiqdev\billing\registry\invoice\PaymentRequestRepresentation;
+use hiqdev\billing\registry\product\ServerProduct;
 use PHPUnit\Framework\TestCase;
 
 class InvoiceDescriptionsBuilderTest extends TestCase
@@ -20,7 +23,11 @@ class InvoiceDescriptionsBuilderTest extends TestCase
                     ->invoiceRepresentation(function () {
                         return 'Invoice for support_time (monthly): $100';
                     })
+                    ->documentRepresentation()
+                        ->attach(new InvoiceRepresentation("trunc(quantity::numeric,0)||' of '||trunc(maxquantity::numeric,0)||' Anycast IP-addresses in '||period"))
+                        ->attach(new PaymentRequestRepresentation("'Recommended prepayment '||trunc(quantity::numeric,0)||' of '||trunc(maxquantity::numeric,0)||' Anycast IP-addresses in '||period"))
                     ->end()
+                ->end()
                 ->overuse('support_time')
                     ->unit('hour')
                     ->description('Support time overuse')

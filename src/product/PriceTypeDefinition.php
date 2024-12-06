@@ -45,4 +45,9 @@ class PriceTypeDefinition
         // Validate the PriceType and lock its state
         return new PriceTypesCollection();
     }
+
+    public function documentRepresentation(): self
+    {
+        return $this;
+    }
 }
