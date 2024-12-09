@@ -4,6 +4,7 @@ namespace hiqdev\php\billing\product;
 
 class BillingRegistry implements BillingRegistryInterface
 {
+    /** @var TariffType[] */
     private array $tariffTypes = [];
     private bool $locked = false;
 

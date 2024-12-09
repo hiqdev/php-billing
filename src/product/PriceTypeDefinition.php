@@ -3,22 +3,25 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
+use hiqdev\billing\registry\product\Type;
+use hiqdev\billing\registry\product\Unit;
 
 class PriceTypeDefinition
 {
-    private string $unit;
+    private Unit $unit;
 
     private string $description;
 
     private string $quantityFormatter;
 
-    private string $invoiceRepresentation;
+    private InvoiceRepresentationCollection $invoiceRepresentation;
 
-    public function __construct(private readonly PriceTypesCollection $parent)
+    public function __construct(private readonly PriceTypesCollection $parent, private readonly Type $type)
     {
+        $this->invoiceRepresentation = new InvoiceRepresentationCollection($this);
     }
 
-    public function unit(string $unit): self
+    public function unit(Unit $unit): self
     {
         $this->unit = $unit;
 
@@ -39,12 +42,12 @@ class PriceTypeDefinition
         return $this;
     }
 
-    public function invoiceRepresentation(string $representationClass): self
-    {
-        $this->invoiceRepresentation = $representationClass;
-
-        return $this;
-    }
+//    public function invoiceRepresentation(string $representationClass): self
+//    {
+//        $this->invoiceRepresentation = $representationClass;
+//
+//        return $this;
+//    }
 
     public function end(): PriceTypesCollection
     {
@@ -54,11 +57,16 @@ class PriceTypeDefinition
 
     public function documentRepresentation(): InvoiceRepresentationCollection
     {
-        return new InvoiceRepresentationCollection($this);
+        return $this->invoiceRepresentation;
     }
 
     public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
     {
         return $this;
+    }
+
+    public function type(): Type
+    {
+        return $this->type;
     }
 }
