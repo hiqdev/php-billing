@@ -2,6 +2,8 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\billing\registry\product\Type;
+
 class PriceTypesCollection
 {
     private array $prices = [];
@@ -10,23 +12,23 @@ class PriceTypesCollection
     {
     }
 
-    public function monthly(string $type): PriceTypeDefinition
+    public function monthly(Type $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition();
-        $this->prices[$type] = $priceType;
+        $priceType = $this->createPriceTypeDefinition($type);
+        $this->prices[$type->toTypeName()] = $priceType;
 
         return $priceType;
     }
 
-    private function createPriceTypeDefinition(): PriceTypeDefinition
+    private function createPriceTypeDefinition(Type $type): PriceTypeDefinition
     {
-        return new PriceTypeDefinition($this);
+        return new PriceTypeDefinition($this, $type);
     }
 
-    public function overuse(string $type): PriceTypeDefinition
+    public function overuse(Type $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition();
-        $this->prices[$type] = $priceType;
+        $priceType = $this->createPriceTypeDefinition($type);
+        $this->prices[$type->toTypeName()] = $priceType;
 
         return $priceType;
     }
