@@ -14,6 +14,10 @@ class PriceTypeDefinition
 
     private string $invoiceRepresentation;
 
+    public function __construct(private readonly PriceTypesCollection $parent)
+    {
+    }
+
     public function unit(string $unit): self
     {
         $this->unit = $unit;
@@ -45,7 +49,7 @@ class PriceTypeDefinition
     public function end(): PriceTypesCollection
     {
         // Validate the PriceType and lock its state
-        return new PriceTypesCollection();
+        return $this->parent;
     }
 
     public function documentRepresentation(): InvoiceRepresentationCollection
@@ -53,8 +57,8 @@ class PriceTypeDefinition
         return new InvoiceRepresentationCollection($this);
     }
 
-    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param)
+    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
     {
-
+        return $this;
     }
 }

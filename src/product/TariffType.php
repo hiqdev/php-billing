@@ -17,7 +17,7 @@ class TariffType
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->prices = new PriceTypesCollection();
+        $this->prices = new PriceTypesCollection($this);
     }
 
     public function ofProduct(Product $product): self
