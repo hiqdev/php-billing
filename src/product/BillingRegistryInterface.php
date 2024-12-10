@@ -4,5 +4,5 @@ namespace hiqdev\php\billing\product;
 
 interface BillingRegistryInterface
 {
-
+    public function priceTypes(): \Generator;
 }
