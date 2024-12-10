@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
+use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\php\units\Unit;
 
@@ -16,8 +17,11 @@ class PriceTypeDefinition
 
     private InvoiceRepresentationCollection $invoiceCollection;
 
-    public function __construct(private readonly PriceTypesCollection $parent, private readonly PriceType $type)
-    {
+    public function __construct(
+        private readonly PriceTypesCollection $parent,
+        private readonly PriceType $type,
+        private readonly GType $gType,
+    ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
     }
 
@@ -61,5 +65,10 @@ class PriceTypeDefinition
     public function type(): PriceType
     {
         return $this->type;
+    }
+
+    public function gType(): GType
+    {
+        return $this->gType;
     }
 }

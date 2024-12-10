@@ -2,6 +2,7 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
 
 class PriceTypesCollection implements \IteratorAggregate
@@ -34,7 +35,7 @@ class PriceTypesCollection implements \IteratorAggregate
 
     public function monthly(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition($type);
+        $priceType = $this->createPriceTypeDefinition(GType::monthly, $type);
 
         $this->addPriceTypeDefinition($type, $priceType);
 
@@ -46,14 +47,14 @@ class PriceTypesCollection implements \IteratorAggregate
         $this->pricesGroupedByPriceType[$type->name][] = $priceTypeDefinition;
     }
 
-    private function createPriceTypeDefinition(PriceType $type): PriceTypeDefinition
+    private function createPriceTypeDefinition(GType $gType, PriceType $type): PriceTypeDefinition
     {
-        return new PriceTypeDefinition($this, $type);
+        return new PriceTypeDefinition($this, $type, $gType);
     }
 
     public function overuse(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition($type);
+        $priceType = $this->createPriceTypeDefinition(GType::overuse, $type);
 
         $this->addPriceTypeDefinition($type, $priceType);
 
