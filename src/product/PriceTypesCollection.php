@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\product\Type;
+use hiqdev\billing\registry\product\PriceType;
 
 class PriceTypesCollection
 {
@@ -12,23 +12,23 @@ class PriceTypesCollection
     {
     }
 
-    public function monthly(Type $type): PriceTypeDefinition
+    public function monthly(PriceType $type): PriceTypeDefinition
     {
         $priceType = $this->createPriceTypeDefinition($type);
-        $this->prices[$type->toTypeName()] = $priceType;
+        $this->prices[$type->name] = $priceType;
 
         return $priceType;
     }
 
-    private function createPriceTypeDefinition(Type $type): PriceTypeDefinition
+    private function createPriceTypeDefinition(PriceType $type): PriceTypeDefinition
     {
         return new PriceTypeDefinition($this, $type);
     }
 
-    public function overuse(Type $type): PriceTypeDefinition
+    public function overuse(PriceType $type): PriceTypeDefinition
     {
         $priceType = $this->createPriceTypeDefinition($type);
-        $this->prices[$type->toTypeName()] = $priceType;
+        $this->prices[$type->name] = $priceType;
 
         return $priceType;
     }
