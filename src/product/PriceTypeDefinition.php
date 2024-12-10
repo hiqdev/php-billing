@@ -3,8 +3,8 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
-use hiqdev\billing\registry\product\Type;
-use hiqdev\billing\registry\product\Unit;
+use hiqdev\billing\registry\product\PriceType;
+use hiqdev\php\units\Unit;
 
 class PriceTypeDefinition
 {
@@ -16,14 +16,14 @@ class PriceTypeDefinition
 
     private InvoiceRepresentationCollection $invoiceRepresentation;
 
-    public function __construct(private readonly PriceTypesCollection $parent, private readonly Type $type)
+    public function __construct(private readonly PriceTypesCollection $parent, private readonly PriceType $type)
     {
         $this->invoiceRepresentation = new InvoiceRepresentationCollection($this);
     }
 
-    public function unit(Unit $unit): self
+    public function unit(string $unit): self
     {
-        $this->unit = $unit;
+        $this->unit = Unit::create($unit);
 
         return $this;
     }
@@ -65,7 +65,7 @@ class PriceTypeDefinition
         return $this;
     }
 
-    public function type(): Type
+    public function type(): PriceType
     {
         return $this->type;
     }
