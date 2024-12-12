@@ -65,4 +65,40 @@ class PriceTypesCollection implements \IteratorAggregate
     {
         return $this->parent;
     }
+
+    public function feature(PriceType $type): PriceTypeDefinition
+    {
+        $priceType = $this->createPriceTypeDefinition(GType::feature, $type);
+
+        $this->addPriceTypeDefinition($type, $priceType);
+
+        return $priceType;
+    }
+
+    public function domain(PriceType $type): PriceTypeDefinition
+    {
+        $priceType = $this->createPriceTypeDefinition(GType::domain, $type);
+
+        $this->addPriceTypeDefinition($type, $priceType);
+
+        return $priceType;
+    }
+
+    public function certificate(PriceType $type): PriceTypeDefinition
+    {
+        $priceType = $this->createPriceTypeDefinition(GType::certificate, $type);
+
+        $this->addPriceTypeDefinition($type, $priceType);
+
+        return $priceType;
+    }
+
+    public function discount(PriceType $type): PriceTypeDefinition
+    {
+        $priceType = $this->createPriceTypeDefinition(GType::discount, $type);
+
+        $this->addPriceTypeDefinition($type, $priceType);
+
+        return $priceType;
+    }
 }
