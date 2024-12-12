@@ -23,6 +23,13 @@ class PriceTypeDefinition
         private readonly GType $gType,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
+
+        $this->init();
+    }
+
+    protected function init(): void
+    {
+        // Hook
     }
 
     public function unit(string $unit): self
