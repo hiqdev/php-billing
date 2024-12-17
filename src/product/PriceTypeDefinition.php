@@ -50,6 +50,7 @@ class PriceTypeDefinition
 
     public function quantityFormatter(string $formatterClass, ?FractionUnit $unit = null): self
     {
+        // TODO: check if formatterClass exists
         $this->quantityFormatterDefinition = new QuantityFormatterDefinition($formatterClass, $unit);
 
         return $this;
