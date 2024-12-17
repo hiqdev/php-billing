@@ -4,6 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
+use hiqdev\billing\registry\product\PriceTypeDefinition\PriceTypeDefinitionFactory;
 
 class PriceTypesCollection implements \IteratorAggregate
 {
@@ -49,7 +50,7 @@ class PriceTypesCollection implements \IteratorAggregate
 
     private function createPriceTypeDefinition(GType $gType, PriceType $type): PriceTypeDefinition
     {
-        return new PriceTypeDefinition($this, $type, $gType);
+        return PriceTypeDefinitionFactory::create($this, $type, $gType);
     }
 
     public function overuse(PriceType $type): PriceTypeDefinition
