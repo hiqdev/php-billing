@@ -5,6 +5,8 @@ namespace hiqdev\php\billing\product;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
+use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
+use hiqdev\billing\registry\unit\FractionUnit;
 use hiqdev\php\units\Unit;
 
 class PriceTypeDefinition
@@ -13,7 +15,7 @@ class PriceTypeDefinition
 
     private string $description;
 
-    private string $quantityFormatter;
+    private QuantityFormatterDefinition $quantityFormatterDefinition;
 
     private InvoiceRepresentationCollection $invoiceCollection;
 
@@ -46,11 +48,16 @@ class PriceTypeDefinition
         return $this;
     }
 
-    public function quantityFormatter(string $formatterClass): self
+    public function quantityFormatter(string $formatterClass, ?FractionUnit $unit = null): self
     {
-        $this->quantityFormatter = $formatterClass;
+        $this->quantityFormatterDefinition = new QuantityFormatterDefinition($formatterClass, $unit);
 
         return $this;
+    }
+
+    public function getQuantityFormatterDefinition(): ?QuantityFormatterDefinition
+    {
+        return $this->quantityFormatterDefinition;
     }
 
     public function end(): PriceTypesCollection
