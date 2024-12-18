@@ -6,12 +6,16 @@ use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
+use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
+use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\billing\registry\unit\FractionUnit;
+use hiqdev\php\billing\quantity\QuantityFormatterInterface;
 use hiqdev\php\units\Unit;
+use hiqdev\php\units\UnitInterface;
 
 class PriceTypeDefinition
 {
-    private Unit $unit;
+    private UnitInterface $unit;
 
     private string $description;
 
@@ -50,20 +54,25 @@ class PriceTypeDefinition
 
     /**
      * @param string $formatterClass
-     * @param null|FractionUnit|string $unit
+     * @param null|FractionUnit|string $fractionUnit
      * @return $this
      */
-    public function quantityFormatter(string $formatterClass, $unit = null): self
+    public function quantityFormatter(string $formatterClass, $fractionUnit = null): self
     {
         // TODO: check if formatterClass exists
-        $this->quantityFormatterDefinition = new QuantityFormatterDefinition($formatterClass, $unit);
+        $this->quantityFormatterDefinition = new QuantityFormatterDefinition($formatterClass, $fractionUnit);
 
         return $this;
     }
 
-    public function getQuantityFormatterDefinition(): ?QuantityFormatterDefinition
-    {
-        return $this->quantityFormatterDefinition;
+    public function createQuantityFormatter(
+        FractionQuantityData $data,
+    ): QuantityFormatterInterface {
+        return QuantityFormatterFactory::create(
+            $this->getUnit(),
+            $this->quantityFormatterDefinition,
+            $data,
+        );
     }
 
     public function end(): PriceTypesCollection
@@ -90,5 +99,10 @@ class PriceTypeDefinition
     public function gType(): GType
     {
         return $this->gType;
+    }
+
+    public function getUnit(): UnitInterface
+    {
+        return $this->unit;
     }
 }
