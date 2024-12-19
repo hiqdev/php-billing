@@ -2,14 +2,14 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\billing\registry\behavior\BehaviorCollection;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
-use hiqdev\billing\registry\product\GType;
-use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\billing\registry\unit\FractionUnit;
 use hiqdev\php\billing\quantity\QuantityFormatterInterface;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Unit;
 use hiqdev\php\units\UnitInterface;
 
@@ -23,12 +23,15 @@ class PriceTypeDefinition
 
     private InvoiceRepresentationCollection $invoiceCollection;
 
+    private BehaviorCollection $behaviorCollection;
+
     public function __construct(
         private readonly PriceTypesCollection $parent,
-        private readonly PriceType $type,
-        private readonly GType $gType,
+        private readonly TypeInterface $type,
+        private readonly QuantityFormatterFactory $quantityFormatterFactory,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
+        $this->behaviorCollection = new BehaviorCollection($this);
 
         $this->init();
     }
@@ -68,7 +71,7 @@ class PriceTypeDefinition
     public function createQuantityFormatter(
         FractionQuantityData $data,
     ): QuantityFormatterInterface {
-        return QuantityFormatterFactory::create(
+        return $this->quantityFormatterFactory->create(
             $this->getUnit(),
             $this->quantityFormatterDefinition,
             $data,
@@ -91,18 +94,23 @@ class PriceTypeDefinition
         return $this;
     }
 
-    public function type(): PriceType
+    public function type(): TypeInterface
     {
         return $this->type;
     }
 
-    public function gType(): GType
+    public function hasType(TypeInterface $type): bool
     {
-        return $this->gType;
+        return $this->type->equals($type);
     }
 
     public function getUnit(): UnitInterface
     {
         return $this->unit;
+    }
+
+    public function withBehaviors(): BehaviorCollection
+    {
+        return $this->behaviorCollection;
     }
 }

@@ -3,10 +3,9 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\RepresentationInterface;
-use hiqdev\billing\registry\product\GType;
-use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterNotFoundException;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
+use hiqdev\php\billing\type\Type;
 
 class BillingRegistry implements BillingRegistryInterface
 {
@@ -56,12 +55,13 @@ class BillingRegistry implements BillingRegistryInterface
     }
 
     public function createQuantityFormatter(
-        GType $gType,
-        PriceType $priceType,
+        string $type,
         FractionQuantityData $data,
     ): array {
+        $type = Type::anyId($type);
+
         foreach ($this->priceTypes() as $priceTypeDefinition) {
-            if ($priceTypeDefinition->gType() === $gType && $priceTypeDefinition->priceType() === $priceType) {
+            if ($priceTypeDefinition->hasType($type)) {
                 return $priceTypeDefinition->createQuantityFormatter($data);
             }
         }
