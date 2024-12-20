@@ -14,10 +14,13 @@ class TariffType
 
     private array $behaviors = [];
 
+    private ConsumptionDefinition $consumption;
+
     public function __construct(string $name)
     {
         $this->name = $name;
         $this->prices = new PriceTypesCollection($this);
+        $this->consumption = new ConsumptionDefinition($this);
     }
 
     public function ofProduct(Product $product): self
@@ -54,5 +57,10 @@ class TariffType
     {
         // Validate the TariffType and lock its state
         return $this;
+    }
+
+    public function consumption(): ConsumptionDefinition
+    {
+        return $this->consumption;
     }
 }
