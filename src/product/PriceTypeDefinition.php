@@ -28,7 +28,6 @@ class PriceTypeDefinition
     public function __construct(
         private readonly PriceTypesCollection $parent,
         private readonly TypeInterface $type,
-        private readonly QuantityFormatterFactory $quantityFormatterFactory,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
         $this->behaviorCollection = new BehaviorCollection($this);
@@ -71,7 +70,7 @@ class PriceTypeDefinition
     public function createQuantityFormatter(
         FractionQuantityData $data,
     ): QuantityFormatterInterface {
-        return $this->quantityFormatterFactory->create(
+        return QuantityFormatterFactory::create(
             $this->getUnit(),
             $this->quantityFormatterDefinition,
             $data,
