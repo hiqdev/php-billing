@@ -68,4 +68,18 @@ class BillingRegistry implements BillingRegistryInterface
 
         throw new QuantityFormatterNotFoundException('Quantity formatter not found');
     }
+
+    public function getConsumptionColumns(): \Generator
+    {
+        foreach ($this->tariffTypes as $tariffType) {
+            yield $tariffType->consumption()->columns();
+        }
+    }
+
+    public function getConsumptionGroups(): \Generator
+    {
+        foreach ($this->tariffTypes as $tariffType) {
+            yield $tariffType->consumption()->groups();
+        }
+    }
 }
