@@ -5,10 +5,12 @@ namespace hiqdev\php\billing\product;
 class ConsumptionDefinition
 {
     private ConsumptionColumnCollection $columnCollection;
+    private ConsumptionGroupCollection $groupCollection;
 
     public function __construct(private readonly TariffType $parent)
     {
         $this->columnCollection = new ConsumptionColumnCollection($this);
+        $this->groupCollection = new ConsumptionGroupCollection($this);
     }
 
     public function columns(): ConsumptionColumnCollection
@@ -16,9 +18,9 @@ class ConsumptionDefinition
         return $this->columnCollection;
     }
 
-    public function groups()
+    public function groups(): ConsumptionGroupCollection
     {
-
+        return $this->groupCollection;
     }
 
     public function end(): TariffType
