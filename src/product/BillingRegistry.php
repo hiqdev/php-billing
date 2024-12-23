@@ -82,4 +82,15 @@ class BillingRegistry implements BillingRegistryInterface
             yield $tariffType->consumption()->groups();
         }
     }
+
+    public function behavior(string $behaviorClassWrapper): \Generator
+    {
+        foreach ($this->priceTypes() as $priceTypeDefinition) {
+            foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
+                if ($behavior instanceof $behaviorClassWrapper) {
+                    yield $behavior;
+                }
+            }
+        }
+    }
 }

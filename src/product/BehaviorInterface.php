@@ -4,5 +4,5 @@ namespace hiqdev\php\billing\product;
 
 interface BehaviorInterface
 {
-    public function execute(): void;
+    public function class(): string;
 }
