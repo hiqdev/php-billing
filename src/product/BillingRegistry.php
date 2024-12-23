@@ -2,10 +2,12 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\billing\registry\behavior\BehaviorNotFoundException;
 use hiqdev\billing\registry\invoice\RepresentationInterface;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterNotFoundException;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\php\billing\type\Type;
+use hiqdev\php\billing\type\TypeInterface;
 
 class BillingRegistry implements BillingRegistryInterface
 {
@@ -58,7 +60,7 @@ class BillingRegistry implements BillingRegistryInterface
         string $type,
         FractionQuantityData $data,
     ): array {
-        $type = Type::anyId($type);
+        $type = $this->convertStringTypeToType($type);
 
         foreach ($this->priceTypes() as $priceTypeDefinition) {
             if ($priceTypeDefinition->hasType($type)) {
@@ -67,6 +69,11 @@ class BillingRegistry implements BillingRegistryInterface
         }
 
         throw new QuantityFormatterNotFoundException('Quantity formatter not found');
+    }
+
+    private function convertStringTypeToType(string $type): TypeInterface
+    {
+        return Type::anyId($type);
     }
 
     public function getConsumptionColumns(): \Generator
@@ -83,14 +90,20 @@ class BillingRegistry implements BillingRegistryInterface
         }
     }
 
-    public function behavior(string $behaviorClassWrapper): \Generator
+    public function behavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
+        $type = $this->convertStringTypeToType($type);
+
         foreach ($this->priceTypes() as $priceTypeDefinition) {
-            foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
-                if ($behavior instanceof $behaviorClassWrapper) {
-                    yield $behavior;
+            if ($priceTypeDefinition->hasType($type)) {
+                foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
+                    if ($behavior instanceof $behaviorClassWrapper) {
+                        return $behavior;
+                    }
                 }
             }
         }
+
+        throw new BehaviorNotFoundException('Behavior class not found');
     }
 }
