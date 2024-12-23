@@ -4,6 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\behavior\BehaviorCollection;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
+use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
@@ -24,6 +25,8 @@ class PriceTypeDefinition
     private InvoiceRepresentationCollection $invoiceCollection;
 
     private BehaviorCollection $behaviorCollection;
+
+    private Aggregate $aggregate;
 
     public function __construct(
         private readonly PriceTypesCollection $parent,
@@ -52,6 +55,11 @@ class PriceTypeDefinition
         $this->description = $description;
 
         return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 
     /**
@@ -111,5 +119,24 @@ class PriceTypeDefinition
     public function withBehaviors(): BehaviorCollection
     {
         return $this->behaviorCollection;
+    }
+
+    /**
+     * це параметер визначає агрегатну функцію яка застосовується для щоденно записаних ресурсів щоб визнизначти
+     * місячне споживання за яке потрібно пробілити клієнта
+     *
+     * @param Aggregate $aggregate
+     * @return self
+     */
+    public function aggregation(Aggregate $aggregate): self
+    {
+        $this->aggregate = $aggregate;
+
+        return $this;
+    }
+
+    public function getAggregate(): Aggregate
+    {
+        return $this->aggregate;
     }
 }

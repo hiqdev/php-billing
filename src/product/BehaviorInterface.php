@@ -2,7 +2,9 @@
 
 namespace hiqdev\php\billing\product;
 
+/**
+ * Empty interface for mark product behavior
+ */
 interface BehaviorInterface
 {
-    public function class(): string;
 }
