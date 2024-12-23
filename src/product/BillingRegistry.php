@@ -2,7 +2,6 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\behavior\BehaviorNotFoundException;
 use hiqdev\billing\registry\invoice\RepresentationInterface;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterNotFoundException;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
@@ -76,21 +75,7 @@ class BillingRegistry implements BillingRegistryInterface
         return Type::anyId($type);
     }
 
-    public function getConsumptionColumns(): \Generator
-    {
-        foreach ($this->tariffTypes as $tariffType) {
-            yield $tariffType->consumption()->columns();
-        }
-    }
-
-    public function getConsumptionGroups(): \Generator
-    {
-        foreach ($this->tariffTypes as $tariffType) {
-            yield $tariffType->consumption()->groups();
-        }
-    }
-
-    public function behavior(string $type, string $behaviorClassWrapper): BehaviorInterface
+    public function getBehavior(string $type, string $behaviorClassWrapper): ?BehaviorInterface
     {
         $type = $this->convertStringTypeToType($type);
 
@@ -104,6 +89,6 @@ class BillingRegistry implements BillingRegistryInterface
             }
         }
 
-        throw new BehaviorNotFoundException('Behavior class not found');
+        return null;
     }
 }

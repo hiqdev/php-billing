@@ -58,9 +58,4 @@ class TariffType
         // Validate the TariffType and lock its state
         return $this;
     }
-
-    public function consumption(): ConsumptionDefinition
-    {
-        return $this->consumption;
-    }
 }
