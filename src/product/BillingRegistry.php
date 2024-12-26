@@ -10,11 +10,11 @@ use hiqdev\php\billing\type\TypeInterface;
 
 class BillingRegistry implements BillingRegistryInterface
 {
-    /** @var TariffType[] */
+    /** @var TariffTypeDefinition[] */
     private array $tariffTypes = [];
     private bool $locked = false;
 
-    public function addTariffType(TariffType $tariffType): void
+    public function addTariffType(TariffTypeDefinition $tariffType): void
     {
         if ($this->locked) {
             throw new \RuntimeException("BillingRegistry is locked and cannot be modified.");
@@ -90,5 +90,24 @@ class BillingRegistry implements BillingRegistryInterface
         }
 
         return null;
+    }
+
+    public function getBehaviors(string $behaviorClassWrapper): \Generator
+    {
+        foreach ($this->tariffTypes as $tariffType) {
+            foreach ($tariffType->withBehaviors() as $behavior) {
+                if ($behavior instanceof $behaviorClassWrapper) {
+                    yield $behavior;
+                }
+            }
+        }
+
+        foreach ($this->priceTypes() as $priceTypeDefinition) {
+            foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
+                if ($behavior instanceof $behaviorClassWrapper) {
+                    yield $behavior;
+                }
+            }
+        }
     }
 }

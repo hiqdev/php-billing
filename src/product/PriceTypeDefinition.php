@@ -2,19 +2,20 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\behavior\BehaviorCollection;
+use hiqdev\billing\registry\behavior\PriceTypeDefinitionBehaviourCollection;
+use hiqdev\billing\registry\domain\TariffType;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
 use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
-use hiqdev\billing\registry\unit\FractionUnit;
+use hiqdev\billing\registry\domain\domain\unit\FractionUnit;
 use hiqdev\php\billing\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Unit;
 use hiqdev\php\units\UnitInterface;
 
-class PriceTypeDefinition
+class PriceTypeDefinition implements ParentNodeDefinitionInterface
 {
     private UnitInterface $unit;
 
@@ -24,16 +25,17 @@ class PriceTypeDefinition
 
     private InvoiceRepresentationCollection $invoiceCollection;
 
-    private BehaviorCollection $behaviorCollection;
+    private PriceTypeDefinitionBehaviourCollection $behaviorCollection;
 
     private Aggregate $aggregate;
 
     public function __construct(
-        private readonly PriceTypesCollection $parent,
-        private readonly TypeInterface $type,
+        private readonly PriceTypeDefinitionCollection $parent,
+        private readonly TypeInterface                 $type,
+        TariffType                                     $tariffType,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
-        $this->behaviorCollection = new BehaviorCollection($this);
+        $this->behaviorCollection = new PriceTypeDefinitionBehaviourCollection($this, $tariffType);
 
         $this->init();
     }
@@ -85,7 +87,7 @@ class PriceTypeDefinition
         );
     }
 
-    public function end(): PriceTypesCollection
+    public function end(): PriceTypeDefinitionCollection
     {
         // Validate the PriceType and lock its state
         return $this->parent;
@@ -116,7 +118,7 @@ class PriceTypeDefinition
         return $this->unit;
     }
 
-    public function withBehaviors(): BehaviorCollection
+    public function withBehaviors(): PriceTypeDefinitionBehaviourCollection
     {
         return $this->behaviorCollection;
     }
