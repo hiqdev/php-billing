@@ -2,15 +2,16 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\billing\registry\domain\TariffType;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\product\PriceTypeDefinition\PriceTypeDefinitionFactory;
 
-class PriceTypesCollection implements \IteratorAggregate
+class PriceTypeDefinitionCollection implements \IteratorAggregate
 {
     private array $pricesGroupedByPriceType = [];
 
-    public function __construct(private readonly TariffType $parent)
+    public function __construct(private readonly TariffTypeDefinition $parent)
     {
     }
 
@@ -36,7 +37,7 @@ class PriceTypesCollection implements \IteratorAggregate
 
     public function monthly(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition(GType::monthly, $type);
+        $priceType = $this->createPriceTypeDefinition(GType::monthly, $type, $this->parent->tariffType());
 
         $this->addPriceTypeDefinition($type, $priceType);
 
@@ -48,28 +49,31 @@ class PriceTypesCollection implements \IteratorAggregate
         $this->pricesGroupedByPriceType[$type->name][] = $priceTypeDefinition;
     }
 
-    private function createPriceTypeDefinition(GType $gType, PriceType $type): PriceTypeDefinition
-    {
-        return PriceTypeDefinitionFactory::create($this, $type, $gType);
+    private function createPriceTypeDefinition(
+        GType $gType,
+        PriceType $type,
+        TariffType $tariffType,
+    ): PriceTypeDefinition {
+        return PriceTypeDefinitionFactory::create($this, $type, $gType, $tariffType);
     }
 
     public function overuse(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition(GType::overuse, $type);
+        $priceType = $this->createPriceTypeDefinition(GType::overuse, $type, $this->parent->tariffType());
 
         $this->addPriceTypeDefinition($type, $priceType);
 
         return $priceType;
     }
 
-    public function end(): TariffType
+    public function end(): TariffTypeDefinition
     {
         return $this->parent;
     }
 
     public function feature(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition(GType::feature, $type);
+        $priceType = $this->createPriceTypeDefinition(GType::feature, $type, $this->parent->tariffType());
 
         $this->addPriceTypeDefinition($type, $priceType);
 
@@ -78,7 +82,7 @@ class PriceTypesCollection implements \IteratorAggregate
 
     public function domain(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition(GType::domain, $type);
+        $priceType = $this->createPriceTypeDefinition(GType::domain, $type, $this->parent->tariffType());
 
         $this->addPriceTypeDefinition($type, $priceType);
 
@@ -87,7 +91,7 @@ class PriceTypesCollection implements \IteratorAggregate
 
     public function certificate(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition(GType::certificate, $type);
+        $priceType = $this->createPriceTypeDefinition(GType::certificate, $type, $this->parent->tariffType());
 
         $this->addPriceTypeDefinition($type, $priceType);
 
@@ -96,7 +100,7 @@ class PriceTypesCollection implements \IteratorAggregate
 
     public function discount(PriceType $type): PriceTypeDefinition
     {
-        $priceType = $this->createPriceTypeDefinition(GType::discount, $type);
+        $priceType = $this->createPriceTypeDefinition(GType::discount, $type, $this->parent->tariffType());
 
         $this->addPriceTypeDefinition($type, $priceType);
 
