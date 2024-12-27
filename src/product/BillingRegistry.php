@@ -89,7 +89,7 @@ class BillingRegistry implements BillingRegistryInterface
             }
         }
 
-        return null;
+        throw new BehaviorNotFoundException('Behaviour was not found');
     }
 
     public function getBehaviors(string $behaviorClassWrapper): \Generator
