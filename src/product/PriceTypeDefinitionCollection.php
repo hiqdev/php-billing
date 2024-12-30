@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\domain\TariffType;
+use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\product\PriceTypeDefinition\PriceTypeDefinitionFactory;

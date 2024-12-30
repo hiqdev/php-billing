@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\domain\TariffType;
+use hiqdev\billing\registry\Domain\Model\TariffType;
 
 /**
  * Empty interface for mark product behavior
