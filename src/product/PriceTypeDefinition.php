@@ -31,8 +31,8 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
 
     public function __construct(
         private readonly PriceTypeDefinitionCollection $parent,
-        private readonly TypeInterface                 $type,
-        TariffType                                     $tariffType,
+        private readonly TypeInterface $type,
+        TariffType $tariffType,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
         $this->behaviorCollection = new PriceTypeDefinitionBehaviourCollection($this, $tariffType);
