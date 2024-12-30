@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\behavior\TariffTypeBehaviorCollection;
 use hiqdev\billing\registry\product\Product;
-use hiqdev\billing\registry\domain\TariffType;
+use hiqdev\billing\registry\Domain\Model\TariffType;
 
 class TariffTypeDefinition implements ParentNodeDefinitionInterface
 {
