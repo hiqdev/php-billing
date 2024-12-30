@@ -75,7 +75,7 @@ class BillingRegistry implements BillingRegistryInterface
         return Type::anyId($type);
     }
 
-    public function getBehavior(string $type, string $behaviorClassWrapper): ?BehaviorInterface
+    public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
         $type = $this->convertStringTypeToType($type);
 
