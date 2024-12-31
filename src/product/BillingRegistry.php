@@ -75,6 +75,12 @@ class BillingRegistry implements BillingRegistryInterface
         return Type::anyId($type);
     }
 
+    /**
+     * @param string $type - full type like 'overuse,lb_capacity_unit'
+     * @param string $behaviorClassWrapper
+     * @return BehaviorInterface
+     * @throws BehaviorNotFoundException
+     */
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
         $type = $this->convertStringTypeToType($type);
