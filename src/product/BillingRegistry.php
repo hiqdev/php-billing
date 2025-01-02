@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\RepresentationInterface;
+use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterNotFoundException;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\php\billing\type\Type;
@@ -115,5 +116,18 @@ class BillingRegistry implements BillingRegistryInterface
                 }
             }
         }
+    }
+
+    public function getAggregate(string $type): Aggregate
+    {
+        $type = $this->convertStringTypeToType($type);
+
+        foreach ($this->priceTypes() as $priceTypeDefinition) {
+            if ($priceTypeDefinition->hasType($type)) {
+                return $priceTypeDefinition->getAggregate();
+            }
+        }
+
+        throw new AggregateNotFoundException('Aggregate was not found');
     }
 }
