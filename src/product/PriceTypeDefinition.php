@@ -123,6 +123,17 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         return $this->behaviorCollection;
     }
 
+    public function hasBehavior(string $behaviorClassName): bool
+    {
+        foreach ($this->behaviorCollection as $behavior) {
+            if ($behavior instanceof $behaviorClassName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * це параметер визначає агрегатну функцію яка застосовується для щоденно записаних ресурсів щоб визнизначти
      * місячне споживання за яке потрібно пробілити клієнта
