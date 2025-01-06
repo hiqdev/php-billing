@@ -4,6 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\behavior\PriceTypeDefinitionBehaviourCollection;
 use hiqdev\billing\registry\Domain\Model\TariffType;
+use hiqdev\billing\registry\Domain\Model\Unit\Unit;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
 use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
@@ -12,12 +13,10 @@ use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\billing\registry\Domain\Model\Unit\FractionUnit;
 use hiqdev\php\billing\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\type\TypeInterface;
-use hiqdev\php\units\Unit;
-use hiqdev\php\units\UnitInterface;
 
 class PriceTypeDefinition implements ParentNodeDefinitionInterface
 {
-    private UnitInterface $unit;
+    private Unit $unit;
 
     private string $description;
 
@@ -45,9 +44,9 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         // Hook
     }
 
-    public function unit(string $unit): self
+    public function unit(Unit $unit): self
     {
-        $this->unit = Unit::create($unit);
+        $this->unit = $unit;
 
         return $this;
     }
@@ -81,7 +80,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         FractionQuantityData $data,
     ): QuantityFormatterInterface {
         return QuantityFormatterFactory::create(
-            $this->getUnit(),
+            $this->getUnit()->createExternalUnit(),
             $this->quantityFormatterDefinition,
             $data,
         );
@@ -113,7 +112,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         return $this->type->equals($type);
     }
 
-    public function getUnit(): UnitInterface
+    public function getUnit(): Unit
     {
         return $this->unit;
     }
