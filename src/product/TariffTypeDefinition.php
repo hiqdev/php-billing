@@ -48,6 +48,17 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
         return $this->behaviorCollection;
     }
 
+    public function hasBehavior(string $behaviorClassName): bool
+    {
+        foreach ($this->behaviorCollection as $behavior) {
+            if ($behavior instanceof $behaviorClassName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function end(): self
     {
         // Validate the TariffType and lock its state
