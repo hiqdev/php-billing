@@ -36,4 +36,6 @@ class BillCreationDto
     public $charges;
 
     public $state;
+
+    public $usageInterval;
 }

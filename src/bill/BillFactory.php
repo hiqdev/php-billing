@@ -10,6 +10,10 @@
 
 namespace hiqdev\php\billing\bill;
 
+use DateTimeImmutable;
+use hiqdev\billing\hiapi\action\UsageIntervalHydrator;
+use hiqdev\php\billing\action\UsageInterval;
+
 /**
  * Default bill factory.
  *
@@ -23,7 +27,7 @@ class BillFactory implements BillFactoryInterface
      */
     public function create(BillCreationDto $dto)
     {
-        return new Bill(
+        $bill = new Bill(
             $dto->id,
             $dto->type,
             $dto->time,
@@ -35,5 +39,21 @@ class BillFactory implements BillFactoryInterface
             $dto->charges ?: [],
             $dto->state
         );
+        if (!empty($dto->usageInterval)) {
+            if ($dto->usageInterval instanceof UsageInterval) {
+                $interval = $dto->usageInterval;
+            } else {
+                $month = $dto->usageInterval['month']['date'];
+                $start = $dto->usageInterval['start']['date'];
+                $end = $dto->usageInterval['end']['date'];;
+                $interval = UsageInterval::withinMonth(
+                    new DateTimeImmutable($month),
+                    new DateTimeImmutable($start),
+                    new DateTimeImmutable($end)
+                );
+            }
+            $bill->setUsageInterval($interval);
+        }
+        return $bill;
     }
 }

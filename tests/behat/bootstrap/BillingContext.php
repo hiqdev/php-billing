@@ -300,6 +300,36 @@ class BillingContext extends BaseContext
         }
     }
 
+    /**
+     * @Given /bill interval +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (.+?) at (\S+) between (\S+) and (\S+)?$/
+     */
+    public function billInterval($type, $sum, $currency, $quantity, $unit, $target, $time, $since, $till)
+    {
+        $this->builder->flushEntitiesCacheByType('bill');
+
+        $quantity = $this->prepareQuantity($quantity);
+        $sum = $this->prepareSum($sum, $quantity);
+        $time = $this->prepareTime($time);
+        $bill = $this->findBill([
+            'type' => $type,
+            'target' => $target,
+            'sum' => "$sum $currency",
+            'quantity' => "$quantity $unit",
+            'time' => $time,
+        ]);
+        Assert::assertSame($type, $bill->getType()->getName(), "Bill type mismatch: expected $type, got {$bill->getType()->getName()}");
+        Assert::assertSame($target, $bill->getTarget()->getFullName(), "Bill target mismatch: expected $target, got {$bill->getTarget()->getFullName()}");
+        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount(), "Bill sum mismatch: expected $sum, got {$bill->getSum()->getAmount()}");
+        Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode(), "Bill currency mismatch: expected $currency, got {$bill->getSum()->getCurrency()->getCode()}");
+        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity(), "Bill quantity mismatch: expected $quantity, got {$bill->getQuantity()->getQuantity()}");
+        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()), "Bill unit mismatch: expected $unit, got {$bill->getQuantity()->getUnit()->getName()}");
+        Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime(), "Bill time mismatch: expected $time, got {$bill->getTime()->format(DATE_ATOM)}");
+        $billStart = $bill->getUsageInterval()->start();
+        $billEnd = $bill->getUsageInterval()->end();
+        Assert::assertEquals(new DateTimeImmutable($since), $billStart, "Bill since time mismatch: expected $since, got {$billStart->format(DATE_ATOM)}");
+        Assert::assertEquals(new DateTimeImmutable($till), $billEnd, "Bill till time mismatch: expected $till, got {$billEnd->format(DATE_ATOM)}");
+    }
+
     public function findBill(array $params): BillInterface
     {
         $bills = $this->builder->findBills($params);
