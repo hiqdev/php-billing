@@ -5,9 +5,10 @@ namespace hiqdev\php\billing\action;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use JsonSerializable;
 
 /** @readonly */
-final class UsageInterval
+final class UsageInterval implements JsonSerializable
 {
     /** @readonly */
     private DateTimeImmutable $start;
@@ -188,5 +189,10 @@ final class UsageInterval
             $newStart,
             $newEnd,
         );
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_filter(get_object_vars($this));
     }
 }

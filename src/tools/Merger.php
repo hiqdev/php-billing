@@ -46,7 +46,7 @@ class Merger implements MergerInterface
     {
         $charges = $this->mergeCharges(array_merge($first->getCharges(), $other->getCharges()));
 
-        return new Bill(
+        $bill = new Bill(
             $this->mergeId($first, $other),
             $first->getType(),
             $first->getTime(),
@@ -57,6 +57,8 @@ class Merger implements MergerInterface
             $first->getPlan(),
             $charges
         );
+        $bill->setUsageInterval($first->getUsageInterval());
+        return $bill;
     }
 
     /**
