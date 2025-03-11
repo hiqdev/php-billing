@@ -3,7 +3,6 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\RepresentationInterface;
-use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterNotFoundException;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
@@ -120,7 +119,7 @@ class BillingRegistry implements BillingRegistryInterface
         }
     }
 
-    public function getAggregate(string $type): Aggregate
+    public function getAggregate(string $type): AggregateInterface
     {
         $type = $this->convertStringTypeToType($type);
 
