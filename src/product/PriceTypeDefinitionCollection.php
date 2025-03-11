@@ -50,7 +50,7 @@ class PriceTypeDefinitionCollection implements \IteratorAggregate
     }
 
     private function createPriceTypeDefinition(
-        GType $gType,
+        GTypeInterface $gType,
         PriceType $type,
         TariffTypeInterface $tariffType,
     ): PriceTypeDefinition {
