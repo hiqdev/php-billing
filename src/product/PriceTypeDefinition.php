@@ -10,7 +10,7 @@ use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
-use hiqdev\php\billing\quantity\QuantityFormatterInterface;
+use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
 class PriceTypeDefinition implements ParentNodeDefinitionInterface
