@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\behavior\TariffTypeBehaviorCollection;
 use hiqdev\billing\registry\product\Product;
-use hiqdev\billing\registry\Domain\Model\TariffType;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
 class TariffTypeDefinition implements ParentNodeDefinitionInterface
 {
@@ -14,13 +14,13 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
 
     private TariffTypeBehaviorCollection $behaviorCollection;
 
-    public function __construct(private readonly TariffType $tariffType)
+    public function __construct(private readonly TariffTypeInterface $tariffType)
     {
         $this->prices = new PriceTypeDefinitionCollection($this);
         $this->behaviorCollection = new TariffTypeBehaviorCollection($this, $tariffType);
     }
 
-    public function tariffType(): TariffType
+    public function tariffType(): TariffTypeInterface
     {
         return $this->tariffType;
     }

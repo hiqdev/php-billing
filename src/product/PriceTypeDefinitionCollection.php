@@ -2,10 +2,10 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\product\GType;
 use hiqdev\billing\registry\product\PriceType;
 use hiqdev\billing\registry\product\PriceTypeDefinition\PriceTypeDefinitionFactory;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
 class PriceTypeDefinitionCollection implements \IteratorAggregate
 {
@@ -52,7 +52,7 @@ class PriceTypeDefinitionCollection implements \IteratorAggregate
     private function createPriceTypeDefinition(
         GType $gType,
         PriceType $type,
-        TariffType $tariffType,
+        TariffTypeInterface $tariffType,
     ): PriceTypeDefinition {
         return PriceTypeDefinitionFactory::create($this, $type, $gType, $tariffType);
     }

@@ -3,7 +3,6 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\behavior\PriceTypeDefinitionBehaviourCollection;
-use hiqdev\billing\registry\Domain\Model\TariffType;
 use hiqdev\billing\registry\Domain\Model\Unit\Unit;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
 use hiqdev\billing\registry\product\Aggregate;
@@ -11,6 +10,7 @@ use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
 use hiqdev\billing\registry\Domain\Model\Unit\FractionUnit;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
@@ -31,7 +31,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
     public function __construct(
         private readonly PriceTypeDefinitionCollection $parent,
         private readonly TypeInterface $type,
-        TariffType $tariffType,
+        TariffTypeInterface $tariffType,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
         $this->behaviorCollection = new PriceTypeDefinitionBehaviourCollection($this, $tariffType);

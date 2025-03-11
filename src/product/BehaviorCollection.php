@@ -2,14 +2,14 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\Domain\Model\TariffType;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
 class BehaviorCollection implements \IteratorAggregate
 {
     /** @var BehaviorInterface[] */
     private array $behaviors = [];
 
-    public function __construct(private readonly TariffType $tariffType)
+    public function __construct(private readonly TariffTypeInterface $tariffType)
     {
     }
 

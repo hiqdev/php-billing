@@ -2,14 +2,14 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\Domain\Model\TariffType;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
 /**
  * Empty interface for mark product behavior
  */
 interface BehaviorInterface
 {
-    public function setTariffType(TariffType $tariffTypeName): void;
+    public function setTariffType(TariffTypeInterface $tariffTypeName): void;
 
-    public function getTariffType(): TariffType;
+    public function getTariffType(): TariffTypeInterface;
 }
