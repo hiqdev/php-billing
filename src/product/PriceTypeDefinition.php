@@ -3,20 +3,20 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\behavior\PriceTypeDefinitionBehaviourCollection;
-use hiqdev\billing\registry\Domain\Model\Unit\Unit;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
 use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
-use hiqdev\billing\registry\Domain\Model\Unit\FractionUnit;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
+use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
+use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
 class PriceTypeDefinition implements ParentNodeDefinitionInterface
 {
-    private Unit $unit;
+    private UnitInterface $unit;
 
     private string $description;
 
@@ -44,7 +44,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         // Hook
     }
 
-    public function unit(Unit $unit): self
+    public function unit(UnitInterface $unit): self
     {
         $this->unit = $unit;
 
@@ -65,7 +65,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
 
     /**
      * @param string $formatterClass
-     * @param null|FractionUnit|string $fractionUnit
+     * @param null|FractionUnitInterface|string $fractionUnit
      * @return $this
      */
     public function quantityFormatter(string $formatterClass, $fractionUnit = null): self
@@ -112,7 +112,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         return $this->type->equals($type);
     }
 
-    public function getUnit(): Unit
+    public function getUnit(): UnitInterface
     {
         return $this->unit;
     }
