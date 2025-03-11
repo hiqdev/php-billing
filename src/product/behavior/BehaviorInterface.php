@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace hiqdev\php\billing\product;
+namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 

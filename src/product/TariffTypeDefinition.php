@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\behavior\TariffTypeBehaviorCollection;
+use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
 use hiqdev\billing\registry\product\Product;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
@@ -12,12 +12,12 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
 
     private PriceTypeDefinitionCollection $prices;
 
-    private TariffTypeBehaviorCollection $behaviorCollection;
+    private BehaviorTariffTypeCollection $behaviorCollection;
 
     public function __construct(private readonly TariffTypeInterface $tariffType)
     {
         $this->prices = new PriceTypeDefinitionCollection($this);
-        $this->behaviorCollection = new TariffTypeBehaviorCollection($this, $tariffType);
+        $this->behaviorCollection = new BehaviorTariffTypeCollection($this, $tariffType);
     }
 
     public function tariffType(): TariffTypeInterface
@@ -43,7 +43,7 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
         return $this->prices;
     }
 
-    public function withBehaviors(): TariffTypeBehaviorCollection
+    public function withBehaviors(): BehaviorTariffTypeCollection
     {
         return $this->behaviorCollection;
     }

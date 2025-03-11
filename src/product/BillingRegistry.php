@@ -6,6 +6,8 @@ use hiqdev\billing\registry\invoice\RepresentationInterface;
 use hiqdev\billing\registry\product\Aggregate;
 use hiqdev\billing\registry\quantity\formatter\QuantityFormatterNotFoundException;
 use hiqdev\billing\registry\quantity\FractionQuantityData;
+use hiqdev\php\billing\product\behavior\BehaviorInterface;
+use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
 

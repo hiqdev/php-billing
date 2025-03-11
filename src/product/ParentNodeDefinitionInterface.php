@@ -2,9 +2,11 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
+
 interface ParentNodeDefinitionInterface
 {
-    public function withBehaviors(): BehaviorCollection;
+    public function withBehaviors(): BehaviorCollectionInterface;
 
     public function hasBehavior(string $behaviorClassName): bool;
 }

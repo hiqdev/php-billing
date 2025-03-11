@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace hiqdev\php\billing\product;
+namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
-class BehaviorCollection implements \IteratorAggregate
+class BehaviorCollection implements BehaviorCollectionInterface
 {
     /** @var BehaviorInterface[] */
     private array $behaviors = [];
@@ -13,9 +13,6 @@ class BehaviorCollection implements \IteratorAggregate
     {
     }
 
-    /**
-     * @return BehaviorInterface[]
-     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->behaviors);
