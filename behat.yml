@@ -1,4 +1,18 @@
 default:
+    formatters:
+        pretty:
+            output_styles:
+                passed: [ white, green ]
+                passed_param: [ white, green, [ bold ] ]
+                undefined: [ yellow, null, [ underscore, bold ] ]
+                pending: [ yellow, null, [ underscore ] ]
+                pending_param: [ yellow, null, [ underscore, bold ] ]
+                failed: [ white, red ]
+                failed_param: [ white, red, [ bold ] ]
+                skipped: [ cyan ]
+                skipped_param: [ cyan, null, [ bold ] ]
+                comment: [ cyan ]
+                tag: [ cyan ]
     suites:
         php-billing:
             paths:
