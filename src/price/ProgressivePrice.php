@@ -49,10 +49,10 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
      */
     public function calculateUsage(QuantityInterface $quantity): ?QuantityInterface
     {
-        $usage = $quantity->convert($this->prepaid->getUnit())->subtract($this->prepaid);
+        $usage = $quantity->subtract($this->prepaid);
 
         if ($usage->isPositive()) {
-            return $usage;
+            return $quantity->convert($this->prepaid->getUnit());
         }
 
         return Quantity::create($this->prepaid->getUnit()->getName(), 0);
