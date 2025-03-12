@@ -42,4 +42,6 @@ interface PlanRepositoryInterface
      * @throws EntityNotFoundException
      */
     public function getById(int $id): PlanInterface;
+
+    public function save(PlanInterface $action): void;
 }

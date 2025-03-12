@@ -17,9 +17,5 @@ namespace hiqdev\php\billing\action;
  */
 interface ActionFactoryInterface
 {
-    /**
-     * Creates action object.
-     * @return Action
-     */
-    public function create(ActionCreationDto $dto);
+    public function create(ActionCreationDto $dto): AbstractAction;
 }

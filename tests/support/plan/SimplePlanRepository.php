@@ -51,4 +51,9 @@ class SimplePlanRepository implements PlanRepositoryInterface
     {
         throw new \Exception('not implemented');
     }
+
+    public function save(PlanInterface $action): void
+    {
+        throw new \Exception('not implemented');
+    }
 }
