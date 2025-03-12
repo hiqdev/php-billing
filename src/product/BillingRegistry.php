@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\billing\registry\invoice\RepresentationInterface;
+use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;

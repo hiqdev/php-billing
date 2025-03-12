@@ -3,7 +3,7 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\BehaviourPriceTypeDefinitionCollection;
-use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
+use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
