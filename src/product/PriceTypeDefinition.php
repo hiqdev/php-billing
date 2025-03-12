@@ -4,9 +4,9 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\BehaviourPriceTypeDefinitionCollection;
 use hiqdev\billing\registry\invoice\InvoiceRepresentationCollection;
-use hiqdev\billing\registry\quantity\formatter\QuantityFormatterDefinition;
-use hiqdev\billing\registry\quantity\formatter\QuantityFormatterFactory;
-use hiqdev\billing\registry\quantity\FractionQuantityData;
+use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
+use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
+use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;

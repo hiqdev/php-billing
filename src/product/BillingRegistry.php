@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\billing\registry\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
-use hiqdev\billing\registry\quantity\FractionQuantityData;
+use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\type\Type;
