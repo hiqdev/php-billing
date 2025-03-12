@@ -3,12 +3,11 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
-use hiqdev\billing\registry\product\Product;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
 class TariffTypeDefinition implements ParentNodeDefinitionInterface
 {
-    private Product $product;
+    private ProductInterface $product;
 
     private PriceTypeDefinitionCollection $prices;
 
@@ -25,7 +24,7 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
         return $this->tariffType;
     }
 
-    public function ofProduct(Product $product): self
+    public function ofProduct(ProductInterface $product): self
     {
         $this->product = $product;
 

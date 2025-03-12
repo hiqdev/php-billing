@@ -4,5 +4,7 @@ namespace hiqdev\php\billing\product;
 
 interface ProductInterface
 {
-    public function name(): string;
+    public function toProductName(): string;
+
+    public function label(): string;
 }
