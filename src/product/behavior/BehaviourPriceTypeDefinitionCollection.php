@@ -3,7 +3,7 @@
 namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
-use hiqdev\php\billing\product\PriceTypeDefinition;
+use hiqdev\php\billing\product\price\PriceTypeDefinition;
 
 class BehaviourPriceTypeDefinitionCollection extends BehaviorCollection
 {

@@ -2,6 +2,8 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\php\billing\product\price\PriceTypeDefinition;
+
 interface BillingRegistryInterface
 {
     /**
