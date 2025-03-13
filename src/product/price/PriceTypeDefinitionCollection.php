@@ -46,11 +46,6 @@ class PriceTypeDefinitionCollection implements \IteratorAggregate
         return $this->addPriceType(GType::overuse, $type);
     }
 
-    public function end(): TariffTypeDefinition
-    {
-        return $this->parent;
-    }
-
     public function feature(PriceType $type): PriceTypeDefinition
     {
         return $this->addPriceType(GType::feature, $type);
@@ -69,5 +64,10 @@ class PriceTypeDefinitionCollection implements \IteratorAggregate
     public function discount(PriceType $type): PriceTypeDefinition
     {
         return $this->addPriceType(GType::discount, $type);
+    }
+
+    public function end(): TariffTypeDefinition
+    {
+        return $this->parent;
     }
 }
