@@ -5,8 +5,9 @@ namespace hiqdev\php\billing\product;
 use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollection;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
 
-class TariffTypeDefinition implements ParentNodeDefinitionInterface
+class TariffTypeDefinition implements TariffTypeDefinitionInterface
 {
     private ProductInterface $product;
 
@@ -16,7 +17,7 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
 
     public function __construct(private readonly TariffTypeInterface $tariffType)
     {
-        $this->prices = new PriceTypeDefinitionCollection($this);
+        $this->prices = new PriceTypeDefinitionCollection($this, new PriceTypeDefinitionFactory());
         $this->behaviorCollection = new BehaviorTariffTypeCollection($this, $tariffType);
     }
 
@@ -25,14 +26,14 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
         return $this->tariffType;
     }
 
-    public function ofProduct(ProductInterface $product): self
+    public function ofProduct(ProductInterface $product): TariffTypeDefinitionInterface
     {
         $this->product = $product;
 
         return $this;
     }
 
-    public function setPricesSuggester(string $suggesterClass): self
+    public function setPricesSuggester(string $suggesterClass): TariffTypeDefinitionInterface
     {
         // Validate or store the suggester class
         return $this;
@@ -59,7 +60,7 @@ class TariffTypeDefinition implements ParentNodeDefinitionInterface
         return false;
     }
 
-    public function end(): self
+    public function end(): TariffTypeDefinitionInterface
     {
         // Validate the TariffType and lock its state
         return $this;
