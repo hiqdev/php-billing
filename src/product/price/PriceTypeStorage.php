@@ -2,13 +2,15 @@
 
 namespace hiqdev\php\billing\product\price;
 
+use hiqdev\php\billing\type\TypeInterface;
+
 class PriceTypeStorage
 {
     private array $pricesGroupedByPriceType = [];
 
-    public function add(PriceTypeInterface $type, PriceTypeDefinition $priceTypeDefinition): void
+    public function add(TypeInterface $type, PriceTypeDefinition $priceTypeDefinition): void
     {
-        $this->pricesGroupedByPriceType[$type->name()][] = $priceTypeDefinition;
+        $this->pricesGroupedByPriceType[$type->getName()][] = $priceTypeDefinition;
     }
 
     /**
