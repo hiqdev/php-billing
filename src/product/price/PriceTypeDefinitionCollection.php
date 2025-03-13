@@ -30,10 +30,10 @@ class PriceTypeDefinitionCollection implements \IteratorAggregate
 
     public function monthly(PriceType $type): PriceTypeDefinition
     {
-        return $this->addPriceType(GType::monthly, $type);
+        return $this->priceType(GType::monthly, $type);
     }
 
-    private function addPriceType(GTypeInterface $gType, PriceTypeInterface $type): PriceTypeDefinition
+    public function priceType(GTypeInterface $gType, PriceTypeInterface $type): PriceTypeDefinition
     {
         $priceType = $this->factory->create($this, $type, $gType, $this->parent->tariffType());
         $this->storage->add($type, $priceType);
@@ -43,27 +43,27 @@ class PriceTypeDefinitionCollection implements \IteratorAggregate
 
     public function overuse(PriceType $type): PriceTypeDefinition
     {
-        return $this->addPriceType(GType::overuse, $type);
+        return $this->priceType(GType::overuse, $type);
     }
 
     public function feature(PriceType $type): PriceTypeDefinition
     {
-        return $this->addPriceType(GType::feature, $type);
+        return $this->priceType(GType::feature, $type);
     }
 
     public function domain(PriceType $type): PriceTypeDefinition
     {
-        return $this->addPriceType(GType::domain, $type);
+        return $this->priceType(GType::domain, $type);
     }
 
     public function certificate(PriceType $type): PriceTypeDefinition
     {
-        return $this->addPriceType(GType::certificate, $type);
+        return $this->priceType(GType::certificate, $type);
     }
 
     public function discount(PriceType $type): PriceTypeDefinition
     {
-        return $this->addPriceType(GType::discount, $type);
+        return $this->priceType(GType::discount, $type);
     }
 
     public function end(): TariffTypeDefinition
