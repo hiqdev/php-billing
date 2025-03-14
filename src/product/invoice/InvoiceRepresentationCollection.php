@@ -3,7 +3,6 @@
 namespace hiqdev\php\billing\product\invoice;
 
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
-use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 
 /**
  * @template T of PriceTypeDefinition
