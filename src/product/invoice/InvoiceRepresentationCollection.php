@@ -3,7 +3,11 @@
 namespace hiqdev\php\billing\product\invoice;
 
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 
+/**
+ * @template T of PriceTypeDefinition
+ */
 class InvoiceRepresentationCollection implements \IteratorAggregate
 {
     private array $representations = [];
@@ -29,6 +33,9 @@ class InvoiceRepresentationCollection implements \IteratorAggregate
         return $this;
     }
 
+    /**
+     * @psalm-return T
+     */
     public function end(): PriceTypeDefinition
     {
         return $this->priceTypeDefinition;

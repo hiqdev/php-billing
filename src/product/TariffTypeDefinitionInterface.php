@@ -5,6 +5,9 @@ namespace hiqdev\php\billing\product;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 
+/**
+ * @template T of PriceTypeDefinitionCollectionInterface
+ */
 interface TariffTypeDefinitionInterface extends ParentNodeDefinitionInterface
 {
     public function tariffType(): TariffTypeInterface;
@@ -13,7 +16,11 @@ interface TariffTypeDefinitionInterface extends ParentNodeDefinitionInterface
 
     public function setPricesSuggester(string $suggesterClass): self;
 
+    /**
+     * @return PriceTypeDefinitionCollectionInterface
+     * @psalm-return T
+     */
     public function withPrices(): PriceTypeDefinitionCollectionInterface;
 
-    public function end(): self;
+    public function end(): static;
 }

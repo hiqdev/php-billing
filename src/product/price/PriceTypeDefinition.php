@@ -15,6 +15,10 @@ use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
+/**
+ * @template T of PriceTypeDefinitionCollectionInterface
+ * @psalm-consistent-templates
+ */
 class PriceTypeDefinition implements ParentNodeDefinitionInterface
 {
     private UnitInterface $unit;
@@ -87,12 +91,18 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         );
     }
 
+    /**
+     * @psalm-return T
+     */
     public function end(): PriceTypeDefinitionCollectionInterface
     {
         // Validate the PriceType and lock its state
         return $this->parent;
     }
 
+    /**
+     * @psalm-return InvoiceRepresentationCollection<self>
+     */
     public function documentRepresentation(): InvoiceRepresentationCollection
     {
         return $this->invoiceCollection;
