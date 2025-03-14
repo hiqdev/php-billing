@@ -87,7 +87,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         );
     }
 
-    public function end(): PriceTypeDefinitionCollection
+    public function end(): PriceTypeDefinitionCollectionInterface
     {
         // Validate the PriceType and lock its state
         return $this->parent;
