@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
+use hiqdev\php\billing\product\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
 use hiqdev\php\billing\product\ParentNodeDefinitionInterface;
@@ -32,7 +33,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
 
     private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
-    private AggregateInterface $aggregate;
+    private ?AggregateInterface $aggregate = null;
 
     public function __construct(
         /**
@@ -76,6 +77,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
      * @param string $formatterClass
      * @param null|FractionUnitInterface|string $fractionUnit
      * @return $this
+     * @throws InvalidQuantityFormatterException
      */
     public function quantityFormatter(string $formatterClass, $fractionUnit = null): self
     {

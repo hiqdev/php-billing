@@ -36,7 +36,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     public function getProduct(): ProductInterface
     {
         if ($this->product === null) {
-            throw new ProductNotSetException('Product is not set');
+            throw new ProductNotDefinedException('Product is not set. Call the ofProduct() method first.');
         }
 
         return $this->product;
