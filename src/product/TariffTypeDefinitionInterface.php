@@ -14,6 +14,8 @@ interface TariffTypeDefinitionInterface extends ParentNodeDefinitionInterface
 
     public function ofProduct(ProductInterface $product): self;
 
+    public function getProduct(): ProductInterface;
+
     public function setPricesSuggester(string $suggesterClass): self;
 
     /**

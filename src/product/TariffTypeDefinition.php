@@ -9,7 +9,7 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
 
 class TariffTypeDefinition implements TariffTypeDefinitionInterface
 {
-    private ProductInterface $product;
+    private ?ProductInterface $product = null;
 
     private PriceTypeDefinitionCollection $prices;
 
@@ -31,6 +31,15 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         $this->product = $product;
 
         return $this;
+    }
+
+    public function getProduct(): ProductInterface
+    {
+        if ($this->product === null) {
+            throw new ProductNotSetException('Product is not set');
+        }
+
+        return $this->product;
     }
 
     public function setPricesSuggester(string $suggesterClass): TariffTypeDefinitionInterface
