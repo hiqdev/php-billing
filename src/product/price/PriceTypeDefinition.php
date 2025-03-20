@@ -34,7 +34,10 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
     private AggregateInterface $aggregate;
 
     public function __construct(
-        private readonly PriceTypeDefinitionCollection $parent,
+        /**
+         * @psalm-var T
+         */
+        private readonly PriceTypeDefinitionCollectionInterface $parent,
         private readonly TypeInterface $type,
         TariffTypeInterface $tariffType,
     ) {
