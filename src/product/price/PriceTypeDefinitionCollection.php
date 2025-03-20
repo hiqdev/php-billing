@@ -14,11 +14,15 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
 {
     private PriceTypeStorage $storage;
 
+    private PriceTypeDefinitionCollectionInterface $collectionInstance;
+
     public function __construct(
         private readonly TariffTypeDefinitionInterface $parent,
         private readonly PriceTypeDefinitionFactoryInterface $factory,
+        PriceTypeDefinitionCollectionInterface $collectionInstance = null,
     ) {
         $this->storage = new PriceTypeStorage();
+        $this->collectionInstance = $collectionInstance ?? $this;
     }
 
     /**
@@ -31,7 +35,7 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
 
     public function priceType(TypeInterface $type): PriceTypeDefinition
     {
-        $priceType = $this->factory->create($this, $type, $this->parent->tariffType());
+        $priceType = $this->factory->create($this->collectionInstance, $type, $this->parent->tariffType());
         $this->storage->add($type, $priceType);
 
         return $priceType;

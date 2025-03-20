@@ -8,7 +8,7 @@ use hiqdev\php\billing\type\TypeInterface;
 class PriceTypeDefinitionFactory implements PriceTypeDefinitionFactoryInterface
 {
     public function create(
-        PriceTypeDefinitionCollection $parent,
+        PriceTypeDefinitionCollectionInterface $parent,
         TypeInterface $type,
         TariffTypeInterface $tariffType,
     ): PriceTypeDefinition {
