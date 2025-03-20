@@ -53,6 +53,12 @@ class BillingRegistry implements BillingRegistryInterface
             throw new InvalidRepresentationException("Class '$representationClass' does not exist");
         }
 
+        if (!is_subclass_of($representationClass, RepresentationInterface::class)) {
+            throw new InvalidBehaviorException(
+                sprintf('Representation class "%s" does not implement RepresentationInterface', $representationClass)
+            );
+        }
+
         $representations = [];
         foreach ($this->priceTypes() as $priceTypeDefinition) {
             foreach ($priceTypeDefinition->documentRepresentation() as $representation) {
@@ -97,6 +103,12 @@ class BillingRegistry implements BillingRegistryInterface
         if (!class_exists($behaviorClassWrapper)) {
             throw new InvalidBehaviorException(
                 sprintf('Behavior class "%s" does not exist', $behaviorClassWrapper)
+            );
+        }
+
+        if (!is_subclass_of($behaviorClassWrapper, BehaviorInterface::class)) {
+            throw new InvalidBehaviorException(
+                sprintf('Behavior class "%s" does not implement BehaviorInterface', $behaviorClassWrapper)
             );
         }
 
