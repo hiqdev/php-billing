@@ -6,6 +6,7 @@ use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
+use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
@@ -67,7 +68,7 @@ class BillingRegistry implements BillingRegistryInterface
     public function createQuantityFormatter(
         string $type,
         FractionQuantityData $data,
-    ): array {
+    ): QuantityFormatterInterface {
         $type = $this->convertStringTypeToType($type);
 
         foreach ($this->priceTypes() as $priceTypeDefinition) {
