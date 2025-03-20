@@ -167,8 +167,16 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         return $this;
     }
 
+    /**
+     * @return AggregateInterface
+     * @throws AggregateNotDefinedException
+     */
     public function getAggregate(): AggregateInterface
     {
+        if ($this->aggregate === null) {
+            throw new AggregateNotDefinedException('Aggregate is not set. Call the aggregation() method first.');
+        }
+
         return $this->aggregate;
     }
 }

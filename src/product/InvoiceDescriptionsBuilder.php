@@ -15,7 +15,7 @@ class InvoiceDescriptionsBuilder
     {
         $descriptions = [];
         foreach ($this->registry->priceTypes() as $priceType) {
-            $descriptions[] = $priceType->representInvoice();
+            $descriptions[] = $priceType->documentRepresentation();
         }
 
         return $descriptions;

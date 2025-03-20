@@ -2,12 +2,13 @@
 
 namespace hiqdev\php\billing\product;
 
+use Generator;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
 
 interface BillingRegistryInterface
 {
     /**
-     * @return PriceTypeDefinition[]
+     * @return Generator<PriceTypeDefinition>
      */
-    public function priceTypes(): \Generator;
+    public function priceTypes(): Generator;
 }
