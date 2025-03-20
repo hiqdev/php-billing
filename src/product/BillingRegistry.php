@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
+use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
@@ -47,6 +48,10 @@ class BillingRegistry implements BillingRegistryInterface
      */
     public function getRepresentationsByType(string $representationClass): array
     {
+        if (!class_exists($representationClass)) {
+            throw new InvalidRepresentationException("Class '$representationClass' does not exist");
+        }
+
         $representations = [];
         foreach ($this->priceTypes() as $priceTypeDefinition) {
             foreach ($priceTypeDefinition->documentRepresentation() as $representation) {
