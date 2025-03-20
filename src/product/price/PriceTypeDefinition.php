@@ -3,7 +3,7 @@
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
-use hiqdev\php\billing\product\behavior\BehaviourPriceTypeDefinitionCollection;
+use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
 use hiqdev\php\billing\product\ParentNodeDefinitionInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
@@ -29,7 +29,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
 
     private InvoiceRepresentationCollection $invoiceCollection;
 
-    private BehaviourPriceTypeDefinitionCollection $behaviorCollection;
+    private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
     private AggregateInterface $aggregate;
 
@@ -42,7 +42,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         TariffTypeInterface $tariffType,
     ) {
         $this->invoiceCollection = new InvoiceRepresentationCollection($this);
-        $this->behaviorCollection = new BehaviourPriceTypeDefinitionCollection($this, $tariffType);
+        $this->behaviorCollection = new BehaviorPriceTypeDefinitionCollection($this, $tariffType);
 
         $this->init();
     }
@@ -131,7 +131,7 @@ class PriceTypeDefinition implements ParentNodeDefinitionInterface
         return $this->unit;
     }
 
-    public function withBehaviors(): BehaviourPriceTypeDefinitionCollection
+    public function withBehaviors(): BehaviorPriceTypeDefinitionCollection
     {
         return $this->behaviorCollection;
     }
