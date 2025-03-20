@@ -2,7 +2,9 @@
 
 namespace hiqdev\php\billing\product;
 
+use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
+use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
@@ -82,22 +84,44 @@ class BillingRegistry implements BillingRegistryInterface
      * @param string $behaviorClassWrapper
      * @return BehaviorInterface
      * @throws BehaviorNotFoundException
+     * @throws InvalidBehaviorException
      */
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
-        $type = $this->convertStringTypeToType($type);
+        if (!class_exists($behaviorClassWrapper)) {
+            throw new InvalidBehaviorException(
+                sprintf('Behavior class "%s" does not exist', $behaviorClassWrapper)
+            );
+        }
+
+        $billingType = $this->convertStringTypeToType($type);
 
         foreach ($this->priceTypes() as $priceTypeDefinition) {
-            if ($priceTypeDefinition->hasType($type)) {
-                foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
-                    if ($behavior instanceof $behaviorClassWrapper) {
-                        return $behavior;
-                    }
+            if ($priceTypeDefinition->hasType($billingType)) {
+                $behavior = $this->findBehaviorInPriceType($priceTypeDefinition, $behaviorClassWrapper);
+
+                if ($behavior) {
+                    return $behavior;
                 }
             }
         }
 
-        throw new BehaviorNotFoundException('Behaviour was not found');
+        throw new BehaviorNotFoundException(
+            sprintf('Behavior of class "%s" not found for type "%s"', $behaviorClassWrapper, $type),
+        );
+    }
+
+    private function findBehaviorInPriceType(
+        PriceTypeDefinition $priceTypeDefinition,
+        string $behaviorClassWrapper
+    ): ?BehaviorInterface {
+        foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
+            if ($behavior instanceof $behaviorClassWrapper) {
+                return $behavior;
+            }
+        }
+
+        return null;
     }
 
     public function getBehaviors(string $behaviorClassWrapper): \Generator
