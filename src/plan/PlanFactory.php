@@ -17,16 +17,12 @@ namespace hiqdev\php\billing\plan;
  */
 class PlanFactory implements PlanFactoryInterface
 {
-    /**
-     * Creates plan object.
-     * @return Plan
-     */
-    public function create(PlanCreationDto $dto)
+    public function create(PlanCreationDto $dto): PlanInterface
     {
         return $this->createAnyPlan($dto);
     }
 
-    protected function createAnyPlan(PlanCreationDto $dto, string $class = null)
+    protected function createAnyPlan(PlanCreationDto $dto, string $class = null): PlanInterface
     {
         $class = $class ?? Plan::class;
 

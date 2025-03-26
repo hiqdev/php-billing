@@ -17,9 +17,5 @@ namespace hiqdev\php\billing\sale;
  */
 interface SaleFactoryInterface
 {
-    /**
-     * Creates sale object.
-     * @return Sale
-     */
-    public function create(SaleCreationDto $dto);
+    public function create(SaleCreationDto $dto): SaleInterface;
 }
