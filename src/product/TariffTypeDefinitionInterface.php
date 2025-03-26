@@ -24,5 +24,5 @@ interface TariffTypeDefinitionInterface extends ParentNodeDefinitionInterface
      */
     public function withPrices(): PriceTypeDefinitionCollectionInterface;
 
-    public function end(): static;
+    public function end(): self;
 }
