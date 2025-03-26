@@ -4,6 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
+use hiqdev\php\billing\product\Exception\BillingRegistryLockedException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
@@ -24,7 +25,7 @@ class BillingRegistry implements BillingRegistryInterface
     public function addTariffType(TariffTypeDefinitionInterface $tariffType): void
     {
         if ($this->locked) {
-            throw new \RuntimeException("BillingRegistry is locked and cannot be modified.");
+            throw new BillingRegistryLockedException("BillingRegistry is locked and cannot be modified.");
         }
 
         $this->tariffTypes[] = $tariffType;
