@@ -9,6 +9,8 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
 
 class TariffTypeDefinition implements TariffTypeDefinitionInterface
 {
+    private bool $locked = false;
+
     private ?ProductInterface $product = null;
 
     private PriceTypeDefinitionCollection $prices;
@@ -28,33 +30,52 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
 
     public function ofProduct(ProductInterface $product): TariffTypeDefinitionInterface
     {
+        $this->ensureNotLocked();
         $this->product = $product;
 
         return $this;
     }
 
+    private function ensureNotLocked(): void
+    {
+        if ($this->locked) {
+            throw new \LogicException('Modifications are not allowed after calling end().');
+        }
+    }
+
     public function getProduct(): ProductInterface
     {
-        if ($this->product === null) {
-            throw new ProductNotDefinedException('Product is not set. Call the ofProduct() method first.');
-        }
+        $this->ensureProductExists();
 
         return $this->product;
     }
 
+    private function ensureProductExists(): void
+    {
+        if ($this->product === null) {
+            throw new ProductNotDefinedException('Product is not set. Call the ofProduct() method first.');
+        }
+    }
+
     public function setPricesSuggester(string $suggesterClass): TariffTypeDefinitionInterface
     {
+        $this->ensureNotLocked();
+
         // Validate or store the suggester class
         return $this;
     }
 
     public function withPrices(): PriceTypeDefinitionCollection
     {
+        $this->ensureNotLocked();
+
         return $this->prices;
     }
 
     public function withBehaviors(): BehaviorTariffTypeCollection
     {
+        $this->ensureNotLocked();
+
         return $this->behaviorCollection;
     }
 
@@ -71,7 +92,16 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
 
     public function end(): TariffTypeDefinitionInterface
     {
-        // Validate the TariffType and lock its state
+        $this->ensureProductExists();
+
+        // Validate prices configuration is complete
+        if ($this->prices->count() === 0) {
+            throw new \LogicException('At least one price type must be defined');
+        }
+
+        // Lock the state to prevent further modifications
+        $this->locked = true;
+
         return $this;
     }
 }
