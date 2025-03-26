@@ -38,7 +38,7 @@ class BillingRegistryTest extends TestCase
         $priceTypes = iterator_to_array($this->registry->priceTypes());
 
         $this->assertCount(1, $priceTypes);
-        $this->assertSame($type, $priceTypes[0]);
+        $this->assertSame($this->tariffTypeDefinition, $priceTypes[0]);
     }
 
     public function testLockPreventsModification(): void
@@ -70,7 +70,7 @@ class BillingRegistryTest extends TestCase
         $tariffTypeDefinition->withBehaviors()
             ->attach($dummyBehavior);
 
-        $this->registry->addTariffType($this->tariffTypeDefinition);
+        $this->registry->addTariffType($tariffTypeDefinition);
         $behavior = $this->registry->getBehavior($tariffType->name(), DummyBehavior::class);
 
         $this->assertSame($dummyBehavior->getContext(), $behavior->getContext());
