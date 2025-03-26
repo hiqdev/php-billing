@@ -4,6 +4,8 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
+use hiqdev\php\billing\product\Exception\ProductNotDefinedException;
+use hiqdev\php\billing\product\Exception\TariffTypeLockedException;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
 
@@ -39,7 +41,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     private function ensureNotLocked(): void
     {
         if ($this->locked) {
-            throw new \LogicException('Modifications are not allowed after calling end().');
+            throw new TariffTypeLockedException('Modifications are not allowed after calling end().');
         }
     }
 

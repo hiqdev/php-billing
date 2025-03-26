@@ -3,7 +3,7 @@
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
-use hiqdev\php\billing\product\AggregateNotDefinedException;
+use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
 use hiqdev\php\billing\product\ParentNodeDefinitionInterface;
