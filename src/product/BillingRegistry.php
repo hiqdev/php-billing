@@ -16,11 +16,11 @@ use hiqdev\php\billing\type\TypeInterface;
 
 class BillingRegistry implements BillingRegistryInterface
 {
-    /** @var TariffTypeDefinition[] */
+    /** @var TariffTypeDefinitionInterface[] */
     private array $tariffTypes = [];
     private bool $locked = false;
 
-    public function addTariffType(TariffTypeDefinition $tariffType): void
+    public function addTariffType(TariffTypeDefinitionInterface $tariffType): void
     {
         if ($this->locked) {
             throw new \RuntimeException("BillingRegistry is locked and cannot be modified.");
