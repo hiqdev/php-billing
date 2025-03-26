@@ -49,4 +49,9 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
     {
         return $this->parent;
     }
+
+    public function count(): int
+    {
+        return $this->storage->count();
+    }
 }

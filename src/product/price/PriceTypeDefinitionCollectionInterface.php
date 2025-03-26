@@ -5,7 +5,7 @@ namespace hiqdev\php\billing\product\price;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
-interface PriceTypeDefinitionCollectionInterface extends \IteratorAggregate
+interface PriceTypeDefinitionCollectionInterface extends \IteratorAggregate, \Countable
 {
     /**
      * @return PriceTypeDefinition[]
