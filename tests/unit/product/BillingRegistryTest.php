@@ -10,6 +10,8 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
+use hiqdev\php\billing\tests\unit\product\behavior\FakeBehavior;
+use hiqdev\php\billing\tests\unit\product\behavior\TestBehavior;
 use hiqdev\php\billing\type\Type;
 use PHPUnit\Framework\TestCase;
 
@@ -68,7 +70,7 @@ class BillingRegistryTest extends TestCase
     {
         $tariffType = new DummyTariffType();
         $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
-        $dummyBehavior = new DummyBehavior('dummy');
+        $dummyBehavior = new TestBehavior('dummy');
         $type = Type::anyId('dummy');
         $tariffTypeDefinition
             ->withPrices()
@@ -78,15 +80,57 @@ class BillingRegistryTest extends TestCase
 
         $this->registry->addTariffType($tariffTypeDefinition);
 
-        $behavior = $this->registry->getBehavior($type->getName(), DummyBehavior::class);
+        $behavior = $this->registry->getBehavior($type->getName(), TestBehavior::class);
 
         $this->assertSame($dummyBehavior->getContext(), $behavior->getContext());
+    }
+
+    public function testGetBehavior_WithMultipleTariffTypeDefinitions(): void
+    {
+        $tariffType = new DummyTariffType();
+        $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
+        $type1 = Type::anyId('type,dummy1');
+        $type2 = Type::anyId('type,dummy2');
+        $dummyBehavior1 = new TestBehavior('dummy 1');
+        $dummyBehavior2 = new TestBehavior('dummy 2');
+        $dummyBehavior3 = new FakeBehavior('dummy 3');
+
+        $tariffTypeDefinition
+            ->withPrices()
+                ->priceType($type1)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior1)
+                    ->end()
+                ->end()
+                ->priceType($type2)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior2)
+                        ->attach($dummyBehavior3)
+                    ->end()
+                ->end()
+            ->end();
+
+        $this->registry->addTariffType($tariffTypeDefinition);
+
+        $behavior = $this->registry->getBehavior($type1->getName(), TestBehavior::class);
+        $this->assertSame($dummyBehavior1->getContext(), $behavior->getContext());
+
+        $behavior = $this->registry->getBehavior($type2->getName(), TestBehavior::class);
+        $this->assertSame($dummyBehavior2->getContext(), $behavior->getContext());
+
+        $behavior = $this->registry->getBehavior($type2->getName(), FakeBehavior::class);
+        $this->assertSame($dummyBehavior3->getContext(), $behavior->getContext());
+    }
+
+    public function testGetBehavior_WithMultiplePriceTypeDefinitions(): void
+    {
+
     }
 
     public function testGetBehaviorThrowsExceptionWhenNotFound(): void
     {
         $this->expectException(BehaviorNotFoundException::class);
-        $this->registry->getBehavior('non-existent-type', DummyBehavior::class);
+        $this->registry->getBehavior('non-existent-type', TestBehavior::class);
     }
 
 //    public function testCreateQuantityFormatterThrowsExceptionWhenNotFound(): void

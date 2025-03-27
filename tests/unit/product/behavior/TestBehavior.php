@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace hiqdev\php\billing\tests\unit\product;
+namespace hiqdev\php\billing\tests\unit\product\behavior;
 
-use hiqdev\billing\registry\behavior\Behavior;
+use hiqdev\php\billing\product\behavior\Behavior;
 
-class DummyBehavior extends Behavior
+class TestBehavior extends Behavior
 {
     private $context;
 
