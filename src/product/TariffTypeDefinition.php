@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
+use hiqdev\php\billing\product\behavior\TariffTypeBehaviorRegistry;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Exception\ProductNotDefinedException;
 use hiqdev\php\billing\product\Exception\TariffTypeLockedException;
@@ -17,12 +18,12 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
 
     private PriceTypeDefinitionCollection $prices;
 
-    private BehaviorTariffTypeCollection $behaviorCollection;
+    private TariffTypeBehaviorRegistry $tariffTypeBehaviorRegistry;
 
     public function __construct(private readonly TariffTypeInterface $tariffType)
     {
         $this->prices = new PriceTypeDefinitionCollection($this, new PriceTypeDefinitionFactory());
-        $this->behaviorCollection = new BehaviorTariffTypeCollection($this, $tariffType);
+        $this->tariffTypeBehaviorRegistry = new TariffTypeBehaviorRegistry($this, $tariffType);
     }
 
     public function tariffType(): TariffTypeInterface
@@ -78,18 +79,12 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     {
         $this->ensureNotLocked();
 
-        return $this->behaviorCollection;
+        return $this->tariffTypeBehaviorRegistry->withBehaviors();
     }
 
     public function hasBehavior(string $behaviorClassName): bool
     {
-        foreach ($this->behaviorCollection as $behavior) {
-            if ($behavior instanceof $behaviorClassName) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->tariffTypeBehaviorRegistry->hasBehavior($behaviorClassName);
     }
 
     public function end(): TariffTypeDefinitionInterface
