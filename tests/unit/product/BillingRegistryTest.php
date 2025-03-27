@@ -69,15 +69,16 @@ class BillingRegistryTest extends TestCase
         $tariffType = new DummyTariffType();
         $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
         $dummyBehavior = new DummyBehavior('dummy');
+        $type = Type::anyId('overuse,lb_capacity_unit');
         $tariffTypeDefinition
             ->withPrices()
-                ->priceType(Type::anyId('dummy'))
+                ->priceType($type)
                 ->withBehaviors()
                     ->attach($dummyBehavior);
 
         $this->registry->addTariffType($tariffTypeDefinition);
 
-        $behavior = $this->registry->getBehavior($tariffType->name(), DummyBehavior::class);
+        $behavior = $this->registry->getBehavior($type->getName(), DummyBehavior::class);
 
         $this->assertSame($dummyBehavior->getContext(), $behavior->getContext());
     }
