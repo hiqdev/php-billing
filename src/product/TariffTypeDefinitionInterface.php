@@ -8,7 +8,7 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 /**
  * @template T of PriceTypeDefinitionCollectionInterface
  */
-interface TariffTypeDefinitionInterface extends ParentNodeDefinitionInterface
+interface TariffTypeDefinitionInterface extends HasBehaviorsInterface
 {
     public function tariffType(): TariffTypeInterface;
 

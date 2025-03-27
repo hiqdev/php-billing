@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
 
-interface ParentNodeDefinitionInterface
+interface HasBehaviorsInterface
 {
     public function withBehaviors(): BehaviorCollectionInterface;
 

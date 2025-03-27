@@ -6,7 +6,7 @@ use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
-use hiqdev\php\billing\product\ParentNodeDefinitionInterface;
+use hiqdev\php\billing\product\HasBehaviorsInterface;
 use hiqdev\php\billing\product\quantity\InvalidQuantityFormatterException;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
@@ -21,7 +21,7 @@ use hiqdev\php\billing\type\TypeInterface;
  * @template T of PriceTypeDefinitionCollectionInterface
  * @psalm-consistent-templates
  */
-class PriceTypeDefinition implements ParentNodeDefinitionInterface
+class PriceTypeDefinition implements HasBehaviorsInterface
 {
     private UnitInterface $unit;
 
