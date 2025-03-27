@@ -4,12 +4,11 @@ namespace hiqdev\php\billing\tests\unit\product;
 
 use hiqdev\php\billing\product\BillingRegistry;
 use hiqdev\php\billing\product\Exception\BillingRegistryLockedException;
+use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\TariffTypeDefinition;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
-use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
-use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\type\Type;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +37,10 @@ class BillingRegistryTest extends TestCase
         $priceTypes = iterator_to_array($this->registry->priceTypes());
 
         $this->assertCount(1, $priceTypes);
-        $this->assertSame($this->tariffTypeDefinition, $priceTypes[0]);
+        /** @var PriceTypeDefinition $priceTypeDefinition */
+        $priceTypeDefinition = $priceTypes[0];
+
+        $this->assertSame($type, $priceTypeDefinition->type());
     }
 
     public function testLockPreventsModification(): void
