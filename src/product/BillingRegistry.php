@@ -19,16 +19,16 @@ use hiqdev\php\billing\type\TypeInterface;
 class BillingRegistry implements BillingRegistryInterface
 {
     /** @var TariffTypeDefinitionInterface[] */
-    private array $tariffTypes = [];
+    private array $tariffTypeDefinitions = [];
     private bool $locked = false;
 
-    public function addTariffType(TariffTypeDefinitionInterface $tariffType): void
+    public function addTariffType(TariffTypeDefinitionInterface $tariffTypeDefinition): void
     {
         if ($this->locked) {
             throw new BillingRegistryLockedException("BillingRegistry is locked and cannot be modified.");
         }
 
-        $this->tariffTypes[] = $tariffType;
+        $this->tariffTypeDefinitions[] = $tariffTypeDefinition;
     }
 
     public function lock(): void
@@ -38,8 +38,8 @@ class BillingRegistry implements BillingRegistryInterface
 
     public function priceTypes(): \Generator
     {
-        foreach ($this->tariffTypes as $tariffType) {
-            foreach ($tariffType->withPrices() as $priceTypeDefinition) {
+        foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
+            foreach ($tariffTypeDefinition->withPrices() as $priceTypeDefinition) {
                 yield $priceTypeDefinition;
             }
         }
@@ -146,7 +146,7 @@ class BillingRegistry implements BillingRegistryInterface
 
     public function getBehaviors(string $behaviorClassWrapper): \Generator
     {
-        foreach ($this->tariffTypes as $tariffType) {
+        foreach ($this->tariffTypeDefinitions as $tariffType) {
             foreach ($tariffType->withBehaviors() as $behavior) {
                 if ($behavior instanceof $behaviorClassWrapper) {
                     yield $behavior;
