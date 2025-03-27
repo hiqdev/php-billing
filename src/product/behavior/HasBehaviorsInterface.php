@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace hiqdev\php\billing\product;
-
-use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
+namespace hiqdev\php\billing\product\behavior;
 
 interface HasBehaviorsInterface
 {
