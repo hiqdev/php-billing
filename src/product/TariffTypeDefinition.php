@@ -79,7 +79,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     {
         $this->ensureNotLocked();
 
-        return $this->tariffTypeBehaviorRegistry->withBehaviors();
+        return $this->tariffTypeBehaviorRegistry->getBehaviors();
     }
 
     public function hasBehavior(string $behaviorClassName): bool
