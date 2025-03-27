@@ -12,10 +12,12 @@ use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\tests\unit\product\behavior\FakeBehavior;
 use hiqdev\php\billing\tests\unit\product\behavior\TestBehavior;
+use hiqdev\php\billing\tests\unit\product\Domain\Model\DummyTariffType;
+use hiqdev\php\billing\tests\unit\product\Domain\Model\FakeTariffType;
 use hiqdev\php\billing\type\Type;
 use PHPUnit\Framework\TestCase;
 
-class BillingRegistryTest extends TestCase
+final class BillingRegistryTest extends TestCase
 {
     private BillingRegistry $registry;
 
@@ -124,7 +126,40 @@ class BillingRegistryTest extends TestCase
 
     public function testGetBehavior_WithMultiplePriceTypeDefinitions(): void
     {
+        $tariffTypeDefinition1 = new TariffTypeDefinition(new DummyTariffType());
+        $testBehavior = new TestBehavior('dummy');
+        $type1 = Type::anyId('type,dummy1');
+        $tariffTypeDefinition1
+            ->withPrices()
+                ->priceType($type1)
+                    ->withBehaviors()
+                        ->attach($testBehavior)
+                    ->end()
+                ->end()
+            ->end();
 
+        $tariffTypeDefinition2 = new TariffTypeDefinition(new FakeTariffType());
+        $fakeBehavior = new FakeBehavior('dummy');
+        $type2 = Type::anyId('type,dummy2');
+        $tariffTypeDefinition2
+            ->withPrices()
+                ->priceType($type2)
+                    ->withBehaviors()
+                        ->attach($fakeBehavior)
+                    ->end()
+                ->end()
+            ->end();
+
+        $this->registry->addTariffType($tariffTypeDefinition1);
+        $this->registry->addTariffType($tariffTypeDefinition2);
+
+        /** @var TestBehavior $testBehaviorActual */
+        $testBehaviorActual = $this->registry->getBehavior($type1->getName(), TestBehavior::class);
+        $this->assertSame($testBehavior->getContext(), $testBehaviorActual->getContext());
+
+        /** @var FakeBehavior $fakeBehaviorActual */
+        $fakeBehaviorActual = $this->registry->getBehavior($type2->getName(), FakeBehavior::class);
+        $this->assertSame($fakeBehavior->getContext(), $fakeBehaviorActual->getContext());
     }
 
     public function testGetBehaviorThrowsExceptionWhenNotFound(): void
