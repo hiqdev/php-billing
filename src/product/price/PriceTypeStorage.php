@@ -10,7 +10,7 @@ class PriceTypeStorage implements \Countable
 
     private int $i = 0;
 
-    public function add(TypeInterface $type, PriceTypeDefinition $priceTypeDefinition): void
+    public function add(TypeInterface $type, PriceTypeDefinitionInterface $priceTypeDefinition): void
     {
         $this->pricesGroupedByPriceType[$type->getName()][] = $priceTypeDefinition;
 
@@ -18,7 +18,7 @@ class PriceTypeStorage implements \Countable
     }
 
     /**
-     * @return PriceTypeDefinition[]
+     * @return PriceTypeDefinitionInterface[]
      */
     public function getAll(): array
     {

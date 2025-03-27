@@ -8,11 +8,11 @@ use hiqdev\php\billing\type\TypeInterface;
 interface PriceTypeDefinitionCollectionInterface extends \IteratorAggregate, \Countable
 {
     /**
-     * @return PriceTypeDefinition[]
+     * @return PriceTypeDefinitionInterface[]
      */
     public function getIterator(): \Traversable;
 
-    public function priceType(TypeInterface $type): PriceTypeDefinition;
+    public function priceType(TypeInterface $type): PriceTypeDefinitionInterface;
 
     public function end(): TariffTypeDefinitionInterface;
 }

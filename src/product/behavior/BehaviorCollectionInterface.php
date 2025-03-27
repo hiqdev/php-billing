@@ -10,4 +10,6 @@ interface BehaviorCollectionInterface extends \IteratorAggregate
     public function getIterator(): \Traversable;
 
     public function attach(BehaviorInterface $behavior): self;
+
+    public function end();
 }

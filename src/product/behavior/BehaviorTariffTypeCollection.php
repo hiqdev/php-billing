@@ -3,16 +3,16 @@
 namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
-use hiqdev\php\billing\product\TariffTypeDefinition;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 
 class BehaviorTariffTypeCollection extends BehaviorCollection
 {
-    public function __construct(private readonly TariffTypeDefinition $parent, TariffTypeInterface $tariffType)
+    public function __construct(private readonly TariffTypeDefinitionInterface $parent, TariffTypeInterface $tariffType)
     {
         parent::__construct($tariffType);
     }
 
-    public function end(): TariffTypeDefinition
+    public function end(): TariffTypeDefinitionInterface
     {
         return $this->parent;
     }

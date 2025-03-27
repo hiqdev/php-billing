@@ -6,7 +6,6 @@ use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
-use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
 use hiqdev\php\billing\product\quantity\InvalidQuantityFormatterException;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
@@ -21,7 +20,7 @@ use hiqdev\php\billing\type\TypeInterface;
  * @template T of PriceTypeDefinitionCollectionInterface
  * @psalm-consistent-templates
  */
-class PriceTypeDefinition implements HasBehaviorsInterface
+class PriceTypeDefinition implements PriceTypeDefinitionInterface
 {
     private UnitInterface $unit;
 
@@ -90,9 +89,8 @@ class PriceTypeDefinition implements HasBehaviorsInterface
         return $this;
     }
 
-    public function createQuantityFormatter(
-        FractionQuantityData $data,
-    ): QuantityFormatterInterface {
+    public function createQuantityFormatter(FractionQuantityData $data): QuantityFormatterInterface
+    {
         return QuantityFormatterFactory::create(
             $this->getUnit()->createExternalUnit(),
             $this->quantityFormatterDefinition,
@@ -154,11 +152,7 @@ class PriceTypeDefinition implements HasBehaviorsInterface
     }
 
     /**
-     * це параметер визначає агрегатну функцію яка застосовується для щоденно записаних ресурсів щоб визнизначти
-     * місячне споживання за яке потрібно пробілити клієнта
-     *
-     * @param AggregateInterface $aggregate
-     * @return self
+     * @inerhitDoc
      */
     public function aggregation(AggregateInterface $aggregate): self
     {

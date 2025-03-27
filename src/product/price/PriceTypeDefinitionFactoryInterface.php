@@ -11,5 +11,5 @@ interface PriceTypeDefinitionFactoryInterface
         PriceTypeDefinitionCollectionInterface $parent,
         TypeInterface $type,
         TariffTypeInterface $tariffType,
-    ): PriceTypeDefinition;
+    ): PriceTypeDefinitionInterface;
 }

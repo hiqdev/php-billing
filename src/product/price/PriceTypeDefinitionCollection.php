@@ -26,14 +26,14 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
     }
 
     /**
-     * @return PriceTypeDefinition[]
+     * @inerhitDoc
      */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->storage->getAll());
     }
 
-    public function priceType(TypeInterface $type): PriceTypeDefinition
+    public function priceType(TypeInterface $type): PriceTypeDefinitionInterface
     {
         $priceType = $this->factory->create($this->collectionInstance, $type, $this->parent->tariffType());
         $this->storage->add($type, $priceType);

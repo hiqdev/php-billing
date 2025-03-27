@@ -4,7 +4,7 @@ namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 
-class BehaviorCollection implements BehaviorCollectionInterface
+abstract class BehaviorCollection implements BehaviorCollectionInterface
 {
     /** @var BehaviorInterface[] */
     private array $behaviors = [];
