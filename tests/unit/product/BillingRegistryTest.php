@@ -83,7 +83,7 @@ class BillingRegistryTest extends TestCase
     public function testGetBehaviorThrowsExceptionWhenNotFound(): void
     {
         $this->expectException(BehaviorNotFoundException::class);
-        $this->registry->getBehavior('non-existent-type', BehaviorInterface::class);
+        $this->registry->getBehavior('non-existent-type', DummyBehavior::class);
     }
 
 //    public function testCreateQuantityFormatterThrowsExceptionWhenNotFound(): void
