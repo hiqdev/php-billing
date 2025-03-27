@@ -69,7 +69,7 @@ class BillingRegistryTest extends TestCase
         $tariffType = new DummyTariffType();
         $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
         $dummyBehavior = new DummyBehavior('dummy');
-        $type = Type::anyId('overuse,lb_capacity_unit');
+        $type = Type::anyId('dummy');
         $tariffTypeDefinition
             ->withPrices()
                 ->priceType($type)
