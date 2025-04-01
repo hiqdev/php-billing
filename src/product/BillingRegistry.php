@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
+use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
 use hiqdev\php\billing\product\Exception\BillingRegistryLockedException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
@@ -179,5 +180,16 @@ class BillingRegistry implements BillingRegistryInterface
         }
 
         throw new AggregateNotFoundException('Aggregate was not found');
+    }
+
+    public function getTariffTypeDefinitionByTariffType(TariffTypeInterface $tariffType): TariffTypeDefinitionInterface
+    {
+        foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
+            if ($tariffTypeDefinition->tariffType() === $tariffType) {
+                return $tariffTypeDefinition;
+            }
+        }
+
+        throw new TariffTypeDefinitionNotFoundException('Tariff type definition was not found');
     }
 }
