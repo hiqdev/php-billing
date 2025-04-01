@@ -151,8 +151,8 @@ class BillingRegistry implements BillingRegistryInterface
 
     public function getBehaviors(string $behaviorClassWrapper): \Generator
     {
-        foreach ($this->tariffTypeDefinitions as $tariffType) {
-            foreach ($tariffType->withBehaviors() as $behavior) {
+        foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
+            foreach ($tariffTypeDefinition->withBehaviors() as $behavior) {
                 if ($behavior instanceof $behaviorClassWrapper) {
                     yield $behavior;
                 }
