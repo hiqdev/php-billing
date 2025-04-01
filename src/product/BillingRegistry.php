@@ -8,6 +8,7 @@ use hiqdev\php\billing\product\Exception\BillingRegistryLockedException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
@@ -36,6 +37,10 @@ class BillingRegistry implements BillingRegistryInterface
         $this->locked = true;
     }
 
+    /**
+     * @return \Generator
+     * @psalm-return \Generator<PriceTypeDefinitionInterface>
+     */
     public function priceTypes(): \Generator
     {
         foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
