@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product\quantity;
 
-use RuntimeException;
+use hiqdev\php\billing\Exception\RuntimeException;
 
 class QuantityFormatterNotFoundException extends RuntimeException
 {
