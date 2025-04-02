@@ -46,6 +46,4 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface
     public function aggregation(AggregateInterface $aggregate): self;
 
     public function getAggregate(): AggregateInterface;
-
-    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface;
 }

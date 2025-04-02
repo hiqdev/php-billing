@@ -174,9 +174,4 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
         return $this->aggregate;
     }
-
-    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface
-    {
-        return $this->parent->end();
-    }
 }
