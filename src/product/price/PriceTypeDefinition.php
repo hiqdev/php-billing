@@ -14,7 +14,7 @@ use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
-use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
+use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
@@ -23,6 +23,8 @@ use hiqdev\php\billing\type\TypeInterface;
  */
 class PriceTypeDefinition implements PriceTypeDefinitionInterface
 {
+    use HasLock;
+
     private UnitInterface $unit;
 
     private string $description;
@@ -56,6 +58,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     public function unit(UnitInterface $unit): self
     {
+        $this->ensureNotLocked();
+
         $this->unit = $unit;
 
         return $this;
@@ -63,6 +67,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     public function description(string $description): self
     {
+        $this->ensureNotLocked();
         $this->description = $description;
 
         return $this;
@@ -81,6 +86,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     public function quantityFormatter(string $formatterClass, $fractionUnit = null): self
     {
+        $this->ensureNotLocked();
+
         if (!\class_exists($formatterClass)) {
             throw new InvalidQuantityFormatterException("Formatter class $formatterClass does not exist");
         }
@@ -92,6 +99,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     public function createQuantityFormatter(FractionQuantityData $data): QuantityFormatterInterface
     {
+        $this->ensureNotLocked();
+
         return QuantityFormatterFactory::create(
             $this->getUnit()->createExternalUnit(),
             $this->quantityFormatterDefinition,
@@ -104,7 +113,9 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     public function end(): PriceTypeDefinitionCollectionInterface
     {
-        // Validate the PriceType and lock its state
+        $this->lock();
+
+        // Validate the PriceType
         return $this->parent;
     }
 
@@ -113,11 +124,15 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     public function documentRepresentation(): InvoiceRepresentationCollection
     {
+        $this->ensureNotLocked();
+
         return $this->invoiceCollection;
     }
 
     public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
     {
+        $this->ensureNotLocked();
+
         return $this;
     }
 
@@ -138,6 +153,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     public function withBehaviors(): BehaviorPriceTypeDefinitionCollection
     {
+        $this->ensureNotLocked();
+
         return $this->behaviorCollection;
     }
 
@@ -157,6 +174,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     public function aggregation(AggregateInterface $aggregate): self
     {
+        $this->ensureNotLocked();
+
         $this->aggregate = $aggregate;
 
         return $this;

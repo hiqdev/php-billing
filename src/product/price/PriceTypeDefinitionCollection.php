@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
+use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
@@ -12,6 +13,8 @@ use hiqdev\php\billing\type\TypeInterface;
  */
 class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInterface
 {
+    use HasLock;
+
     private PriceTypeStorage $storage;
 
     private PriceTypeDefinitionCollectionInterface $collectionInstance;
@@ -35,6 +38,8 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
 
     public function priceType(TypeInterface $type): PriceTypeDefinitionInterface
     {
+        $this->ensureNotLocked();
+
         $priceType = $this->factory->create($this->collectionInstance, $type, $this->parent->tariffType());
         $this->storage->add($type, $priceType);
 
@@ -47,6 +52,8 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
      */
     public function end(): TariffTypeDefinitionInterface
     {
+        $this->lock();
+
         return $this->parent;
     }
 
