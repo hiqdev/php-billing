@@ -6,13 +6,13 @@ use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
 use hiqdev\php\billing\product\behavior\TariffTypeBehaviorRegistry;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Exception\ProductNotDefinedException;
-use hiqdev\php\billing\product\Exception\TariffTypeLockedException;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
+use hiqdev\php\billing\product\trait\HasLock;
 
 class TariffTypeDefinition implements TariffTypeDefinitionInterface
 {
-    private bool $locked = false;
+    use HasLock;
 
     private ?ProductInterface $product = null;
 
@@ -37,13 +37,6 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         $this->product = $product;
 
         return $this;
-    }
-
-    private function ensureNotLocked(): void
-    {
-        if ($this->locked) {
-            throw new TariffTypeLockedException('Modifications are not allowed after calling end().');
-        }
     }
 
     public function getProduct(): ProductInterface
@@ -96,8 +89,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
             throw new \LogicException('At least one price type must be defined');
         }
 
-        // Lock the state to prevent further modifications
-        $this->locked = true;
+        $this->lock();
 
         return $this;
     }

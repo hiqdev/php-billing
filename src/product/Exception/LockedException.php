@@ -2,7 +2,9 @@
 
 namespace hiqdev\php\billing\product\Exception;
 
-class TariffTypeLockedException extends \LogicException
+use LogicException;
+
+class LockedException extends LogicException
 {
 
 }
