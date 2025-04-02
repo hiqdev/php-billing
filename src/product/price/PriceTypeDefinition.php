@@ -14,6 +14,7 @@ use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
@@ -172,5 +173,10 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         }
 
         return $this->aggregate;
+    }
+
+    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface
+    {
+        return $this->parent->end();
     }
 }

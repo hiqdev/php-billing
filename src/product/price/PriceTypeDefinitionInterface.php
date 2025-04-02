@@ -8,6 +8,7 @@ use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
 interface PriceTypeDefinitionInterface extends HasBehaviorsInterface
@@ -45,4 +46,6 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface
     public function aggregation(AggregateInterface $aggregate): self;
 
     public function getAggregate(): AggregateInterface;
+
+    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface;
 }
