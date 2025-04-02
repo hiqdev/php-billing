@@ -14,6 +14,8 @@ class BehaviorTariffTypeCollection extends BehaviorCollection
 
     public function end(): TariffTypeDefinitionInterface
     {
+        $this->lock();
+
         return $this->parent;
     }
 }

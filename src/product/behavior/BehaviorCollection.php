@@ -3,9 +3,12 @@
 namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
+use hiqdev\php\billing\product\trait\HasLock;
 
 abstract class BehaviorCollection implements BehaviorCollectionInterface
 {
+    use HasLock;
+
     /** @var BehaviorInterface[] */
     private array $behaviors = [];
 
@@ -20,6 +23,8 @@ abstract class BehaviorCollection implements BehaviorCollectionInterface
 
     public function attach(BehaviorInterface $behavior): self
     {
+        $this->ensureNotLocked();
+
         $behavior->setTariffType($this->tariffType);
 
         $this->behaviors[] = $behavior;
