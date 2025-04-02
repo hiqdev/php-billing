@@ -188,7 +188,6 @@ class BillingRegistry implements BillingRegistryInterface
     public function getTariffTypeDefinitions(): \Generator
     {
         foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
-            // TODO: endure that it would not be changed
             yield $tariffTypeDefinition;
         }
     }
