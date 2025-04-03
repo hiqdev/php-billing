@@ -17,7 +17,7 @@ trait HasLock
     protected function ensureNotLocked(): void
     {
         if ($this->isLocked()) {
-            throw new LockedException('Modifications are not allowed after, class was locked.');
+            throw new LockedException('Modifications are not allowed after the class has been locked.');
         }
     }
 

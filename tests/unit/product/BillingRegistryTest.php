@@ -3,7 +3,7 @@
 namespace hiqdev\php\billing\tests\unit\product;
 
 use hiqdev\php\billing\product\BillingRegistry;
-use hiqdev\php\billing\product\Exception\BillingRegistryLockedException;
+use hiqdev\php\billing\product\Exception\LockedException;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\TariffTypeDefinition;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
@@ -51,7 +51,7 @@ final class BillingRegistryTest extends TestCase
     {
         $this->registry->lock();
 
-        $this->expectException(BillingRegistryLockedException::class);
+        $this->expectException(LockedException::class);
 
         $this->registry->addTariffType($this->tariffTypeDefinition);
     }

@@ -4,7 +4,6 @@ namespace hiqdev\php\billing\product;
 
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
-use hiqdev\php\billing\product\Exception\BillingRegistryLockedException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
@@ -14,27 +13,23 @@ use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
+use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
 
 class BillingRegistry implements BillingRegistryInterface
 {
+    use HasLock;
+
     /** @var TariffTypeDefinitionInterface[] */
     private array $tariffTypeDefinitions = [];
     private bool $locked = false;
 
     public function addTariffType(TariffTypeDefinitionInterface $tariffTypeDefinition): void
     {
-        if ($this->locked) {
-            throw new BillingRegistryLockedException("BillingRegistry is locked and cannot be modified.");
-        }
+        $this->ensureNotLocked();
 
         $this->tariffTypeDefinitions[] = $tariffTypeDefinition;
-    }
-
-    public function lock(): void
-    {
-        $this->locked = true;
     }
 
     /**
