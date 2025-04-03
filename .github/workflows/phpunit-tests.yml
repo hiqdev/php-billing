@@ -24,7 +24,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: gmp
           coverage: pcov
-          tools: composer:v4, infection
+          tools: composer:v2, infection
 
       - name: Cache Composer packages
         id: composer-cache
