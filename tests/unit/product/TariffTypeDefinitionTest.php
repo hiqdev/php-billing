@@ -2,8 +2,8 @@
 
 namespace hiqdev\php\billing\tests\unit\product;
 
+use hiqdev\php\billing\product\Exception\LockedException;
 use hiqdev\php\billing\product\Exception\ProductNotDefinedException;
-use hiqdev\php\billing\product\Exception\TariffTypeLockedException;
 use hiqdev\php\billing\product\TariffTypeDefinition;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\ProductInterface;
@@ -77,7 +77,9 @@ class TariffTypeDefinitionTest extends TestCase
             ->priceType(Type::anyId('dummy'));
         $definition->end();
 
-        $this->expectException(TariffTypeLockedException::class);
+        $definition->lock();
+
+        $this->expectException(LockedException::class);
         $definition->ofProduct($this->createMock(ProductInterface::class));
     }
 }
