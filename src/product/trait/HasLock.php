@@ -8,7 +8,7 @@ trait HasLock
 {
     private bool $locked = false;
 
-    protected function lock(): void
+    public function lock(): void
     {
         // Lock the state to prevent further modifications
         $this->locked = true;
