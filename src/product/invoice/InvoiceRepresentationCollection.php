@@ -4,11 +4,12 @@ namespace hiqdev\php\billing\product\invoice;
 
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\trait\HasLock;
+use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
  * @template T of PriceTypeDefinition
  */
-class InvoiceRepresentationCollection implements \IteratorAggregate
+class InvoiceRepresentationCollection implements \IteratorAggregate, HasLockInterface
 {
     use HasLock;
 
@@ -42,8 +43,6 @@ class InvoiceRepresentationCollection implements \IteratorAggregate
      */
     public function end(): PriceTypeDefinition
     {
-        $this->lock();
-
         return $this->priceTypeDefinition;
     }
 

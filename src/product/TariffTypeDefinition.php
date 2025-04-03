@@ -89,8 +89,12 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
             throw new \LogicException('At least one price type must be defined');
         }
 
-        $this->lock();
-
         return $this;
+    }
+
+    protected function afterLock(): void
+    {
+        $this->prices->lock();
+        $this->tariffTypeBehaviorRegistry->lock();
     }
 }

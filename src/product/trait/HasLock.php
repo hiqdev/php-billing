@@ -12,6 +12,8 @@ trait HasLock
     {
         // Lock the state to prevent further modifications
         $this->locked = true;
+
+        $this->afterLock();
     }
 
     protected function ensureNotLocked(): void
@@ -24,5 +26,21 @@ trait HasLock
     protected function isLocked(): bool
     {
         return $this->locked;
+    }
+
+    protected function afterLock(): void
+    {
+        // Hook
+    }
+
+    /**
+     * @param HasLockInterface[] $items
+     * @return void
+     */
+    protected function lockItems(array $items): void
+    {
+        foreach ($items as $item) {
+            $item->lock();
+        }
     }
 }

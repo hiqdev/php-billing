@@ -186,4 +186,9 @@ class BillingRegistry implements BillingRegistryInterface
             yield $tariffTypeDefinition;
         }
     }
+
+    protected function afterLock(): void
+    {
+        $this->lockItems($this->tariffTypeDefinitions);
+    }
 }

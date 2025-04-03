@@ -2,7 +2,11 @@
 
 namespace hiqdev\php\billing\product\behavior;
 
-interface BehaviorCollectionInterface extends \IteratorAggregate
+use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
+use hiqdev\php\billing\product\trait\HasLockInterface;
+
+interface BehaviorCollectionInterface extends \IteratorAggregate, HasLockInterface
 {
     /**
      * @return BehaviorInterface[]
@@ -11,5 +15,8 @@ interface BehaviorCollectionInterface extends \IteratorAggregate
 
     public function attach(BehaviorInterface $behavior): self;
 
-    public function end();
+    /**
+     * @return TariffTypeDefinitionInterface|PriceTypeDefinitionInterface
+     */
+    public function end(): TariffTypeDefinitionInterface|PriceTypeDefinitionInterface;
 }

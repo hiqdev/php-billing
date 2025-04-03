@@ -68,6 +68,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     public function description(string $description): self
     {
         $this->ensureNotLocked();
+
         $this->description = $description;
 
         return $this;
@@ -113,8 +114,6 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     public function end(): PriceTypeDefinitionCollectionInterface
     {
-        $this->lock();
-
         // Validate the PriceType
         return $this->parent;
     }
@@ -192,5 +191,11 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         }
 
         return $this->aggregate;
+    }
+
+    protected function afterLock(): void
+    {
+        $this->invoiceCollection->lock();
+        $this->behaviorCollection->lock();
     }
 }

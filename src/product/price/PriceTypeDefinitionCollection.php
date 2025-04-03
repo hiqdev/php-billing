@@ -52,8 +52,6 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
      */
     public function end(): TariffTypeDefinitionInterface
     {
-        $this->lock();
-
         return $this->parent;
     }
 

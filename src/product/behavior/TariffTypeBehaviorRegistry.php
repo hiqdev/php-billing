@@ -4,6 +4,8 @@ namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
+use hiqdev\php\billing\product\trait\HasLock;
+use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
  * class TariffTypeBehaviorRegistry
@@ -22,28 +24,33 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
  *  - To separate concerns by handling behavior-related logic in a dedicated class.
  *  - To improve maintainability and testability of tariff behavior handling.
  */
-final class TariffTypeBehaviorRegistry
+final class TariffTypeBehaviorRegistry implements HasLockInterface
 {
-    private BehaviorTariffTypeCollection $behaviors;
+    private BehaviorTariffTypeCollection $behaviorCollection;
 
     public function __construct(TariffTypeDefinitionInterface $tariffTypeDefinition, TariffTypeInterface $tariffType)
     {
-        $this->behaviors = new BehaviorTariffTypeCollection($tariffTypeDefinition, $tariffType);
+        $this->behaviorCollection = new BehaviorTariffTypeCollection($tariffTypeDefinition, $tariffType);
     }
 
     public function getBehaviors(): BehaviorTariffTypeCollection
     {
-        return $this->behaviors;
+        return $this->behaviorCollection;
     }
 
     public function hasBehavior(string $behaviorClassName): bool
     {
-        foreach ($this->behaviors as $behavior) {
+        foreach ($this->behaviorCollection as $behavior) {
             if ($behavior instanceof $behaviorClassName) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public function lock(): void
+    {
+        $this->behaviorCollection->lock();
     }
 }

@@ -14,8 +14,6 @@ class BehaviorPriceTypeDefinitionCollection extends BehaviorCollection
 
     public function end(): PriceTypeDefinitionInterface
     {
-        $this->lock();
-
         return $this->parent;
     }
 }

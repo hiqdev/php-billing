@@ -5,11 +5,12 @@ namespace hiqdev\php\billing\product;
 use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
+use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
  * @template T of PriceTypeDefinitionCollectionInterface
  */
-interface TariffTypeDefinitionInterface extends HasBehaviorsInterface
+interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInterface
 {
     public function tariffType(): TariffTypeInterface;
 
