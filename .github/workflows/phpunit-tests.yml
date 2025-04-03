@@ -16,19 +16,19 @@ jobs:
     name: PHP ${{ matrix.php }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v3
         with:
           php-version: ${{ matrix.php }}
           extensions: gmp
           coverage: pcov
-          tools: composer:v2, infection
+          tools: composer:v4, infection
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
