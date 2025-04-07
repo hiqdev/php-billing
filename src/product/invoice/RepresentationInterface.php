@@ -10,5 +10,5 @@ interface RepresentationInterface
 
     public function getType(): TypeInterface;
 
-    public function setType(TypeInterface $type): void;
+    public function setType(TypeInterface $type): RepresentationInterface;
 }
