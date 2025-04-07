@@ -5,7 +5,7 @@ namespace hiqdev\php\billing\product\price;
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
-use hiqdev\php\billing\product\invoice\InvoiceRepresentationCollection;
+use hiqdev\php\billing\product\invoice\RepresentationCollection;
 use hiqdev\php\billing\product\quantity\InvalidQuantityFormatterException;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
@@ -31,7 +31,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     private QuantityFormatterDefinition $quantityFormatterDefinition;
 
-    private InvoiceRepresentationCollection $invoiceCollection;
+    private RepresentationCollection $representationCollection;
 
     private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
@@ -45,7 +45,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         private readonly TypeInterface $type,
         TariffTypeInterface $tariffType,
     ) {
-        $this->invoiceCollection = new InvoiceRepresentationCollection($this);
+        $this->representationCollection = new RepresentationCollection($this);
         $this->behaviorCollection = new BehaviorPriceTypeDefinitionCollection($this, $tariffType);
 
         $this->init();
@@ -119,13 +119,13 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     }
 
     /**
-     * @psalm-return InvoiceRepresentationCollection<self>
+     * @psalm-return RepresentationCollection<self>
      */
-    public function documentRepresentation(): InvoiceRepresentationCollection
+    public function documentRepresentation(): RepresentationCollection
     {
         $this->ensureNotLocked();
 
-        return $this->invoiceCollection;
+        return $this->representationCollection;
     }
 
     public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
@@ -195,7 +195,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     protected function afterLock(): void
     {
-        $this->invoiceCollection->lock();
+        $this->representationCollection->lock();
         $this->behaviorCollection->lock();
     }
 }

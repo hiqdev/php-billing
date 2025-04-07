@@ -9,7 +9,7 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
 /**
  * @template T of PriceTypeDefinition
  */
-class InvoiceRepresentationCollection implements \IteratorAggregate, HasLockInterface
+class RepresentationCollection implements \IteratorAggregate, HasLockInterface
 {
     use HasLock;
 
