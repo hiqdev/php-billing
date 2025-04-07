@@ -15,8 +15,11 @@ class RepresentationCollection implements \IteratorAggregate, HasLockInterface
 
     private array $representations = [];
 
+    private RepresentationUniquenessGuard $uniquenessGuard;
+
     public function __construct(private readonly PriceTypeDefinition $priceTypeDefinition)
     {
+        $this->uniquenessGuard = new RepresentationUniquenessGuard();
     }
 
     /**
@@ -32,6 +35,8 @@ class RepresentationCollection implements \IteratorAggregate, HasLockInterface
         $this->ensureNotLocked();
 
         $representation->setType($this->priceTypeDefinition->type());
+
+        $this->uniquenessGuard->ensureUnique($representation);
 
         $this->representations[] = $representation;
 
