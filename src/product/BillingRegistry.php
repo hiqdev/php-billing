@@ -7,7 +7,6 @@ use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
-use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
@@ -32,10 +31,6 @@ class BillingRegistry implements BillingRegistryInterface
         $this->tariffTypeDefinitions[] = $tariffTypeDefinition;
     }
 
-    /**
-     * @return \Generator
-     * @psalm-return \Generator<PriceTypeDefinitionInterface>
-     */
     public function priceTypes(): \Generator
     {
         foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
@@ -45,10 +40,6 @@ class BillingRegistry implements BillingRegistryInterface
         }
     }
 
-    /**
-     * @param string $representationClass
-     * @return RepresentationInterface[]
-     */
     public function getRepresentationsByType(string $representationClass): array
     {
         if (!class_exists($representationClass)) {
@@ -93,13 +84,6 @@ class BillingRegistry implements BillingRegistryInterface
         return Type::anyId($type);
     }
 
-    /**
-     * @param string $type - full type like 'overuse,lb_capacity_unit'
-     * @param string $behaviorClassWrapper
-     * @return BehaviorInterface
-     * @throws BehaviorNotFoundException
-     * @throws InvalidBehaviorException
-     */
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
         if (!class_exists($behaviorClassWrapper)) {
@@ -176,10 +160,6 @@ class BillingRegistry implements BillingRegistryInterface
         throw new AggregateNotFoundException('Aggregate was not found');
     }
 
-    /**
-     * @return \Generator
-     * @psalm-return \Generator<TariffTypeDefinitionInterface>
-     */
     public function getTariffTypeDefinitions(): \Generator
     {
         foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
