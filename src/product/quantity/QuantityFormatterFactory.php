@@ -4,6 +4,9 @@ namespace hiqdev\php\billing\product\quantity;
 
 use hiqdev\php\units\UnitInterface;
 
+/**
+ * Was created to replace {@see \hipanel\modules\finance\logic\bill\QuantityFormatterFactory}
+ */
 class QuantityFormatterFactory
 {
     public static function create(
