@@ -83,7 +83,7 @@ Feature: Combination
         | date       | qty      | first                                  | second                    | third            |
         | 2022-01-01 | 1        | monthly 100 USD for 672 hour           | monthly 0 USD for 72 hour |                  |
         | 2022-04-01 | 1        | monthly 100 USD for 672 hour           | monthly 0 USD for 48 hour |                  |
-        | 2022-05-15 | 0.5      | monthly 55.36 USD for 372 hour         |                           |                  |
+        | 2022-05-15 | 0.5      | monthly 55.36 USD for 408 hour         |                           |                  |
 
       Scenario Outline: discount, then monthly cap
       Given formula is discount.fixed('10 USD').since('04.2022')
@@ -98,5 +98,5 @@ Feature: Combination
         | date       | qty      | first                                  | second                    | third            |
         | 2022-01-01 | 1        | monthly 100 USD for 672 hour           | monthly 0 USD for 72 hour |                  |
         | 2022-04-01 | 1        | monthly 90 USD for 672 hour            | monthly 0 USD for 48 hour |                  |
-        | 2022-05-15 | 0.5      | monthly 49.82 USD for 372 hour         |                           |                  |
+        | 2022-05-15 | 0.5      | monthly 49.82 USD for 408 hour         |                           |                  |
 
