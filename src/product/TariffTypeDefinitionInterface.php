@@ -14,6 +14,14 @@ interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockIn
 {
     public function tariffType(): TariffTypeInterface;
 
+    /**
+     * Check if TariffTypeDefinition belongs to specified TariffType
+     *
+     * @param TariffTypeInterface $tariffType
+     * @return bool
+     */
+    public function belongToTariffType(TariffTypeInterface $tariffType): bool;
+
     public function ofProduct(ProductInterface $product): self;
 
     public function getProduct(): ProductInterface;

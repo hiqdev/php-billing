@@ -15,10 +15,11 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
 interface BillingRegistryInterface extends HasLockInterface
 {
     /**
-     * @return Generator
-     * @psalm-return Generator<PriceTypeDefinitionInterface>
+     * @return Generator<PriceTypeDefinitionInterface>
      */
     public function priceTypes(): Generator;
+
+    public function getTariffTypeDefinitions(): array;
 
     public function addTariffType(TariffTypeDefinitionInterface $tariffTypeDefinition): void;
 
@@ -40,17 +41,22 @@ interface BillingRegistryInterface extends HasLockInterface
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface;
 
     /**
+     * Find all behaviors attached to any TariffType or PriceType by specified Behavior class.
+     *
      * @param string $behaviorClassWrapper
-     * @return Generator
-     * @psalm-return Generator<BehaviorInterface>
+     * @return Generator<BehaviorInterface>
      */
     public function getBehaviors(string $behaviorClassWrapper): Generator;
 
-    public function getAggregate(string $type): AggregateInterface;
+    public function findTariffTypeDefinitionByBehavior(BehaviorInterface $behavior): TariffTypeDefinitionInterface;
 
     /**
-     * @return Generator
-     * @psalm-return Generator<TariffTypeDefinitionInterface>
+     * Find all PriceTypeDefinition in registry by specified Behavior class.
+     *
+     * @param string $behaviorClassWrapper
+     * @return \Generator<PriceTypeDefinitionInterface>
      */
-    public function getTariffTypeDefinitions(): Generator;
+    public function findPriceTypeDefinitionsByBehavior(string $behaviorClassWrapper): \Generator;
+
+    public function getAggregate(string $type): AggregateInterface;
 }

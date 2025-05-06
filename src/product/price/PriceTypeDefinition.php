@@ -14,6 +14,7 @@ use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
@@ -197,5 +198,15 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         $this->representationCollection->lock();
         $this->behaviorCollection->lock();
+    }
+
+    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface
+    {
+        return $this->parent->getTariffTypeDefinition();
+    }
+
+    public function belongsToTariffType(string $tariffTypeName): bool
+    {
+        return $this->getTariffTypeDefinition()->tariffType()->equalsName($tariffTypeName);
     }
 }

@@ -2,19 +2,10 @@
 
 namespace hiqdev\php\billing\product;
 
-use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
-use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
-use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
-use hiqdev\php\billing\product\invoice\RepresentationInterface;
-use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
-use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
-use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\trait\HasLock;
-use hiqdev\php\billing\type\Type;
-use hiqdev\php\billing\type\TypeInterface;
 
 class BillingRegistry implements BillingRegistryInterface
 {
@@ -22,7 +13,15 @@ class BillingRegistry implements BillingRegistryInterface
 
     /** @var TariffTypeDefinitionInterface[] */
     private array $tariffTypeDefinitions = [];
+
     private bool $locked = false;
+
+    private BillingRegistryService $service;
+
+    public function __construct()
+    {
+        $this->service = new BillingRegistryService($this);
+    }
 
     public function addTariffType(TariffTypeDefinitionInterface $tariffTypeDefinition): void
     {
@@ -31,9 +30,14 @@ class BillingRegistry implements BillingRegistryInterface
         $this->tariffTypeDefinitions[] = $tariffTypeDefinition;
     }
 
+    public function getTariffTypeDefinitions(): array
+    {
+        return $this->tariffTypeDefinitions;
+    }
+
     public function priceTypes(): \Generator
     {
-        foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
+        foreach ($this->getTariffTypeDefinitions() as $tariffTypeDefinition) {
             foreach ($tariffTypeDefinition->withPrices() as $priceTypeDefinition) {
                 yield $priceTypeDefinition;
             }
@@ -42,129 +46,42 @@ class BillingRegistry implements BillingRegistryInterface
 
     public function getRepresentationsByType(string $representationClass): array
     {
-        if (!class_exists($representationClass)) {
-            throw new InvalidRepresentationException("Class '$representationClass' does not exist");
-        }
-
-        if (!is_subclass_of($representationClass, RepresentationInterface::class)) {
-            throw new InvalidBehaviorException(
-                sprintf('Representation class "%s" does not implement RepresentationInterface', $representationClass)
-            );
-        }
-
-        $representations = [];
-        foreach ($this->priceTypes() as $priceTypeDefinition) {
-            foreach ($priceTypeDefinition->documentRepresentation() as $representation) {
-                if ($representation instanceof $representationClass) {
-                    $representations[] = $representation;
-                }
-            }
-        }
-
-        return $representations;
+        return $this->service->getRepresentationsByType($representationClass);
     }
 
     public function createQuantityFormatter(
         string $type,
         FractionQuantityData $data,
     ): QuantityFormatterInterface {
-        $type = $this->convertStringTypeToType($type);
-
-        foreach ($this->priceTypes() as $priceTypeDefinition) {
-            if ($priceTypeDefinition->hasType($type)) {
-                return $priceTypeDefinition->createQuantityFormatter($data);
-            }
-        }
-
-        throw new QuantityFormatterNotFoundException('Quantity formatter not found');
-    }
-
-    private function convertStringTypeToType(string $type): TypeInterface
-    {
-        return Type::anyId($type);
+        return $this->service->createQuantityFormatter($type, $data);
     }
 
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
-        if (!class_exists($behaviorClassWrapper)) {
-            throw new InvalidBehaviorException(
-                sprintf('Behavior class "%s" does not exist', $behaviorClassWrapper)
-            );
-        }
-
-        if (!is_subclass_of($behaviorClassWrapper, BehaviorInterface::class)) {
-            throw new InvalidBehaviorException(
-                sprintf('Behavior class "%s" does not implement BehaviorInterface', $behaviorClassWrapper)
-            );
-        }
-
-        $billingType = $this->convertStringTypeToType($type);
-
-        foreach ($this->priceTypes() as $priceTypeDefinition) {
-            if ($priceTypeDefinition->hasType($billingType)) {
-                $behavior = $this->findBehaviorInPriceType($priceTypeDefinition, $behaviorClassWrapper);
-
-                if ($behavior) {
-                    return $behavior;
-                }
-            }
-        }
-
-        throw new BehaviorNotFoundException(
-            sprintf('Behavior of class "%s" not found for type "%s"', $behaviorClassWrapper, $type),
-        );
+        return $this->service->getBehavior($type, $behaviorClassWrapper);
     }
 
-    private function findBehaviorInPriceType(
-        PriceTypeDefinition $priceTypeDefinition,
-        string $behaviorClassWrapper
-    ): ?BehaviorInterface {
-        foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
-            if ($behavior instanceof $behaviorClassWrapper) {
-                return $behavior;
-            }
-        }
-
-        return null;
-    }
-
+    /**
+     * @inerhitDoc
+     */
     public function getBehaviors(string $behaviorClassWrapper): \Generator
     {
-        foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
-            foreach ($tariffTypeDefinition->withBehaviors() as $behavior) {
-                if ($behavior instanceof $behaviorClassWrapper) {
-                    yield $behavior;
-                }
-            }
-        }
-
-        foreach ($this->priceTypes() as $priceTypeDefinition) {
-            foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
-                if ($behavior instanceof $behaviorClassWrapper) {
-                    yield $behavior;
-                }
-            }
-        }
+        return $this->service->getBehaviors($behaviorClassWrapper);
     }
 
     public function getAggregate(string $type): AggregateInterface
     {
-        $type = $this->convertStringTypeToType($type);
-
-        foreach ($this->priceTypes() as $priceTypeDefinition) {
-            if ($priceTypeDefinition->hasType($type)) {
-                return $priceTypeDefinition->getAggregate();
-            }
-        }
-
-        throw new AggregateNotFoundException('Aggregate was not found');
+        return $this->service->getAggregate($type);
     }
 
-    public function getTariffTypeDefinitions(): \Generator
+    public function findTariffTypeDefinitionByBehavior(BehaviorInterface $behavior): TariffTypeDefinitionInterface
     {
-        foreach ($this->tariffTypeDefinitions as $tariffTypeDefinition) {
-            yield $tariffTypeDefinition;
-        }
+        return $this->service->findTariffTypeDefinitionByBehavior($behavior);
+    }
+
+    public function findPriceTypeDefinitionsByBehavior(string $behaviorClassWrapper): \Generator
+    {
+        return $this->service->findPriceTypeDefinitionsByBehavior($behaviorClassWrapper);
     }
 
     protected function afterLock(): void
