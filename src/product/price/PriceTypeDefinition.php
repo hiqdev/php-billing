@@ -2,6 +2,7 @@
 
 namespace hiqdev\php\billing\product\price;
 
+use hiqdev\billing\registry\Type\TypeSemantics;
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
@@ -208,5 +209,12 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     public function belongsToTariffType(string $tariffTypeName): bool
     {
         return $this->getTariffTypeDefinition()->tariffType()->equalsName($tariffTypeName);
+    }
+
+    public function belongsToPriceType(PriceTypeInterface $priceType): bool
+    {
+        $typeSemantics = new TypeSemantics();
+
+        return $typeSemantics->belongsToLocalCategory($this->type(), $priceType->name());
     }
 }
