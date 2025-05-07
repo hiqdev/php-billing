@@ -8,11 +8,11 @@ abstract class TariffType implements TariffTypeInterface
 {
     public function equals(TariffTypeInterface $tariffType): bool
     {
-        return true;
+        return $this->name() === $tariffType->name();
     }
 
     public function equalsName(string $tariffTypeName): bool
     {
-        return true;
+        return $this->name() === $tariffTypeName;
     }
 }
