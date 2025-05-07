@@ -7,10 +7,13 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 use Traversable;
 
+/**
+ * @extends \IteratorAggregate<int, BehaviorInterface>
+ */
 interface BehaviorCollectionInterface extends \IteratorAggregate, HasLockInterface
 {
     /**
-     * @return Traversable<BehaviorInterface>
+     * @return Traversable<int, BehaviorInterface>
      */
     public function getIterator(): Traversable;
 
