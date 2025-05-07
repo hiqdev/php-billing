@@ -2,9 +2,7 @@
 
 namespace hiqdev\php\billing\tests\unit\product\Domain\Model;
 
-use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
-
-class DummyTariffType implements TariffTypeInterface
+class DummyTariffType extends TariffType
 {
     public function name(): string
     {

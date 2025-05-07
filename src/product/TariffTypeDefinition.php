@@ -10,6 +10,9 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
 use hiqdev\php\billing\product\trait\HasLock;
 
+/**
+ * @implements TariffTypeDefinitionInterface<PriceTypeDefinitionCollection>
+ */
 class TariffTypeDefinition implements TariffTypeDefinitionInterface
 {
     use HasLock;
@@ -29,6 +32,11 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     public function tariffType(): TariffTypeInterface
     {
         return $this->tariffType;
+    }
+
+    public function belongToTariffType(TariffTypeInterface $tariffType): bool
+    {
+        return $this->tariffType->equals($tariffType);
     }
 
     public function ofProduct(ProductInterface $product): TariffTypeDefinitionInterface

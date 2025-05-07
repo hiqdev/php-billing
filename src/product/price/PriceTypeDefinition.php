@@ -6,6 +6,7 @@ use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
+use hiqdev\php\billing\product\measure\TrafCollectorInterface;
 use hiqdev\php\billing\product\quantity\InvalidQuantityFormatterException;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
@@ -14,6 +15,7 @@ use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
@@ -128,9 +130,11 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         return $this->representationCollection;
     }
 
-    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
+    public function measuredWith(TrafCollectorInterface $collector): self
     {
         $this->ensureNotLocked();
+
+        // Not completed yet, only for implementing the interface purpose
 
         return $this;
     }
@@ -197,5 +201,15 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         $this->representationCollection->lock();
         $this->behaviorCollection->lock();
+    }
+
+    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface
+    {
+        return $this->parent->getTariffTypeDefinition();
+    }
+
+    public function belongsToTariffType(string $tariffTypeName): bool
+    {
+        return $this->getTariffTypeDefinition()->tariffType()->equalsName($tariffTypeName);
     }
 }
