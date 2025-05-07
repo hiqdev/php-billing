@@ -10,7 +10,7 @@ use Traversable;
 interface PriceTypeDefinitionCollectionInterface extends \IteratorAggregate, \Countable, HasLockInterface
 {
     /**
-     * @return Traversable<PriceTypeDefinitionInterface>
+     * @return Traversable<int, PriceTypeDefinitionInterface>
      */
     public function getIterator(): Traversable;
 
