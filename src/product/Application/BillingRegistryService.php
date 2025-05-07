@@ -1,24 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace hiqdev\php\billing\product;
+namespace hiqdev\php\billing\product\Application;
 
+use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
+use hiqdev\php\billing\product\BillingRegistryInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
 use hiqdev\php\billing\product\Exception\TariffTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
-use hiqdev\php\billing\product\price\PriceTypeDefinition;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
 
-class BillingRegistryService
+final class BillingRegistryService implements BillingRegistryServiceInterface
 {
-    public function __construct(private readonly BillingRegistry $registry)
+    public function __construct(private readonly BillingRegistryInterface $registry)
     {
     }
 
@@ -46,10 +49,7 @@ class BillingRegistryService
         return $representations;
     }
 
-    public function createQuantityFormatter(
-        string $type,
-        FractionQuantityData $data,
-    ): QuantityFormatterInterface {
+    public function createQuantityFormatter(string $type, FractionQuantityData $data): QuantityFormatterInterface {
         $type = $this->convertStringTypeToType($type);
 
         foreach ($this->registry->priceTypes() as $priceTypeDefinition) {
@@ -98,7 +98,7 @@ class BillingRegistryService
     }
 
     private function findBehaviorInPriceType(
-        PriceTypeDefinition $priceTypeDefinition,
+        PriceTypeDefinitionInterface $priceTypeDefinition,
         string $behaviorClassWrapper
     ): ?BehaviorInterface {
         foreach ($priceTypeDefinition->withBehaviors() as $behavior) {
@@ -110,9 +110,6 @@ class BillingRegistryService
         return null;
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function getBehaviors(string $behaviorClassWrapper): \Generator
     {
         foreach ($this->registry->getTariffTypeDefinitions() as $tariffTypeDefinition) {
