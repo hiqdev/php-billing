@@ -5,12 +5,13 @@ namespace hiqdev\php\billing\product\behavior;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
+use IteratorAggregate;
 use Traversable;
 
 /**
- * @extends \IteratorAggregate<int, BehaviorInterface>
+ * @extends IteratorAggregate<int, BehaviorInterface>
  */
-interface BehaviorCollectionInterface extends \IteratorAggregate, HasLockInterface
+interface BehaviorCollectionInterface extends IteratorAggregate, HasLockInterface
 {
     /**
      * @return Traversable<int, BehaviorInterface>

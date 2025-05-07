@@ -10,7 +10,7 @@ use Traversable;
 
 /**
  * @template T of PriceTypeDefinition
- * @extends IteratorAggregate<int, RepresentationInterface>
+ * @implements IteratorAggregate<int, RepresentationInterface>
  */
 class RepresentationCollection implements IteratorAggregate, HasLockInterface
 {
