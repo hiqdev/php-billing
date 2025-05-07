@@ -2,11 +2,11 @@
 
 namespace hiqdev\php\billing\product\price;
 
-use hiqdev\billing\registry\Type\TypeSemantics;
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
+use hiqdev\php\billing\product\measure\TrafCollectorInterface;
 use hiqdev\php\billing\product\quantity\InvalidQuantityFormatterException;
 use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterFactory;
@@ -130,12 +130,14 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         return $this->representationCollection;
     }
 
-//    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
-//    {
-//        $this->ensureNotLocked();
-//
-//        return $this;
-//    }
+    public function measuredWith(TrafCollectorInterface $collector): self
+    {
+        $this->ensureNotLocked();
+
+        // Not completed yet, only for implementing the interface purpose
+
+        return $this;
+    }
 
     public function type(): TypeInterface
     {

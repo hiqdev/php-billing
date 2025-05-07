@@ -6,6 +6,7 @@ use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
 use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
+use hiqdev\php\billing\product\measure\TrafCollectorInterface;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
@@ -28,8 +29,7 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
 
     public function documentRepresentation(): RepresentationCollection;
 
-    // TODO: maybe we need it in the future, keep for now
-//    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self;
+    public function measuredWith(TrafCollectorInterface $collector): self;
 
     public function type(): TypeInterface;
 
