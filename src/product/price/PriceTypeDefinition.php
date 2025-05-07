@@ -130,12 +130,12 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         return $this->representationCollection;
     }
 
-    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
-    {
-        $this->ensureNotLocked();
-
-        return $this;
-    }
+//    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self
+//    {
+//        $this->ensureNotLocked();
+//
+//        return $this;
+//    }
 
     public function type(): TypeInterface
     {

@@ -28,8 +28,8 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
 
     public function documentRepresentation(): RepresentationCollection;
 
-    // TODO: Not sure if it will be needed at all
-    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self;
+    // TODO: maybe we need it in the future, keep for now
+//    public function measuredWith(\hiqdev\billing\registry\measure\RcpTrafCollector $param): self;
 
     public function type(): TypeInterface;
 
