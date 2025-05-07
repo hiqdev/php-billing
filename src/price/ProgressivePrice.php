@@ -105,8 +105,8 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
             $price = $threshold->price();
 
             $chargedAmount = $price->money()
-                                   ->multiply((string)$billedUsage->getQuantity())
-                                   ->divide((string)($price->multiplier()));
+                                   ->multiply((string)(sprintf('%.14F', $billedUsage->getQuantity())))
+                                   ->divide((string)(sprintf('%.14F', $price->multiplier())));
 
             $this->calculationTraces[] = new ProgressivePriceCalculationTrace(
                 $threshold, $billedUsage, $chargedAmount
