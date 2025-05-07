@@ -7,6 +7,9 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
 use hiqdev\php\billing\type\TypeInterface;
 use Traversable;
 
+/**
+ * @extends \IteratorAggregate<int, PriceTypeDefinitionInterface>
+ */
 interface PriceTypeDefinitionCollectionInterface extends \IteratorAggregate, \Countable, HasLockInterface
 {
     /**
