@@ -5,12 +5,14 @@ namespace hiqdev\php\billing\product\invoice;
 use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\product\trait\HasLockInterface;
+use IteratorAggregate;
 use Traversable;
 
 /**
  * @template T of PriceTypeDefinition
+ * @extends IteratorAggregate<int, RepresentationInterface>
  */
-class RepresentationCollection implements \IteratorAggregate, HasLockInterface
+class RepresentationCollection implements IteratorAggregate, HasLockInterface
 {
     use HasLock;
 
@@ -24,7 +26,7 @@ class RepresentationCollection implements \IteratorAggregate, HasLockInterface
     }
 
     /**
-     * @return Traversable<RepresentationInterface>
+     * @return Traversable<int, RepresentationInterface>
      */
     public function getIterator(): Traversable
     {
