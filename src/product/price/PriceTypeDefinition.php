@@ -210,11 +210,4 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         return $this->getTariffTypeDefinition()->tariffType()->equalsName($tariffTypeName);
     }
-
-    public function belongsToPriceType(PriceTypeInterface $priceType): bool
-    {
-        $typeSemantics = new TypeSemantics();
-
-        return $typeSemantics->belongsToLocalCategory($this->type(), $priceType->name());
-    }
 }

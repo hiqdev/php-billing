@@ -56,6 +56,4 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
     public function getTariffTypeDefinition(): TariffTypeDefinitionInterface;
 
     public function belongsToTariffType(string $tariffTypeName): bool;
-
-    public function belongsToPriceType(PriceTypeInterface $priceType): bool;
 }
