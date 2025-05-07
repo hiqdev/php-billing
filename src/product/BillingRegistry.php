@@ -14,8 +14,6 @@ class BillingRegistry implements BillingRegistryInterface
     /** @var TariffTypeDefinitionInterface[] */
     private array $tariffTypeDefinitions = [];
 
-    private bool $locked = false;
-
     private BillingRegistryService $service;
 
     public function __construct()
