@@ -2,12 +2,11 @@ build:
   environment:
     php:
       version: "8.3"
-    dependencies:
-      before:
-        - composer self-update --2
-        - composer install --no-interaction --no-scripts
   nodes:
     analysis:
+      before_commands:
+        - composer self-update --2
+        - composer install --no-interaction --no-scripts
       tests:
         override: [ php-scrutinizer-run ]
 
