@@ -1,0 +1,25 @@
+build:
+  environment:
+    php:
+      version: "8.3"
+    dependencies:
+      before:
+        - composer self-update --2
+        - composer install --no-interaction --no-scripts
+  nodes:
+    analysis:
+      tests:
+        override: [ php-scrutinizer-run ]
+
+tools:
+  php_code_coverage:
+    enabled: true
+    external_code_coverage:
+      timeout: 600
+  php_code_sniffer: true
+  psalm: true
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
