@@ -16,7 +16,6 @@ tools:
     external_code_coverage:
       timeout: 600
   php_code_sniffer: true
-  psalm: true
 
 checks:
   php:
