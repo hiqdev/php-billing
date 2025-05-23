@@ -46,10 +46,6 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
         return $priceType;
     }
 
-    /**
-     * @return TariffTypeDefinitionInterface
-     * @plsam-return M
-     */
     public function end(): TariffTypeDefinitionInterface
     {
         return $this->parent;
@@ -58,5 +54,10 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
     public function count(): int
     {
         return $this->storage->count();
+    }
+
+    public function getTariffTypeDefinition(): TariffTypeDefinitionInterface
+    {
+        return $this->parent;
     }
 }

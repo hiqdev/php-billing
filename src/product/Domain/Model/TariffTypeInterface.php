@@ -7,4 +7,8 @@ interface TariffTypeInterface
     public function name(): string;
 
     public function label(): string;
+
+    public function equals(TariffTypeInterface $tariffType): bool;
+
+    public function equalsName(string $tariffTypeName): bool;
 }
