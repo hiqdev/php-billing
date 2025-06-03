@@ -4,9 +4,11 @@ namespace hiqdev\php\billing\tests\unit\product\Domain\Model;
 
 class DummyTariffType extends TariffType
 {
+    public string $name = 'dummy';
+
     public function name(): string
     {
-        return 'dummy';
+        return $this->name;
     }
 
     public function label(): string

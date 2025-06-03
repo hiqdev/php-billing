@@ -49,6 +49,21 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
         return $representations;
     }
 
+    public function getTariffDefinitionByName(string $tariffName): ?TariffTypeDefinitionInterface
+    {
+        foreach ($this->registry->getTariffTypeDefinitions() as $tariffTypeDefinition) {
+            if ($tariffName === $tariffTypeDefinition->tariffType()->name) {
+                return $tariffTypeDefinition;
+            }
+        }
+        return null;
+    }
+
+    public function hasBehaviour(TariffTypeDefinitionInterface $tariffTypeDefinition, string $behaviorClassWrapper): bool
+    {
+        return $tariffTypeDefinition->hasBehavior($behaviorClassWrapper);
+    }
+
     public function createQuantityFormatter(string $type, FractionQuantityData $data): QuantityFormatterInterface {
         $type = $this->convertStringTypeToType($type);
 
