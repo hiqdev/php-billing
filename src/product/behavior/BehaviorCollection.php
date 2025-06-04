@@ -5,6 +5,11 @@ namespace hiqdev\php\billing\product\behavior;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\trait\HasLock;
 
+/**
+ * @template TPriceDefinition
+ * @implements BehaviorCollectionInterface<TPriceDefinition>
+ * @psalm-consistent-templates
+ */
 abstract class BehaviorCollection implements BehaviorCollectionInterface
 {
     use HasLock;
@@ -21,7 +26,7 @@ abstract class BehaviorCollection implements BehaviorCollectionInterface
         return new \ArrayIterator($this->behaviors);
     }
 
-    public function attach(BehaviorInterface $behavior): self
+    public function attach(BehaviorInterface $behavior): static
     {
         $this->ensureNotLocked();
 

@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
+use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
+use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
@@ -20,7 +23,9 @@ use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
- * @template T of PriceTypeDefinitionCollectionInterface
+ * @template TParentCollection
+ * @implements PriceTypeDefinitionInterface<TParentCollection>
+ * @implements HasBehaviorsInterface<PriceTypeDefinition>
  * @psalm-consistent-templates
  */
 class PriceTypeDefinition implements PriceTypeDefinitionInterface
@@ -31,22 +36,32 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     private string $description;
 
-    private QuantityFormatterDefinition $quantityFormatterDefinition;
+    private ?QuantityFormatterDefinition $quantityFormatterDefinition = null;
 
+    /**
+     * @var RepresentationCollection<PriceTypeDefinition>
+     */
     private RepresentationCollection $representationCollection;
 
+    /**
+     * @var BehaviorPriceTypeDefinitionCollection<PriceTypeDefinition>
+     */
     private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
     private ?AggregateInterface $aggregate = null;
 
+    /** @psalm-var TParentCollection */
+    private readonly PriceTypeDefinitionCollectionInterface $parent;
+
+    /**
+     * @param TParentCollection $parent
+     */
     public function __construct(
-        /**
-         * @psalm-var T
-         */
-        private readonly PriceTypeDefinitionCollectionInterface $parent,
+        PriceTypeDefinitionCollectionInterface $parent,
         private readonly TypeInterface $type,
         TariffTypeInterface $tariffType,
     ) {
+        $this->parent = $parent;
         $this->representationCollection = new RepresentationCollection($this);
         $this->behaviorCollection = new BehaviorPriceTypeDefinitionCollection($this, $tariffType);
 
@@ -58,7 +73,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         // Hook
     }
 
-    public function unit(UnitInterface $unit): self
+    public function unit(UnitInterface $unit): static
     {
         $this->ensureNotLocked();
 
@@ -67,7 +82,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         return $this;
     }
 
-    public function description(string $description): self
+    public function description(string $description): static
     {
         $this->ensureNotLocked();
 
@@ -82,12 +97,10 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     }
 
     /**
-     * @param string $formatterClass
      * @param null|FractionUnitInterface|string $fractionUnit
-     * @return $this
      * @throws InvalidQuantityFormatterException
      */
-    public function quantityFormatter(string $formatterClass, $fractionUnit = null): self
+    public function quantityFormatter(string $formatterClass, $fractionUnit = null): static
     {
         $this->ensureNotLocked();
 
@@ -112,25 +125,25 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     }
 
     /**
-     * @psalm-return T
+     * @return TParentCollection
      */
-    public function end(): PriceTypeDefinitionCollectionInterface
+    public function end()
     {
         // Validate the PriceType
         return $this->parent;
     }
 
     /**
-     * @psalm-return RepresentationCollection<self>
+     * @return RepresentationCollection<PriceTypeDefinition>
      */
-    public function documentRepresentation(): RepresentationCollection
+    public function documentRepresentation()
     {
         $this->ensureNotLocked();
 
         return $this->representationCollection;
     }
 
-    public function measuredWith(TrafCollectorInterface $collector): self
+    public function measuredWith(TrafCollectorInterface $collector): static
     {
         $this->ensureNotLocked();
 
@@ -154,7 +167,10 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         return $this->unit;
     }
 
-    public function withBehaviors(): BehaviorPriceTypeDefinitionCollection
+    /**
+     * @return BehaviorPriceTypeDefinitionCollection<PriceTypeDefinition>
+     */
+    public function withBehaviors()
     {
         $this->ensureNotLocked();
 
@@ -175,7 +191,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     /**
      * @inerhitDoc
      */
-    public function aggregation(AggregateInterface $aggregate): self
+    public function aggregation(AggregateInterface $aggregate): static
     {
         $this->ensureNotLocked();
 
@@ -195,6 +211,14 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         }
 
         return $this->aggregate;
+    }
+
+    /**
+     * @internal
+     */
+    public function getQuantityFormatterDefinition(): ?QuantityFormatterDefinition
+    {
+        return $this->quantityFormatterDefinition;
     }
 
     protected function afterLock(): void

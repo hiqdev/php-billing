@@ -39,7 +39,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         return $this->tariffType->equals($tariffType);
     }
 
-    public function ofProduct(ProductInterface $product): TariffTypeDefinitionInterface
+    public function ofProduct(ProductInterface $product): static
     {
         $this->ensureNotLocked();
         $this->product = $product;
@@ -61,7 +61,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         }
     }
 
-    public function setPricesSuggester(string $suggesterClass): TariffTypeDefinitionInterface
+    public function setPricesSuggester(string $suggesterClass): static
     {
         $this->ensureNotLocked();
 
@@ -76,7 +76,10 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         return $this->prices;
     }
 
-    public function withBehaviors(): BehaviorTariffTypeCollection
+    /**
+     * @return BehaviorTariffTypeCollection<TariffTypeDefinition>
+     */
+    public function withBehaviors()
     {
         $this->ensureNotLocked();
 

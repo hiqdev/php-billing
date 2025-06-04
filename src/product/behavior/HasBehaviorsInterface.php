@@ -2,9 +2,16 @@
 
 namespace hiqdev\php\billing\product\behavior;
 
+/**
+ * @template TParentCollection
+ * @psalm-consistent-templates
+ */
 interface HasBehaviorsInterface
 {
-    public function withBehaviors(): BehaviorCollectionInterface;
+//    /**
+//     * @return BehaviorCollectionInterface<TParentCollection>
+//     */
+//    public function withBehaviors();
 
     public function hasBehavior(string $behaviorClassName): bool;
 }

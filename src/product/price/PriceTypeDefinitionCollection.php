@@ -7,8 +7,8 @@ use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
- * @template T of PriceTypeDefinitionCollectionInterface
- * @template M of TariffTypeDefinitionInterface
+ * @template-covariant T of PriceTypeDefinitionCollectionInterface
+ * @template-covariant M of TariffTypeDefinitionInterface
  * @mixin T
  */
 class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInterface
