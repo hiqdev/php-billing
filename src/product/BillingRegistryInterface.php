@@ -13,6 +13,9 @@ interface BillingRegistryInterface extends HasLockInterface
      */
     public function priceTypes(): Generator;
 
+    /**
+     * @return TariffTypeDefinitionInterface[]
+     */
     public function getTariffTypeDefinitions(): array;
 
     public function addTariffType(TariffTypeDefinitionInterface $tariffTypeDefinition): void;

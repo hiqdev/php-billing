@@ -7,9 +7,12 @@ use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
- * @template T of PriceTypeDefinitionCollectionInterface
- * @template M of TariffTypeDefinitionInterface
- * @mixin T
+ * @template TTariffTypeDefinition of TariffTypeDefinitionInterface
+ * @template TPriceTypeDefinition of PriceTypeDefinitionCollectionInterface
+ * @implements PriceTypeDefinitionCollectionInterface<TPriceTypeDefinition>
+ * @mixin TPriceTypeDefinition
+ * @psalm-suppress TooManyTemplateParams
+ * @psalm-suppress InvalidTemplateParam
  */
 class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInterface
 {
@@ -19,7 +22,13 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
 
     private PriceTypeDefinitionCollectionInterface $collectionInstance;
 
+    /**
+     * @psalm-param TTariffTypeDefinition $parent
+     */
     public function __construct(
+        /**
+         * @psalm-var TTariffTypeDefinition
+         */
         private readonly TariffTypeDefinitionInterface $parent,
         private readonly PriceTypeDefinitionFactoryInterface $factory,
         PriceTypeDefinitionCollectionInterface $collectionInstance = null,
@@ -36,6 +45,10 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
         return new \ArrayIterator($this->storage->getAll());
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
     public function priceType(TypeInterface $type): PriceTypeDefinitionInterface
     {
         $this->ensureNotLocked();

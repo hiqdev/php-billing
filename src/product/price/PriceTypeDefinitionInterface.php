@@ -8,28 +8,43 @@ use hiqdev\php\billing\product\Domain\Model\Unit\UnitInterface;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
 use hiqdev\php\billing\product\measure\TrafCollectorInterface;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
+use hiqdev\php\billing\product\quantity\QuantityFormatterDefinition;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
+/**
+ * @template TParentCollection of PriceTypeDefinitionCollectionInterface
+ * @template TPriceTypeDefinition of PriceTypeDefinitionInterface
+ * @extends HasBehaviorsInterface<TPriceTypeDefinition>
+ * @psalm-consistent-templates
+ * @psalm-suppress TooManyTemplateParams
+ * @psalm-suppress InvalidTemplateParam
+ */
 interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInterface
 {
-    public function unit(UnitInterface $unit): self;
+    public function unit(UnitInterface $unit): static;
 
-    public function description(string $description): self;
+    public function description(string $description): static;
 
     public function getDescription(): string;
 
-    public function quantityFormatter(string $formatterClass, $fractionUnit = null): self;
+    public function quantityFormatter(string $formatterClass, $fractionUnit = null): static;
 
     public function createQuantityFormatter(FractionQuantityData $data): QuantityFormatterInterface;
 
-    public function end(): PriceTypeDefinitionCollectionInterface;
+    /**
+     * @psalm-return TParentCollection
+     */
+    public function end();
 
-    public function documentRepresentation(): RepresentationCollection;
+    /**
+     * @return RepresentationCollection<static>
+     */
+    public function documentRepresentation();
 
-    public function measuredWith(TrafCollectorInterface $collector): self;
+    public function measuredWith(TrafCollectorInterface $collector): static;
 
     public function type(): TypeInterface;
 
@@ -42,9 +57,9 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
      * місячне споживання за яке потрібно пробілити клієнта
      *
      * @param AggregateInterface $aggregate
-     * @return self
+     * @return static
      */
-    public function aggregation(AggregateInterface $aggregate): self;
+    public function aggregation(AggregateInterface $aggregate): static;
 
     public function getAggregate(): AggregateInterface;
 
@@ -56,4 +71,6 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
     public function getTariffTypeDefinition(): TariffTypeDefinitionInterface;
 
     public function belongsToTariffType(string $tariffTypeName): bool;
+
+    public function getQuantityFormatterDefinition(): ?QuantityFormatterDefinition;
 }

@@ -23,16 +23,27 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
  *  - To avoid code duplication of behavior-related methods in multiple classes.
  *  - To separate concerns by handling behavior-related logic in a dedicated class.
  *  - To improve maintainability and testability of tariff behavior handling.
+ *
+ * @template-covariant T of TariffTypeDefinitionInterface
  */
 final class TariffTypeBehaviorRegistry implements HasLockInterface
 {
+    /**
+     * @var BehaviorTariffTypeCollection<T>
+     */
     private BehaviorTariffTypeCollection $behaviorCollection;
 
+    /**
+     * @psalm-param T $tariffTypeDefinition
+     */
     public function __construct(TariffTypeDefinitionInterface $tariffTypeDefinition, TariffTypeInterface $tariffType)
     {
         $this->behaviorCollection = new BehaviorTariffTypeCollection($tariffTypeDefinition, $tariffType);
     }
 
+    /**
+     * @return BehaviorTariffTypeCollection<T>
+     */
     public function getBehaviors(): BehaviorTariffTypeCollection
     {
         return $this->behaviorCollection;
