@@ -140,8 +140,6 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     /**
      * @return RepresentationCollection<PriceTypeDefinition>
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      * @psalm-suppress LessSpecificImplementedReturnType
      */
     public function documentRepresentation()
@@ -177,9 +175,6 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     /**
      * @return BehaviorPriceTypeDefinitionCollection<PriceTypeDefinition>
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      */
     public function withBehaviors()
     {
