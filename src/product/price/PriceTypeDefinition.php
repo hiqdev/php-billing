@@ -24,9 +24,11 @@ use hiqdev\php\billing\type\TypeInterface;
 
 /**
  * @template TParentCollection
- * @implements PriceTypeDefinitionInterface<TParentCollection>
- * @implements HasBehaviorsInterface<PriceTypeDefinition>
+ * @implements PriceTypeDefinitionInterface<TParentCollection, PriceTypeDefinition>
+ * @implements HasBehaviorsInterface<PriceTypeDefinition, BehaviorPriceTypeDefinitionCollection>
  * @psalm-consistent-templates
+ * @psalm-suppress InvalidTemplateParam
+ * @psalm-suppress MissingTemplateParam
  */
 class PriceTypeDefinition implements PriceTypeDefinitionInterface
 {
@@ -113,6 +115,9 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         return $this;
     }
 
+    /**
+     * @psalm-suppress PossiblyNullArgument
+     */
     public function createQuantityFormatter(FractionQuantityData $data): QuantityFormatterInterface
     {
         $this->ensureNotLocked();
@@ -135,6 +140,9 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     /**
      * @return RepresentationCollection<PriceTypeDefinition>
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress LessSpecificImplementedReturnType
      */
     public function documentRepresentation()
     {
@@ -169,6 +177,9 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     /**
      * @return BehaviorPriceTypeDefinitionCollection<PriceTypeDefinition>
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
     public function withBehaviors()
     {

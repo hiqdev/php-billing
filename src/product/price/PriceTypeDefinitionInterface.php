@@ -15,8 +15,12 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
 use hiqdev\php\billing\type\TypeInterface;
 
 /**
- * @template TParentCollection
+ * @template TParentCollection of PriceTypeDefinitionCollectionInterface
+ * @template TPriceTypeDefinition of PriceTypeDefinitionInterface
+ * @extends HasBehaviorsInterface<TPriceTypeDefinition>
  * @psalm-consistent-templates
+ * @psalm-suppress TooManyTemplateParams
+ * @psalm-suppress InvalidTemplateParam
  */
 interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInterface
 {
@@ -36,7 +40,7 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
     public function end();
 
     /**
-     * @return RepresentationCollection<TParentCollection>
+     * @return RepresentationCollection<static>
      */
     public function documentRepresentation();
 

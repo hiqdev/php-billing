@@ -9,6 +9,7 @@ use IteratorAggregate;
 use Traversable;
 
 /**
+ * @template-covariant TParentContext of TariffTypeDefinitionInterface|PriceTypeDefinitionInterface
  * @extends IteratorAggregate<int, BehaviorInterface>
  * @psalm-consistent-templates
  */
@@ -21,5 +22,8 @@ interface BehaviorCollectionInterface extends IteratorAggregate, HasLockInterfac
 
     public function attach(BehaviorInterface $behavior): static;
 
+    /**
+     * @return TParentContext
+     */
     public function end();
 }

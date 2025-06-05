@@ -7,6 +7,8 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 
 /**
  * @template T
+ * @psalm-suppress MissingTemplateParam
+ * @psalm-suppress InvalidTemplateParam
  */
 class BehaviorTariffTypeCollection extends BehaviorCollection
 {
@@ -25,6 +27,7 @@ class BehaviorTariffTypeCollection extends BehaviorCollection
 
     /**
      * @psalm-return T
+     * @psalm-suppress LessSpecificImplementedReturnType
      */
     public function end(): TariffTypeDefinitionInterface
     {

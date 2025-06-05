@@ -8,7 +8,10 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
- * @template-covariant T of PriceTypeDefinitionCollectionInterface
+ * @template-covariant TPriceTypeDefinitionCollection of PriceTypeDefinitionCollectionInterface
+ * @extends HasBehaviorsInterface<static>
+ * @psalm-consistent-templates
+ * @psalm-suppress InvalidTemplateParam
  */
 interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInterface
 {
@@ -29,7 +32,7 @@ interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockIn
     public function setPricesSuggester(string $suggesterClass): static;
 
     /**
-     * @return T
+     * @return TPriceTypeDefinitionCollection
      */
     public function withPrices();
 

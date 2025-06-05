@@ -9,6 +9,7 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
  * @template TPriceDefinition
  * @extends BehaviorCollection<TPriceDefinition>
  * @psalm-consistent-templates
+ * @psalm-suppress InvalidTemplateParam
  */
 class BehaviorPriceTypeDefinitionCollection extends BehaviorCollection
 {

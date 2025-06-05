@@ -2,7 +2,7 @@
 
 namespace hiqdev\php\billing\product\price;
 
-use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
+use Countable;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 use hiqdev\php\billing\type\TypeInterface;
@@ -10,12 +10,11 @@ use IteratorAggregate;
 use Traversable;
 
 /**
+ * @template TPriceTypeDefinition of PriceTypeDefinitionInterface
  * @extends IteratorAggregate<int, PriceTypeDefinitionInterface>
- * @template-covariant TPriceTypeDefinition of PriceTypeDefinitionInterface
- * @implements HasBehaviorsInterface<TPriceTypeDefinition>
  * @psalm-consistent-templates
  */
-interface PriceTypeDefinitionCollectionInterface extends IteratorAggregate, \Countable, HasLockInterface
+interface PriceTypeDefinitionCollectionInterface extends IteratorAggregate, Countable, HasLockInterface
 {
     /**
      * @return Traversable<int, PriceTypeDefinitionInterface>
@@ -23,7 +22,7 @@ interface PriceTypeDefinitionCollectionInterface extends IteratorAggregate, \Cou
     public function getIterator(): Traversable;
 
     /**
-     * @psalm-return PriceTypeDefinitionInterface<static>
+     * @psalm-return PriceTypeDefinitionInterface<static, TPriceTypeDefinition>
      */
     public function priceType(TypeInterface $type): PriceTypeDefinitionInterface;
 

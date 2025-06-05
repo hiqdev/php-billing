@@ -3,11 +3,13 @@
 namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLock;
 
 /**
- * @template TPriceDefinition
- * @implements BehaviorCollectionInterface<TPriceDefinition>
+ * @template-covariant TParentContext of TariffTypeDefinitionInterface|PriceTypeDefinitionInterface
+ * @implements BehaviorCollectionInterface<TParentContext>
  * @psalm-consistent-templates
  */
 abstract class BehaviorCollection implements BehaviorCollectionInterface

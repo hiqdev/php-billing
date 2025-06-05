@@ -3,6 +3,7 @@
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\type\TypeInterface;
+use InvalidArgumentException;
 
 class PriceTypeStorage implements \Countable
 {
@@ -12,8 +13,12 @@ class PriceTypeStorage implements \Countable
 
     public function add(TypeInterface $type, PriceTypeDefinitionInterface $priceTypeDefinition): void
     {
-        $this->pricesGroupedByPriceType[$type->getName()][] = $priceTypeDefinition;
+        $typeName = $type->getName();
+        if ($typeName === null) {
+            throw new InvalidArgumentException('Price type name must not be null');
+        }
 
+        $this->pricesGroupedByPriceType[$typeName][] = $priceTypeDefinition;
         $this->i++;
     }
 
