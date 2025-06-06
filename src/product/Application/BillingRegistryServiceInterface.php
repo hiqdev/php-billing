@@ -2,18 +2,12 @@
 
 namespace hiqdev\php\billing\product\Application;
 
-use Generator;
 use hiqdev\php\billing\product\AggregateInterface;
-use hiqdev\php\billing\product\behavior\BehaviorInterface;
-use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
-use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
-use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\quantity\FractionQuantityData;
 use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
-use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 
-interface BillingRegistryServiceInterface extends BillingRegistryTariffServiseInterface, BillingRegistryBehaviorServiceInterface
+interface BillingRegistryServiceInterface extends BillingRegistryTariffServiceInterface, BillingRegistryBehaviorServiceInterface
 {
     /**
      * @param string $representationClass
@@ -24,5 +18,4 @@ interface BillingRegistryServiceInterface extends BillingRegistryTariffServiseIn
     public function createQuantityFormatter(string $type, FractionQuantityData $data): QuantityFormatterInterface;
 
     public function getAggregate(string $type): AggregateInterface;
-
 }
