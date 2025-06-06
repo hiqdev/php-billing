@@ -2,14 +2,11 @@
 
 namespace hiqdev\php\billing\tests\unit\product\Application;
 
-use hiqdev\billing\registry\invoice\InvoiceRepresentation;
-use hiqdev\billing\registry\invoice\PaymentRequestRepresentation;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\BillingRegistry;
 use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
-use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\TariffTypeDefinition;
 use hiqdev\php\billing\tests\unit\product\behavior\FakeBehavior;
 use hiqdev\php\billing\tests\unit\product\behavior\TestBehavior;
@@ -18,7 +15,7 @@ use hiqdev\php\billing\tests\unit\product\Domain\Model\FakeTariffType;
 use hiqdev\php\billing\type\Type;
 use PHPUnit\Framework\TestCase;
 
-class BillingRegistryServiceTest extends TestCase
+class BillingRegistryBehaviorServiceTest extends TestCase
 {
     private BillingRegistry $registry;
 
@@ -28,40 +25,6 @@ class BillingRegistryServiceTest extends TestCase
     {
         $this->registry = new BillingRegistry();
         $this->registryService = new BillingRegistryService($this->registry);
-    }
-
-    public function testGetRepresentationsByTypeThrowsOnInvalidClass(): void
-    {
-        $this->expectException(InvalidRepresentationException::class);
-        $this->registryService->getRepresentationsByType('InvalidClass');
-    }
-
-    public function testGetAggregateThrowsExceptionWhenNotFound(): void
-    {
-        $this->expectException(AggregateNotFoundException::class);
-        $this->registryService->getAggregate('non-existent-type');
-    }
-
-    public function testGetRepresentationsByInterfaceReturnsAllRepresentations(): void
-    {
-        $tariffType = new DummyTariffType();
-        $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
-
-        $tariffTypeDefinition
-            ->withPrices()
-                ->priceType(Type::anyId('dummy'))
-                    ->documentRepresentation()
-                        ->attach(new InvoiceRepresentation("Invoice"))
-                        ->attach(new PaymentRequestRepresentation("Payment Request"))
-                    ->end()
-                ->end()
-            ->end();
-
-        $this->registry->addTariffType($tariffTypeDefinition);
-
-        $representations = $this->registryService->getRepresentationsByType(RepresentationInterface::class);
-
-        $this->assertCount(2, $representations);
     }
 
     public function testGetBehavior(): void
@@ -163,10 +126,4 @@ class BillingRegistryServiceTest extends TestCase
         $this->expectException(BehaviorNotFoundException::class);
         $this->registryService->getBehavior('non-existent-type', TestBehavior::class);
     }
-
-//    public function testCreateQuantityFormatterThrowsExceptionWhenNotFound(): void
-//    {
-//        $this->expectException(QuantityFormatterNotFoundException::class);
-//        $this->registryService->createQuantityFormatter('non-existent-type', $this->createMock(FractionQuantityData::class));
-//    }
 }
