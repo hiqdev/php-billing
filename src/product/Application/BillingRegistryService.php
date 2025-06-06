@@ -27,11 +27,11 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
 
     public function getRepresentationsByType(string $representationClass): array
     {
-        if (!class_exists($representationClass)) {
+        if (!class_exists($representationClass) && !interface_exists($representationClass)) {
             throw new InvalidRepresentationException("Class '$representationClass' does not exist");
         }
 
-        if (!is_subclass_of($representationClass, RepresentationInterface::class)) {
+        if (class_exists($representationClass) && !is_subclass_of($representationClass, RepresentationInterface::class)) {
             throw new InvalidBehaviorException(
                 sprintf('Representation class "%s" does not implement RepresentationInterface', $representationClass)
             );
