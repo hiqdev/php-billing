@@ -2,16 +2,22 @@
 
 namespace hiqdev\php\billing\product;
 
+use Google\Service\TPU;
+use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
 use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
 use hiqdev\php\billing\product\behavior\TariffTypeBehaviorRegistry;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Exception\ProductNotDefinedException;
+use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollection;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
 use hiqdev\php\billing\product\trait\HasLock;
 
 /**
- * @implements TariffTypeDefinitionInterface<PriceTypeDefinitionCollection>
+ * @template TPriceTypeDefinitionCollection of PriceTypeDefinitionCollection
+ * @implements TariffTypeDefinitionInterface<TPriceTypeDefinitionCollection>
+ * @psalm-suppress InvalidTemplateParam
  */
 class TariffTypeDefinition implements TariffTypeDefinitionInterface
 {
@@ -39,7 +45,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         return $this->tariffType->equals($tariffType);
     }
 
-    public function ofProduct(ProductInterface $product): TariffTypeDefinitionInterface
+    public function ofProduct(ProductInterface $product): static
     {
         $this->ensureNotLocked();
         $this->product = $product;
@@ -51,6 +57,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     {
         $this->ensureProductExists();
 
+        /** @psalm-suppress NullableReturnStatement */
         return $this->product;
     }
 
@@ -61,7 +68,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         }
     }
 
-    public function setPricesSuggester(string $suggesterClass): TariffTypeDefinitionInterface
+    public function setPricesSuggester(string $suggesterClass): static
     {
         $this->ensureNotLocked();
 
@@ -69,14 +76,24 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         return $this;
     }
 
-    public function withPrices(): PriceTypeDefinitionCollection
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
+    public function withPrices()
     {
         $this->ensureNotLocked();
 
         return $this->prices;
     }
 
-    public function withBehaviors(): BehaviorTariffTypeCollection
+    /**
+     * @return BehaviorCollectionInterface<TariffTypeDefinition>
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
+    public function withBehaviors()
     {
         $this->ensureNotLocked();
 

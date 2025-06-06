@@ -9,8 +9,9 @@ use IteratorAggregate;
 use Traversable;
 
 /**
- * @template T of PriceTypeDefinition
+ * @template T
  * @implements IteratorAggregate<int, RepresentationInterface>
+ * @psalm-consistent-templates
  */
 class RepresentationCollection implements IteratorAggregate, HasLockInterface
 {
@@ -20,8 +21,18 @@ class RepresentationCollection implements IteratorAggregate, HasLockInterface
 
     private RepresentationUniquenessGuard $uniquenessGuard;
 
-    public function __construct(private readonly PriceTypeDefinition $priceTypeDefinition)
-    {
+    /**
+     * @psalm-var T
+     */
+    private readonly PriceTypeDefinition $priceTypeDefinition;
+
+    /**
+     * @psalm-param T $priceTypeDefinition
+     */
+    public function __construct(
+        PriceTypeDefinition $priceTypeDefinition,
+    ) {
+        $this->priceTypeDefinition = $priceTypeDefinition;
         $this->uniquenessGuard = new RepresentationUniquenessGuard();
     }
 
@@ -33,7 +44,7 @@ class RepresentationCollection implements IteratorAggregate, HasLockInterface
         return new \ArrayIterator($this->representations);
     }
 
-    public function attach(RepresentationInterface $representation): self
+    public function attach(RepresentationInterface $representation): static
     {
         $this->ensureNotLocked();
 
@@ -49,7 +60,7 @@ class RepresentationCollection implements IteratorAggregate, HasLockInterface
     /**
      * @psalm-return T
      */
-    public function end(): PriceTypeDefinition
+    public function end()
     {
         return $this->priceTypeDefinition;
     }

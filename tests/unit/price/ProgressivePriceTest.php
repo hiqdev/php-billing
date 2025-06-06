@@ -232,7 +232,7 @@ class ProgressivePriceTest extends TestCase
         );
         $this->usage = Quantity::bps(6043);
         $usage = $price->calculateUsage($this->usage);
-        $this->assertSame($this->usage->getQuantity(), $usage->getQuantity());
+        $this->assertTrue($this->usage->equals($usage));
 
         $amount = $price->calculateSum($this->usage);
         $this->assertEquals($expectedAmount, $amount->getAmount());
