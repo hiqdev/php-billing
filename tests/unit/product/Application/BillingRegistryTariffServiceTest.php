@@ -38,7 +38,7 @@ class BillingRegistryTariffServiceTest extends TestCase
 
         $this->registry->addTariffType($tariffTypeDefinition);
 
-        $tariff = $this->registryService->getTariffDefinitionByName('dummy');
+        $tariff = $this->registryService->getTariffTypeDefinitionByName('dummy');
 
         $this->assertSame($tariffType->name(), $tariff->tariffType()->name());
     }
@@ -54,7 +54,7 @@ class BillingRegistryTariffServiceTest extends TestCase
 
         $this->registry->addTariffType($tariffTypeDefinition);
 
-        $tariff = $this->registryService->getTariffDefinitionByName('dummy');
+        $tariff = $this->registryService->getTariffTypeDefinitionByName('dummy');
         $this->assertTrue($this->registryService->hasBehaviour($tariff, TestBehavior::class));
     }
 

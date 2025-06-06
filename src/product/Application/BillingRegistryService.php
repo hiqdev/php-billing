@@ -49,19 +49,15 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
         return $representations;
     }
 
-    public function getTariffDefinitionByName(string $tariffName): ?TariffTypeDefinitionInterface
+    public function getTariffTypeDefinitionByName(string $tariffName): TariffTypeDefinitionInterface
     {
         foreach ($this->registry->getTariffTypeDefinitions() as $tariffTypeDefinition) {
-            if ($tariffName === $tariffTypeDefinition->tariffType()->name) {
+            if ($tariffTypeDefinition->tariffType()->equalsName($tariffName)) {
                 return $tariffTypeDefinition;
             }
         }
-        return null;
-    }
 
-    public function hasBehaviour(TariffTypeDefinitionInterface $tariffTypeDefinition, string $behaviorClassWrapper): bool
-    {
-        return $tariffTypeDefinition->hasBehavior($behaviorClassWrapper);
+        throw new TariffTypeDefinitionNotFoundException('Tariff type definition was not found');
     }
 
     public function createQuantityFormatter(string $type, FractionQuantityData $data): QuantityFormatterInterface {
@@ -155,19 +151,6 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
         }
 
         throw new AggregateNotFoundException('Aggregate was not found');
-    }
-
-    public function findTariffTypeDefinitionByBehavior(BehaviorInterface $behavior): TariffTypeDefinitionInterface
-    {
-        $tariffType = $behavior->getTariffType();
-
-        foreach ($this->registry->getTariffTypeDefinitions() as $tariffTypeDefinition) {
-            if ($tariffTypeDefinition->belongToTariffType($tariffType)) {
-                return $tariffTypeDefinition;
-            }
-        }
-
-        throw new TariffTypeDefinitionNotFoundException('Tariff type definition was not found');
     }
 
     public function findPriceTypeDefinitionsByBehavior(string $behaviorClassWrapper): \Generator
