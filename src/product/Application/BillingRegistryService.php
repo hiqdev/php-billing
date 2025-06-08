@@ -31,9 +31,14 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
             throw new InvalidRepresentationException("Class '$representationClass' does not exist");
         }
 
-        if (class_exists($representationClass) && !is_subclass_of($representationClass, RepresentationInterface::class)) {
+        if (class_exists($representationClass)
+            && !is_subclass_of($representationClass, RepresentationInterface::class)
+        ) {
             throw new InvalidBehaviorException(
-                sprintf('Representation class "%s" does not implement RepresentationInterface', $representationClass)
+                sprintf(
+                    'Representation class "%s" does not implement RepresentationInterface',
+                    $representationClass,
+                )
             );
         }
 
