@@ -48,10 +48,14 @@ class BillingRegistryServiceTest extends TestCase
 
         $tariffTypeDefinition
             ->withPrices()
-                ->priceType(Type::anyId('dummy'))
+                ->priceType(Type::anyId('dummy 1'))
                     ->documentRepresentation()
-                        ->attach(new TestRepresentation("Invoice"))
-                        ->attach(new TestRepresentation("Payment Request"))
+                        ->attach(new TestRepresentation("Representation 1"))
+                    ->end()
+                ->end()
+                ->priceType(Type::anyId('dummy 2'))
+                    ->documentRepresentation()
+                        ->attach(new TestRepresentation("Representation 2"))
                     ->end()
                 ->end()
             ->end();
