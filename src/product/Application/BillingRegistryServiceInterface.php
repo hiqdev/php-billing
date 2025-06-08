@@ -7,6 +7,7 @@ use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
+use hiqdev\php\billing\product\Exception\PriceTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\Exception\TariffTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
@@ -27,6 +28,11 @@ interface BillingRegistryServiceInterface
      */
     public function getAggregate(string $type): AggregateInterface;
 
+    /**
+     * @param string $typeName
+     * @return PriceTypeDefinitionInterface
+     * @throws PriceTypeDefinitionNotFoundException
+     */
     public function getPriceTypeDefinitionByPriceTypeName(string $typeName): PriceTypeDefinitionInterface;
 
     /**
