@@ -2,8 +2,6 @@
 
 namespace hiqdev\php\billing\tests\unit\product\Application;
 
-use hiqdev\billing\registry\invoice\InvoiceRepresentation;
-use hiqdev\billing\registry\invoice\PaymentRequestRepresentation;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\BillingRegistry;
@@ -15,6 +13,7 @@ use hiqdev\php\billing\tests\unit\product\behavior\FakeBehavior;
 use hiqdev\php\billing\tests\unit\product\behavior\TestBehavior;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\DummyTariffType;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\FakeTariffType;
+use hiqdev\php\billing\tests\unit\product\invoice\TestRepresentation;
 use hiqdev\php\billing\type\Type;
 use PHPUnit\Framework\TestCase;
 
@@ -51,8 +50,8 @@ class BillingRegistryServiceTest extends TestCase
             ->withPrices()
                 ->priceType(Type::anyId('dummy'))
                     ->documentRepresentation()
-                        ->attach(new InvoiceRepresentation("Invoice"))
-                        ->attach(new PaymentRequestRepresentation("Payment Request"))
+                        ->attach(new TestRepresentation("Invoice"))
+                        ->attach(new TestRepresentation("Payment Request"))
                     ->end()
                 ->end()
             ->end();
