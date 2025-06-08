@@ -7,14 +7,11 @@ use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\BillingRegistryInterface;
-use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
+use hiqdev\php\billing\product\Exception\PriceTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\Exception\TariffTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
-use hiqdev\php\billing\product\quantity\FractionQuantityData;
-use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
-use hiqdev\php\billing\product\quantity\QuantityFormatterNotFoundException;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
@@ -54,7 +51,7 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
         return $representations;
     }
 
-    public function getTariffTypeDefinitionByName(string $tariffName): TariffTypeDefinitionInterface
+    public function getTariffTypeDefinitionByTariffName(string $tariffName): TariffTypeDefinitionInterface
     {
         foreach ($this->registry->getTariffTypeDefinitions() as $tariffTypeDefinition) {
             if ($tariffTypeDefinition->tariffType()->equalsName($tariffName)) {
@@ -63,23 +60,6 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
         }
 
         throw new TariffTypeDefinitionNotFoundException('Tariff type definition was not found');
-    }
-
-    public function createQuantityFormatter(string $type, FractionQuantityData $data): QuantityFormatterInterface {
-        $type = $this->convertStringTypeToType($type);
-
-        foreach ($this->registry->priceTypes() as $priceTypeDefinition) {
-            if ($priceTypeDefinition->hasType($type)) {
-                return $priceTypeDefinition->createQuantityFormatter($data);
-            }
-        }
-
-        throw new QuantityFormatterNotFoundException('Quantity formatter not found');
-    }
-
-    private function convertStringTypeToType(string $type): TypeInterface
-    {
-        return Type::anyId($type);
     }
 
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
@@ -111,6 +91,11 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
         throw new BehaviorNotFoundException(
             sprintf('Behavior of class "%s" not found for type "%s"', $behaviorClassWrapper, $type),
         );
+    }
+
+    private function convertStringTypeToType(string $type): TypeInterface
+    {
+        return Type::anyId($type);
     }
 
     private function findBehaviorInPriceType(
@@ -147,15 +132,23 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
 
     public function getAggregate(string $type): AggregateInterface
     {
-        $type = $this->convertStringTypeToType($type);
+        return $this->getPriceTypeDefinitionByPriceTypeName($type)->getAggregate();
+    }
+
+    public function getPriceTypeDefinitionByPriceTypeName(string $typeName): PriceTypeDefinitionInterface
+    {
+        $type = $this->convertStringTypeToType($typeName);
 
         foreach ($this->registry->priceTypes() as $priceTypeDefinition) {
             if ($priceTypeDefinition->hasType($type)) {
-                return $priceTypeDefinition->getAggregate();
+                return $priceTypeDefinition;
             }
         }
 
-        throw new AggregateNotFoundException('Aggregate was not found');
+        throw new PriceTypeDefinitionNotFoundException(sprintf(
+            'PriceTypeDefinition was not found for %s type',
+            $typeName,
+        ));
     }
 
     public function findPriceTypeDefinitionsByBehavior(string $behaviorClassWrapper): \Generator

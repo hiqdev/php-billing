@@ -10,8 +10,6 @@ use hiqdev\php\billing\product\behavior\InvalidBehaviorException;
 use hiqdev\php\billing\product\Exception\TariffTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
-use hiqdev\php\billing\product\quantity\FractionQuantityData;
-use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 
 interface BillingRegistryServiceInterface
@@ -22,16 +20,21 @@ interface BillingRegistryServiceInterface
      */
     public function getRepresentationsByType(string $representationClass): array;
 
-    public function createQuantityFormatter(string $type, FractionQuantityData $data): QuantityFormatterInterface;
-
+    /**
+     * @deprecated - please use getPriceTypeDefinitionByTypeName() method instead
+     * @param string $type
+     * @return AggregateInterface
+     */
     public function getAggregate(string $type): AggregateInterface;
+
+    public function getPriceTypeDefinitionByPriceTypeName(string $typeName): PriceTypeDefinitionInterface;
 
     /**
      * @param string $tariffName
      * @return TariffTypeDefinitionInterface
      * @throws TariffTypeDefinitionNotFoundException
      */
-    public function getTariffTypeDefinitionByName(string $tariffName): TariffTypeDefinitionInterface;
+    public function getTariffTypeDefinitionByTariffName(string $tariffName): TariffTypeDefinitionInterface;
 
     /**
      * @param string $type - full type like 'overuse,lb_capacity_unit'
