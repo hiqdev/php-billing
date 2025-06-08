@@ -21,7 +21,7 @@ interface BillingRegistryServiceInterface
     public function getRepresentationsByType(string $representationClass): array;
 
     /**
-     * @deprecated - please use getPriceTypeDefinitionByTypeName() method instead
+     * @deprecated - please use getPriceTypeDefinitionByPriceTypeName() method instead
      * @param string $type
      * @return AggregateInterface
      */
