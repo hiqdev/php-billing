@@ -169,4 +169,20 @@ class BillingRegistryServiceTest extends TestCase
         $this->expectException(BehaviorNotFoundException::class);
         $this->registryService->getBehavior('non-existent-type', TestBehavior::class);
     }
+
+    public function testGetTariffDefinitionByName(): void
+    {
+        $tariffType = new DummyTariffType();
+        $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
+        $dummyBehavior = new TestBehavior('dummy');
+        $tariffTypeDefinition
+            ->withBehaviors()
+            ->attach($dummyBehavior);
+
+        $this->registry->addTariffType($tariffTypeDefinition);
+
+        $tariff = $this->registryService->getTariffTypeDefinitionByName('dummy');
+
+        $this->assertSame($tariffType->name(), $tariff->tariffType()->name());
+    }
 }
