@@ -169,10 +169,4 @@ class BillingRegistryServiceTest extends TestCase
         $this->expectException(BehaviorNotFoundException::class);
         $this->registryService->getBehavior('non-existent-type', TestBehavior::class);
     }
-
-//    public function testCreateQuantityFormatterThrowsExceptionWhenNotFound(): void
-//    {
-//        $this->expectException(QuantityFormatterNotFoundException::class);
-//        $this->registryService->createQuantityFormatter('non-existent-type', $this->createMock(FractionQuantityData::class));
-//    }
 }
