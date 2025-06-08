@@ -75,9 +75,12 @@ class BillingRegistryServiceTest extends TestCase
         $type = Type::anyId('dummy');
         $tariffTypeDefinition
             ->withPrices()
-            ->priceType($type)
-            ->withBehaviors()
-            ->attach($dummyBehavior);
+                ->priceType($type)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior)
+                    ->end()
+                ->end()
+            ->end();
 
         $this->registry->addTariffType($tariffTypeDefinition);
 
@@ -98,17 +101,17 @@ class BillingRegistryServiceTest extends TestCase
 
         $tariffTypeDefinition
             ->withPrices()
-            ->priceType($type1)
-            ->withBehaviors()
-            ->attach($dummyBehavior1)
-            ->end()
-            ->end()
-            ->priceType($type2)
-            ->withBehaviors()
-            ->attach($dummyBehavior2)
-            ->attach($dummyBehavior3)
-            ->end()
-            ->end()
+                ->priceType($type1)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior1)
+                    ->end()
+                ->end()
+                ->priceType($type2)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior2)
+                        ->attach($dummyBehavior3)
+                    ->end()
+                ->end()
             ->end();
 
         $this->registry->addTariffType($tariffTypeDefinition);
@@ -130,11 +133,11 @@ class BillingRegistryServiceTest extends TestCase
         $type1 = Type::anyId('type,dummy1');
         $tariffTypeDefinition1
             ->withPrices()
-            ->priceType($type1)
-            ->withBehaviors()
-            ->attach($testBehavior)
-            ->end()
-            ->end()
+                ->priceType($type1)
+                    ->withBehaviors()
+                        ->attach($testBehavior)
+                    ->end()
+                ->end()
             ->end();
 
         $tariffTypeDefinition2 = new TariffTypeDefinition(new FakeTariffType());
@@ -142,11 +145,11 @@ class BillingRegistryServiceTest extends TestCase
         $type2 = Type::anyId('type,dummy2');
         $tariffTypeDefinition2
             ->withPrices()
-            ->priceType($type2)
-            ->withBehaviors()
-            ->attach($fakeBehavior)
-            ->end()
-            ->end()
+                ->priceType($type2)
+                    ->withBehaviors()
+                        ->attach($fakeBehavior)
+                    ->end()
+                ->end()
             ->end();
 
         $this->registry->addTariffType($tariffTypeDefinition1);
