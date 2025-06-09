@@ -2,12 +2,11 @@
 
 namespace hiqdev\php\billing\tests\unit\product\Application;
 
-use hiqdev\billing\registry\invoice\InvoiceRepresentation;
-use hiqdev\billing\registry\invoice\PaymentRequestRepresentation;
 use hiqdev\php\billing\product\Application\BillingRegistryService;
 use hiqdev\php\billing\product\behavior\BehaviorNotFoundException;
 use hiqdev\php\billing\product\BillingRegistry;
-use hiqdev\php\billing\product\Exception\AggregateNotFoundException;
+use hiqdev\php\billing\product\Exception\PriceTypeDefinitionNotFoundException;
+use hiqdev\php\billing\product\Exception\TariffTypeDefinitionNotFoundException;
 use hiqdev\php\billing\product\invoice\InvalidRepresentationException;
 use hiqdev\php\billing\product\invoice\RepresentationInterface;
 use hiqdev\php\billing\product\TariffTypeDefinition;
@@ -15,6 +14,7 @@ use hiqdev\php\billing\tests\unit\product\behavior\FakeBehavior;
 use hiqdev\php\billing\tests\unit\product\behavior\TestBehavior;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\DummyTariffType;
 use hiqdev\php\billing\tests\unit\product\Domain\Model\FakeTariffType;
+use hiqdev\php\billing\tests\unit\product\invoice\TestRepresentation;
 use hiqdev\php\billing\type\Type;
 use PHPUnit\Framework\TestCase;
 
@@ -36,12 +36,6 @@ class BillingRegistryServiceTest extends TestCase
         $this->registryService->getRepresentationsByType('InvalidClass');
     }
 
-    public function testGetAggregateThrowsExceptionWhenNotFound(): void
-    {
-        $this->expectException(AggregateNotFoundException::class);
-        $this->registryService->getAggregate('non-existent-type');
-    }
-
     public function testGetRepresentationsByInterfaceReturnsAllRepresentations(): void
     {
         $tariffType = new DummyTariffType();
@@ -49,10 +43,14 @@ class BillingRegistryServiceTest extends TestCase
 
         $tariffTypeDefinition
             ->withPrices()
-                ->priceType(Type::anyId('dummy'))
+                ->priceType(Type::anyId('dummy 1'))
                     ->documentRepresentation()
-                        ->attach(new InvoiceRepresentation("Invoice"))
-                        ->attach(new PaymentRequestRepresentation("Payment Request"))
+                        ->attach(new TestRepresentation("Representation 1"))
+                    ->end()
+                ->end()
+                ->priceType(Type::anyId('dummy 2'))
+                    ->documentRepresentation()
+                        ->attach(new TestRepresentation("Representation 2"))
                     ->end()
                 ->end()
             ->end();
@@ -72,9 +70,12 @@ class BillingRegistryServiceTest extends TestCase
         $type = Type::anyId('dummy');
         $tariffTypeDefinition
             ->withPrices()
-            ->priceType($type)
-            ->withBehaviors()
-            ->attach($dummyBehavior);
+                ->priceType($type)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior)
+                    ->end()
+                ->end()
+            ->end();
 
         $this->registry->addTariffType($tariffTypeDefinition);
 
@@ -95,17 +96,17 @@ class BillingRegistryServiceTest extends TestCase
 
         $tariffTypeDefinition
             ->withPrices()
-            ->priceType($type1)
-            ->withBehaviors()
-            ->attach($dummyBehavior1)
-            ->end()
-            ->end()
-            ->priceType($type2)
-            ->withBehaviors()
-            ->attach($dummyBehavior2)
-            ->attach($dummyBehavior3)
-            ->end()
-            ->end()
+                ->priceType($type1)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior1)
+                    ->end()
+                ->end()
+                ->priceType($type2)
+                    ->withBehaviors()
+                        ->attach($dummyBehavior2)
+                        ->attach($dummyBehavior3)
+                    ->end()
+                ->end()
             ->end();
 
         $this->registry->addTariffType($tariffTypeDefinition);
@@ -127,11 +128,11 @@ class BillingRegistryServiceTest extends TestCase
         $type1 = Type::anyId('type,dummy1');
         $tariffTypeDefinition1
             ->withPrices()
-            ->priceType($type1)
-            ->withBehaviors()
-            ->attach($testBehavior)
-            ->end()
-            ->end()
+                ->priceType($type1)
+                    ->withBehaviors()
+                        ->attach($testBehavior)
+                    ->end()
+                ->end()
             ->end();
 
         $tariffTypeDefinition2 = new TariffTypeDefinition(new FakeTariffType());
@@ -139,11 +140,11 @@ class BillingRegistryServiceTest extends TestCase
         $type2 = Type::anyId('type,dummy2');
         $tariffTypeDefinition2
             ->withPrices()
-            ->priceType($type2)
-            ->withBehaviors()
-            ->attach($fakeBehavior)
-            ->end()
-            ->end()
+                ->priceType($type2)
+                    ->withBehaviors()
+                        ->attach($fakeBehavior)
+                    ->end()
+                ->end()
             ->end();
 
         $this->registry->addTariffType($tariffTypeDefinition1);
@@ -164,9 +165,59 @@ class BillingRegistryServiceTest extends TestCase
         $this->registryService->getBehavior('non-existent-type', TestBehavior::class);
     }
 
-//    public function testCreateQuantityFormatterThrowsExceptionWhenNotFound(): void
-//    {
-//        $this->expectException(QuantityFormatterNotFoundException::class);
-//        $this->registryService->createQuantityFormatter('non-existent-type', $this->createMock(FractionQuantityData::class));
-//    }
+    public function testGetTariffDefinitionByTariffName(): void
+    {
+        $tariffType = new DummyTariffType();
+        $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
+
+        $this->registry->addTariffType($tariffTypeDefinition);
+
+        $tariffTypeDefinition = $this->registryService->getTariffTypeDefinitionByTariffName('dummy');
+
+        $this->assertSame($tariffType->name(), $tariffTypeDefinition->tariffType()->name());
+    }
+
+    public function testGetTariffDefinitionByTariffName_ThrowsException(): void
+    {
+        $tariffType = new DummyTariffType();
+        $tariffTypeDefinition = new TariffTypeDefinition($tariffType);
+
+        $this->registry->addTariffType($tariffTypeDefinition);
+
+        $this->expectException(TariffTypeDefinitionNotFoundException::class);
+        $this->registryService->getTariffTypeDefinitionByTariffName('fake');
+    }
+    
+    public function testGetPriceTypeDefinitionByPriceTypeName(): void
+    {
+        $tariffTypeDefinition = new TariffTypeDefinition(new DummyTariffType());
+        $type = Type::anyId('dummy');
+        $tariffTypeDefinition
+            ->withPrices()
+                ->priceType($type)
+                ->end()
+            ->end();
+
+        $this->registry->addTariffType($tariffTypeDefinition);
+
+        $priceTypeDefinition = $this->registryService->getPriceTypeDefinitionByPriceTypeName('dummy');
+
+        $this->assertSame($type, $priceTypeDefinition->type());
+    }
+
+    public function testGetPriceTypeDefinitionByPriceTypeName_ThrowsException(): void
+    {
+        $tariffTypeDefinition = new TariffTypeDefinition(new DummyTariffType());
+        $type = Type::anyId('dummy');
+        $tariffTypeDefinition
+            ->withPrices()
+                ->priceType($type)
+                ->end()
+            ->end();
+
+        $this->registry->addTariffType($tariffTypeDefinition);
+
+        $this->expectException(PriceTypeDefinitionNotFoundException::class);
+        $this->registryService->getPriceTypeDefinitionByPriceTypeName('fake');
+    }
 }
