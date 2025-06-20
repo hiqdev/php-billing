@@ -17,4 +17,6 @@ abstract class Behavior implements BehaviorInterface
     {
         return $this->tariffType;
     }
+
+    abstract public function description(): string;
 }

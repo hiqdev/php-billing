@@ -17,4 +17,9 @@ class TestBehavior extends Behavior
     {
         return $this->context;
     }
+
+    public function description(): string
+    {
+        return 'Test behavior for testing purposes';
+    }
 }
