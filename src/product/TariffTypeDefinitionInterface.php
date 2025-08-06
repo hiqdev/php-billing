@@ -5,6 +5,7 @@ namespace hiqdev\php\billing\product;
 use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
+use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
@@ -37,4 +38,6 @@ interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockIn
     public function withPrices();
 
     public function end();
+
+    public function findPricesByTypeName(string $typeName): ?array;
 }
