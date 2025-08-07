@@ -127,15 +127,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
 
     public function findBehaviorByClass(string $class): ?BehaviorInterface
     {
-        $this->ensureNotLocked();
-
-        foreach ($this->tariffTypeBehaviorRegistry->getBehaviors() as $behavior) {
-            if ($behavior instanceof $class) {
-                return $behavior;
-            }
-        }
-
-        return null;
+        return $this->tariffTypeBehaviorRegistry->findBehaviorByClass($class);
     }
 
     public function end(): TariffTypeDefinitionInterface

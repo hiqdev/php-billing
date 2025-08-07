@@ -60,6 +60,17 @@ final class TariffTypeBehaviorRegistry implements HasLockInterface
         return false;
     }
 
+    public function findBehaviorByClass(string $class): ?BehaviorInterface
+    {
+        foreach ($this->getBehaviors() as $behavior) {
+            if ($behavior instanceof $class) {
+                return $behavior;
+            }
+        }
+
+        return null;
+    }
+
     public function lock(): void
     {
         $this->behaviorCollection->lock();
