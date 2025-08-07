@@ -3,8 +3,6 @@
 namespace hiqdev\php\billing\product;
 
 use Google\Service\TPU;
-use hiqdev\billing\registry\behavior\ResourceDecoratorBehavior;
-use hiqdev\php\billing\price\PriceInterface;
 use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
 use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
