@@ -18,4 +18,6 @@ interface HasBehaviorsInterface
     public function withBehaviors();
 
     public function hasBehavior(string $behaviorClassName): bool;
+
+    public function findBehaviorByClass(string $class): ?BehaviorInterface;
 }

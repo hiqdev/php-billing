@@ -5,6 +5,7 @@ namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
+use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
@@ -192,6 +193,17 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
         }
 
         return false;
+    }
+
+    public function findBehaviorByClass(string $class): ?BehaviorInterface
+    {
+        foreach ($this->behaviorCollection as $behavior) {
+            if ($behavior instanceof $class) {
+                return $behavior;
+            }
+        }
+
+        return null;
     }
 
     /**
