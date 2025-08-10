@@ -26,7 +26,7 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
  *
  * @template-covariant T of TariffTypeDefinitionInterface
  */
-final class TariffTypeBehaviorRegistry implements HasLockInterface
+final class TariffTypeBehaviorRegistry extends BehaviorRegistry
 {
     /**
      * @var BehaviorTariffTypeCollection<T>
@@ -44,35 +44,13 @@ final class TariffTypeBehaviorRegistry implements HasLockInterface
     /**
      * @return BehaviorTariffTypeCollection<T>
      */
-    public function getBehaviors(): BehaviorTariffTypeCollection
+    public function withBehaviors(): BehaviorTariffTypeCollection
     {
         return $this->behaviorCollection;
     }
 
-    public function hasBehavior(string $behaviorClassName): bool
+    protected function getBehaviorCollection(): BehaviorCollectionInterface
     {
-        foreach ($this->behaviorCollection as $behavior) {
-            if ($behavior instanceof $behaviorClassName) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function findBehaviorByClass(string $class): ?BehaviorInterface
-    {
-        foreach ($this->getBehaviors() as $behavior) {
-            if ($behavior instanceof $class) {
-                return $behavior;
-            }
-        }
-
-        return null;
-    }
-
-    public function lock(): void
-    {
-        $this->behaviorCollection->lock();
+        return $this->behaviorCollection;
     }
 }

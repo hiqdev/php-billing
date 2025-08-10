@@ -21,7 +21,7 @@ class TariffTypeBehaviorRegistryTest extends TestCase
 
     public function testWithBehaviorsReturnsBehaviorCollection(): void
     {
-        $this->assertInstanceOf(BehaviorTariffTypeCollection::class, $this->manager->getBehaviors());
+        $this->assertInstanceOf(BehaviorTariffTypeCollection::class, $this->manager->withBehaviors());
     }
 
     public function testHasBehaviorReturnsFalseWhenBehaviorNotPresent(): void
@@ -32,7 +32,7 @@ class TariffTypeBehaviorRegistryTest extends TestCase
     public function testHasBehaviorReturnsTrueWhenBehaviorPresent(): void
     {
         $behavior = $this->createMock(TestBehavior::class);
-        $behaviorCollection = $this->manager->getBehaviors();
+        $behaviorCollection = $this->manager->withBehaviors();
         $behaviorCollection->attach($behavior);
 
         $this->assertTrue($this->manager->hasBehavior(TestBehavior::class));

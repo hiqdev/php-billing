@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
-use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
-use hiqdev\php\billing\product\behavior\BehaviorInterface;
 use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
+use hiqdev\php\billing\product\behavior\PriceTypeBehaviourRegistry;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
@@ -22,6 +21,7 @@ use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
+use function class_exists;
 
 /**
  * @template TParentCollection
@@ -46,15 +46,12 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     private RepresentationCollection $representationCollection;
 
-    /**
-     * @var BehaviorPriceTypeDefinitionCollection<PriceTypeDefinition>
-     */
-    private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
-
     private ?AggregateInterface $aggregate = null;
 
     /** @psalm-var TParentCollection */
     private readonly PriceTypeDefinitionCollectionInterface $parent;
+
+    private readonly PriceTypeBehaviourRegistry $behaviorRegistry;
 
     /**
      * @param TParentCollection $parent
@@ -66,7 +63,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     ) {
         $this->parent = $parent;
         $this->representationCollection = new RepresentationCollection($this);
-        $this->behaviorCollection = new BehaviorPriceTypeDefinitionCollection($this, $tariffType);
+        $this->behaviorRegistry = new PriceTypeBehaviourRegistry($this, $tariffType);
 
         $this->init();
     }
@@ -107,7 +104,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         $this->ensureNotLocked();
 
-        if (!\class_exists($formatterClass)) {
+        if (!class_exists($formatterClass)) {
             throw new InvalidQuantityFormatterException("Formatter class $formatterClass does not exist");
         }
 
@@ -181,29 +178,17 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         $this->ensureNotLocked();
 
-        return $this->behaviorCollection;
+        return $this->behaviorRegistry->withBehaviors();
     }
 
     public function hasBehavior(string $behaviorClassName): bool
     {
-        foreach ($this->behaviorCollection as $behavior) {
-            if ($behavior instanceof $behaviorClassName) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->behaviorRegistry->hasBehavior($behaviorClassName);
     }
 
-    public function findBehaviorByClass(string $class): ?BehaviorInterface
+    public function findBehaviorByClass(string $class)
     {
-        foreach ($this->behaviorCollection as $behavior) {
-            if ($behavior instanceof $class) {
-                return $behavior;
-            }
-        }
-
-        return null;
+        return $this->behaviorRegistry->findBehaviorByClass($class);
     }
 
     /**
@@ -242,7 +227,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     protected function afterLock(): void
     {
         $this->representationCollection->lock();
-        $this->behaviorCollection->lock();
+        $this->behaviorRegistry->lock();
     }
 
     public function getTariffTypeDefinition(): TariffTypeDefinitionInterface
