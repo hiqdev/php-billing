@@ -13,12 +13,12 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 final class PriceTypeBehaviorRegistry extends BehaviorRegistry
 {
     /**
-     * @var BehaviorPriceTypeDefinitionCollection<T>
+     * @var BehaviorPriceTypeDefinitionCollection<PriceTypeDefinitionInterface>
      */
     private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
     /**
-     * @psalm-param T $priceTypeDefinition
+     * @psalm-param PriceTypeDefinitionInterface $priceTypeDefinition
      */
     public function __construct(PriceTypeDefinitionInterface $priceTypeDefinition, TariffTypeInterface $tariffType)
     {
@@ -26,7 +26,7 @@ final class PriceTypeBehaviorRegistry extends BehaviorRegistry
     }
 
     /**
-     * @return BehaviorPriceTypeDefinitionCollection<T>
+     * @return BehaviorPriceTypeDefinitionCollection<PriceTypeDefinitionInterface>
      */
     public function withBehaviors(): BehaviorPriceTypeDefinitionCollection
     {

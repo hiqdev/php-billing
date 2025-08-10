@@ -29,12 +29,12 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
 final class TariffTypeBehaviorRegistry extends BehaviorRegistry
 {
     /**
-     * @var BehaviorTariffTypeCollection<T>
+     * @var BehaviorTariffTypeCollection<TariffTypeDefinitionInterface>
      */
     private BehaviorTariffTypeCollection $behaviorCollection;
 
     /**
-     * @psalm-param T $tariffTypeDefinition
+     * @psalm-param TariffTypeDefinitionInterface $tariffTypeDefinition
      */
     public function __construct(TariffTypeDefinitionInterface $tariffTypeDefinition, TariffTypeInterface $tariffType)
     {
@@ -42,7 +42,7 @@ final class TariffTypeBehaviorRegistry extends BehaviorRegistry
     }
 
     /**
-     * @return BehaviorTariffTypeCollection<T>
+     * @return BehaviorTariffTypeCollection<TariffTypeDefinitionInterface>
      */
     public function withBehaviors(): BehaviorTariffTypeCollection
     {
