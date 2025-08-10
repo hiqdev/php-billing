@@ -9,7 +9,7 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
- * @template TParentCollection of PriceTypeDefinitionInterface|TariffTypeDefinitionInterface
+ * @template-covariant TParentCollection of PriceTypeDefinitionInterface|TariffTypeDefinitionInterface
  * @implements HasBehaviorsInterface<TParentCollection>
  */
 abstract class BehaviorRegistry implements HasLockInterface, HasBehaviorsInterface
