@@ -6,8 +6,15 @@ namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\trait\HasLockInterface;
 
+/**
+ * @template TParentCollection
+ * @implements HasBehaviorsInterface<TParentCollection>
+ */
 abstract class BehaviorRegistry implements HasLockInterface, HasBehaviorsInterface
 {
+    /**
+     * @return BehaviorCollectionInterface<TParentCollection>
+     */
     abstract protected function getBehaviorCollection(): BehaviorCollectionInterface;
 
     public function hasBehavior(string $behaviorClassName): bool
@@ -23,7 +30,7 @@ abstract class BehaviorRegistry implements HasLockInterface, HasBehaviorsInterfa
 
     public function findBehaviorByClass(string $class)
     {
-        foreach ($this->withBehaviors() as $behavior) {
+        foreach ($this->getBehaviorCollection() as $behavior) {
             if ($behavior instanceof $class) {
                 return $behavior;
             }
