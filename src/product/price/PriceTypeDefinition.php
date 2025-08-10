@@ -5,7 +5,7 @@ namespace hiqdev\php\billing\product\price;
 
 use hiqdev\php\billing\product\AggregateInterface;
 use hiqdev\php\billing\product\behavior\HasBehaviorsInterface;
-use hiqdev\php\billing\product\behavior\PriceTypeBehaviourRegistry;
+use hiqdev\php\billing\product\behavior\PriceTypeBehaviorRegistry;
 use hiqdev\php\billing\product\Exception\AggregateNotDefinedException;
 use hiqdev\php\billing\product\behavior\BehaviorPriceTypeDefinitionCollection;
 use hiqdev\php\billing\product\invoice\RepresentationCollection;
@@ -51,7 +51,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     /** @psalm-var TParentCollection */
     private readonly PriceTypeDefinitionCollectionInterface $parent;
 
-    private readonly PriceTypeBehaviourRegistry $behaviorRegistry;
+    private readonly PriceTypeBehaviorRegistry $behaviorRegistry;
 
     /**
      * @param TParentCollection $parent
@@ -63,7 +63,7 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     ) {
         $this->parent = $parent;
         $this->representationCollection = new RepresentationCollection($this);
-        $this->behaviorRegistry = new PriceTypeBehaviourRegistry($this, $tariffType);
+        $this->behaviorRegistry = new PriceTypeBehaviorRegistry($this, $tariffType);
 
         $this->init();
     }

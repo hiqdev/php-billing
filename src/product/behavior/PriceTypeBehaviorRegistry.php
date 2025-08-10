@@ -11,7 +11,7 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
  * @template T as PriceTypeDefinitionInterface
  * @extends BehaviorRegistry<PriceTypeDefinitionInterface>
  */
-final class PriceTypeBehaviourRegistry extends BehaviorRegistry
+final class PriceTypeBehaviorRegistry extends BehaviorRegistry
 {
     /**
      * @var BehaviorPriceTypeDefinitionCollection<T>
