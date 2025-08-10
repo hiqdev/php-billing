@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\product\behavior;
 
+use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
+use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLockInterface;
 
 /**
- * @template TParentCollection
+ * @template TParentCollection of PriceTypeDefinitionInterface|TariffTypeDefinitionInterface
  * @implements HasBehaviorsInterface<TParentCollection>
  */
 abstract class BehaviorRegistry implements HasLockInterface, HasBehaviorsInterface
