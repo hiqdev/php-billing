@@ -9,6 +9,7 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 
 /**
  * @template T as PriceTypeDefinitionInterface
+ * @extends BehaviorRegistry<PriceTypeDefinitionInterface>
  */
 final class PriceTypeBehaviourRegistry extends BehaviorRegistry
 {
