@@ -9,7 +9,7 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 
 /**
  * @template T as PriceTypeDefinitionInterface
- * @extends BehaviorRegistry<PriceTypeDefinitionInterface>
+ * @extends BehaviorRegistry<T>
  */
 final class PriceTypeBehaviorRegistry extends BehaviorRegistry
 {
@@ -19,11 +19,11 @@ final class PriceTypeBehaviorRegistry extends BehaviorRegistry
     private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
     /**
-     * @psalm-param T $tariffTypeDefinition
+     * @psalm-param T $priceTypeDefinition
      */
-    public function __construct(PriceTypeDefinitionInterface $tariffTypeDefinition, TariffTypeInterface $tariffType)
+    public function __construct(PriceTypeDefinitionInterface $priceTypeDefinition, TariffTypeInterface $tariffType)
     {
-        $this->behaviorCollection = new BehaviorPriceTypeDefinitionCollection($tariffTypeDefinition, $tariffType);
+        $this->behaviorCollection = new BehaviorPriceTypeDefinitionCollection($priceTypeDefinition, $tariffType);
     }
 
     /**
