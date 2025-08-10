@@ -24,8 +24,7 @@ use hiqdev\php\billing\product\trait\HasLockInterface;
  *  - To separate concerns by handling behavior-related logic in a dedicated class.
  *  - To improve maintainability and testability of tariff behavior handling.
  *
- * @template-covariant T of TariffTypeDefinitionInterface
- * @extends BehaviorRegistry<T>
+ * @extends BehaviorRegistry<TariffTypeDefinitionInterface>
  */
 final class TariffTypeBehaviorRegistry extends BehaviorRegistry
 {

@@ -8,8 +8,7 @@ use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 
 /**
- * @template T as PriceTypeDefinitionInterface
- * @extends BehaviorRegistry<T>
+ * @extends BehaviorRegistry<PriceTypeDefinitionInterface>
  */
 final class PriceTypeBehaviorRegistry extends BehaviorRegistry
 {
