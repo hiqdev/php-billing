@@ -8,17 +8,17 @@ use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 
 /**
- * @extends BehaviorRegistry<PriceTypeDefinitionInterface>
+ * @template-covariant T of PriceTypeDefinitionInterface
  */
 final class PriceTypeBehaviorRegistry extends BehaviorRegistry
 {
     /**
-     * @var BehaviorPriceTypeDefinitionCollection<PriceTypeDefinitionInterface>
+     * @var BehaviorPriceTypeDefinitionCollection<T>
      */
     private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
     /**
-     * @psalm-param PriceTypeDefinitionInterface $priceTypeDefinition
+     * @psalm-param T $priceTypeDefinition
      */
     public function __construct(PriceTypeDefinitionInterface $priceTypeDefinition, TariffTypeInterface $tariffType)
     {
@@ -26,7 +26,7 @@ final class PriceTypeBehaviorRegistry extends BehaviorRegistry
     }
 
     /**
-     * @return BehaviorPriceTypeDefinitionCollection<PriceTypeDefinitionInterface>
+     * @return BehaviorPriceTypeDefinitionCollection<T>
      */
     public function withBehaviors(): BehaviorPriceTypeDefinitionCollection
     {
