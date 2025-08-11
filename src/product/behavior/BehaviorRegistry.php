@@ -6,6 +6,10 @@ namespace hiqdev\php\billing\product\behavior;
 
 use hiqdev\php\billing\product\trait\HasLockInterface;
 
+/**
+ * @psalm-suppress MissingTemplateParam
+ * @psalm-suppress InvalidTemplateParam
+ */
 abstract class BehaviorRegistry implements HasLockInterface, HasBehaviorsInterface
 {
     public function hasBehavior(string $behaviorClassName): bool
