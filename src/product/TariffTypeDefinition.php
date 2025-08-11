@@ -2,19 +2,14 @@
 
 namespace hiqdev\php\billing\product;
 
-use Google\Service\TPU;
 use hiqdev\php\billing\product\behavior\BehaviorCollectionInterface;
-use hiqdev\php\billing\product\behavior\BehaviorInterface;
-use hiqdev\php\billing\product\behavior\BehaviorTariffTypeCollection;
 use hiqdev\php\billing\product\behavior\TariffTypeBehaviorRegistry;
 use hiqdev\php\billing\product\Domain\Model\TariffTypeInterface;
 use hiqdev\php\billing\product\Exception\ProductNotDefinedException;
-use hiqdev\php\billing\product\price\PriceTypeDefinition;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionCollection;
-use hiqdev\php\billing\product\price\PriceTypeDefinitionCollectionInterface;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionFactory;
-use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLock;
+use LogicException;
 
 /**
  * @template TPriceTypeDefinitionCollection of PriceTypeDefinitionCollection
@@ -89,24 +84,6 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         return $this->prices;
     }
 
-    public function findPricesByTypeName(string $typeName): ?array
-    {
-        $prices = null;
-        $this->ensureNotLocked();
-
-        foreach ($this->prices as $price) {
-            if ($this->matchesPriceType($price, $typeName)) {
-                $prices[] = $price;
-            }
-        }
-        return $prices;
-    }
-
-    private function matchesPriceType(PriceTypeDefinitionInterface $price, string $typeName): bool
-    {
-        return str_ends_with($price->type()->getName(), ",$typeName");
-    }
-
     /**
      * @return BehaviorCollectionInterface<TariffTypeDefinition>
      * @psalm-suppress ImplementedReturnTypeMismatch
@@ -117,7 +94,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
     {
         $this->ensureNotLocked();
 
-        return $this->tariffTypeBehaviorRegistry->getBehaviors();
+        return $this->tariffTypeBehaviorRegistry->withBehaviors();
     }
 
     public function hasBehavior(string $behaviorClassName): bool
@@ -125,7 +102,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
         return $this->tariffTypeBehaviorRegistry->hasBehavior($behaviorClassName);
     }
 
-    public function findBehaviorByClass(string $class): ?BehaviorInterface
+    public function findBehaviorByClass(string $class)
     {
         return $this->tariffTypeBehaviorRegistry->findBehaviorByClass($class);
     }
@@ -136,7 +113,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
 
         // Validate prices configuration is complete
         if ($this->prices->count() === 0) {
-            throw new \LogicException('At least one price type must be defined');
+            throw new LogicException('At least one price type must be defined');
         }
 
         return $this;

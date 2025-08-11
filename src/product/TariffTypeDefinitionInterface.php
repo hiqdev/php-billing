@@ -37,6 +37,4 @@ interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockIn
     public function withPrices();
 
     public function end();
-
-    public function findPricesByTypeName(string $typeName): ?array;
 }

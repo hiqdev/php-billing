@@ -2,7 +2,6 @@
 
 namespace hiqdev\php\billing\product\behavior;
 
-use hiqdev\php\billing\product\invoice\RepresentationCollection;
 use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 
@@ -19,5 +18,10 @@ interface HasBehaviorsInterface
 
     public function hasBehavior(string $behaviorClassName): bool;
 
-    public function findBehaviorByClass(string $class): ?BehaviorInterface;
+    /**
+     * @template TBehavior of object
+     * @param class-string<TBehavior> $class
+     * @return TBehavior|null
+     */
+    public function findBehaviorByClass(string $class);
 }
