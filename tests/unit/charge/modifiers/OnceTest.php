@@ -16,6 +16,7 @@ use hiqdev\php\billing\sale\Sale;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
+use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
 
 class OnceTest extends ActionTest
@@ -24,6 +25,7 @@ class OnceTest extends ActionTest
     {
         parent::setUp();
 
+        $this->prepaid = Quantity::item(0);
         $this->type = $this->createType('monthly,monthly');
         $this->price = $this->createPrice($this->type);
     }
@@ -92,7 +94,7 @@ class OnceTest extends ActionTest
 
         $saleTime = new DateTimeImmutable('22-11-2023');
         $actionTime = $saleTime->modify('+1 year');
-        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
+        $action = $this->createActionWithSale($actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
 
@@ -102,6 +104,25 @@ class OnceTest extends ActionTest
         $this->assertIsArray($charges);
         $this->assertCount(1, $charges);
         $this->assertSame($charge, $charges[0]);
+    }
+
+    public function testPerOneYear_ShouldChargeInFirstMonthOfSale(): void
+    {
+        $once = $this->buildOnce('1 year');
+        $saleTime = new DateTimeImmutable('01-01-2025 12:31:00');
+        $actionTime = $saleTime->modify('first day of this month 00:00:00');
+        $action = $this->createActionWithSale($actionTime, $saleTime);
+        $type = $this->createType('monthly,monthly');
+        $price = $this->createPrice($type);
+
+        $charge = $this->calculator->calculateCharge($price, $action);
+        $this->assertNonZeroCharge($charge);
+
+        $charges = $once->modifyCharge($charge, $action);
+        $this->assertIsArray($charges);
+        $this->assertCount(1, $charges);
+        $this->assertSame($charge, $charges[0]);
+        $this->assertNonZeroCharge($charges[0]);
     }
 
     private function createActionWithCustomTime(QuantityInterface $quantity, DateTimeImmutable $time): Action
@@ -115,11 +136,12 @@ class OnceTest extends ActionTest
 
         $saleTime = new DateTimeImmutable('22-10-2023');
         $actionTime = $saleTime->modify('+11 months');
-        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
+        $action = $this->createActionWithSale($actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
 
         $charge = $this->calculator->calculateCharge($price, $action);
+        $this->assertNonZeroCharge($charge);
 
         $charges = $once->modifyCharge($charge, $action);
         $this->assertCount(1, $charges);
@@ -127,10 +149,10 @@ class OnceTest extends ActionTest
     }
 
     private function createActionWithSale(
-        QuantityInterface $quantity,
         DateTimeImmutable $actionTime,
         DateTimeImmutable $saleTime
     ): ActionInterface {
+        $quantity = Quantity::item(1);
         $action = $this->createActionWithCustomTime($quantity, $actionTime);
 
         $plan = new Plan(null, '', $this->customer, [$this->price]);
@@ -159,7 +181,7 @@ class OnceTest extends ActionTest
 
         $saleTime = new DateTimeImmutable('22-01-2024');
         $actionTime = $saleTime->modify('+3 months');
-        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
+        $action = $this->createActionWithSale($actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
 
@@ -177,7 +199,7 @@ class OnceTest extends ActionTest
 
         $saleTime = new DateTimeImmutable('22-01-2024');
         $actionTime = $saleTime->modify('+2 months');
-        $action = $this->createActionWithSale($this->prepaid->multiply(2), $actionTime, $saleTime);
+        $action = $this->createActionWithSale($actionTime, $saleTime);
         $type = $this->createType('monthly,monthly');
         $price = $this->createPrice($type);
 
@@ -186,5 +208,45 @@ class OnceTest extends ActionTest
         $charges = $once->modifyCharge($charge, $action);
         $this->assertCount(1, $charges);
         $this->assertZeroCharge($charges[0]);
+    }
+
+    public function testPerOneYearSinceDate(): void
+    {
+        $once = $this->buildOnce('1 year')->since('04.2025');
+
+        $saleTime = new DateTimeImmutable('2023-01-01'); // Sale time should be ignored, since is set
+        $price = $this->createPrice($this->createType('monthly,monthly'));
+
+        // Action in the same month and year as since: applies
+        $actionTime1 = new DateTimeImmutable('2025-04-30');
+        $action1 = $this->createActionWithSale($actionTime1, $saleTime);
+        $charge1 = $this->calculator->calculateCharge($price, $action1);
+        $charges1 = $once->modifyCharge($charge1, $action1);
+        $this->assertCount(1, $charges1);
+        $this->assertEquals($charge1, $charges1[0]);
+
+        // Action one year later in same month: applies
+        $actionTime2 = new DateTimeImmutable('2026-04-01');
+        $action2 = $this->createActionWithSale($actionTime2, $saleTime);
+        $charge2 = $this->calculator->calculateCharge($price, $action2);
+        $charges2 = $once->modifyCharge($charge2, $action2);
+        $this->assertCount(1, $charges2);
+        $this->assertEquals($charge2, $charges2[0]);
+
+        // Action one year later in different month: zero charge
+        $actionTime3 = new DateTimeImmutable('2026-05-01');
+        $action3 = $this->createActionWithSale($actionTime3, $saleTime);
+        $charge3 = $this->calculator->calculateCharge($price, $action3);
+        $charges3 = $once->modifyCharge($charge3, $action3);
+        $this->assertCount(1, $charges3);
+        $this->assertZeroCharge($charges3[0]);
+        
+        // Action before since date: zero charge
+        $actionTime4 = new DateTimeImmutable('2025-03-01');
+        $action4 = $this->createActionWithSale($actionTime4, $saleTime);
+        $charge4 = $this->calculator->calculateCharge($price, $action4);
+        $charges4 = $once->modifyCharge($charge4, $action4);
+        $this->assertCount(1, $charges4);
+        $this->assertZeroCharge($charges4[0]);
     }
 }

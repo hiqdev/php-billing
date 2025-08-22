@@ -9,6 +9,8 @@ use hiqdev\php\billing\charge\derivative\ChargeDerivative;
 use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
+use hiqdev\php\billing\charge\modifiers\addons\WithSince;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use hiqdev\php\billing\formula\FormulaEngineException;
 use Money\Money;
@@ -16,10 +18,11 @@ use Money\Money;
 /**
  * 1. API:
  * - once.per('1 year') – bill every month that matches the month of sale of the object
+ * - once.per('1 year').since('04.2025') – bill every year in April, starting from 2025
  * - once.per('3 months') – bill every third month, starting from the month of sale of the object
  * - once.per('day'), once.per('1.5 months') – throws an interpret-time exception, a value must NOT be a fraction of the month
  * 2. In months where the formula should NOT bill, it should produce a ZERO charge.
- * 3. If the sale is re-opened, the formula starts over.
+ * 3. If the sale is re-opened, the formula starts over, unless a `since` is specified.
  */
 class Once extends Modifier
 {
@@ -84,6 +87,8 @@ class Once extends Modifier
         $reason = $this->getReason();
         if ($reason) {
             $zeroChargeQuery->changeComment($reason->getValue());
+        } else {
+            $zeroChargeQuery->changeComment('Billed once per ' . $this->getPer()->toString());
         }
 
         return $this->chargeDerivative->__invoke($charge, $zeroChargeQuery);
@@ -105,9 +110,9 @@ class Once extends Modifier
 
     private function isApplicable(ActionInterface $action, Period $period): bool
     {
-        $saleTime = $this->getSaleTime($action);
+        $since = $this->getSinceDate($action);
         $actionTime = $action->getTime();
-        $monthsDiff = $this->calculateMonthsDifference($saleTime, $actionTime);
+        $monthsDiff = $this->calculateMonthsDifference($since, $actionTime);
 
         $intervalMonths = $this->getIntervalMonthsFromPeriod($period);
 
@@ -115,14 +120,19 @@ class Once extends Modifier
         return $monthsDiff % $intervalMonths === 0;
     }
 
-    private function getSaleTime(ActionInterface $action): DateTimeImmutable
+    private function getSinceDate(ActionInterface $action): DateTimeImmutable
     {
-        $sale = $action->getSale();
-        if ($sale === null || $sale->getTime() === null) {
-            throw new FormulaEngineException('Sale or sale time cannot be null in Once');
+        $since = $this->getSince();
+        if ($since instanceof Since) {
+            return $since->getValue();
         }
 
-        return $sale->getTime();
+        $sale = $action->getSale();
+        if ($sale !== null) {
+            return $sale->getTime();
+        }
+
+        throw new FormulaEngineException('Cannot determine initial date for "once" modifier: no "since" addon and no sale in action');
     }
 
     private function calculateMonthsDifference(DateTimeImmutable $start, DateTimeImmutable $end): int

@@ -130,6 +130,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('0', $charge->getSum()->getAmount());
     }
 
+    public function assertNonZeroCharge(ChargeInterface $charge): void
+    {
+        $this->assertNotSame('0', $charge->getSum()->getAmount(), 'Charge is zero');
+    }
+
     public function testChargesForNextMonthSalesAreNotCalculated()
     {
         $action = $this->createAction($this->prepaid->multiply(2));
