@@ -19,7 +19,7 @@ interface HasBehaviorsInterface
     public function hasBehavior(string $behaviorClassName): bool;
 
     /**
-     * @template TBehavior of object
+     * @template TBehavior of BehaviorInterface
      * @param class-string<TBehavior> $class
      * @return TBehavior|null
      */
