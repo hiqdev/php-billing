@@ -2,9 +2,11 @@
 
 namespace hiqdev\php\billing\product\Exception;
 
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\Exception\RuntimeException;
 
-class TariffTypeDefinitionNotFoundException extends RuntimeException
+class TariffTypeDefinitionNotFoundException extends RuntimeException implements HasContextInterface
 {
-
+    use HasContext;
 }

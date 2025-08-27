@@ -2,8 +2,11 @@
 
 namespace hiqdev\php\billing\product\behavior;
 
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\Exception\RuntimeException;
 
-class BehaviorNotFoundException extends RuntimeException
+class BehaviorNotFoundException extends RuntimeException implements HasContextInterface
 {
+    use HasContext;
 }
