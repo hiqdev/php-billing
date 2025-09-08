@@ -7,4 +7,6 @@ interface FractionUnitInterface
     public function name(): string;
 
     public function label(): string;
+
+    public function equals(FractionUnitInterface $other): bool;
 }
