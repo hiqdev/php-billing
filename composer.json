@@ -52,7 +52,7 @@
     "require-dev": {
         "ext-intl": "*",
         "behat/behat": "^3.4.3",
-        "phpunit/phpunit": "^10.0.0",
+        "phpunit/phpunit": "^12.0",
         "league/event": "^2.1",
         "hoa/ruler": "^2.17",
         "hiqdev/hidev": "dev-master",
