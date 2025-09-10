@@ -50,6 +50,7 @@
         "cache/array-adapter": "^1.2"
     },
     "require-dev": {
+        "php": "^8.3",
         "ext-intl": "*",
         "behat/behat": "^3.4.3",
         "phpunit/phpunit": "^12.0",
