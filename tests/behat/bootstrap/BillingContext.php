@@ -400,7 +400,6 @@ class BillingContext extends BaseContext
         }
 
         return $charge;
-
     }
 
     public function findCharges($type, $target): ?array
