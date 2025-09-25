@@ -30,51 +30,28 @@ class FormulaEngine implements FormulaEngineInterface
 {
     public const FORMULAS_SEPARATOR = "\n";
 
-    /**
-     * @var Ruler
-     */
-    protected $ruler;
+    protected ?Ruler $ruler = null;
 
-    /**
-     * @var Visit|Asserter
-     */
-    protected $asserter;
+    protected ?Visit $asserter = null;
 
-    /**
-     * @var Context
-     */
-    protected $context;
+    protected ?Context $context = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $discount;
+    protected ?ChargeModifier $discount = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $installment;
+    protected ?ChargeModifier $installment = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $increase;
+    protected ?ChargeModifier $increase = null;
 
     protected ?Cap $cap = null;
 
     protected ?Once $once = null;
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
 
-    public function __construct(CacheInterface $cache)
-    {
+    public function __construct(
+        private CacheInterface $cache
+    ) {
         if (!class_exists(Context::class)) {
             throw new Exception('to use formula engine install `hoa/ruler`');
         }
-
-        $this->cache = $cache;
     }
 
     public function build(string $formula): ChargeModifier
@@ -253,5 +230,18 @@ class FormulaEngine implements FormulaEngineInterface
         }
 
         return $this->once;
+    }
+
+    public function __clone(): void
+    {
+        if ($this->context !== null) {
+            $this->context = clone $this->context;
+        }
+        if ($this->ruler !== null) {
+            $this->ruler = clone $this->ruler;
+        }
+        if ($this->asserter !== null) {
+            $this->asserter = clone $this->asserter;
+        }
     }
 }
