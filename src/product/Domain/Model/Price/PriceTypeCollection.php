@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\product\Domain\Model\Price;
 
 use Countable;
-use hiqdev\php\billing\product\price\PriceTypeInterface;
 use IteratorAggregate;
 use Traversable;
 
