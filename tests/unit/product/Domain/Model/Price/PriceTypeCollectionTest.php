@@ -78,4 +78,14 @@ class PriceTypeCollectionTest extends TestCase
         // But "has" should still return true for 'hourly'
         $this->assertTrue($collection->has('hourly'));
     }
+
+    public function testNames(): void
+    {
+        $type = $this->createPriceType('hourly');
+        $monthly = $this->createPriceType('monthly');
+
+        $collection = new PriceTypeCollection([$type, $monthly]);
+
+        $this->assertSame(['hourly', 'monthly'], $collection->names());
+    }
 }
