@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\tests\unit\product\Domain\Model\Price;
 
+use hiqdev\php\billing\product\Domain\Model\Price\Exception\InvalidPriceTypeCollectionException;
 use hiqdev\php\billing\product\Domain\Model\Price\PriceTypeCollection;
 use hiqdev\php\billing\product\Domain\Model\Price\PriceTypeInterface;
 use PHPUnit\Framework\TestCase;
@@ -87,5 +88,15 @@ class PriceTypeCollectionTest extends TestCase
         $collection = new PriceTypeCollection([$type, $monthly]);
 
         $this->assertSame(['hourly', 'monthly'], $collection->names());
+    }
+
+    public function testThrowsExceptionWhenInvalidItemProvided(): void
+    {
+        $invalidItem = new \stdClass(); // not a PriceTypeInterface instance
+
+        $this->expectException(InvalidPriceTypeCollectionException::class);
+        $this->expectExceptionMessage('PriceTypeCollection can only contain instances of PriceTypeInterface. Got: stdClas');
+
+        new PriceTypeCollection([$invalidItem]);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace hiqdev\php\billing\product\Domain\Model\Price;
 
 use Countable;
+use hiqdev\php\billing\product\Domain\Model\Price\Exception\InvalidPriceTypeCollectionException;
 use IteratorAggregate;
 use Traversable;
 
@@ -17,7 +18,20 @@ class PriceTypeCollection implements IteratorAggregate, Countable
 
     public function __construct(private readonly array $types = [])
     {
+        $this->assertAllPriceTypes($types);
         $this->flippedTypeNames = array_flip($this->names());
+    }
+
+    private function assertAllPriceTypes(array $types): void
+    {
+        foreach ($types as $type) {
+            if (!$type instanceof PriceTypeInterface) {
+                throw new InvalidPriceTypeCollectionException(sprintf(
+                    'PriceTypeCollection can only contain instances of PriceTypeInterface. Got: %s',
+                    is_object($type) ? get_class($type) : gettype($type)
+                ));
+            }
+        }
     }
 
     public function names(): array
