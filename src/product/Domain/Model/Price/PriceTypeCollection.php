@@ -26,10 +26,7 @@ class PriceTypeCollection implements IteratorAggregate, Countable
     {
         foreach ($types as $type) {
             if (!$type instanceof PriceTypeInterface) {
-                throw new InvalidPriceTypeCollectionException(sprintf(
-                    'PriceTypeCollection can only contain instances of PriceTypeInterface. Got: %s',
-                    is_object($type) ? get_class($type) : gettype($type)
-                ));
+                throw InvalidPriceTypeCollectionException::becauseContainsNonPriceType($type);
             }
         }
     }
