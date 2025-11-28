@@ -105,7 +105,7 @@ class Sale implements SaleInterface
         return $this->closeTime;
     }
 
-    public function close(DateTimeImmutable $closeTime): SaleInterface
+    public function close(DateTimeImmutable $closeTime): self
     {
         if ($this->closeTime !== null) {
             throw new InvariantException('Sale is already closed');
