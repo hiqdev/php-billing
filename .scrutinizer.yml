@@ -1,0 +1,25 @@
+build:
+  environment:
+    php:
+      version: 8.3.3
+  nodes:
+    analysis:
+      tests:
+        override: [ php-scrutinizer-run ]
+
+tools:
+  php_code_coverage:
+    enabled: true
+    external_code_coverage:
+      timeout: 600
+  php_code_sniffer: true
+
+filter:
+  excluded_paths:
+    - tests/*
+    - vendor/*
+
+checks:
+  php:
+    code_rating: true
+    duplication: true

@@ -215,4 +215,41 @@ class ProgressivePriceTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider progressivePriceProviderSmallUsage
+     */
+    public function testProgressivePriceSmallUsage(
+        array $inputThresholdsArray,
+        int $expectedAmount,
+        string $startPrice,
+        string $prepaid = '0'
+    ): void {
+        $price = $this->createProgressivePrice(
+            prepaid: $prepaid,
+            startPrice: $startPrice,
+            thresholdsArray: $inputThresholdsArray
+        );
+        $this->usage = Quantity::bps(6043);
+        $usage = $price->calculateUsage($this->usage);
+        $this->assertTrue($this->usage->equals($usage));
+
+        $amount = $price->calculateSum($this->usage);
+        $this->assertEquals($expectedAmount, $amount->getAmount());
+    }
+
+    private function progressivePriceProviderSmallUsage(): Generator
+    {
+        yield 'Simple case' => [
+            'thresholds' => [
+                ['price' => '10', 'currency' => 'EUR', 'quantity' => '0', 'unit' => 'gbps'],
+            ],
+            'money' => 0,
+            'price' => '1',
+            'prepaid' => '0',
+            'trace' => [
+                '6043bps * 0.00000001 = 0.00',
+            ],
+        ];
+    }
 }

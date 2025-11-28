@@ -31,7 +31,7 @@ abstract class Date implements AddonInterface
         $this->value = static::ensureValidValue($value);
     }
 
-    public function getValue()
+    public function getValue(): DateTimeImmutable
     {
         return $this->value;
     }

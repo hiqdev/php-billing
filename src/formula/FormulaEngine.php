@@ -16,6 +16,7 @@ use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Increase;
 use hiqdev\php\billing\charge\modifiers\Installment;
+use hiqdev\php\billing\charge\modifiers\Once;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model\Model;
 use Hoa\Ruler\Ruler;
@@ -29,49 +30,28 @@ class FormulaEngine implements FormulaEngineInterface
 {
     public const FORMULAS_SEPARATOR = "\n";
 
-    /**
-     * @var Ruler
-     */
-    protected $ruler;
+    protected ?Ruler $ruler = null;
 
-    /**
-     * @var Visit|Asserter
-     */
-    protected $asserter;
+    protected ?Visit $asserter = null;
 
-    /**
-     * @var Context
-     */
-    protected $context;
+    protected ?Context $context = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $discount;
+    protected ?ChargeModifier $discount = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $installment;
+    protected ?ChargeModifier $installment = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $increase;
+    protected ?ChargeModifier $increase = null;
 
     protected ?Cap $cap = null;
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
 
-    public function __construct(CacheInterface $cache)
-    {
+    protected ?Once $once = null;
+
+    public function __construct(
+        private CacheInterface $cache
+    ) {
         if (!class_exists(Context::class)) {
             throw new Exception('to use formula engine install `hoa/ruler`');
         }
-
-        $this->cache = $cache;
     }
 
     public function build(string $formula): ChargeModifier
@@ -202,6 +182,7 @@ class FormulaEngine implements FormulaEngineInterface
         $context['installment'] = $this->getInstallment();
         $context['increase'] = $this->getIncrease();
         $context['cap'] = $this->getCap();
+        $context['once'] = $this->getOnce();
 
         return $context;
     }
@@ -240,5 +221,27 @@ class FormulaEngine implements FormulaEngineInterface
         }
 
         return $this->cap;
+    }
+
+    private function getOnce(): ChargeModifier
+    {
+        if ($this->once === null) {
+            $this->once = new Once();
+        }
+
+        return $this->once;
+    }
+
+    public function __clone(): void
+    {
+        if ($this->context !== null) {
+            $this->context = clone $this->context;
+        }
+        if ($this->ruler !== null) {
+            $this->ruler = clone $this->ruler;
+        }
+        if ($this->asserter !== null) {
+            $this->asserter = clone $this->asserter;
+        }
     }
 }

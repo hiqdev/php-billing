@@ -54,6 +54,8 @@ abstract class AbstractAction implements ActionInterface
     /** @var ActionInterface */
     protected $parent;
 
+    protected float $fractionOfMonth = 0.0;
+
     /**
      * @param SaleInterface $sale
      * @param ActionInterface $parent
@@ -67,7 +69,8 @@ abstract class AbstractAction implements ActionInterface
         DateTimeImmutable $time,
         SaleInterface $sale = null,
         ActionState $state = null,
-        ActionInterface $parent = null
+        ActionInterface $parent = null,
+        float $fractionOfMonth = 0.0
     ) {
         $this->id       = $id;
         $this->type     = $type;
@@ -78,6 +81,7 @@ abstract class AbstractAction implements ActionInterface
         $this->sale     = $sale;
         $this->state    = $state;
         $this->parent   = $parent;
+        $this->fractionOfMonth = $fractionOfMonth;
     }
 
     /**
@@ -217,6 +221,10 @@ abstract class AbstractAction implements ActionInterface
         $this->sale = $sale;
     }
 
+    public function getFractionOfMonth(): float
+    {
+        return $this->fractionOfMonth;
+    }
     /**
      * {@inheritdoc}
      */
@@ -231,6 +239,17 @@ abstract class AbstractAction implements ActionInterface
             return UsageInterval::wholeMonth($this->getTime());
         }
 
-        return UsageInterval::withinMonth($this->getTime(), $this->getSale()->getTime(), $this->getSale()->getCloseTime());
+        if ($this->getFractionOfMonth() > 0) {
+            return UsageInterval::withMonthAndFraction(
+                $this->getTime(),
+                $this->getSale()->getTime(),
+                $this->getFractionOfMonth()
+            );
+        }
+        return UsageInterval::withinMonth(
+            $this->getTime(),
+            $this->getSale()->getTime(),
+            $this->getSale()->getCloseTime()
+        );
     }
 }

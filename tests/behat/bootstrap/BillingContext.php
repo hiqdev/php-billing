@@ -153,6 +153,22 @@ class BillingContext extends BaseContext
     }
 
     /**
+     * @Given /^build progressive price/
+     */
+    public function buildProgressivePrices()
+    {
+        foreach ($this->progressivePrice as $type => $price) {
+            $this->fullPrice([
+                'type' => $type,
+                'price' => 0,
+                'currency' => $price['currency'],
+                'unit' => $price['unit'],
+                'data' => ['thresholds' => $price['thresholds'], 'class' => 'ProgressivePrice'],
+            ]);
+        }
+    }
+
+    /**
      * @Given /^remove and recreate tariff plan (\S+)/
      */
     public function recreatePlan($plan)
@@ -297,6 +313,36 @@ class BillingContext extends BaseContext
         }
     }
 
+    /**
+     * @Given /bill interval +for (\S+) is +(\S+) (\S+) per (\S+) (\S+) for target (.+?) at (\S+) between (\S+) and (\S+)?$/
+     */
+    public function billInterval($type, $sum, $currency, $quantity, $unit, $target, $time, $since, $till)
+    {
+        $this->builder->flushEntitiesCacheByType('bill');
+
+        $quantity = $this->prepareQuantity($quantity);
+        $sum = $this->prepareSum($sum, $quantity);
+        $time = $this->prepareTime($time);
+        $bill = $this->findBill([
+            'type' => $type,
+            'target' => $target,
+            'sum' => "$sum $currency",
+            'quantity' => "$quantity $unit",
+            'time' => $time,
+        ]);
+        Assert::assertSame($type, $bill->getType()->getName(), "Bill type mismatch: expected $type, got {$bill->getType()->getName()}");
+        Assert::assertSame($target, $bill->getTarget()->getFullName(), "Bill target mismatch: expected $target, got {$bill->getTarget()->getFullName()}");
+        Assert::assertEquals(bcmul($sum, 100), $bill->getSum()->getAmount(), "Bill sum mismatch: expected $sum, got {$bill->getSum()->getAmount()}");
+        Assert::assertSame($currency, $bill->getSum()->getCurrency()->getCode(), "Bill currency mismatch: expected $currency, got {$bill->getSum()->getCurrency()->getCode()}");
+        Assert::assertEquals((float)$quantity, (float)$bill->getQuantity()->getQuantity(), "Bill quantity mismatch: expected $quantity, got {$bill->getQuantity()->getQuantity()}");
+        Assert::assertEquals(strtolower($unit), strtolower($bill->getQuantity()->getUnit()->getName()), "Bill unit mismatch: expected $unit, got {$bill->getQuantity()->getUnit()->getName()}");
+        Assert::assertEquals(new DateTimeImmutable($time), $bill->getTime(), "Bill time mismatch: expected $time, got {$bill->getTime()->format(DATE_ATOM)}");
+        $billStart = $bill->getUsageInterval()->start();
+        $billEnd = $bill->getUsageInterval()->end();
+        Assert::assertEquals(new DateTimeImmutable($since), $billStart, "Bill since time mismatch: expected $since, got {$billStart->format(DATE_ATOM)}");
+        Assert::assertEquals(new DateTimeImmutable($till), $billEnd, "Bill till time mismatch: expected $till, got {$billEnd->format(DATE_ATOM)}");
+    }
+
     public function findBill(array $params): BillInterface
     {
         $bills = $this->builder->findBills($params);
@@ -343,7 +389,7 @@ class BillingContext extends BaseContext
     {
         $quantity = $this->prepareQuantity($quantity);
         $amount = $this->prepareSum($amount, $quantity);
-        $charge = $this->findCharge($type, $target);
+        $charge = $this->findCharge($type, $target, $quantity);
         Assert::assertNotNull($charge);
         Assert::assertSame($type, $charge->getType()->getName());
         Assert::assertSame($target, $charge->getTarget()->getFullName());
@@ -353,7 +399,23 @@ class BillingContext extends BaseContext
         Assert::assertEquals(strtolower($unit), strtolower($charge->getUsage()->getUnit()->getName()));
     }
 
-    public function findCharge($type, $target): ?ChargeInterface
+    public function findCharge($type, $target, $quantity = null): ?ChargeInterface
+    {
+        $charges = $this->findCharges($type, $target);
+        if ($charges === null) {
+            return null;
+        }
+
+        foreach ($charges as $charge) {
+            if ((string) $quantity === (string) $charge->getUsage()->getQuantity()) {
+                return $charge;
+            }
+        }
+
+        return $charge;
+    }
+
+    public function findCharges($type, $target): ?array
     {
         foreach ($this->charges as $charge) {
             if ($charge->getType()->getName() !== $type) {
@@ -363,10 +425,10 @@ class BillingContext extends BaseContext
                 continue;
             }
 
-            return $charge;
+            $charges[] = $charge;
         }
 
-        return null;
+        return $charges ?? null;
     }
 
     public function getNextCharge(): ChargeInterface

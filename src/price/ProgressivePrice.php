@@ -52,7 +52,7 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
         $usage = $quantity->subtract($this->prepaid);
 
         if ($usage->isPositive()) {
-            return $quantity;
+            return $quantity->convert($this->prepaid->getUnit());
         }
 
         return Quantity::create($this->prepaid->getUnit()->getName(), 0);
@@ -105,8 +105,8 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
             $price = $threshold->price();
 
             $chargedAmount = $price->money()
-                                   ->multiply((string)$billedUsage->getQuantity())
-                                   ->divide((string)($price->multiplier()));
+                                   ->multiply((string)(sprintf('%.14F', $billedUsage->getQuantity())))
+                                   ->divide((string)(sprintf('%.14F', $price->multiplier())));
 
             $this->calculationTraces[] = new ProgressivePriceCalculationTrace(
                 $threshold, $billedUsage, $chargedAmount

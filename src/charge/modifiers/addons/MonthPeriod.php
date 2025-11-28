@@ -30,4 +30,9 @@ class MonthPeriod extends Period
     {
         return $since->add(new \DateInterval("P{$this->value}M"));
     }
+
+    public function __toString(): string
+    {
+        return $this->value . ' month' . ($this->value > 1 ? 's' : '');
+    }
 }

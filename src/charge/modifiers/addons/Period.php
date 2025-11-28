@@ -69,6 +69,13 @@ abstract class Period implements AddonInterface
         return (int) $value;
     }
 
+    abstract public function __toString(): string;
+
+    public function toString(): string
+    {
+        return $this->__toString();
+    }
+
     /**
      * Adds current period to the passed $startTime
      *

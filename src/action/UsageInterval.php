@@ -5,9 +5,10 @@ namespace hiqdev\php\billing\action;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use JsonSerializable;
 
 /** @readonly */
-final class UsageInterval
+final class UsageInterval implements JsonSerializable
 {
     /** @readonly */
     private DateTimeImmutable $start;
@@ -46,6 +47,7 @@ final class UsageInterval
      * @param DateTimeImmutable $month the month to calculate the usage interval for
      * @param DateTimeImmutable $start the start date of the sale
      * @param DateTimeImmutable|null $end the end date of the sale or null if the sale is active
+     * @throws InvalidArgumentException if the start date is greater than the end date
      * @return static
      */
     public static function withinMonth(
@@ -75,6 +77,45 @@ final class UsageInterval
             $end ?? new DateTimeImmutable('2999-01-01'),
             $month->modify('+1 month')
         );
+
+        return new self(
+            $effectiveSince,
+            $effectiveTill,
+        );
+    }
+
+    /**
+     * Calculates the usage interval for the given month for the given start date and fraction of month value.
+     *
+     * @param DateTimeImmutable $month the month to calculate the usage interval for
+     * @param DateTimeImmutable $start the start date of the sale
+     * @param float $fractionOfMonth the fraction of manth
+     * @return static
+     */
+    public static function withMonthAndFraction(
+        DateTimeImmutable $month,
+        DateTimeImmutable $start,
+        float $fractionOfMonth
+    ): self {
+        if ($fractionOfMonth < 0 || $fractionOfMonth > 1) {
+            throw new InvalidArgumentException('Fraction of month must be between 0 and 1');
+        }
+        $month = self::toMonth($month);
+        $nextMonth = $month->modify('+1 month');
+
+        if ($start >= $nextMonth) {
+            $start = $month;
+        }
+
+        $effectiveSince = max($start, $month);
+
+        if ($fractionOfMonth === 1.0) {
+            $effectiveTill = $month->modify('+1 month');
+        } else {
+            $interval = new self($month, $nextMonth);
+            $seconds = $interval->secondsInMonth() * $fractionOfMonth;
+            $effectiveTill = $effectiveSince->modify(sprintf('+%d seconds', $seconds));
+        }
 
         return new self(
             $effectiveSince,
@@ -128,5 +169,30 @@ final class UsageInterval
         $secondsInCurrentMonth = $this->secondsInMonth();
 
         return $usageSeconds / $secondsInCurrentMonth;
+    }
+
+    /**
+     * Extends the usage interval to include both current and other intervals.
+     *
+     * @param UsageInterval $other
+     * @return self
+     */
+    public function extend(self $other): self
+    {
+        $newStart = min($this->start, $other->start);
+        $newEnd = max($this->end, $other->end);
+
+        if ($newStart > $newEnd) {
+            throw new InvalidArgumentException('Cannot extend intervals: resulting interval would be invalid');
+        }
+        return new self(
+            $newStart,
+            $newEnd,
+        );
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_filter(get_object_vars($this));
     }
 }

@@ -30,4 +30,9 @@ class YearPeriod extends Period
     {
         return $since->add(new \DateInterval("P{$this->value}Y"));
     }
+
+    public function __toString(): string
+    {
+        return $this->value . ' year' . ($this->value > 1 ? 's' : '');
+    }
 }

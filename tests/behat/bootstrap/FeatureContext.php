@@ -17,6 +17,7 @@ use Closure;
 use DateTimeImmutable;
 use Exception;
 use hiqdev\php\billing\action\Action;
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\Customer;
@@ -188,31 +189,39 @@ class FeatureContext implements Context
         $type = Type::anyId($type);
         $target = new Target(Target::ANY, $target);
         $time = new DateTimeImmutable($date);
+        $fractionOfMonth = 1;
         if ($this->sale->getCloseTime() instanceof DateTimeImmutable) {
-            $amount = $amount * $this->getFractionOfMonth(
+            $fractionOfMonth = $this->getFractionOfMonth(
                 $time, $time, $this->sale->getCloseTime()
             );
+            if ($type->getName() !== 'overuse') {
+                // Overuses should be prepared in the test case
+                $amount = $amount * $fractionOfMonth;
+            }
         }
         $quantity = Quantity::create($unit, $amount);
 
-        $this->action = new Action(null, $type, $target, $quantity, $this->customer, $time);
+        $this->action = new Action(
+            null,
+            $type,
+            $target,
+            $quantity,
+            $this->customer,
+            $time,
+            null,
+            null,
+            null,
+            $fractionOfMonth
+        );
     }
 
     private function getFractionOfMonth(DateTimeImmutable $month, DateTimeImmutable $startTime, DateTimeImmutable $endTime): float
     {
-        // SQL function: days2quantity()
-
-        $month = $month->modify('first day of this month 00:00');
-        if ($startTime < $month) {
-            $startTime = $month;
+        try {
+            return UsageInterval::withinMonth($month, $startTime, $endTime)->ratioOfMonth();
+        } catch (\InvalidArgumentException $e) {
+            return 1;
         }
-        if ($endTime > $month->modify('first day of next month 00:00')) {
-            $endTime = $month->modify('first day of next month 00:00');
-        }
-
-        $secondsInMonth = $month->format('t') * 24 * 60 * 60;
-
-        return ($endTime->getTimestamp() - $startTime->getTimestamp()) / $secondsInMonth;
     }
 
     /**
@@ -250,10 +259,15 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given /^client rejected service at (.+)$/
+     * @Given /^client rejected service at ?(.+?)$/
      */
-    public function actionCloseDateIs(string $close_date): void
+    public function actionCloseDateIs(?string $close_date): void
     {
+        $close_date = trim($close_date);
+        if (empty($close_date)) {
+            return;
+        }
+
         $this->sale->close(new DateTimeImmutable($close_date));
     }
 

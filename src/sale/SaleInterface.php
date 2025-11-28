@@ -71,7 +71,7 @@ interface SaleInterface extends EntityInterface
      * @throws InvariantException
      * @throws ConstraintException
      */
-    public function close(DateTimeImmutable $closeTime): SaleInterface;
+    public function close(DateTimeImmutable $closeTime): self;
 
     public function cancelClosing(): void;
 }

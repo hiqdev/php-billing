@@ -61,4 +61,14 @@ class SimpleSaleRepository implements SaleRepositoryInterface
     {
         throw new Exception('not implemented');
     }
+
+    public function isTariffInUse(int $tariffId): bool
+    {
+        throw new Exception('not implemented');
+    }
+
+    public function deleteByTariffId(int $tariffId): void
+    {
+        throw new Exception('not implemented');
+    }
 }

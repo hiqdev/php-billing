@@ -31,4 +31,9 @@ class DayPeriod extends Period
     {
         return $since->add(new DateInterval("P{$this->value}D"));
     }
+
+    public function __toString(): string
+    {
+        return $this->value . ' day' . ($this->value > 1 ? 's' : '');
+    }
 }

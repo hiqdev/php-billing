@@ -1,20 +1,20 @@
 language: php
 php:
-    - 7.1
-    - 7.2
-    - 7.3
     - 7.4
-dist: trusty
+    - 8.1
+    - 8.2
+    - 8.3
+dist: focal
+sudo: false
 cache:
     directories:
         - $HOME/.composer/cache
 before_install:
-    - 'composer self-update'
+    - 'composer self-update --2'
     - 'composer --version'
     - 'composer install --no-interaction'
     - './vendor/bin/hidev --version'
     - './vendor/bin/hidev travis/before-install'
-sudo: false
 install:
     - './vendor/bin/hidev travis/install'
 script:
@@ -23,6 +23,3 @@ after_script:
     - './vendor/bin/hidev travis/after-script'
 matrix:
     fast_finish: true
-    allow_failures:
-        -
-            php: 7.1
