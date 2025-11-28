@@ -17,9 +17,5 @@ namespace hiqdev\php\billing\plan;
  */
 interface PlanFactoryInterface
 {
-    /**
-     * Creates plan object.
-     * @return Plan
-     */
-    public function create(PlanCreationDto $dto);
+    public function create(PlanCreationDto $dto): PlanInterface;
 }

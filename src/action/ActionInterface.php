@@ -71,7 +71,7 @@ interface ActionInterface extends EntityInterface
     /**
      * Returns null if the action state is not set.
      */
-    public function isFinished(): ?bool;
+    public function isNotActive(): ?bool;
 
     public function getParent(): ?ActionInterface;
 

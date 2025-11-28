@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\action;
 
-use DateInterval;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
@@ -26,7 +25,7 @@ use hiqdev\php\units\QuantityInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class AbstractAction implements \JsonSerializable, ActionInterface
+abstract class AbstractAction implements ActionInterface
 {
     /** @var int */
     protected $id;
@@ -172,9 +171,9 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
         $this->state = ActionState::finished();
     }
 
-    public function isFinished(): ?bool
+    public function isNotActive(): ?bool
     {
-        return $this->state === null ? null : $this->state->isFinished();
+        return $this->state === null ? null : $this->state->isNotActive();
     }
 
     /**

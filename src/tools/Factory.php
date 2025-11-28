@@ -11,10 +11,21 @@
 namespace hiqdev\php\billing\tools;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\ActionInterface;
+use hiqdev\php\billing\bill\BillInterface;
+use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\UnknownEntityException;
+use hiqdev\php\billing\plan\PlanInterface;
+use hiqdev\php\billing\price\PriceInterface;
+use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetCollection;
+use hiqdev\php\billing\target\TargetInterface;
+use hiqdev\php\billing\type\TypeInterface;
 use hiqdev\php\units\Quantity;
+use hiqdev\php\units\QuantityInterface;
 use hiqdev\php\units\Unit;
+use hiqdev\php\units\UnitInterface;
 use Money\Currency;
 use Money\Money;
 
@@ -25,21 +36,21 @@ use Money\Money;
  */
 class Factory implements FactoryInterface
 {
-    private $entities = [];
+    private array $entities = [];
 
-    private $factories = [];
+    private array $factories;
 
     public function __construct(array $factories)
     {
         $this->factories = $factories;
     }
 
-    public function getMoney($data)
+    public function getMoney($data): Money
     {
         return $this->get('money', $data);
     }
 
-    public function getSums($data)
+    public function getSums($data): array
     {
         $res = [];
         foreach ($data as $key => $value) {
@@ -49,7 +60,7 @@ class Factory implements FactoryInterface
         return $res;
     }
 
-    public function parseMoney($str)
+    public function parseMoney(string $str): array
     {
         [$amount, $currency] = explode(' ', $str);
 
@@ -59,22 +70,22 @@ class Factory implements FactoryInterface
         ];
     }
 
-    public function createMoney($data)
+    public function createMoney($data): Money
     {
         return new Money($data['amount'], new Currency(strtoupper($data['currency'])));
     }
 
-    public function getCurrency($data)
+    public function getCurrency($data): Currency
     {
         return new Currency($data);
     }
 
-    public function getQuantity($data)
+    public function getQuantity($data): QuantityInterface
     {
         return $this->get('quantity', $data);
     }
 
-    public function parseQuantity($str)
+    public function parseQuantity(string $str): array
     {
         [$quantity, $unit] = explode(' ', $str);
 
@@ -84,32 +95,32 @@ class Factory implements FactoryInterface
         ];
     }
 
-    public function createQuantity($data)
+    public function createQuantity($data): QuantityInterface
     {
         return Quantity::create($data['unit'], $data['quantity']);
     }
 
-    public function getUnit($data)
+    public function getUnit($data): UnitInterface
     {
         return $this->get('unit', $data);
     }
 
-    public function createUnit($data)
+    public function createUnit($data): UnitInterface
     {
         return Unit::create($data['name']);
     }
 
-    public function getType($data)
+    public function getType($data): TypeInterface
     {
         return $this->get('type', $data);
     }
 
-    public function getTime($data)
+    public function getTime($data): DateTimeImmutable
     {
         return $this->get('time', $data);
     }
 
-    public function createTime($data)
+    public function createTime($data): DateTimeImmutable
     {
         if (empty($data['date'])) {
             return new DateTimeImmutable();
@@ -123,12 +134,12 @@ class Factory implements FactoryInterface
         return new DateTimeImmutable($str);
     }
 
-    public function getTargets($data)
+    public function getTargets($data): TargetCollection
     {
         return $this->get('targets', $data);
     }
 
-    public function createTargets($data)
+    public function createTargets(array $data): TargetCollection
     {
         $targets = [];
         foreach ($data as $one) {
@@ -138,17 +149,21 @@ class Factory implements FactoryInterface
         return new TargetCollection($targets);
     }
 
-    public function getTarget($data)
+    public function getTarget($data): TargetInterface
     {
         return $this->get('target', $data);
     }
 
-    public function getAction($data)
+    public function getAction($data): ActionInterface
     {
         return $this->get('action', $data);
     }
 
-    public function getCharges($data)
+    /**
+     * @param array $data
+     * @return ChargeInterface[]
+     */
+    public function getCharges(array $data): array
     {
         $res = [];
         foreach ($data as $key => $row) {
@@ -158,36 +173,43 @@ class Factory implements FactoryInterface
         return $res;
     }
 
-    public function getCharge($data)
+    public function getCharge($data): ChargeInterface
     {
         return $this->get('charge', $data);
     }
 
-    public function getPrice($data)
+    public function getPrice($data): PriceInterface
     {
         return $this->get('price', $data);
     }
 
-    public function getBill($data)
+    public function getBill($data): BillInterface
     {
         return $this->get('bill', $data);
     }
 
-    public function getPlan($data)
+    public function getPlan($data): PlanInterface
     {
         return $this->get('plan', $data);
     }
 
-    public function getSale($data)
+    public function getSale($data): SaleInterface
     {
         return $this->get('sale', $data);
     }
 
-    public function getCustomer($data)
+    public function getCustomer($data): CustomerInterface
     {
         return $this->get('customer', $data);
     }
 
+    /**
+     * @deprecated In the future the function will be private.
+     * Please use a specific method instead (e.g., getSale)
+     * @param string $entity
+     * @param $data
+     * @return mixed
+     */
     public function get(string $entity, $data)
     {
         if (is_scalar($data)) {
@@ -270,9 +292,7 @@ class Factory implements FactoryInterface
             throw new FactoryNotFoundException($entity);
         }
 
-        $factory = $this->factories[$entity];
-
-        return $factory->create($this->createDto($entity, $data));
+        return $this->factories[$entity]->create($this->createDto($entity, $data));
     }
 
     public function createDto(string $entity, array $data)

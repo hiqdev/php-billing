@@ -35,4 +35,14 @@ interface CustomerInterface extends EntityInterface
      * @return static|null
      */
     public function getSeller();
+
+    /**
+     * Get Customer state.
+     * @return null|CustomerState
+     */
+    public function getState(): ?CustomerState;
+
+    public function setState(CustomerState $state): self;
+
+    public function isDeleted(): bool;
 }

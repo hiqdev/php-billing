@@ -17,9 +17,5 @@ namespace hiqdev\php\billing\bill;
  */
 interface BillFactoryInterface
 {
-    /**
-     * Creates bill object.
-     * @return Bill
-     */
-    public function create(BillCreationDto $dto);
+    public function create(BillCreationDto $dto): BillInterface;
 }

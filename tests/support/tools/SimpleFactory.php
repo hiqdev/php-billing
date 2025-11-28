@@ -26,7 +26,7 @@ class SimpleFactory extends Factory
 {
     public function __construct(array $factories = [])
     {
-        return parent::__construct(array_merge(self::simpleFactories(), $factories));
+        parent::__construct(array_merge(self::simpleFactories(), $factories));
     }
 
     public static function simpleFactories(): array

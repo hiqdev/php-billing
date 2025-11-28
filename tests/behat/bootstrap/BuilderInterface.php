@@ -28,7 +28,9 @@ interface BuilderInterface
 
     public function recreatePlan(string $name);
 
-    public function buildSale(string $target, string $plan, string $time);
+    public function buildSale(string $target, string $planName, string $time, ?string $closeTime = null);
+
+    public function createSale(string $target, string $planName, string $time, ?string $closeTime = null);
 
     public function buildPurchase(string $target, string $plan, string $time, ?array $uses = []);
 

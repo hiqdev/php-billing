@@ -21,11 +21,7 @@ use hiqdev\php\billing\action\UsageInterval;
  */
 class BillFactory implements BillFactoryInterface
 {
-    /**
-     * Creates bill object.
-     * @return Bill
-     */
-    public function create(BillCreationDto $dto)
+    public function create(BillCreationDto $dto): BillInterface
     {
         $bill = new Bill(
             $dto->id,

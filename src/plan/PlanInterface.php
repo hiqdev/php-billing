@@ -28,6 +28,8 @@ interface PlanInterface extends EntityInterface
      */
     public function getId();
 
+    public function setId(int $id): void;
+
     /**
      * Globally unique ID.
      * @return int|string
@@ -38,6 +40,7 @@ interface PlanInterface extends EntityInterface
      * @return PriceInterface[]
      */
     public function getPrices(): array;
+
     public function hasPrices(): bool;
 
     /**
@@ -45,9 +48,13 @@ interface PlanInterface extends EntityInterface
      * @throws CannotReassignException when prices are already set
      */
     public function setPrices(array $prices): void;
+
     public function getSeller(): ?CustomerInterface;
+
     public function getName(): string;
+
     public function setName(string $name): void;
+
     public function getType(): ?TypeInterface;
     public function getParentId(): ?int;
     public function setParentId(int $parentId): void;
