@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
  * Class ProgressivePriceThresholdsTest
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- * @covers \hiqdev\php\billing\price\ProgressivePriceThresholdList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\hiqdev\php\billing\price\ProgressivePriceThresholdList::class)]
 class ProgressivePriceThresholdsTest extends TestCase
 {
     public function testCreateFromScalarsArray(): void

@@ -37,9 +37,7 @@ class SumsTest extends TestCase
         $this->assertNull($sums->getSum(4));  // Not found
     }
 
-    /**
-     * @dataProvider minSumDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('minSumDataProvider')]
     public function testGetMinSum($input, $expected): void
     {
         $sums = new Sums($input);
@@ -47,7 +45,7 @@ class SumsTest extends TestCase
         $this->assertSame($expected, $sums->getMinSum());
     }
 
-    public function minSumDataProvider(): array
+    public static function minSumDataProvider(): array
     {
         return [
             // Single element case
