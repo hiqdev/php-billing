@@ -72,7 +72,7 @@ class FormulaEngineTest extends TestCase
         $this->assertNull($formula->getTill());
     }
 
-    public function normalizeDataProvider()
+    public static function normalizeDataProvider()
     {
         return [
             ["ab\ncd", "ab\ncd"],
@@ -86,23 +86,19 @@ class FormulaEngineTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider normalizeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('normalizeDataProvider')]
     public function testNormalize($formula, $expected)
     {
         return $this->assertSame($expected, $this->engine->normalize($formula));
     }
 
-    /**
-     * @dataProvider validateDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateDataProvider')]
     public function testValidate($formula, $error)
     {
         return $this->assertSame($error, $this->engine->validate($formula));
     }
 
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑ : "],

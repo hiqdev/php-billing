@@ -16,13 +16,11 @@ use PHPUnit\Framework\TestCase;
  * Class ProgressivePriceThresholdTest
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- * @covers \hiqdev\php\billing\price\ProgressivePriceThreshold
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\hiqdev\php\billing\price\ProgressivePriceThreshold::class)]
 class ProgressivePriceThresholdTest extends TestCase
 {
-    /**
-     * @dataProvider scalarsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scalarsDataProvider')]
     public function testCreateFromScalar(string $price, string $currency, string $quantity, string $unit): void
     {
         $threshold = ProgressivePriceThreshold::createFromScalar($price, $currency, $quantity, $unit);
@@ -58,7 +56,7 @@ class ProgressivePriceThresholdTest extends TestCase
         ], $threshold->__toArray());
     }
 
-    public function scalarsDataProvider(): Generator
+    public static function scalarsDataProvider(): Generator
     {
         yield ['10', 'USD', '20', 'gpbs'];
         yield ['10.24', 'EUR', '0', 'items'];

@@ -21,9 +21,7 @@ class UsageIntervalTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider provideWithinMonth
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideWithinMonth')]
     public function testWithinMonth(array $constructor, array $expectations): void
     {
         $month = new DateTimeImmutable($constructor['month']);
@@ -45,9 +43,7 @@ class UsageIntervalTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider provideWithinMonth
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideWithinMonth')]
     public function testWithMonthAndFraction(array $constructor, array $expectations): void
     {
         $month = new DateTimeImmutable($constructor['month']);
@@ -62,7 +58,7 @@ class UsageIntervalTest extends TestCase
         $this->assertSame($expectations['secondsInMonth'], $interval->secondsInMonth());
     }
 
-    public function provideWithinMonth()
+    public static function provideWithinMonth()
     {
         yield 'For a start and end dates outside the month, the interval is the whole month' => [
             ['month' => '2023-02-01 00:00:00', 'start' => '2023-01-01 00:00:00', 'end' => '2023-10-01 00:00:00', 'fraction' => 1],
@@ -142,9 +138,7 @@ class UsageIntervalTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideWithinMonthFailed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideWithinMonthFailed')]
     public function testWithinMonthFailed(array $constructor, array $expectations): void
     {
         $month = new DateTimeImmutable($constructor['month']);
@@ -157,7 +151,7 @@ class UsageIntervalTest extends TestCase
         UsageInterval::withinMonth($month, $start, $end);
     }
 
-    public function provideWithinMonthFailed()
+    public static function provideWithinMonthFailed()
     {
         yield 'When a start date is greater than the end an exception is thrown' => [
             ['month' => '2023-02-01 00:00:00', 'start' => '2023-03-15 00:00:00', 'end' => '2023-02-15 00:00:00'],
@@ -168,9 +162,7 @@ class UsageIntervalTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideInvalidFractionOfMonthValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvalidFractionOfMonthValues')]
     public function testWithMonthAndFractionInvalidValues(float $fractionOfMonth): void
     {
         $month = new DateTimeImmutable('2023-01-01');
@@ -182,7 +174,7 @@ class UsageIntervalTest extends TestCase
         UsageInterval::withMonthAndFraction($month, $start, $fractionOfMonth);
     }
 
-    public function provideInvalidFractionOfMonthValues(): array
+    public static function provideInvalidFractionOfMonthValues(): array
     {
         return [
             [-0.1],
