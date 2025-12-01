@@ -17,8 +17,8 @@ class MultipliedMoneyTest extends TestCase
 {
     /**
      * @param numeric-string $amountCents
-     * @dataProvider moneyParsingProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('moneyParsingProvider')]
     public function testMultipliedMoneyParsing(string $amountCents, string $expectedCents, int $expectedMultiplier): void
     {
         $currencyCode = 'USD';
@@ -28,7 +28,7 @@ class MultipliedMoneyTest extends TestCase
         $this->assertSame($expectedMultiplier, $multipliedMoney->multiplier());
     }
 
-    public function moneyParsingProvider(): Generator
+    public static function moneyParsingProvider(): Generator
     {
         yield ['0', '0', 1];
         yield ['1', '100', 1];

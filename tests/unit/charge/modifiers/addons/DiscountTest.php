@@ -18,79 +18,90 @@ use Money\Money;
  */
 class DiscountTest extends \PHPUnit\Framework\TestCase
 {
-    protected $absolute;
-    protected $relative;
-    protected $rate = 11;
-    protected $sum = 1234;
-    protected $currency = 'USD';
+    private const int RATE = 11;
 
+    private const int SUM = 1234;
+
+    private Discount $absolute;
+    
+    private Discount $relative;
+    
     protected function setUp(): void
     {
-        $this->absolute = new Discount($this->sum/100 . ' ' . $this->currency);
-        $this->relative = new Discount($this->rate . '%');
+        $this->absolute = self::createAbsoluteDiscount();
+        $this->relative = self::createRelativeDiscount();
+    }
+    
+    private static function createAbsoluteDiscount(): Discount
+    {
+        $currency = 'USD';
+        
+        return new Discount(self::SUM / 100 . ' ' . $currency);
+    }
+    
+    private static function createRelativeDiscount(): Discount
+    {
+        return new Discount(self::RATE . '%');
     }
 
-    public function testEnsureValidValue()
+    public function testEnsureValidValue(): void
     {
-        $money = Money::USD($this->sum);
+        $money = Money::USD(self::SUM);
         $this->assertEquals($money, $this->absolute->getValue());
-        $this->assertEquals($this->rate, $this->relative->getValue());
+        $this->assertEquals(self::RATE, $this->relative->getValue());
     }
 
-    public function testMultiply()
+    public function testMultiply(): void
     {
-        $money = Money::USD($this->sum*10);
+        $money = Money::USD(self::SUM*10);
         $this->assertEquals($money, $this->absolute->multiply(10)->getValue());
-        $this->assertEquals($this->rate*10, $this->relative->multiply(10)->getValue());
+        $this->assertEquals(self::RATE*10, $this->relative->multiply(10)->getValue());
     }
 
-    public function badMultipliers()
+    public static function badMultipliers(): iterable
     {
         return [
             ['aasd'], ['10%'], [Money::USD(12)],
         ];
     }
 
-    /**
-     * @dataProvider badMultipliers
-     */
-    public function testMultiplyFailed($multiplier)
+    #[\PHPUnit\Framework\Attributes\DataProvider('badMultipliers')]
+    public function testMultiplyFailed($multiplier): void
     {
         $this->expectException(\Exception::class);
         $this->absolute->multiply($multiplier);
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
-        $money = Money::USD($this->sum+10);
+        $money = Money::USD(self::SUM+10);
         $this->assertEquals($money, $this->absolute->add(Money::USD(10))->getValue());
-        $this->assertEquals($this->rate+10, $this->relative->add(10)->getValue());
+        $this->assertEquals(self::RATE+10, $this->relative->add(10)->getValue());
     }
 
-    public function badAddends()
+    public static function badAddends(): iterable
     {
-        $this->setUp();
+        $relative = self::createRelativeDiscount();
+        $absolute = self::createAbsoluteDiscount();
 
         return [
-            [$this->relative, 'aasd'],
-            [$this->relative, '10a'],
-            [$this->relative, Money::USD(12)],
-            [$this->absolute, 'aasd'],
-            [$this->absolute, '10b'],
-            [$this->absolute, 10],
+            [$relative, 'aasd'],
+            [$relative, '10a'],
+            [$relative, Money::USD(12)],
+            [$absolute, 'aasd'],
+            [$absolute, '10b'],
+            [$absolute, 10],
         ];
     }
 
-    /**
-     * @dataProvider badAddends
-     */
-    public function testAddFailed($discount, $addend)
+    #[\PHPUnit\Framework\Attributes\DataProvider('badAddends')]
+    public function testAddFailed($discount, $addend): void
     {
         $this->expectException(\Exception::class);
         $discount->add($addend);
     }
 
-    public function testCompare()
+    public function testCompare(): void
     {
         $money = Money::USD(1);
         $this->assertTrue($this->absolute->compare($money) > 0);

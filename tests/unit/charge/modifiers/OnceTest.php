@@ -40,9 +40,7 @@ class OnceTest extends ActionTest
         return new SinglePrice(5, $type, $this->target, null, $this->prepaid, $this->money);
     }
 
-    /**
-     * @dataProvider periodCreationProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('periodCreationProvider')]
     public function testPeriodCreation(string $interval, string $expectedClass, int $expectedValue): void
     {
         $oncePeriod = $this->buildOnce($interval);
@@ -51,7 +49,7 @@ class OnceTest extends ActionTest
         $this->assertSame($expectedValue, $period->getValue());
     }
 
-    public function periodCreationProvider(): array
+    public static function periodCreationProvider(): array
     {
         return [
             'yearly' => ['1 year', YearPeriod::class, 1],
@@ -64,9 +62,7 @@ class OnceTest extends ActionTest
         return (new Once())->per($interval);
     }
 
-    /**
-     * @dataProvider fractionDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fractionDataProvider')]
     public function testFraction(string $interval): void
     {
         $this->expectException(FormulaEngineException::class);
@@ -74,7 +70,7 @@ class OnceTest extends ActionTest
         $this->buildOnce($interval);
     }
 
-    private function fractionDataProvider(): iterable
+    public static function fractionDataProvider(): iterable
     {
         yield ['1.5 months'];
         yield ['day'];
