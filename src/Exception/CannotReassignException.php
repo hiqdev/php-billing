@@ -23,8 +23,6 @@ class CannotReassignException extends Exception implements ExceptionInterface, H
 {
     use HasContext;
 
-    private $field;
-
     public function __construct(string $message, int $code = 0, Throwable $previous = null)
     {
         $this->addContext(['filed' => $message]);
