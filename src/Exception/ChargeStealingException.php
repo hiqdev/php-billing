@@ -27,8 +27,6 @@ final class ChargeStealingException extends Exception implements ExceptionInterf
 {
     use HasContext;
 
-    private ChargeInterface $charge;
-
     public static function fromPdoException(ChargeInterface $charge, Exception $exception): self
     {
         $self = new self(sprintf(
