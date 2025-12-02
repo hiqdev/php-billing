@@ -10,7 +10,7 @@ use IteratorAggregate;
 use Traversable;
 
 /**
- * @template-implements IteratorAggregate<int, string>
+ * @template-implements IteratorAggregate<int, PriceTypeInterface>
  */
 class PriceTypeCollection implements IteratorAggregate, Countable
 {
