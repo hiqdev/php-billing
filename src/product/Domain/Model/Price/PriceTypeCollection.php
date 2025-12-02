@@ -9,6 +9,9 @@ use hiqdev\php\billing\product\Domain\Model\Price\Exception\InvalidPriceTypeColl
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @template-implements IteratorAggregate<int, string>
+ */
 class PriceTypeCollection implements IteratorAggregate, Countable
 {
     /**
