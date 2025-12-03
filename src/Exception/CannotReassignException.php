@@ -11,24 +11,22 @@
 namespace hiqdev\php\billing\Exception;
 
 use Exception;
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\ExceptionInterface;
 use Throwable;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class CannotReassignException extends Exception implements ExceptionInterface
+class CannotReassignException extends Exception implements ExceptionInterface, HasContextInterface
 {
-    private $field;
+    use HasContext;
 
-    public function __construct(string $message, int $code = 0, Throwable $previous = null)
+    public function __construct(string $message, int $code = 0, ?Throwable $previous = null)
     {
-        $this->field = $message;
+        $this->addContext(['field' => $message]);
+
         parent::__construct("cannot reassign $message", $code, $previous);
-    }
-
-    public function getField()
-    {
-        return $this->field;
     }
 }

@@ -232,7 +232,7 @@ class FormulaEngine implements FormulaEngineInterface
         return $this->once;
     }
 
-    public function __clone(): void
+    public function __clone()
     {
         if ($this->context !== null) {
             $this->context = clone $this->context;

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\Exception;
 
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\action\ActionInterface;
 use Throwable;
 
@@ -12,9 +14,9 @@ use Throwable;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-final class ActionChargingException extends RuntimeException
+final class ActionChargingException extends RuntimeException implements HasContextInterface
 {
-    private readonly ActionInterface $action;
+    use HasContext;
 
     public static function forAction(ActionInterface $action, Throwable $previousException): self
     {
@@ -32,13 +34,8 @@ final class ActionChargingException extends RuntimeException
         }
 
         $self = new self($message, 0, $previousException);
-        $self->action = $action;
+        $self->addContext(['action' => $action]);
 
         return $self;
-    }
-
-    public function getAction(): ActionInterface
-    {
-        return $this->action;
     }
 }

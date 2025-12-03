@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\Exception;
 
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\ExceptionInterface;
 use Exception;
@@ -21,9 +23,9 @@ use Exception;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-final class ChargeStealingException extends Exception implements ExceptionInterface
+final class ChargeStealingException extends Exception implements ExceptionInterface, HasContextInterface
 {
-    private ChargeInterface $charge;
+    use HasContext;
 
     public static function fromPdoException(ChargeInterface $charge, Exception $exception): self
     {
@@ -31,7 +33,7 @@ final class ChargeStealingException extends Exception implements ExceptionInterf
             'Charge being saved tries to steal an existing charge from another bill: %s',
             self::trimExceptionMessage($exception->getMessage())
         ));
-        $self->charge = $charge;
+        $self->addContext(['charge' => $charge]);
 
         return $self;
     }
@@ -39,10 +41,5 @@ final class ChargeStealingException extends Exception implements ExceptionInterf
     private static function trimExceptionMessage(string $message): string
     {
         return preg_replace('/^.+ERROR:\s+([^\n]+).+$/s', '$1', $message);
-    }
-
-    public function getCharge(): ChargeInterface
-    {
-        return $this->charge;
     }
 }
