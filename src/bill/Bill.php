@@ -67,6 +67,12 @@ class Bill implements BillInterface
     /** @var UsageInterval */
     protected $usageInterval;
 
+    /** @var BillSource|null */
+    protected $source;
+
+    /** @var BillTxn|null */
+    protected $txn;
+
     public function __construct(
                             $id,
         TypeInterface $type,
@@ -77,7 +83,9 @@ class Bill implements BillInterface
         TargetInterface $target = null,
         PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null
+        BillState $state = null,
+        BillSource $source = null,
+        BillTxn $txn = null,
     ) {
         $this->id           = $id;
         $this->type         = $type;
@@ -89,6 +97,8 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
+        $this->source       = $source;
+        $this->txn          = $txn;
     }
 
     /**
@@ -240,6 +250,16 @@ class Bill implements BillInterface
     public function getComment()
     {
         return $this->comment;
+    }
+
+    public function getSource(): ?BillSource
+    {
+        return $this->source;
+    }
+
+    public function getTxn(): ?BillTxn
+    {
+        return $this->txn;
     }
 
     public function setComment(string $comment)
