@@ -59,4 +59,6 @@ interface BillInterface extends EntityInterface
     public function getSource(): ?BillSource;
 
     public function getTxn(): ?BillTxn;
+
+    public function getReversesId(): ?BillReversesId;
 }
