@@ -55,4 +55,10 @@ interface BillInterface extends EntityInterface
     public function getUsageInterval(): UsageInterval;
 
     public function setUsageInterval(UsageInterval $usageInterval): void;
+
+    public function getSource(): ?BillSource;
+
+    public function getTxn(): ?BillTxn;
+
+    public function getReversesId(): ?BillReversesId;
 }
