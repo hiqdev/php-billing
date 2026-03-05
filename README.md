@@ -1,6 +1,4 @@
-# PHP Billing
-
-**PHP Billing Library**
+# PHP Billing Library
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/php-billing/v/stable)](https://packagist.org/packages/hiqdev/php-billing)
 [![Total Downloads](https://poser.pugx.org/hiqdev/php-billing/downloads)](https://packagist.org/packages/hiqdev/php-billing)
@@ -22,24 +20,6 @@ Billing library providing:
 - one-time, metered and recurring charging
 
 Please see [additional documentation in russian](docs/ru.md).
-
-## Installation
-
-The preferred way to install this library is through [composer](http://getcomposer.org/download/).
-
-Either run
-
-```sh
-php composer.phar require "hiqdev/php-billing"
-```
-
-or add
-
-```json
-"hiqdev/php-billing": "*"
-```
-
-to the require section of your composer.json.
 
 ## Idea
 
@@ -75,8 +55,6 @@ Billing operates such ideas:
 [Order]:        /src/order/Order.php
 [Plan]:         /src/plan/Plan.php
 [Price]:        /src/price/AbstractPrice.php
-[SinglePrice]:  /src/price/SinglePrice.php
-[EnumPrice]:    /src/price/EnumPrice.php
 [Sale]:         /src/sale/Sale.php
 [Target]:       /src/target/Target.php
 [Type]:         /src/type/Type.php
@@ -112,4 +90,4 @@ because many of them implement customer-specific logic that cannot be disclosed.
 This project is released under the terms of the BSD-3-Clause [license](LICENSE).
 Read more [here](http://choosealicense.com/licenses/bsd-3-clause).
 
-Copyright © 2017-2019, HiQDev (http://hiqdev.com/)
+Copyright © 2017-2026, HiQDev (<http://hiqdev.com/>)
