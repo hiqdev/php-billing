@@ -50,12 +50,42 @@ Once set, these fields cannot be reassigned (throws `CannotReassignException`):
 
 ## Execution Flow
 
-1. **Calculator** iterates Actions, finds applicable Prices via `isApplicable()`
-2. Each Price produces one or more **Charges** with calculated sum
-3. **Aggregator** groups Charges by billing criteria (customer, type, target, period)
-4. Grouped Charges become **Bills** (invoice line items)
+### Calculator Pipeline
 
-## Money
+1. `findSales(order)` — matches Actions to Sales (direct or via repository)
+2. `findPlans(order)` — resolves Plans from Sales (loads from repository if needed)
+3. `calculatePlan(plan, action)` — iterates all Prices in the Plan
+4. `calculatePrice(price, action)` — calls `calculateCharge()`, then applies `ChargeModifier` if price has one
+5. `calculateCharge(price, action)` — core calculation:
+   - Checks `action.isApplicable(price)` (target + type matching)
+   - Checks sale time is not in the future
+   - Calculates usage via `price.calculateUsage(quantity)`
+   - Calculates sum via `price.calculateSum(quantity)`
+   - Specializes type/target via Generalizer
+   - Returns a Charge
+
+### Generalizer
+
+**Generalizer** (`src/charge/Generalizer.php`) maps Charges to Bills. It is the customization point
+for downstream projects that need different aggregation behavior.
+
+Key responsibilities:
+- `createBill(charge)` — converts a Charge into a Bill (negates sum for accounting)
+- `specializeType(priceType, actionType)` — resolves which Type to use on the Charge (base: returns price type)
+- `specializeTarget(priceTarget, actionTarget)` — resolves which Target to use (base: returns price target)
+
+### Aggregator
+
+**Aggregator** groups Charges into Bills using `Bill.getUniqueString()` as the aggregation key.
+
+Bill unique key composition:
+```
+currency + customer.uniqueId + target.uniqueId + type.uniqueId + time (ISO 8601)
+```
+
+Bills with the same key are merged: sums are added, quantities are added (if same unit), charge arrays are concatenated.
+
+## Money and Units
 
 Money is a value object — never use floats for monetary values.
 Uses `hiqdev\php\units` for quantity handling.

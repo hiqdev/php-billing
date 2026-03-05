@@ -4,45 +4,29 @@
 [![Total Downloads](https://poser.pugx.org/hiqdev/php-billing/downloads)](https://packagist.org/packages/hiqdev/php-billing)
 ![phpunit-tests](https://github.com/hiqdev/php-billing/actions/workflows/phpunit-tests.yml/badge.svg)
 ![behat-tests](https://github.com/hiqdev/php-billing/actions/workflows/behat-tests.yml/badge.svg)
-[![Build Status](https://img.shields.io/travis/hiqdev/php-billing.svg)](https://travis-ci.org/hiqdev/php-billing)
-[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/php-billing.svg)](https://scrutinizer-ci.com/g/hiqdev/php-billing/)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/php-billing.svg)](https://scrutinizer-ci.com/g/hiqdev/php-billing/)
 
-Billing library providing:
+A pure domain library for billing and invoicing. It models the full billing pipeline:
+[Customer]s subscribe to [Target]s under [Plan]s (via [Sale]s), metered activities
+are recorded as [Action]s, the [Calculator] matches Actions to [Price]s within Plans
+to produce [Charge]s, and the [Aggregator] groups Charges into [Bill]s.
 
-- customers with subscriptions
-- orders with actions
-- tariff plans with prices
-- smart discounts with formulas
-- bills with charges
-- calculator and aggregator
+The library supports one-time, metered, and recurring charging with multiple pricing
+strategies (fixed per-unit, percentage-based, tiered/progressive, discrete lookup),
+a formula DSL for smart discounts and installments, and a reseller hierarchy.
 
-- one-time, metered and recurring charging
+No framework dependency — this is a standalone domain model.
 
-Please see [additional documentation in russian](docs/ru.md).
+## Core Entities
 
-## Idea
-
-In general the billing functions like this:
-
-For a given [order] a [calculator] finds [plan]s and then matches
-applicable [price]s to [action]s and calculates [charge]s.
-Then [charge]s can be aggregated to [bill]s with [aggregator].
-
-Billing operates such ideas:
-
-- [Action] - [customer]'s metered activity of a certain [type] at a certain [target]
-- [Order] - collection of [action]s
-- [Bill]
-- [Charge]
-- [Plan]
-- [Price]
-- [Customer]
-- [Sale] - a subscription, binding [customer] to a [target] and a [plan]
-- [Target] - object being charged in billing
-- [Type]
-- [Calculator]
-- [Aggregator]
+- **[Action]** — a [Customer]'s metered activity of a certain [Type] at a certain [Target]
+- **[Order]** — a collection of Actions to be billed together
+- **[Sale]** — a subscription binding a [Customer] to a [Target] under a [Plan]
+- **[Plan]** — a tariff containing a set of [Price]s
+- **[Price]** — a billing rule that calculates charges (SinglePrice, EnumPrice, RatePrice, ProgressivePrice)
+- **[Charge]** — the result of matching an Action to a Price
+- **[Bill]** — aggregation of Charges into an invoice line item
+- **[Calculator]** — orchestrates the billing pipeline
+- **[Aggregator]** — groups Charges into Bills
 
 ![Model UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/hiqdev/php-billing/master/docs/model.puml)
 
@@ -58,6 +42,13 @@ Billing operates such ideas:
 [Sale]:         /src/sale/Sale.php
 [Target]:       /src/target/Target.php
 [Type]:         /src/type/Type.php
+
+## Documentation
+
+- [Domain Model](docs/domain-model.md) — core entities, matching rules, immutability, calculator pipeline
+- [Price Types](docs/price-types.md) — SinglePrice, EnumPrice, RatePrice, ProgressivePrice algorithms
+- [Formula DSL and Charge Modifiers](docs/formula-and-modifiers.md) — discount, installment, cap, and modifier system
+- [Codebase Overview](docs/overview.md) — directory map, patterns, and testing
 
 ## Disclaimer
 

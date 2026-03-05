@@ -2,6 +2,7 @@
 
 Pure billing domain library. No framework dependency — no Yii2, no config-plugin.
 
+@docs/overview.md
 @docs/domain-model.md
 @docs/price-types.md
 
