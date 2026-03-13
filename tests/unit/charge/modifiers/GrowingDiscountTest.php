@@ -20,13 +20,15 @@ use hiqdev\php\units\Quantity;
  */
 class GrowingDiscountTest extends FixedDiscountTest
 {
+    #[\Override]
     protected function buildDiscount($value)
     {
-        $month = (new DateTimeImmutable())->modify('first day of this month midnight');
+        $month = new DateTimeImmutable()->modify('first day of this month midnight');
 
-        return (new GrowingDiscount($value))->since($month)->every('month')->till('3000-01');
+        return new GrowingDiscount($value)->since($month)->every('month')->till('3000-01');
     }
 
+    #[\Override]
     public function assertCharges($fd, $sum)
     {
         $action = $this->createAction($this->prepaid->multiply(2));

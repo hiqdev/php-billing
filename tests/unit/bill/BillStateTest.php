@@ -74,7 +74,6 @@ class BillStateTest extends TestCase
     {
         $reflection = new \ReflectionClass($billState);
         $property = $reflection->getProperty('state');
-        $property->setAccessible(true);
 
         return $property->getValue($billState);
     }

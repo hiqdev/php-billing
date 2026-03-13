@@ -63,6 +63,7 @@ class AggregatorTest extends SaleTest
         return new Order(null, $this->plan->customer, $actions);
     }
 
+    #[\Override]
     public function testCalculateCharges(): void
     {
         $charges = $this->calculator->calculateOrder($this->order);

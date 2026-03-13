@@ -31,7 +31,7 @@ class PriceTypeCollectionTest extends TestCase
 
     private function createPriceType(string $name): PriceTypeInterface
     {
-        return new class($name) implements PriceTypeInterface {
+        return new readonly class($name) implements PriceTypeInterface {
             public function __construct(private string $name) {}
             public function name(): string { return $this->name; }
         };

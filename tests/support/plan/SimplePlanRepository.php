@@ -40,7 +40,7 @@ class SimplePlanRepository implements PlanRepositoryInterface
         return $plans;
     }
 
-    public function findByIds(array $ids)
+    public function findByIds(array $ids): never
     {
         throw new \Exception('not implemented');
     }
@@ -53,22 +53,22 @@ class SimplePlanRepository implements PlanRepositoryInterface
         throw new \Exception('not implemented');
     }
 
-    public function count(Specification $specification)
+    public function count(Specification $specification): never
     {
         throw new \Exception('not implemented');
     }
 
-    public function findAll(Specification $specification)
+    public function findAll(Specification $specification): never
     {
         throw new \Exception('not implemented');
     }
 
-    public function findOne(Specification $specification)
+    public function findOne(Specification $specification): never
     {
         throw new \Exception('not implemented');
     }
 
-    public function findOneOrFail(Specification $specification)
+    public function findOneOrFail(Specification $specification): never
     {
         throw new \Exception('not implemented');
     }

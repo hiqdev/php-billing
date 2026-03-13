@@ -54,6 +54,7 @@ class CalculatorTest extends SaleTest
         $this->order = new Order(null, $this->plan->customer, $actions);
     }
 
+    #[\Override]
     public function testCalculateCharges(): void
     {
         $charges = $this->calculator->calculateOrder($this->order);

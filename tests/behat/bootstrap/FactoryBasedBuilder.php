@@ -121,7 +121,7 @@ class FactoryBasedBuilder implements BuilderInterface
         $plan->setPrices($this->prices);
     }
 
-    public function buildSale(string $target, $plan, string $time = null)
+    public function buildSale(string $target, $plan, ?string $time = null)
     {
         $this->time = $time;
         $this->sale = $this->factory->get('sale', array_filter([
@@ -171,7 +171,7 @@ class FactoryBasedBuilder implements BuilderInterface
         return $this->factory->get('target', $target);
     }
 
-    public function performCalculation(string $time = null): array
+    public function performCalculation(?string $time = null): array
     {
         return $this->getBilling()->calculateCharges($this->actions);
     }
@@ -193,8 +193,8 @@ class FactoryBasedBuilder implements BuilderInterface
 
     public function buildAction(array $data)
     {
-        $data['time'] = $data['time'] ?? $this->time;
-        $data['customer'] = $data['customer'] ?? $this->customer;
+        $data['time'] ??= $this->time;
+        $data['customer'] ??= $this->customer;
         if (!empty($data['targets'])) {
             $data['target'] = $this->factory->get('targets', $data['targets']);
         }
@@ -204,8 +204,8 @@ class FactoryBasedBuilder implements BuilderInterface
 
     public function findBills(array $data): array
     {
-        $data['sum'] = $data['sum'] ?? '0 USD';
-        $data['quantity'] = $data['quantity'] ?? '0 items';
+        $data['sum'] ??= '0 USD';
+        $data['quantity'] ??= '0 items';
         $bill = $this->buildBill($data);
         $repo = $this->getBilling()->getBillRepository();
 
@@ -214,8 +214,8 @@ class FactoryBasedBuilder implements BuilderInterface
 
     public function buildBill(array $data)
     {
-        $data['time'] = $data['time'] ?? $this->time;
-        $data['customer'] = $data['customer'] ?? $this->customer;
+        $data['time'] ??= $this->time;
+        $data['customer'] ??= $this->customer;
         if (!empty($data['targets'])) {
             $data['target'] = $this->factory->get('targets', $data['targets']);
         }
@@ -225,8 +225,8 @@ class FactoryBasedBuilder implements BuilderInterface
 
     public function findCharges(array $data): array
     {
-        $data['sum'] = $data['sum'] ?? '0 USD';
-        $data['quantity'] = $data['quantity'] ?? '0 items';
+        $data['sum'] ??= '0 USD';
+        $data['quantity'] ??= '0 items';
         $bill = $this->buildCharge($data);
         $repo = $this->getBilling()->getChargeRepository();
 
@@ -235,8 +235,8 @@ class FactoryBasedBuilder implements BuilderInterface
 
     public function buildCharge(array $data)
     {
-        $data['time'] = $data['time'] ?? $this->time;
-        $data['customer'] = $data['customer'] ?? $this->customer;
+        $data['time'] ??= $this->time;
+        $data['customer'] ??= $this->customer;
         if (!empty($data['targets'])) {
             $data['target'] = $this->factory->get('targets', $data['targets']);
         }
@@ -244,7 +244,7 @@ class FactoryBasedBuilder implements BuilderInterface
         return $this->factory->get('bill', $data);
     }
 
-    public function targetChangePlan(string $target, string $planName, string $date, string $wallTime = null)
+    public function targetChangePlan(string $target, string $planName, string $date, ?string $wallTime = null): never
     {
         throw new RuntimeException('Not implemented yet');
     }

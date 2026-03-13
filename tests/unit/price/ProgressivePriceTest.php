@@ -126,7 +126,7 @@ class ProgressivePriceTest extends TestCase
         $unserializedThresholds = array_reverse($unserialized['thresholds']);
         $this->assertCount(count($inputThresholdsArray), $unserializedThresholds);
         foreach ($thresholdsArray as $index => $threshold) {
-            $val = (new \ReflectionObject($threshold))->getProperty('price')->getValue($threshold);
+            $val = new \ReflectionObject($threshold)->getProperty('price')->getValue($threshold);
             $this->assertSame($val, $unserializedThresholds[$index]['price']);
             $this->assertSame($threshold->price()->getCurrency()->getCode(), $unserializedThresholds[$index]['currency']);
             $this->assertSame($threshold->quantity()->getQuantity(), $unserializedThresholds[$index]['quantity']);

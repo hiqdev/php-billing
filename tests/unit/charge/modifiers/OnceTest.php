@@ -59,7 +59,7 @@ class OnceTest extends ActionTest
 
     protected function buildOnce(string $interval): Once
     {
-        return (new Once())->per($interval);
+        return new Once()->per($interval);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('fractionDataProvider')]

@@ -6,11 +6,8 @@ use hiqdev\php\billing\product\behavior\Behavior;
 
 class TestBehavior extends Behavior
 {
-    private $context;
-
-    public function __construct($context)
+    public function __construct(private $context)
     {
-        $this->context = $context;
     }
 
     public function getContext()
