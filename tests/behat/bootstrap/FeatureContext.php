@@ -100,7 +100,7 @@ class FeatureContext implements Context
         $target = new Target(Target::ANY, $target);
         $quantity = Quantity::create($unit, $quantity);
         $sum = $this->moneyParser->parse($sum, new Currency($currency));
-        $this->setPrice(new SinglePrice(null, $type, $target, null, $quantity, $sum));
+        $this->setPrice(new SinglePrice(null, $type, $target, $quantity, $sum));
     }
 
     protected array $progressivePrice = [];
