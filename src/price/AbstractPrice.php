@@ -56,7 +56,7 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
         $id,
         TypeInterface $type,
         TargetInterface $target,
-        PlanInterface $plan = null
+        ?PlanInterface $plan = null
     ) {
         $this->id = $id;
         $this->type = $type;

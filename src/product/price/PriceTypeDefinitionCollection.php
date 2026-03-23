@@ -31,7 +31,7 @@ class PriceTypeDefinitionCollection implements PriceTypeDefinitionCollectionInte
          */
         private readonly TariffTypeDefinitionInterface $parent,
         private readonly PriceTypeDefinitionFactoryInterface $factory,
-        PriceTypeDefinitionCollectionInterface $collectionInstance = null,
+        ?PriceTypeDefinitionCollectionInterface $collectionInstance = null,
     ) {
         $this->storage = new PriceTypeStorage();
         $this->collectionInstance = $collectionInstance ?? $this;

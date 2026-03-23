@@ -72,7 +72,7 @@ class Charge implements ChargeInterface
         ?PriceInterface $price,
         QuantityInterface $usage,
         Money $sum,
-        BillInterface $bill = null
+        ?BillInterface $bill = null
     ) {
         $this->id       = $id;
         $this->type     = $type;
