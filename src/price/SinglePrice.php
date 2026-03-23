@@ -36,7 +36,7 @@ class SinglePrice extends AbstractPrice implements PriceWithQuantityInterface, P
         $id,
         TypeInterface $type,
         TargetInterface $target,
-        PlanInterface $plan = null,
+        ?PlanInterface $plan = null,
         QuantityInterface $prepaid,
         Money $price
     ) {
