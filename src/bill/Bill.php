@@ -83,13 +83,13 @@ class Bill implements BillInterface
         Money $sum,
         QuantityInterface $quantity,
         CustomerInterface $customer,
-        TargetInterface $target = null,
-        PlanInterface $plan = null,
+        ?TargetInterface $target = null,
+        ?PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null,
-        BillSource $source = null,
-        BillTxn $txn = null,
-        BillReversesId $reversesId = null,
+        ?BillState $state = null,
+        ?BillSource $source = null,
+        ?BillTxn $txn = null,
+        ?BillReversesId $reversesId = null,
     ) {
         $this->id           = $id;
         $this->type         = $type;
