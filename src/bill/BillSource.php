@@ -11,7 +11,7 @@ class BillSource
 
     protected ?string $name = null;
 
-    public function __construct($id = null, string $name = null)
+    public function __construct($id = null, ?string $name = null)
     {
         $this->id = $id;
         $this->name = $name;
