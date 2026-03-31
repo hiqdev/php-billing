@@ -37,7 +37,7 @@ class Customer implements CustomerInterface
      */
     protected $sellers = [];
 
-    public function __construct($id, $login, CustomerInterface $seller = null)
+    public function __construct($id, $login, ?CustomerInterface $seller = null)
     {
         $this->id = $id;
         $this->login = $login;
