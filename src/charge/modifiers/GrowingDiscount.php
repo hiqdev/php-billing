@@ -87,7 +87,7 @@ class GrowingDiscount extends FixedDiscount
         return $this->addAddon(self::PERIOD, Period::fromString($string));
     }
 
-    public function calculateSum(ChargeInterface $charge = null): Money
+    public function calculateSum(?ChargeInterface $charge = null): Money
     {
         $sum = parent::calculateSum($charge);
 
@@ -101,7 +101,7 @@ class GrowingDiscount extends FixedDiscount
         return $sum;
     }
 
-    public function getValue(ChargeInterface $charge = null): Discount
+    public function getValue(?ChargeInterface $charge = null): Discount
     {
         $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
         $num = (int) $this->countPeriodsPassed($time);
