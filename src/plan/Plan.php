@@ -57,9 +57,9 @@ class Plan implements PlanInterface
     public function __construct(
         $id,
         $name,
-        CustomerInterface $seller = null,
+        ?CustomerInterface $seller = null,
         $prices = [],
-        TypeInterface $type = null,
+        ?TypeInterface $type = null,
         $parent_id = null
     ) {
         $this->id = $id;

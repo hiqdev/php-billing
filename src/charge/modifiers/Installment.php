@@ -39,7 +39,7 @@ class Installment extends Modifier
         $target = $this->getTarget();
         $prepaid = Quantity::create('items', 0);
 
-        return new SinglePrice(null, $type, $target, null, $prepaid, $sum);
+        return new SinglePrice(null, $type, $target, $prepaid, $sum);
     }
 
     public function getType()

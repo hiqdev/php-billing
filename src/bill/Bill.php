@@ -67,6 +67,15 @@ class Bill implements BillInterface
     /** @var UsageInterval */
     protected $usageInterval;
 
+    /** @var BillSource|null */
+    protected $source;
+
+    /** @var BillTxn|null */
+    protected $txn;
+
+    /** @var BillReversesId|null */
+    protected $reversesId;
+
     public function __construct(
                             $id,
         TypeInterface $type,
@@ -74,10 +83,13 @@ class Bill implements BillInterface
         Money $sum,
         QuantityInterface $quantity,
         CustomerInterface $customer,
-        TargetInterface $target = null,
-        PlanInterface $plan = null,
+        ?TargetInterface $target = null,
+        ?PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null
+        ?BillState $state = null,
+        ?BillSource $source = null,
+        ?BillTxn $txn = null,
+        ?BillReversesId $reversesId = null,
     ) {
         $this->id           = $id;
         $this->type         = $type;
@@ -89,6 +101,9 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
+        $this->source       = $source;
+        $this->txn          = $txn;
+        $this->reversesId   = $reversesId;
     }
 
     /**
@@ -242,6 +257,16 @@ class Bill implements BillInterface
         return $this->comment;
     }
 
+    public function getSource(): ?BillSource
+    {
+        return $this->source;
+    }
+
+    public function getTxn(): ?BillTxn
+    {
+        return $this->txn;
+    }
+
     public function setComment(string $comment)
     {
         $this->comment = $comment;
@@ -255,5 +280,19 @@ class Bill implements BillInterface
     public function setUsageInterval(UsageInterval $usageInterval): void
     {
         $this->usageInterval = $usageInterval;
+    }
+
+    public function getReversesId(): ?BillReversesId
+    {
+        return $this->reversesId;
+    }
+
+    /**
+     * @param BillReversesId|null $reversesId
+     * @return void
+     */
+    public function setReversesId($reversesId): void
+    {
+        $this->reversesId = $reversesId;
     }
 }

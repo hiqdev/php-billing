@@ -68,9 +68,9 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $time,
-        SaleInterface $sale = null,
-        ActionState $state = null,
-        ActionInterface $parent = null,
+        ?SaleInterface $sale = null,
+        ?ActionState $state = null,
+        ?ActionInterface $parent = null,
         float $fractionOfMonth = 0.0
     ) {
         $this->id       = $id;

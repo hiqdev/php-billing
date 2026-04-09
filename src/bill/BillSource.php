@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace hiqdev\php\billing\bill;
 
-class BillRequisite
+class BillSource
 {
     /** @var int|string|null */
     protected $id;
