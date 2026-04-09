@@ -23,26 +23,9 @@ use hiqdev\php\billing\type\TypeInterface;
 class Plan implements PlanInterface
 {
     /**
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    protected ?int $parent_id = null;
-
-    /**
      * @var CustomerInterface
      */
     protected $seller;
-
-    /**
-     * @var PriceInterface[]
-     */
-    protected $prices = [];
 
     /**
      * @var ?TypeInterface
@@ -55,19 +38,15 @@ class Plan implements PlanInterface
      * @param PriceInterface[] $prices
      */
     public function __construct(
-        $id,
-        $name,
-        CustomerInterface $seller = null,
-        $prices = [],
-        TypeInterface $type = null,
-        $parent_id = null
+        protected $id,
+        protected $name,
+        ?CustomerInterface $seller = null,
+        protected $prices = [],
+        ?TypeInterface $type = null,
+        protected ?int $parent_id = null
     ) {
-        $this->id = $id;
-        $this->name = $name;
         $this->seller = $seller;
-        $this->prices = $prices;
         $this->type = $type;
-        $this->parent_id = $parent_id;
     }
 
     public function getUniqueId()
@@ -83,9 +62,6 @@ class Plan implements PlanInterface
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

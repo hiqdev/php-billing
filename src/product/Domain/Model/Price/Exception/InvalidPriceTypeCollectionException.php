@@ -10,7 +10,7 @@ class InvalidPriceTypeCollectionException extends InvalidArgumentException
 {
     public static function becauseContainsNonPriceType(mixed $value): self
     {
-        $given = is_object($value) ? get_class($value) : gettype($value);
+        $given = get_debug_type($value);
 
         return new self(sprintf(
             'PriceTypeCollection can only contain instances of PriceTypeInterface. Got: %s',

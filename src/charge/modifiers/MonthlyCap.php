@@ -20,6 +20,7 @@ use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
 use hiqdev\php\billing\charge\modifiers\addons\Boolean;
 use hiqdev\php\billing\charge\modifiers\addons\DayPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\Exception\NotSupportedException;
 use hiqdev\php\units\Quantity;
 use hiqdev\php\units\QuantityInterface;
@@ -34,7 +35,7 @@ use Money\Money;
  */
 class MonthlyCap extends Modifier
 {
-    private const PERIOD = 'period';
+    private const string PERIOD = 'period';
 
     protected ChargeDerivative $chargeDerivative;
 
@@ -56,6 +57,7 @@ class MonthlyCap extends Modifier
         return $this->addAddon('non-proportionalized', new Boolean(true));
     }
 
+    #[\Override]
     public function getNext()
     {
         return $this;
@@ -63,7 +65,7 @@ class MonthlyCap extends Modifier
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        if ($charge === null) {
+        if (!$charge instanceof ChargeInterface) {
             return [];
         }
 
@@ -81,8 +83,6 @@ class MonthlyCap extends Modifier
     }
 
     /**
-     * @param ChargeInterface $charge
-     * @param ActionInterface $action
      * @return ChargeInterface[]
      */
     private function propotionalizeCharge(ChargeInterface $charge, ActionInterface $action): array
@@ -133,7 +133,7 @@ class MonthlyCap extends Modifier
         $zeroChargeQuery->changeUsage($usageHours->subtract($cappedHours));
         $zeroChargeQuery->changeParent($newCharge);
         $reason = $this->getReason();
-        if ($reason) {
+        if ($reason instanceof Reason) {
             $zeroChargeQuery->changeComment($reason->getValue());
         }
         $newZeroCharge = $this->chargeDerivative->__invoke($charge, $zeroChargeQuery);

@@ -63,7 +63,7 @@ class Billing implements BillingInterface
         $this->collector = $collector ?? new Collector();
     }
 
-    public function calculate($source, DateTimeImmutable $time = null): array
+    public function calculate($source, ?DateTimeImmutable $time = null): array
     {
         $charges = $this->calculateCharges($source, $time);
         $bills = $this->aggregator->aggregateCharges($charges);
@@ -71,7 +71,7 @@ class Billing implements BillingInterface
         return $this->merger->mergeBills($bills);
     }
 
-    public function perform($source, DateTimeImmutable $time = null): array
+    public function perform($source, ?DateTimeImmutable $time = null): array
     {
         $charges = $this->calculateCharges($source, $time);
         $bills = $this->getRepoAggregator()->aggregateCharges($charges);
@@ -79,7 +79,7 @@ class Billing implements BillingInterface
         return $this->saveBills($bills);
     }
 
-    public function calculateCharges($source, DateTimeImmutable $time = null): array
+    public function calculateCharges($source, ?DateTimeImmutable $time = null): array
     {
         $order = $this->collector->collect($source, $time);
 
@@ -109,9 +109,6 @@ class Billing implements BillingInterface
         return $res;
     }
 
-    /**
-     * @return CalculatorInterface
-     */
     public function getCalculator(): CalculatorInterface
     {
         return $this->calculator;

@@ -35,7 +35,6 @@ final class MultipliedMoney
 
     /**
      * @param numeric-string $amount
-     * @param string $currencyCode
      */
     public static function create(string $amount, string $currencyCode): MultipliedMoney
     {
@@ -87,7 +86,7 @@ final class MultipliedMoney
         }
 
         [, $fraction] = explode('.', $amount, 2);
-        return (int)('1' . implode(array_fill(0, strlen($fraction), 0)));
+        return (int)('1' . implode('', array_fill(0, strlen($fraction), 0)));
     }
 
     /**

@@ -20,33 +20,20 @@ use hiqdev\php\billing\Exception\CannotReassignException;
 abstract class AbstractTarget implements TargetInterface
 {
     /**
-     * @var int|string
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
      * @var string
      */
     protected $state;
 
-    /**
-     * @var string
-     */
-    protected $name;
-
     /** @var string */
     protected $label;
 
-    public function __construct($id, $type, $name = null)
+    /**
+     * @param int|string $id
+     * @param string $type
+     * @param string $name
+     */
+    public function __construct(protected $id, protected $type, protected $name = null)
     {
-        $this->id = $id;
-        $this->type = $type;
-        $this->name = $name;
     }
 
     /**
@@ -67,7 +54,7 @@ abstract class AbstractTarget implements TargetInterface
 
     public function setId($id)
     {
-        if ((string) $this->id === (string) $id) {
+        if ((string)$this->id === (string)$id) {
             return;
         }
         if ($this->hasId()) {
@@ -172,20 +159,22 @@ abstract class AbstractTarget implements TargetInterface
             return false;
         }
 
-        return (string) $lhs === (string) $rhs;
+        return (string)$lhs === (string)$rhs;
     }
 
     public function jsonSerialize(): array
     {
-        return array_filter(array_merge(
-            get_object_vars($this),
-            [
-                'id'    => $this->getId(),
-                'type'  => $this->getType(),
-                'state'  => $this->getState(),
-                'name'  => $this->getName(),
-            ],
-        ));
+        return array_filter(
+            array_merge(
+                get_object_vars($this),
+                [
+                    'id' => $this->getId(),
+                    'type' => $this->getType(),
+                    'state' => $this->getState(),
+                    'name' => $this->getName(),
+                ],
+            )
+        );
     }
 
     protected static $anyTarget;

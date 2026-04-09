@@ -19,7 +19,7 @@ use hiqdev\php\billing\formula\FormulaSemanticsError;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class Period implements AddonInterface
+abstract class Period implements AddonInterface, \Stringable
 {
     /**
      * @var int
@@ -49,12 +49,9 @@ abstract class Period implements AddonInterface
 
     public static function fromString($string)
     {
-        if (preg_match('/^((\d+) +)?(\w+)$/', trim($string), $ms)) {
-            if (isset(static::$periods[$ms[3]])) {
-                $class = static::$periods[$ms[3]];
-
-                return new $class($ms[1] ?: 1);
-            }
+        if (preg_match('/^((\d+) +)?(\w+)$/', trim((string) $string), $ms) && isset(static::$periods[$ms[3]])) {
+            $class = static::$periods[$ms[3]];
+            return new $class($ms[1] ?: 1);
         }
 
         throw new FormulaSemanticsError("invalid period given: $string");

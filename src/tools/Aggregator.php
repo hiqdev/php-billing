@@ -66,11 +66,9 @@ class Aggregator implements AggregatorInterface
     {
         foreach ($others as $bill) {
             $uid = $bill->getUniqueString();
-            if (empty($bills[$uid])) {
-                $bills[$uid] = $bill;
-            } else {
-                $bills[$uid] = $this->aggregateBill($bills[$uid], $bill);
-            }
+            $bills[$uid] = empty($bills[$uid])
+                ? $bill
+                : $this->aggregateBill($bills[$uid], $bill);
         }
 
         return $bills;

@@ -28,9 +28,6 @@ use hiqdev\php\units\QuantityInterface;
  */
 abstract class AbstractAction implements \JsonSerializable, ActionInterface
 {
-    /** @var int */
-    protected $id;
-
     /** @var TypeInterface */
     protected $type;
 
@@ -55,25 +52,21 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
     /** @var ActionInterface */
     protected $parent;
 
-    protected float $fractionOfMonth = 0.0;
-
     /**
-     * @param SaleInterface $sale
-     * @param ActionInterface $parent
+     * @param int $id
      */
     public function __construct(
-        $id,
+        protected $id,
         TypeInterface $type,
         TargetInterface $target,
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $time,
-        SaleInterface $sale = null,
-        ActionState $state = null,
-        ActionInterface $parent = null,
-        float $fractionOfMonth = 0.0
+        ?SaleInterface $sale = null,
+        ?ActionState $state = null,
+        ?ActionInterface $parent = null,
+        protected float $fractionOfMonth = 0.0
     ) {
-        $this->id       = $id;
         $this->type     = $type;
         $this->target   = $target;
         $this->quantity = $quantity;
@@ -82,7 +75,6 @@ abstract class AbstractAction implements \JsonSerializable, ActionInterface
         $this->sale     = $sale;
         $this->state    = $state;
         $this->parent   = $parent;
-        $this->fractionOfMonth = $fractionOfMonth;
     }
 
     /**

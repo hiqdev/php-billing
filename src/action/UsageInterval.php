@@ -7,23 +7,15 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use JsonSerializable;
 
-/** @readonly */
-final class UsageInterval implements JsonSerializable
+final readonly class UsageInterval implements JsonSerializable
 {
-    /** @readonly */
-    private DateTimeImmutable $start;
-    /** @readonly */
-    private DateTimeImmutable $end;
-    /** @readonly */
     private DateTimeImmutable $month;
 
     private function __construct(
-        DateTimeImmutable $start,
-        DateTimeImmutable $end
+        private DateTimeImmutable $start,
+        private DateTimeImmutable $end
     ) {
-        $this->start = $start;
-        $this->end = $end;
-        $this->month = self::toMonth($start);
+        $this->month = self::toMonth($this->start);
     }
 
     private static function toMonth(DateTimeImmutable $date): DateTimeImmutable
@@ -48,7 +40,6 @@ final class UsageInterval implements JsonSerializable
      * @param DateTimeImmutable $start the start date of the sale
      * @param DateTimeImmutable|null $end the end date of the sale or null if the sale is active
      * @throws InvalidArgumentException if the start date is greater than the end date
-     * @return static
      */
     public static function withinMonth(
         DateTimeImmutable $month,
@@ -58,7 +49,7 @@ final class UsageInterval implements JsonSerializable
         $month = self::toMonth($month);
         $nextMonth = $month->modify('+1 month');
 
-        if ($end !== null && $start > $end) {
+        if ($end instanceof \DateTimeImmutable && $start > $end) {
             throw new InvalidArgumentException('Start date must be less than end date');
         }
 
@@ -67,7 +58,7 @@ final class UsageInterval implements JsonSerializable
             $end = $month;
         }
 
-        if ($end !== null && $end < $month) {
+        if ($end instanceof \DateTimeImmutable && $end < $month) {
             $start = $month;
             $end = $month;
         }
@@ -90,7 +81,6 @@ final class UsageInterval implements JsonSerializable
      * @param DateTimeImmutable $month the month to calculate the usage interval for
      * @param DateTimeImmutable $start the start date of the sale
      * @param float $fractionOfMonth the fraction of manth
-     * @return static
      */
     public static function withMonthAndFraction(
         DateTimeImmutable $month,
@@ -173,9 +163,6 @@ final class UsageInterval implements JsonSerializable
 
     /**
      * Extends the usage interval to include both current and other intervals.
-     *
-     * @param UsageInterval $other
-     * @return self
      */
     public function extend(self $other): self
     {

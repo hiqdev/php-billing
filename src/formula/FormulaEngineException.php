@@ -25,7 +25,7 @@ class FormulaEngineException extends Exception
      */
     private $formula;
 
-    public static function fromException(Throwable $previous, string $formula, string $message = null): FormulaEngineException
+    public static function fromException(Throwable $previous, string $formula, ?string $message = null): FormulaEngineException
     {
         if ($message !== null) {
             $message .= ': ';

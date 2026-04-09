@@ -48,20 +48,17 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     private ?AggregateInterface $aggregate = null;
 
-    /** @psalm-var TParentCollection */
-    private readonly PriceTypeDefinitionCollectionInterface $parent;
-
     private readonly PriceTypeBehaviorRegistry $behaviorRegistry;
 
     /**
      * @param TParentCollection $parent
      */
     public function __construct(
-        PriceTypeDefinitionCollectionInterface $parent,
+        /** @psalm-var TParentCollection */
+        private readonly PriceTypeDefinitionCollectionInterface $parent,
         private readonly TypeInterface $type,
         TariffTypeInterface $tariffType,
     ) {
-        $this->parent = $parent;
         $this->representationCollection = new RepresentationCollection($this);
         $this->behaviorRegistry = new PriceTypeBehaviorRegistry($this, $tariffType);
 
@@ -204,12 +201,11 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     }
 
     /**
-     * @return AggregateInterface
      * @throws AggregateNotDefinedException
      */
     public function getAggregate(): AggregateInterface
     {
-        if ($this->aggregate === null) {
+        if (!$this->aggregate instanceof AggregateInterface) {
             throw new AggregateNotDefinedException('Aggregate is not set. Call the aggregation() method first.');
         }
 

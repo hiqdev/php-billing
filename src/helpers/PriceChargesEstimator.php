@@ -29,11 +29,6 @@ class PriceChargesEstimator
      */
     protected $calculations = [];
 
-    /**
-     * @var string[] array of strings compatible with `strtotime()`, e.g. `first day of next month`
-     */
-    private $periods = [];
-
     public function __construct(array $calculations)
     {
         $this->calculations = $calculations;
@@ -46,12 +41,9 @@ class PriceChargesEstimator
 
     /**
      * @var string[] array of strings compatible with `strtotime()`, e.g. `first day of next month`
-     * @return array
      */
     public function calculateForPeriods($periods): array
     {
-        $this->periods = $periods;
-
         return $this->groupCalculationsByTarget();
     }
 
@@ -86,16 +78,14 @@ class PriceChargesEstimator
             }
             unset($action);
 
-            if (!empty($chargesByTargetAndAction['targets'])) {
-                foreach ($chargesByTargetAndAction['targets'] as &$actions) {
-                    foreach ($actions as &$action) {
-                        $this->decorateAction($action);
-                    }
+            foreach ($chargesByTargetAndAction['targets'] as &$actions) {
+                foreach ($actions as &$action) {
+                    $this->decorateAction($action);
                 }
             }
             unset($action, $actions);
 
-            $result[date("Y-m-d", strtotime($period))] = $chargesByTargetAndAction;
+            $result[date("Y-m-d", strtotime((string) $period))] = $chargesByTargetAndAction;
         }
 
         return $result;

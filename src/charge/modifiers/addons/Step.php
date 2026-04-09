@@ -21,7 +21,7 @@ class Step extends Discount
 
     public function calculateFor(int $num, ?Discount $min): Discount
     {
-        $start = $min ? $min : $this;
+        $start = $min instanceof Discount ? $min : $this;
 
         if ($this->isAbsolute() || $this->isPercentPoint()) {
             return $this->multiply($num)->add($start);
@@ -30,7 +30,7 @@ class Step extends Discount
         $start = $start->getValue()/100.0;
         $factor = $this->getValue()/100.0;
 
-        $value = 1 - (1 - $start)*pow(1 - $factor, $num);
+        $value = 1 - (1 - $start)*(1 - $factor) ** $num;
 
         return new Discount($value*100);
     }

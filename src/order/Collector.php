@@ -22,7 +22,7 @@ use hiqdev\php\billing\Exception\NotSupportedException;
  */
 class Collector implements CollectorInterface
 {
-    public function collect($source, DateTimeImmutable $time = null): OrderInterface
+    public function collect($source, ?DateTimeImmutable $time = null): OrderInterface
     {
         if ($source instanceof OrderInterface) {
             return $source;

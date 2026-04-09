@@ -16,6 +16,7 @@ use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\charge\modifiers\addons\Maximum;
 use hiqdev\php\billing\charge\modifiers\addons\Minimum;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\addons\Step;
 use Money\Money;
 
@@ -40,6 +41,7 @@ class GrowingDiscount extends FixedDiscount
         }
     }
 
+    #[\Override]
     public function isAbsolute()
     {
         return $this->getStep()->isAbsolute();
@@ -87,6 +89,7 @@ class GrowingDiscount extends FixedDiscount
         return $this->addAddon(self::PERIOD, Period::fromString($string));
     }
 
+    #[\Override]
     public function calculateSum(?ChargeInterface $charge = null): Money
     {
         $sum = parent::calculateSum($charge);
@@ -101,9 +104,10 @@ class GrowingDiscount extends FixedDiscount
         return $sum;
     }
 
+    #[\Override]
     public function getValue(?ChargeInterface $charge = null): Discount
     {
-        $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
+        $time = $charge instanceof ChargeInterface ? $charge->getAction()->getTime() : new DateTimeImmutable();
         $num = (int) $this->countPeriodsPassed($time);
 
         return $this->getStep()->calculateFor($num, $this->getMin());
@@ -112,7 +116,7 @@ class GrowingDiscount extends FixedDiscount
     protected function countPeriodsPassed(DateTimeImmutable $time)
     {
         $since = $this->getSince();
-        if ($since === null) {
+        if (!$since instanceof Since) {
             throw new \Exception('no since given for growing discount');
         }
 

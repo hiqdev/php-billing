@@ -6,20 +6,14 @@ use hiqdev\php\billing\product\Domain\Model\Unit\FractionUnitInterface;
 
 class QuantityFormatterDefinition
 {
-    /** @var class-string<QuantityFormatterInterface> */
-    private string $formatterClass;
-
-    /** @var FractionUnitInterface|null|string */
-    private $fractionUnit;
-
     /**
      * @param class-string<QuantityFormatterInterface> $formatterClass
      * @param FractionUnitInterface|string|null $fractionUnit
      */
-    public function __construct(string $formatterClass, $fractionUnit = null)
-    {
-        $this->formatterClass = $formatterClass;
-        $this->fractionUnit = $fractionUnit;
+    public function __construct(
+        private readonly string $formatterClass,
+        private $fractionUnit = null
+    ) {
     }
 
     /**

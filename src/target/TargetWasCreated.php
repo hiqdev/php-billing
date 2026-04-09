@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * PHP Billing Library
@@ -20,11 +21,8 @@ use League\Event\AbstractEvent;
  */
 class TargetWasCreated extends AbstractEvent
 {
-    private TargetInterface $target;
-
-    public function __construct(TargetInterface $target)
+    public function __construct(private readonly TargetInterface $target)
     {
-        $this->target = $target;
     }
 
     public function getTarget(): TargetInterface

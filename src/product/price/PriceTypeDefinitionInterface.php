@@ -55,9 +55,6 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
     /**
      * це параметер визначає агрегатну функцію яка застосовується для щоденно записаних ресурсів щоб визнизначти
      * місячне споживання за яке потрібно пробілити клієнта
-     *
-     * @param AggregateInterface $aggregate
-     * @return static
      */
     public function aggregation(AggregateInterface $aggregate): static;
 
@@ -65,8 +62,6 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
 
     /**
      * For establishing a relationship between PriceTypeDefinition and TariffTypeDefinition
-     *
-     * @return TariffTypeDefinitionInterface
      */
     public function getTariffTypeDefinition(): TariffTypeDefinitionInterface;
 

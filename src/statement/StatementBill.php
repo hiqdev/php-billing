@@ -43,9 +43,6 @@ class StatementBill extends Bill implements StatementBillInterface
     /** @var string */
     protected $from;
 
-    /** @var int */
-    protected int $unique_objects_count = 0;
-
     /** @var TypeInterface */
     protected $tariff_type;
 
@@ -57,16 +54,16 @@ class StatementBill extends Bill implements StatementBillInterface
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $month,
-        int $unique_objects_count,
-        Money $price = null,
-        Money $overuse = null,
-        QuantityInterface $prepaid = null,
+        protected int $unique_objects_count,
+        ?Money $price = null,
+        ?Money $overuse = null,
+        ?QuantityInterface $prepaid = null,
         array $charges = [],
-        TargetInterface $target = null,
-        PlanInterface $plan = null,
-        BillState $state = null,
+        ?TargetInterface $target = null,
+        ?PlanInterface $plan = null,
+        ?BillState $state = null,
         ?string $from = null,
-        TypeInterface $tariff_type = null
+        ?TypeInterface $tariff_type = null
     ) {
         parent::__construct(
             $id,
@@ -81,7 +78,6 @@ class StatementBill extends Bill implements StatementBillInterface
             $state
         );
         $this->month                = $month;
-        $this->unique_objects_count = $unique_objects_count;
         $this->price                = $price;
         $this->overuse              = $overuse;
         $this->prepaid              = $prepaid;
