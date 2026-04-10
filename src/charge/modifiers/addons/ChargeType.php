@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -7,7 +10,6 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
-
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
@@ -36,7 +38,7 @@ class ChargeType implements AddonInterface
 
     private function ensureValidValue($value): string
     {
-        if (!preg_match('/^[\w_,]+$/', $value)) {
+        if (!preg_match('/^[\w_,]+$/', (string) $value)) {
             throw new \InvalidArgumentException('Charge type is not valid');
         }
 

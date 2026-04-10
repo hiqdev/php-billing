@@ -31,9 +31,6 @@ class Charge implements ChargeInterface
 {
     use EventAwareTrait;
 
-    /** @var int */
-    protected $id;
-
     /** @var TypeInterface */
     protected $type;
 
@@ -64,17 +61,19 @@ class Charge implements ChargeInterface
     /** @var ChargeInterface|null */
     protected $parent;
 
+    /**
+     * @param int $id
+     */
     public function __construct(
-                            $id,
+        protected $id,
         TypeInterface $type,
         TargetInterface $target,
         ActionInterface $action,
         ?PriceInterface $price,
         QuantityInterface $usage,
         Money $sum,
-        BillInterface $bill = null
+        ?BillInterface $bill = null
     ) {
-        $this->id       = $id;
         $this->type     = $type;
         $this->target   = $target;
         $this->action   = $action;

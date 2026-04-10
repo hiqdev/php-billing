@@ -15,7 +15,7 @@ final class PriceTypeBehaviorRegistry extends BehaviorRegistry
     /**
      * @var BehaviorPriceTypeDefinitionCollection<T>
      */
-    private BehaviorPriceTypeDefinitionCollection $behaviorCollection;
+    private readonly BehaviorPriceTypeDefinitionCollection $behaviorCollection;
 
     /**
      * @psalm-param T $priceTypeDefinition

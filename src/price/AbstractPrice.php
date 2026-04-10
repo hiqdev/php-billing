@@ -33,11 +33,6 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     use SettableChargeModifierTrait;
 
     /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
      * @var TypeInterface
      */
     protected $type;
@@ -52,13 +47,15 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
      */
     protected $plan;
 
+    /**
+     * @param int $id
+     */
     public function __construct(
-        $id,
+        protected $id,
         TypeInterface $type,
         TargetInterface $target,
-        PlanInterface $plan = null
+        ?PlanInterface $plan = null
     ) {
-        $this->id = $id;
         $this->type = $type;
         $this->target = $target;
         $this->plan = $plan;
@@ -122,12 +119,12 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $usage = $this->calculateUsage($quantity);
-        if ($usage === null) {
+        if (!$usage instanceof QuantityInterface) {
             return null;
         }
 
         $price = $this->calculatePrice($quantity);
-        if ($price === null) {
+        if (!$price instanceof Money) {
             return null;
         }
 
@@ -151,8 +148,6 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
      * Where we are using the result of this method?
      * Magic calls can't be determined and I don't know what can be broken if we change the method result.
      * Which structure must have the result, because array can contain anything?
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {

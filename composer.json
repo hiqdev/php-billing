@@ -65,7 +65,8 @@
         "opis/closure": "3.x-dev as 3.6.x-dev",
         "cache/array-adapter": "*",
         "matthiasnoback/behat-expect-exception": "^v0.3.0",
-        "behat/gherkin": "~v4.11.0"
+        "behat/gherkin": "~v4.11.0",
+        "rector/rector": "dev-main"
     },
     "suggest": {
         "ext-intl": "intl extension is required for formula support",

@@ -60,7 +60,7 @@ class TariffTypeDefinition implements TariffTypeDefinitionInterface
 
     private function ensureProductExists(): void
     {
-        if ($this->product === null) {
+        if (!$this->product instanceof ProductInterface) {
             throw new ProductNotDefinedException('Product is not set. Call the ofProduct() method first.');
         }
     }

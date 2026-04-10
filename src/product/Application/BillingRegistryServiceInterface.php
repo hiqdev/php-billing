@@ -16,36 +16,25 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 interface BillingRegistryServiceInterface
 {
     /**
-     * @param string $representationClass
      * @return RepresentationInterface[]
      */
     public function getRepresentationsByType(string $representationClass): array;
 
-    /**
-     * @deprecated - please use getPriceTypeDefinitionByPriceTypeName() method instead
-     * @param string $type
-     * @return AggregateInterface
-     */
+    #[\Deprecated(message: '- please use getPriceTypeDefinitionByPriceTypeName() method instead')]
     public function getAggregate(string $type): AggregateInterface;
 
     /**
-     * @param string $typeName
-     * @return PriceTypeDefinitionInterface
      * @throws PriceTypeDefinitionNotFoundException
      */
     public function getPriceTypeDefinitionByPriceTypeName(string $typeName): PriceTypeDefinitionInterface;
 
     /**
-     * @param string $tariffName
-     * @return TariffTypeDefinitionInterface
      * @throws TariffTypeDefinitionNotFoundException
      */
     public function getTariffTypeDefinitionByTariffName(string $tariffName): TariffTypeDefinitionInterface;
 
     /**
      * @param string $type - full type like 'overuse,lb_capacity_unit'
-     * @param string $behaviorClassWrapper
-     * @return BehaviorInterface
      * @throws BehaviorNotFoundException
      * @throws InvalidBehaviorException
      */
@@ -55,7 +44,6 @@ interface BillingRegistryServiceInterface
     /**
      * Find all behaviors attached to any TariffType or PriceType by specified Behavior class.
      *
-     * @param string $behaviorClassWrapper
      * @return Generator<BehaviorInterface>
      */
     public function getBehaviors(string $behaviorClassWrapper): Generator;
@@ -63,7 +51,6 @@ interface BillingRegistryServiceInterface
     /**
      * Find all PriceTypeDefinition in registry by specified Behavior class.
      *
-     * @param string $behaviorClassWrapper
      * @return Generator<PriceTypeDefinitionInterface>
      */
     public function findPriceTypeDefinitionsByBehavior(string $behaviorClassWrapper): Generator;

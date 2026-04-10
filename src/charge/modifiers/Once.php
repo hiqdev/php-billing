@@ -9,10 +9,12 @@ use hiqdev\php\billing\charge\derivative\ChargeDerivative;
 use hiqdev\php\billing\charge\derivative\ChargeDerivativeQuery;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\addons\WithSince;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
 use hiqdev\php\billing\formula\FormulaEngineException;
+use hiqdev\php\billing\sale\SaleInterface;
 use Money\Money;
 
 /**
@@ -26,7 +28,7 @@ use Money\Money;
  */
 class Once extends Modifier
 {
-    private const MONTHS_IN_YEAR_ON_EARTH = 12;
+    private const int MONTHS_IN_YEAR_ON_EARTH = 12;
 
     protected ChargeDerivative $chargeDerivative;
 
@@ -85,7 +87,7 @@ class Once extends Modifier
         $zeroChargeQuery = new ChargeDerivativeQuery();
         $zeroChargeQuery->changeSum(new Money(0, $charge->getSum()->getCurrency()));
         $reason = $this->getReason();
-        if ($reason) {
+        if ($reason instanceof Reason) {
             $zeroChargeQuery->changeComment($reason->getValue());
         } else {
             $zeroChargeQuery->changeComment('Billed once per ' . $this->getPer()->toString());
@@ -96,14 +98,14 @@ class Once extends Modifier
 
     private function assertPeriod(?Period $period)
     {
-        if ($period === null) {
+        if (!$period instanceof Period) {
             throw new FormulaEngineException('Period cannot be null in Once');
         }
     }
 
     private function assertCharge(?ChargeInterface $charge)
     {
-        if ($charge === null) {
+        if (!$charge instanceof ChargeInterface) {
             throw new FormulaEngineException('Charge cannot be null in Once');
         }
     }
@@ -128,7 +130,7 @@ class Once extends Modifier
         }
 
         $sale = $action->getSale();
-        if ($sale !== null) {
+        if ($sale instanceof SaleInterface) {
             return $sale->getTime();
         }
 
@@ -145,7 +147,8 @@ class Once extends Modifier
     {
         if ($period instanceof YearPeriod) {
             return self::MONTHS_IN_YEAR_ON_EARTH;
-        } elseif ($period instanceof MonthPeriod) {
+        }
+        if ($period instanceof MonthPeriod) {
             return $period->getValue();
         }
 

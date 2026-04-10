@@ -27,11 +27,8 @@ class Factory implements FactoryInterface
 {
     private $entities = [];
 
-    private $factories = [];
-
-    public function __construct(array $factories)
+    public function __construct(private array $factories)
     {
-        $this->factories = $factories;
     }
 
     public function getMoney($data)
@@ -51,7 +48,7 @@ class Factory implements FactoryInterface
 
     public function parseMoney($str)
     {
-        [$amount, $currency] = explode(' ', $str);
+        [$amount, $currency] = explode(' ', (string) $str);
 
         return [
             'amount' => $amount*100,
@@ -61,7 +58,7 @@ class Factory implements FactoryInterface
 
     public function createMoney($data)
     {
-        return new Money($data['amount'], new Currency(strtoupper($data['currency'])));
+        return new Money($data['amount'], new Currency(strtoupper((string) $data['currency'])));
     }
 
     public function getCurrency($data)
@@ -76,7 +73,7 @@ class Factory implements FactoryInterface
 
     public function parseQuantity($str)
     {
-        [$quantity, $unit] = explode(' ', $str);
+        [$quantity, $unit] = explode(' ', (string) $str);
 
         return [
             'quantity' => $quantity,
@@ -218,12 +215,8 @@ class Factory implements FactoryInterface
         if (count($keys) === 1) {
             return [reset($keys) => $str];
         }
-        $parts = explode($delimiter, $str, count($keys));
-        if (count($parts) === count($keys)) {
-            $res = array_combine($keys, $parts);
-        } else {
-            $res = [];
-        }
+        $parts = explode($delimiter, (string) $str, count($keys));
+        $res = count($parts) === count($keys) ? array_combine($keys, $parts) : [];
         $res['id'] = $str;
 
         return $res;

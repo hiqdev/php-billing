@@ -28,9 +28,6 @@ use Money\Money;
  */
 class Bill implements BillInterface
 {
-    /** @var int|string */
-    protected $id;
-
     /** @var TypeInterface */
     protected $type;
 
@@ -67,19 +64,21 @@ class Bill implements BillInterface
     /** @var UsageInterval */
     protected $usageInterval;
 
+    /**
+     * @param int|string $id
+     */
     public function __construct(
-                            $id,
+        protected $id,
         TypeInterface $type,
         DateTimeImmutable $time,
         Money $sum,
         QuantityInterface $quantity,
         CustomerInterface $customer,
-        TargetInterface $target = null,
-        PlanInterface $plan = null,
+        ?TargetInterface $target = null,
+        ?PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null
+        ?BillState $state = null
     ) {
-        $this->id           = $id;
         $this->type         = $type;
         $this->time         = $time;
         $this->sum          = $sum;

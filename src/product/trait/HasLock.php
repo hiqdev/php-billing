@@ -35,7 +35,6 @@ trait HasLock
 
     /**
      * @param HasLockInterface[] $items
-     * @return void
      */
     protected function lockItems(array $items): void
     {

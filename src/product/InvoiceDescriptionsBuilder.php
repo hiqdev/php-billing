@@ -4,11 +4,9 @@ namespace hiqdev\php\billing\product;
 
 class InvoiceDescriptionsBuilder
 {
-    private BillingRegistry $registry;
-
-    public function __construct(BillingRegistry $registry)
-    {
-        $this->registry = $registry;
+    public function __construct(
+        private readonly BillingRegistry $registry
+    ) {
     }
 
     public function build(): array

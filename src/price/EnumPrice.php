@@ -28,25 +28,16 @@ use Money\Money;
  */
 class EnumPrice extends AbstractPrice implements PriceWithSumsInterface, PriceWithCurrencyInterface, PriceWithUnitInterface
 {
-    protected UnitInterface $unit;
-
-    protected Currency $currency;
-
-    protected Sums $sums;
-
     public function __construct(
         $id,
         TypeInterface $type,
         TargetInterface $target,
         ?PlanInterface $plan,
-        UnitInterface $unit,
-        Currency $currency,
-        Sums $sums,
+        protected UnitInterface $unit,
+        protected Currency $currency,
+        protected Sums $sums,
     ) {
         parent::__construct($id, $type, $target, $plan);
-        $this->unit = $unit;
-        $this->currency = $currency;
-        $this->sums = $sums;
     }
 
     public function getUnit(): UnitInterface
@@ -67,6 +58,7 @@ class EnumPrice extends AbstractPrice implements PriceWithSumsInterface, PriceWi
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $usage = $this->calculateUsage($quantity)->getQuantity();
@@ -86,12 +78,12 @@ class EnumPrice extends AbstractPrice implements PriceWithSumsInterface, PriceWi
     public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         $sum = $this->calculateSum($quantity);
-        if ($sum === null) {
+        if (!$sum instanceof Money) {
             return null;
         }
 
         $usage = $this->calculateUsage($quantity);
-        if ($usage === null) {
+        if (!$usage instanceof QuantityInterface) {
             return null;
         }
 

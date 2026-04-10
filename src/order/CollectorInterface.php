@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -7,7 +10,6 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
-
 namespace hiqdev\php\billing\order;
 
 use DateTimeImmutable;
@@ -31,8 +33,6 @@ interface CollectorInterface
 {
     /**
      * @param OrderInterface|ActionInterface|mixed $source
-     * @param DateTimeImmutable|null $time
-     * @return OrderInterface
      */
-    public function collect($source, DateTimeImmutable $time = null): OrderInterface;
+    public function collect($source, ?DateTimeImmutable $time = null): OrderInterface;
 }

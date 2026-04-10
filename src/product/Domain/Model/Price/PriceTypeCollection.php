@@ -17,7 +17,7 @@ class PriceTypeCollection implements IteratorAggregate, Countable
     /**
      * @var string[] - flipped type names for fast search
      */
-    private array $flippedTypeNames;
+    private readonly array $flippedTypeNames;
 
     public function __construct(private readonly array $types = [])
     {
