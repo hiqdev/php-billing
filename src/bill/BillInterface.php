@@ -52,7 +52,7 @@ interface BillInterface extends EntityInterface
     /**
      * @return ChargeInterface[]
      */
-    public function getCharges();
+    public function getCharges(): array;
 
     public function getUsageInterval(): UsageInterval;
 

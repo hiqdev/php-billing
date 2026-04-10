@@ -28,47 +28,33 @@ use Money\Money;
  */
 class Bill implements BillInterface
 {
-    /** @var TypeInterface */
-    protected $type;
+    protected TypeInterface $type;
 
-    /** @var DateTimeImmutable */
-    protected $time;
+    protected DateTimeImmutable $time;
 
-    /** @var Money */
-    protected $sum;
+    protected Money $sum;
 
-    /** @var QuantityInterface */
-    protected $quantity;
+    protected QuantityInterface $quantity;
 
-    /** @var CustomerInterface */
-    protected $customer;
+    protected CustomerInterface $customer;
 
-    /** @var TargetInterface */
-    protected $target;
+    protected ?TargetInterface $target;
 
-    /** @var BillRequisite */
-    protected $requisite;
+    protected ?BillRequisite $requisite = null;
 
-    /** @var PlanInterface */
-    protected $plan;
+    protected ?PlanInterface $plan;
 
     /** @var ChargeInterface[] */
-    protected $charges = [];
+    protected array $charges = [];
 
-    /** @var BillState */
-    protected $state;
+    protected ?BillState $state;
 
-    /** @var string */
-    protected $comment;
+    protected string $comment = '';
 
-    /** @var UsageInterval */
-    protected $usageInterval;
+    protected UsageInterval $usageInterval;
 
-    /**
-     * @param int|string $id
-     */
     public function __construct(
-        protected $id,
+        protected int|string|null $id,
         TypeInterface $type,
         DateTimeImmutable $time,
         Money $sum,
@@ -109,7 +95,7 @@ class Bill implements BillInterface
 
     public function getUsageInterval(): UsageInterval
     {
-        if ($this->usageInterval === null) {
+        if (!isset($this->usageInterval)) {
             $this->initializeWholeMonthUsageInterval();
         }
 
@@ -121,22 +107,19 @@ class Bill implements BillInterface
         $this->setUsageInterval(UsageInterval::wholeMonth($this->time));
     }
 
-    public function calculatePrice()
+    public function calculatePrice(): Money
     {
         $quantity = $this->quantity->getQuantity();
 
         return $quantity ? $this->sum->divide(sprintf('%.14F', $quantity)) : $this->sum;
     }
 
-    /**
-     * @return int|string
-     */
-    public function getId()
+    public function getId(): int|string|null
     {
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId(int|string $id): void
     {
         if ($this->id === $id) {
             return;
@@ -177,7 +160,7 @@ class Bill implements BillInterface
         return $this->quantity;
     }
 
-    public function setQuantity(QuantityInterface $quantity): BillInterface
+    public function setQuantity(QuantityInterface $quantity): static
     {
         $this->quantity = $quantity;
 
@@ -208,10 +191,10 @@ class Bill implements BillInterface
     }
 
     /**
-     * @param ChargeInterface[] $prices
-     * @throws \Exception
+     * @param ChargeInterface[] $charges
+     * @throws CannotReassignException
      */
-    public function setCharges(array $charges): self
+    public function setCharges(array $charges): static
     {
         if ($this->hasCharges()) {
             throw new CannotReassignException('bill charges');
@@ -236,12 +219,12 @@ class Bill implements BillInterface
         return $this->state === null ? null : $this->state->isFinished();
     }
 
-    public function getComment()
+    public function getComment(): string
     {
         return $this->comment;
     }
 
-    public function setComment(string $comment)
+    public function setComment(string $comment): void
     {
         $this->comment = $comment;
     }
