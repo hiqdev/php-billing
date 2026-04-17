@@ -11,8 +11,6 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
-use Cache\Adapter\PHPArray\ArrayCachePool;
 use Closure;
 use DateTimeImmutable;
 use Exception;
@@ -34,7 +32,7 @@ use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
+use hiqdev\yii\compat\PsrCache;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -42,6 +40,7 @@ use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
+use yii\caching\ArrayCache;
 
 /**
  * Defines application features from the specific context.
@@ -224,7 +223,8 @@ class FeatureContext implements Context
     protected function getFormulaEngine()
     {
         if ($this->engine === null) {
-            $this->engine = new FormulaEngine(new ArrayCachePool());
+            $cache = new PsrCache(new ArrayCache());
+            $this->engine = new FormulaEngine($cache);
         }
 
         return $this->engine;
