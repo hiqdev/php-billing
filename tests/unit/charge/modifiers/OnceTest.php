@@ -37,7 +37,7 @@ class OnceTest extends ActionTest
 
     private function createPrice(TypeInterface $type): PriceInterface
     {
-        return new SinglePrice(5, $type, $this->target, null, $this->prepaid, $this->money);
+        return new SinglePrice(5, $type, $this->target, $this->prepaid, $this->money);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('periodCreationProvider')]

@@ -87,7 +87,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->target   = new Target(2, 'server');
         $this->prepaid  = Quantity::gigabyte(1);
         $this->money    = Money::USD(10000);
-        $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+        $this->price    = new SinglePrice(5, $this->type, $this->target, $this->prepaid, $this->money);
         $this->customer = new Customer(2, 'client');
         $this->time     = new DateTimeImmutable('now');
         $this->generalizer = new Generalizer();

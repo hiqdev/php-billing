@@ -30,7 +30,7 @@ class InstallmentTest extends ActionTest
     {
         parent::setUp();
         $this->type = Type::anyId('monthly,installment');
-        $this->price = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+        $this->price = new SinglePrice(5, $this->type, $this->target, $this->prepaid, $this->money);
     }
 
     protected function buildInstallment($term)

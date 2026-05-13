@@ -91,7 +91,7 @@ class PriceFactory implements PriceFactoryInterface
 
     public function createSinglePrice(PriceCreationDto $dto)
     {
-        return new SinglePrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->prepaid, $dto->price);
+        return new SinglePrice($dto->id, $dto->type, $dto->target, $dto->prepaid, $dto->price, $dto->plan);
     }
 
     public function createProgressivePrice(PriceCreationDto $dto): ProgressivePrice
