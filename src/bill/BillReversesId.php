@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace hiqdev\php\billing\bill;
 
-class BillReversesId
+readonly class BillReversesId
 {
-    /** @var int|null */
-    protected $id;
-
-    public function __construct($id = null)
+    public function __construct(private ?int $value = null)
     {
-        $this->id = $id;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
-        return $this->id;
+        return $this->value;
     }
 
     public static function fromInt(int $id): self
