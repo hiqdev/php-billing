@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -7,7 +10,6 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
-
 namespace hiqdev\php\billing\order;
 
 use DateTimeImmutable;
@@ -24,27 +26,21 @@ interface BillingInterface
 {
     /**
      * @param OrderInterface|ActionInterface|mixed $source
-     * @param DateTimeImmutable|null $time
      * @return BillInterface[]
      */
-    public function calculate($source, DateTimeImmutable $time = null): array;
+    public function calculate($source, ?DateTimeImmutable $time = null): array;
 
     /**
      * @param OrderInterface|ActionInterface|ActionInterface[]|mixed $source
-     * @param DateTimeImmutable|null $time
      * @return BillInterface[] array of charges
      */
-    public function perform($source, DateTimeImmutable $time = null): array;
+    public function perform($source, ?DateTimeImmutable $time = null): array;
 
     /**
      * @param OrderInterface|ActionInterface|mixed $source
-     * @param DateTimeImmutable|null $time
      * @return ChargeInterface[]
      */
-    public function calculateCharges($source, DateTimeImmutable $time = null): array;
+    public function calculateCharges($source, ?DateTimeImmutable $time = null): array;
 
-    /**
-     * @return CalculatorInterface
-     */
     public function getCalculator(): CalculatorInterface;
 }

@@ -31,7 +31,7 @@ final class TariffTypeBehaviorRegistry extends BehaviorRegistry
     /**
      * @var BehaviorTariffTypeCollection<T>
      */
-    private BehaviorTariffTypeCollection $behaviorCollection;
+    private readonly BehaviorTariffTypeCollection $behaviorCollection;
 
     /**
      * @psalm-param T $tariffTypeDefinition

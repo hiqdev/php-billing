@@ -26,6 +26,8 @@ use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\sale\SaleRepositoryInterface;
 use hiqdev\php\billing\tools\ActualDateTimeProvider;
 use hiqdev\php\billing\tools\CurrentDateTimeProviderInterface;
+use hiqdev\php\units\QuantityInterface;
+use Money\Money;
 use Throwable;
 
 /**
@@ -35,21 +37,14 @@ use Throwable;
  */
 class Calculator implements CalculatorInterface
 {
-    protected GeneralizerInterface $generalizer;
-    private SaleRepositoryInterface $saleRepository;
-    private PlanRepositoryInterface $planRepository;
-
-    private CurrentDateTimeProviderInterface $dateTimeProvider;
+    private readonly CurrentDateTimeProviderInterface $dateTimeProvider;
 
     public function __construct(
-        GeneralizerInterface $generalizer,
-        SaleRepositoryInterface $saleRepository,
-        PlanRepositoryInterface $planRepository,
-        CurrentDateTimeProviderInterface $dateTimeProvider = null
+        protected GeneralizerInterface $generalizer,
+        private readonly SaleRepositoryInterface $saleRepository,
+        private readonly PlanRepositoryInterface $planRepository,
+        ?CurrentDateTimeProviderInterface $dateTimeProvider = null
     ) {
-        $this->generalizer    = $generalizer;
-        $this->saleRepository = $saleRepository;
-        $this->planRepository = $planRepository;
         $this->dateTimeProvider = $dateTimeProvider ?? new ActualDateTimeProvider();
     }
 
@@ -92,7 +87,7 @@ class Calculator implements CalculatorInterface
     public function calculatePrice(PriceInterface $price, ActionInterface $action): array
     {
         $charge = $this->calculateCharge($price, $action);
-        if ($charge === null) {
+        if (!$charge instanceof ChargeInterface) {
             return [];
         }
 
@@ -114,8 +109,6 @@ class Calculator implements CalculatorInterface
     /**
      * Calculates charge for given action and price.
      * Returns `null`, if $price is not applicable to $action.
-     *
-     * @return ChargeInterface|Charge|null
      */
     public function calculateCharge(PriceInterface $price, ActionInterface $action): ?ChargeInterface
     {
@@ -123,17 +116,17 @@ class Calculator implements CalculatorInterface
             return null;
         }
 
-        if ($action->getSale() !== null && $action->getSale()->getTime() > $this->dateTimeProvider->dateTimeImmutable()) {
+        if ($action->getSale() instanceof SaleInterface && $action->getSale()->getTime() > $this->dateTimeProvider->dateTimeImmutable()) {
             return null;
         }
 
         $usage = $price->calculateUsage($action->getQuantity());
-        if ($usage === null) {
+        if (!$usage instanceof QuantityInterface) {
             return null;
         }
 
         $sum = $price->calculateSum($action->getQuantity());
-        if ($sum === null) {
+        if (!$sum instanceof Money) {
             return null;
         }
 
@@ -183,7 +176,7 @@ class Calculator implements CalculatorInterface
             }
         }
 
-        if ($lookPlanIds) {
+        if ($lookPlanIds !== []) {
             $foundPlans = $this->planRepository->findByIds($lookPlanIds);
             foreach ($foundPlans as $plan) {
                 $foundPlans[$plan->getId()] = $plan;
@@ -200,7 +193,6 @@ class Calculator implements CalculatorInterface
     }
 
     /**
-     * @param OrderInterface $order
      * @return SaleInterface[]
      */
     private function findSales(OrderInterface $order): array
@@ -216,7 +208,7 @@ class Calculator implements CalculatorInterface
             }
         }
 
-        if ($lookActions) {
+        if ($lookActions !== []) {
             $lookOrder = new Order(null, $order->getCustomer(), $lookActions);
             $foundSales = $this->saleRepository->findByOrder($lookOrder);
             foreach ($foundSales as $actionKey => $sale) {

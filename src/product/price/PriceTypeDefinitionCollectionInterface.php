@@ -27,7 +27,6 @@ interface PriceTypeDefinitionCollectionInterface extends IteratorAggregate, Coun
     public function priceType(TypeInterface $type): PriceTypeDefinitionInterface;
 
     /**
-     * @return TariffTypeDefinitionInterface
      * @plsam-return M
      */
     public function end(): TariffTypeDefinitionInterface;
@@ -36,7 +35,6 @@ interface PriceTypeDefinitionCollectionInterface extends IteratorAggregate, Coun
      * For easier understanding and establishing a relationship between PriceTypeDefinitionCollection
      * and TariffTypeDefinition
      *
-     * @return TariffTypeDefinitionInterface
      * @plsam-return M
      */
     public function getTariffTypeDefinition(): TariffTypeDefinitionInterface;

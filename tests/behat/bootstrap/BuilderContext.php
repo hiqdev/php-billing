@@ -17,9 +17,9 @@ class BuilderContext implements Context
 {
     private $builder;
 
-    public function __construct(string $class = null)
+    public function __construct(?string $class = null)
     {
-        $class = $class ?? FactoryBasedBuilder::class;
+        $class ??= FactoryBasedBuilder::class;
         $this->builder = new $class();
     }
 

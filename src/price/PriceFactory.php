@@ -31,14 +31,16 @@ class PriceFactory implements PriceFactoryInterface
     ];
 
     /**
-     * @var string default price class, when given will be used for not found types
+     * @param string $defaultClass
      */
-    protected $defaultClass = null;
-
-    public function __construct(array $types = [], $defaultClass = null)
-    {
+    public function __construct(
+        array $types = [],
+        /**
+         * @var string default price class, when given will be used for not found types
+         */
+        protected $defaultClass = null
+    ) {
         $this->types = $types;
-        $this->defaultClass = $defaultClass;
     }
 
 
@@ -48,7 +50,7 @@ class PriceFactory implements PriceFactoryInterface
     public function create(PriceCreationDto $dto): PriceInterface
     {
         $class = $this->findClassForTypes([
-            get_class($dto),
+            $dto::class,
             $dto->type->getName(),
         ]);
         $method = $this->findMethodForClass($class);

@@ -39,14 +39,12 @@ final class ProgressivePriceThresholdList implements JsonSerializable
      */
     public static function fromScalarsArray(array $thresholds): self
     {
-        return new self(array_map(function ($threshold) {
-            return ProgressivePriceThreshold::createFromScalar(
-                $threshold['price'],
-                $threshold['currency'],
-                $threshold['quantity'],
-                $threshold['unit']
-            );
-        }, $thresholds));
+        return new self(array_map(fn($threshold) => ProgressivePriceThreshold::createFromScalar(
+            $threshold['price'],
+            $threshold['currency'],
+            $threshold['quantity'],
+            $threshold['unit']
+        ), $thresholds));
     }
 
     private function checkCanBeAdded(ProgressivePriceThreshold $threshold): void

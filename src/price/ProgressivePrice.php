@@ -21,20 +21,17 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
     use HasMoney;
     use HasQuantity;
 
-    protected ProgressivePriceThresholdList $thresholds;
-
     public function __construct(
         $id,
         TypeInterface $type,
         TargetInterface $target,
         QuantityInterface $prepaid,
         Money $price,
-        ProgressivePriceThresholdList $thresholds,
+        protected ProgressivePriceThresholdList $thresholds,
         ?PlanInterface $plan = null
     )
     {
         parent::__construct($id, $type, $target, $plan);
-        $this->thresholds = $thresholds;
         $this->price = $price;
         $this->prepaid = $prepaid;
     }
@@ -81,6 +78,7 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
         return $this->calculationTraces;
     }
 
+    #[\Override]
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $this->calculationTraces = [];
@@ -105,8 +103,8 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
             $price = $threshold->price();
 
             $chargedAmount = $price->money()
-                                   ->multiply((string)(sprintf('%.14F', $billedUsage->getQuantity())))
-                                   ->divide((string)(sprintf('%.14F', $price->multiplier())));
+                                   ->multiply(sprintf('%.14F', $billedUsage->getQuantity()))
+                                   ->divide(sprintf('%.14F', $price->multiplier()));
 
             $this->calculationTraces[] = new ProgressivePriceCalculationTrace(
                 $threshold, $billedUsage, $chargedAmount

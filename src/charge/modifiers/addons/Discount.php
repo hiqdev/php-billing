@@ -94,7 +94,7 @@ class Discount implements AddonInterface
             if (preg_match('/^(-?\d{1,5}(\.\d+)?) ([a-z]{2,})$/', $value, $ms)) {
                 try {
                     return Quantity::create($ms[3], $ms[1]);
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     throw new FormulaSemanticsError("invalid $name value: $value");
                 }
             }
@@ -119,11 +119,9 @@ class Discount implements AddonInterface
         }
         $this->ensureSameType($addend, 'addend');
 
-        if ($this->isAbsolute()) {
-            $sum = $this->getValue()->add($addend->getValue());
-        } else {
-            $sum = $this->getValue() + $addend->getValue();
-        }
+        $sum = $this->isAbsolute()
+            ? $this->getValue()->add($addend->getValue())
+            : $this->getValue() + $addend->getValue();
 
         return new static($sum);
     }
@@ -137,9 +135,9 @@ class Discount implements AddonInterface
 
         if ($this->isAbsolute()) {
             return $this->value->compare($other->getValue());
-        } else {
-            return $this->value - $other->getValue();
         }
+
+        return $this->value - $other->getValue();
     }
 
     public function ensureSameType(self $other, $name)

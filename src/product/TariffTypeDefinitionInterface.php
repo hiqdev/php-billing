@@ -19,9 +19,6 @@ interface TariffTypeDefinitionInterface extends HasBehaviorsInterface, HasLockIn
 
     /**
      * Check if TariffTypeDefinition belongs to specified TariffType
-     *
-     * @param TariffTypeInterface $tariffType
-     * @return bool
      */
     public function belongToTariffType(TariffTypeInterface $tariffType): bool;
 

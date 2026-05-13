@@ -27,9 +27,9 @@ use hiqdev\php\billing\tools\MergerInterface;
 class SimpleBilling extends Billing
 {
     public function __construct(
-        CalculatorInterface $calculator = null,
-        AggregatorInterface $aggregator = null,
-        MergerInterface $merger = null,
+        ?CalculatorInterface $calculator = null,
+        ?AggregatorInterface $aggregator = null,
+        ?MergerInterface $merger = null,
         $repository = null
     ) {
         $calculator = $calculator ?: new SimpleCalculator();
@@ -45,9 +45,9 @@ class SimpleBilling extends Billing
         return $this->repository;
     }
 
-    public static function fromPlan(PlanInterface $plan, CustomerInterface $customer = null)
+    public static function fromPlan(PlanInterface $plan, ?CustomerInterface $customer = null)
     {
-        $customer = $customer ?? $plan->getSeller();
+        $customer ??= $plan->getSeller();
         $sale = new Sale(null, Target::any(), $customer, $plan);
 
         return self::fromSale($sale);

@@ -36,8 +36,8 @@ class SinglePrice extends AbstractPrice implements PriceWithQuantityInterface, P
         $id,
         TypeInterface $type,
         TargetInterface $target,
-        QuantityInterface $prepaid,
-        Money $price,
+        ?QuantityInterface $prepaid = null,
+        ?Money $price = null,
         ?PlanInterface $plan = null,
     ) {
         parent::__construct($id, $type, $target, $plan);

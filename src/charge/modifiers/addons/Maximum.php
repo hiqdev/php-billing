@@ -22,6 +22,7 @@ class Maximum extends Extremum
 {
     protected static $name = 'maximum';
 
+    #[\Override]
     public function calculateSum(ChargeInterface $charge): Money
     {
         return $this->value instanceof Money

@@ -40,7 +40,7 @@ interface BuilderInterface
 
     public function performCalculation(string $time): array;
 
-    public function targetChangePlan(string $target, string $planName, string $date, string $wallTime = null);
+    public function targetChangePlan(string $target, string $planName, string $date, ?string $wallTime = null);
 
     /**
      * @return SaleInterface[]

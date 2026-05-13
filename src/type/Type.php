@@ -18,24 +18,24 @@ namespace hiqdev\php\billing\type;
 class Type implements TypeInterface
 {
     /**
-     * @var int|string|null|float The unique identifier of the type. Can be an integer or string.
-     *                            Special values:
-     *                            - `Type::ANY` indicates that the type can match any ID.
-     *                            - `Type::NONE` indicates that there is no valid ID.
+     * @param int|string|null|float $id
+     * @param string|null|float $name
      */
-    protected $id;
-
-    /**
-     * @var string|null|float The name of the type. Can be a specific name or one of the special values:
-     *                        - `Type::ANY` indicates that the type can match any name.
-     *                        - `Type::NONE` indicates that there is no valid name.
-     */
-    protected $name;
-
-    public function __construct($id, $name = self::ANY)
-    {
-        $this->id = $id;
-        $this->name = $name;
+    public function __construct(
+        /**
+         * @var int|string|null|float The unique identifier of the type. Can be an integer or string.
+         *                            Special values:
+         *                            - `Type::ANY` indicates that the type can match any ID.
+         *                            - `Type::NONE` indicates that there is no valid ID.
+         */
+        protected $id,
+        /**
+         * @var string|null|float The name of the type. Can be a specific name or one of the special values:
+         *                        - `Type::ANY` indicates that the type can match any name.
+         *                        - `Type::NONE` indicates that there is no valid name.
+         */
+        protected $name = self::ANY
+    ) {
     }
 
     /**
@@ -83,7 +83,7 @@ class Type implements TypeInterface
             return false;
         }
 
-        return (string) $lhs === (string) $rhs;
+        return (string)$lhs === (string)$rhs;
     }
 
     public function jsonSerialize(): array

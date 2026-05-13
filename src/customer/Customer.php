@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -7,7 +10,6 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
-
 namespace hiqdev\php\billing\customer;
 
 /**
@@ -18,16 +20,6 @@ namespace hiqdev\php\billing\customer;
 class Customer implements CustomerInterface
 {
     /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $login;
-
-    /**
      * @var CustomerInterface
      */
     protected $seller;
@@ -37,10 +29,15 @@ class Customer implements CustomerInterface
      */
     protected $sellers = [];
 
-    public function __construct($id, $login, ?CustomerInterface $seller = null)
-    {
-        $this->id = $id;
-        $this->login = $login;
+    /**
+     * @param int $id
+     * @param string $login
+     */
+    public function __construct(
+        protected $id,
+        protected $login,
+        ?CustomerInterface $seller = null
+    ) {
         $this->seller = $seller;
     }
 
@@ -75,11 +72,9 @@ class Customer implements CustomerInterface
 
     public static function fromArray(array $info)
     {
-        if (!empty($info['seller_id']) && !empty($info['seller'])) {
-            $seller = new static($info['seller_id'], $info['seller']);
-        } else {
-            $seller = null;
-        }
+        $seller = !empty($info['seller_id']) && !empty($info['seller'])
+            ? new static($info['seller_id'], $info['seller'])
+            : null;
 
         return new static($info['id'], $info['login'], $seller);
     }

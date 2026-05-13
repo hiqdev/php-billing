@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -7,7 +10,6 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
-
 namespace hiqdev\php\billing\target;
 
 use hiqdev\php\billing\EntityInterface;
@@ -51,7 +53,6 @@ interface TargetInterface extends EntityInterface
 
     /**
      * Get target state.
-     * @return null|string
      */
     public function getState(): ?string;
 

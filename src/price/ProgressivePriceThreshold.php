@@ -14,27 +14,24 @@ use hiqdev\php\units\Quantity;
 
 class ProgressivePriceThreshold implements JsonSerializable
 {
-    /**
-     * @var numeric-string $price The price of the progressive price threshold in currency (not cents)
-     */
-    private string $price;
+    private readonly string $currency;
 
-    private string $currency;
+    private readonly string $quantity;
 
-    private string $quantity;
-
-    private string $unit;
-
-    private function __construct(string $price, string $currency, string $quantity, string $unit)
-    {
+    private function __construct(
+        /**
+         * @var numeric-string $price The price of the progressive price threshold in currency (not cents)
+         */
+        private readonly string $price,
+        string $currency,
+        string $quantity,
+        private readonly string $unit
+    ) {
         if ($quantity < 0) {
             throw new InvalidArgumentException('Quantity of the progressive price threshold must be positive');
         }
-
-        $this->price = $price;
         $this->currency = strtoupper($currency);
         $this->quantity = $quantity;
-        $this->unit = $unit;
     }
 
     public static function createFromScalar(string $price, string $currency, string $quantity, string $unit): self

@@ -11,8 +11,6 @@
 namespace hiqdev\php\billing\tests\behat\bootstrap;
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
-use Cache\Adapter\PHPArray\ArrayCachePool;
 use Closure;
 use DateTimeImmutable;
 use Exception;
@@ -34,7 +32,7 @@ use hiqdev\php\billing\target\Target;
 use hiqdev\php\billing\tests\support\order\SimpleBilling;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
-use hiqdev\php\units\Unit;
+use hiqdev\yii\compat\PsrCache;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -42,6 +40,7 @@ use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
+use yii\caching\ArrayCache;
 
 /**
  * Defines application features from the specific context.
@@ -91,9 +90,7 @@ class FeatureContext implements Context
         $this->billing = SimpleBilling::fromSale($this->sale);
     }
 
-    /**
-     * @Given /(\S+) (\S+) price is ([0-9.]+) (\w+) per (\w+)(?: includes ([\d.]+))?/
-     */
+    #[\Behat\Step\Given('/(\S+) (\S+) price is ([0-9.]+) (\w+) per (\w+)(?: includes ([\d.]+))?/')]
     public function priceIs($target, $type, $sum, $currency, $unit, $quantity = 0)
     {
         $type = Type::anyId($type);
@@ -104,9 +101,7 @@ class FeatureContext implements Context
     }
 
     protected array $progressivePrice = [];
-    /**
-     * @Given /(\S+) progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+)$/
-     */
+    #[\Behat\Step\Given('/(\S+) progressive price for (\S+) is +(\S+) (\S+) per (\S+) (\S+) (\S+) (\S+)$/')]
     public function progressivePrice($target, $type, $price, $currency, $unit, $sign, $quantity, $perUnit): void
     {
         if (empty($this->progressivePrice[$type])) {
@@ -128,9 +123,7 @@ class FeatureContext implements Context
         }
     }
 
-    /**
-     * @Given /^build progressive price/
-     */
+    #[\Behat\Step\Given('/^build progressive price/')]
     public function buildProgressivePrices()
     {
         $i = 0;
@@ -148,9 +141,7 @@ class FeatureContext implements Context
         }
     }
 
-    /**
-     * @Given /sale close time is ([0-9.-]+)?/
-     */
+    #[\Behat\Step\Given('/sale close time is ([0-9.-]+)?/')]
     public function setActionCloseTime($closeTime): void
     {
         if ($closeTime === null) {
@@ -160,16 +151,12 @@ class FeatureContext implements Context
         $this->sale->close(new DateTimeImmutable($closeTime));
     }
 
-    /**
-     * @Given /sale time is (.+)$/
-     */
+    #[\Behat\Step\Given('/sale time is (.+)$/')]
     public function setSaleTime($time): void
     {
         $ref = new ReflectionClass($this->sale);
         $prop = $ref->getProperty('time');
-        $prop->setAccessible(true);
         $prop->setValue($this->sale, new DateTimeImmutable($time));
-        $prop->setAccessible(false);
     }
 
     private function setPrice($price)
@@ -177,13 +164,10 @@ class FeatureContext implements Context
         $this->price = $price;
         $ref = new ReflectionClass($this->plan);
         $prop = $ref->getProperty('prices');
-        $prop->setAccessible(true);
         $prop->setValue($this->plan, [$price]);
     }
 
-    /**
-     * @Given /action is (\S+) ([\w_,]+)(?: ([0-9.]+) (\S+))?(?: in (.+))?/
-     */
+    #[\Behat\Step\Given('/action is (\S+) ([\w_,]+)(?: ([0-9.]+) (\S+))?(?: in (.+))?/')]
     public function actionIs(string $target, string $type, float $amount, string $unit, ?string $date = null): void
     {
         $type = Type::anyId($type);
@@ -196,7 +180,7 @@ class FeatureContext implements Context
             );
             if ($type->getName() !== 'overuse') {
                 // Overuses should be prepared in the test case
-                $amount = $amount * $fractionOfMonth;
+                $amount *= $fractionOfMonth;
             }
         }
         $quantity = Quantity::create($unit, $amount);
@@ -219,22 +203,18 @@ class FeatureContext implements Context
     {
         try {
             return UsageInterval::withinMonth($month, $startTime, $endTime)->ratioOfMonth();
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException) {
             return 1;
         }
     }
 
-    /**
-     * @Given /formula is (.+)/
-     */
+    #[\Behat\Step\Given('/formula is (.+)/')]
     public function formulaIs(string $formula): void
     {
         $this->formula = $formula;
     }
 
-    /**
-     * @Given /formula continues (.+)/
-     */
+    #[\Behat\Step\Given('/formula continues (.+)/')]
     public function formulaContinues(string $formula): void
     {
         $this->formula .= "\n" . $formula;
@@ -243,27 +223,26 @@ class FeatureContext implements Context
     protected function getFormulaEngine()
     {
         if ($this->engine === null) {
-            $this->engine = new FormulaEngine(new ArrayCachePool());
+            $cache = new PsrCache(new ArrayCache());
+            $this->engine = new FormulaEngine($cache);
         }
 
         return $this->engine;
     }
 
     /**
-     * @When /action date is (.+)/
      * @throws Exception
      */
+    #[\Behat\Step\When('/action date is (.+)/')]
     public function actionDateIs(string $date): void
     {
         $this->action->setTime(new DateTimeImmutable($date));
     }
 
-    /**
-     * @Given /^client rejected service at ?(.+?)$/
-     */
+    #[\Behat\Step\Given('/^client rejected service at ?(.+?)$/')]
     public function actionCloseDateIs(?string $close_date): void
     {
-        $close_date = trim($close_date);
+        $close_date = trim((string) $close_date);
         if (empty($close_date)) {
             return;
         }
@@ -271,43 +250,34 @@ class FeatureContext implements Context
         $this->sale->close(new DateTimeImmutable($close_date));
     }
 
-    /**
-     * @Then /^error is$/m
-     */
+    #[\Behat\Step\Then('/^error is$/m')]
     public function multilineErrorIs(\Behat\Gherkin\Node\PyStringNode $value)
     {
         $this->expectedError = $value->getRaw();
     }
 
     /**
-     * @Then /^error is (.+)$/
-     *
      * @param string $error
      */
+    #[\Behat\Step\Then('/^error is (.+)$/')]
     public function errorIs($error): void
     {
         $this->expectedError = $error;
     }
 
-    /**
-     * @Then /^(\w+) charge is ?(?: with ?)?$/
-     */
+    #[\Behat\Step\Then('/^(\w+) charge is ?(?: with ?)?$/')]
     public function emptyCharge(string $numeral): void
     {
         $this->chargeIs($numeral);
     }
 
-    /**
-     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})(?: for ([\d.]+)? (\w+)?)?(?: with (.+)?)?$/
-     */
+    #[\Behat\Step\Then('/^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3})(?: for ([\d.]+)? (\w+)?)?(?: with (.+)?)?$/')]
     public function chargeWithSum($numeral, $type = null, $sum = null, $currency = null, $qty = null, $unit = null, $events = null): void
     {
         $this->chargeIs($numeral, $type, $sum, $currency, null, $qty, $unit, $events);
     }
 
-    /**
-     * @Then /^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3}) reason ([\w]+)(?: with (.+)?)?$/
-     */
+    #[\Behat\Step\Then('/^(\w+) charge is (\S+) +(-?[0-9.]+) ([A-Z]{3}) reason ([\w]+)(?: with (.+)?)?$/')]
     public function chargeWithReason($numeral, $type = null, $sum = null, $currency = null, $reason = null, $events = null): void
     {
         $this->chargeIs($numeral, $type, $sum, $currency, $reason, null, null, $events);
@@ -322,12 +292,10 @@ class FeatureContext implements Context
         $this->assertCharge($this->charges[$no] ?? null, $type, $sum, $currency, $reason, $qty, $unit, $events);
     }
 
-    /**
-     * @When /^calculating charges$/
-     */
+    #[\Behat\Step\When('/^calculating charges$/')]
     public function calculatePrice(): void
     {
-        $this->expectError(function () {
+        $this->expectError(function (): void {
             if ($this->formula !== null) {
                 $this->price->setModifier($this->getFormulaEngine()->build($this->formula));
             }
@@ -395,7 +363,7 @@ class FeatureContext implements Context
         }
         if ($events !== null) {
             $storedEvents = $charge->releaseEvents();
-            foreach (array_map('trim', explode(',', $events)) as $eventClass) {
+            foreach (array_map(trim(...), explode(',', $events)) as $eventClass) {
                 foreach ($storedEvents as $storedEvent) {
                     $eventReflection = new \ReflectionObject($storedEvent);
                     if ($eventReflection->getShortName() === $eventClass) {
@@ -412,16 +380,12 @@ class FeatureContext implements Context
 
     private function normalizeType($string): string
     {
-        switch ($string) {
-            case 'discount,discount':
-                return 'discount';
-            case 'monthly,leasing':
-                return 'leasing';
-            case 'monthly,installment':
-                return 'installment';
-            default:
-                return $string;
-        }
+        return match ($string) {
+            'discount,discount' => 'discount',
+            'monthly,leasing' => 'leasing',
+            'monthly,installment' => 'installment',
+            default => $string,
+        };
     }
 
     private function ensureNo(string $numeral): int
@@ -435,9 +399,7 @@ class FeatureContext implements Context
         return --$result;
     }
 
-    /**
-     * @Given /^progressive price calculation steps are (.*)$/
-     */
+    #[\Behat\Step\Given('/^progressive price calculation steps are (.*)$/')]
     public function progressivePriceCalculationStepsAre($explanation)
     {
         if (!$this->price instanceof ProgressivePrice) {

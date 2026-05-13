@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\tests\unit\formula;
 
-use Cache\Adapter\PHPArray\ArrayCachePool;
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
@@ -18,7 +17,9 @@ use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\charge\modifiers\Installment;
 use hiqdev\php\billing\formula\FormulaEngine;
+use hiqdev\yii\compat\PsrCache;
 use PHPUnit\Framework\TestCase;
+use yii\caching\ArrayCache;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -32,7 +33,8 @@ class FormulaEngineTest extends TestCase
 
     public function setUp(): void
     {
-        $this->engine = new FormulaEngine(new ArrayCachePool());
+        $cache = new PsrCache(new ArrayCache());
+        $this->engine = new FormulaEngine($cache);
     }
 
     public function testSimpleDiscount()

@@ -28,9 +28,6 @@ use Money\Money;
  */
 class Bill implements BillInterface
 {
-    /** @var int|string */
-    protected $id;
-
     /** @var TypeInterface */
     protected $type;
 
@@ -76,8 +73,11 @@ class Bill implements BillInterface
     /** @var BillReversesId|null */
     protected $reversesId;
 
+    /**
+     * @param int|string $id
+     */
     public function __construct(
-                            $id,
+        protected $id,
         TypeInterface $type,
         DateTimeImmutable $time,
         Money $sum,
@@ -91,7 +91,6 @@ class Bill implements BillInterface
         ?BillTxn $txn = null,
         ?BillReversesId $reversesId = null,
     ) {
-        $this->id           = $id;
         $this->type         = $type;
         $this->time         = $time;
         $this->sum          = $sum;

@@ -35,9 +35,9 @@ class InstallmentTest extends ActionTest
 
     protected function buildInstallment($term)
     {
-        $month = (new DateTimeImmutable())->modify('first day of this month midnight');
+        $month = new DateTimeImmutable()->modify('first day of this month midnight');
 
-        return (new Installment())->since($month)->lasts($term);
+        return new Installment()->since($month)->lasts($term);
     }
 
     public function testCreateMonth()

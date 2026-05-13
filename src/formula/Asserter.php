@@ -21,12 +21,12 @@ use Hoa\Visitor\Element;
 class Asserter extends \Hoa\Ruler\Visitor\Asserter
 {
     /**
-     * @param Context $context context
+     * @param Context|null $context context
      */
-    public function __construct(Context $context = null)
+    public function __construct(?Context $context = null)
     {
         parent::__construct($context);
-        $this->setOperator('and', [$this, 'makeAnd']);
+        $this->setOperator('and', $this->makeAnd(...));
     }
 
     public function makeAnd($lhs, $rhs)
@@ -34,6 +34,7 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
         return new FullCombination($lhs, $rhs);
     }
 
+    #[\Override]
     public function visitModel(Model $element, &$handle = null, $eldnah = null)
     {
         return $this->getExpression($element)->accept($this, $handle, $eldnah);

@@ -57,9 +57,7 @@ class FullCombination implements ChargeModifier
                 return []; // If there was at least one charge, but it disappeared – modifier does not want this charge to happen. Stop.
             }
 
-            $originalChargeExists = array_reduce($leftCharges, static function ($result, Charge $item) use ($charge) {
-                return $result || $charge === $item;
-            }, false);
+            $originalChargeExists = array_reduce($leftCharges, static fn($result, Charge $item) => $result || $charge === $item, false);
             if ($charge && !$originalChargeExists) {
                 return $leftCharges;
             }
@@ -155,7 +153,7 @@ class FullCombination implements ChargeModifier
      */
     private function sumCharges(?ChargeInterface $originalCharge, array $producedCharges): ?ChargeInterface
     {
-        if ($originalCharge === null) {
+        if (!$originalCharge instanceof ChargeInterface) {
             return null;
         }
 
@@ -175,9 +173,9 @@ class FullCombination implements ChargeModifier
             return $originalCharge;
         }
 
-        $query = (new ChargeDerivativeQuery())->changeSum($sum);
+        $query = new ChargeDerivativeQuery()->changeSum($sum);
 
-        return (new ChargeDerivative())->__invoke($originalCharge, $query);
+        return new ChargeDerivative()->__invoke($originalCharge, $query);
     }
 
     /**

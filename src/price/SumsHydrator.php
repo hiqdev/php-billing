@@ -6,6 +6,7 @@ use hiqdev\DataMapper\Hydrator\GeneratedHydrator;
 
 class SumsHydrator extends GeneratedHydrator
 {
+    #[\Override]
     public function hydrate(array $data, $object): object
     {
         if (!isset($data['sums'])) {

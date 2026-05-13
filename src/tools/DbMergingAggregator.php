@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -20,18 +23,11 @@ use hiqdev\php\billing\charge\ChargeInterface;
  */
 class DbMergingAggregator implements AggregatorInterface, MergerInterface
 {
-    protected BillRepositoryInterface $billRepository;
-    protected MergerInterface $merger;
-    private AggregatorInterface $localAggregator;
-
     public function __construct(
-        AggregatorInterface $localAggregator,
-        BillRepositoryInterface $billRepository,
-        MergerInterface $merger
+        private readonly AggregatorInterface $localAggregator,
+        protected BillRepositoryInterface $billRepository,
+        protected MergerInterface $merger
     ) {
-        $this->billRepository = $billRepository;
-        $this->merger = $merger;
-        $this->localAggregator = $localAggregator;
     }
 
     public function mergeBills(array $bills): array

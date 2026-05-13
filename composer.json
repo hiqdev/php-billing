@@ -46,8 +46,7 @@
         "php": "^8.3",
         "moneyphp/money": "^3.0 | ^4.0",
         "hiqdev/php-units": "dev-master",
-        "psr/simple-cache": "^1.0",
-        "cache/array-adapter": "^1.2"
+        "psr/simple-cache": "^2.0 | ^3.0"
     },
     "require-dev": {
         "php": "^8.3",
@@ -65,7 +64,8 @@
         "opis/closure": "3.x-dev as 3.6.x-dev",
         "cache/array-adapter": "*",
         "matthiasnoback/behat-expect-exception": "^v0.3.0",
-        "behat/gherkin": "~v4.11.0"
+        "behat/gherkin": "~v4.11.0",
+        "rector/rector": "dev-main"
     },
     "suggest": {
         "ext-intl": "intl extension is required for formula support",

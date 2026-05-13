@@ -88,7 +88,7 @@ class ChargeDerivativeQueryTest extends TestCase
         $this->assertFalse($query->isChanged('parent'));
 
         /** @var Charge $parent */
-        $parent = (new \ReflectionClass(Charge::class))->newInstanceWithoutConstructor();
+        $parent = new \ReflectionClass(Charge::class)->newInstanceWithoutConstructor();
 
         $query->changeParent($parent);
         $this->assertTrue($query->isChanged('parent'));
@@ -120,7 +120,7 @@ class ChargeDerivativeQueryTest extends TestCase
         $this->assertFalse($query->isChanged('price'));
 
         /** @var SinglePrice $price */
-        $price = (new \ReflectionClass(SinglePrice::class))->newInstanceWithoutConstructor();
+        $price = new \ReflectionClass(SinglePrice::class)->newInstanceWithoutConstructor();
 
         $query->changePrice($price);
         $this->assertTrue($query->isChanged('price'));
@@ -133,7 +133,7 @@ class ChargeDerivativeQueryTest extends TestCase
         $this->assertFalse($query->isChanged('action'));
 
         /** @var Action $action */
-        $action = (new \ReflectionClass(Action::class))->newInstanceWithoutConstructor();
+        $action = new \ReflectionClass(Action::class)->newInstanceWithoutConstructor();
 
         $query->changeAction($action);
         $this->assertTrue($query->isChanged('action'));
@@ -147,7 +147,7 @@ class ChargeDerivativeQueryTest extends TestCase
         $this->assertFalse($query->isChanged('bill'));
 
         /** @var Bill $bill */
-        $bill = (new \ReflectionClass(Bill::class))->newInstanceWithoutConstructor();
+        $bill = new \ReflectionClass(Bill::class)->newInstanceWithoutConstructor();
 
         $query->changeBill($bill);
         $this->assertTrue($query->isChanged('bill'));

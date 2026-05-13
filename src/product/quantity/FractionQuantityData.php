@@ -4,11 +4,11 @@ namespace hiqdev\php\billing\product\quantity;
 
 use hiqdev\php\units\Quantity;
 
-final class FractionQuantityData
+final readonly class FractionQuantityData
 {
     public function __construct(
-        public readonly Quantity $quantity,
-        public readonly string $time,
-        public readonly ?float $fractionOfMonth
+        public Quantity $quantity,
+        public string $time,
+        public ?float $fractionOfMonth
     ) {}
 }

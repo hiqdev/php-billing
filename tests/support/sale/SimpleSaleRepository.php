@@ -52,7 +52,7 @@ class SimpleSaleRepository implements SaleRepositoryInterface
         throw new Exception('not implemented');
     }
 
-    public function findByIds(array $ids)
+    public function findByIds(array $ids): never
     {
         throw new Exception('not implemented');
     }

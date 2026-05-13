@@ -17,9 +17,9 @@ use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\billing\type\TypeInterface;
 
-final class BillingRegistryService implements BillingRegistryServiceInterface
+final readonly class BillingRegistryService implements BillingRegistryServiceInterface
 {
-    public function __construct(private readonly BillingRegistryInterface $registry)
+    public function __construct(private BillingRegistryInterface $registry)
     {
     }
 
@@ -88,7 +88,7 @@ final class BillingRegistryService implements BillingRegistryServiceInterface
             if ($priceTypeDefinition->hasType($billingType)) {
                 $behavior = $this->findBehaviorInPriceType($priceTypeDefinition, $behaviorClassWrapper);
 
-                if ($behavior) {
+                if ($behavior instanceof BehaviorInterface) {
                     return $behavior;
                 }
             }

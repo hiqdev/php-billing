@@ -26,11 +26,6 @@ use hiqdev\php\billing\target\TargetInterface;
 class Sale implements SaleInterface
 {
     /**
-     * @var int
-     */
-    protected $id;
-
-    /**
      * @var TargetInterface
      */
     protected $target;
@@ -52,22 +47,21 @@ class Sale implements SaleInterface
 
     protected ?DateTimeImmutable $closeTime = null;
 
-    protected ?array $data = null;
-
+    /**
+     * @param int $id
+     */
     public function __construct(
-        $id,
+        protected $id,
         TargetInterface $target,
         CustomerInterface $customer,
         ?PlanInterface $plan = null,
         ?DateTimeImmutable $time = null,
-        ?array $data = null,
+        protected ?array $data = null,
     ) {
-        $this->id = $id;
         $this->target = $target;
         $this->customer = $customer;
         $this->plan = $plan;
         $this->time = $time ?? new DateTimeImmutable();
-        $this->data = $data;
     }
 
     public function getId()
@@ -107,7 +101,7 @@ class Sale implements SaleInterface
 
     public function close(DateTimeImmutable $closeTime): self
     {
-        if ($this->closeTime !== null) {
+        if ($this->closeTime instanceof \DateTimeImmutable) {
             throw new InvariantException('Sale is already closed');
         }
 

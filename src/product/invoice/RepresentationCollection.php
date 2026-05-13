@@ -22,17 +22,14 @@ class RepresentationCollection implements IteratorAggregate, HasLockInterface
     private RepresentationUniquenessGuard $uniquenessGuard;
 
     /**
-     * @psalm-var T
-     */
-    private readonly PriceTypeDefinition $priceTypeDefinition;
-
-    /**
      * @psalm-param T $priceTypeDefinition
      */
     public function __construct(
-        PriceTypeDefinition $priceTypeDefinition,
+        /**
+         * @psalm-var T
+         */
+        private readonly PriceTypeDefinition $priceTypeDefinition,
     ) {
-        $this->priceTypeDefinition = $priceTypeDefinition;
         $this->uniquenessGuard = new RepresentationUniquenessGuard();
     }
 

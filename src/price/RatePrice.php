@@ -26,17 +26,14 @@ use Money\Money;
  */
 class RatePrice extends AbstractPrice implements PriceWithRateInterface
 {
-    protected float $rate;
-
     public function __construct(
         $id,
         TypeInterface $type,
         TargetInterface $target,
         ?PlanInterface $plan,
-        float $rate
+        protected float $rate
     ) {
         parent::__construct($id, $type, $target, $plan);
-        $this->rate = $rate;
     }
 
     public function getRate(): float
@@ -44,6 +41,7 @@ class RatePrice extends AbstractPrice implements PriceWithRateInterface
         return $this->rate;
     }
 
+    #[\Override]
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $sum = $quantity->multiply((string) -$this->rate);
@@ -55,12 +53,12 @@ class RatePrice extends AbstractPrice implements PriceWithRateInterface
     public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         $sum = $this->calculateSum($quantity);
-        if ($sum === null) {
+        if (!$sum instanceof Money) {
             return null;
         }
 
         $usage = $this->calculateUsage($quantity);
-        if ($usage === null) {
+        if (!$usage instanceof QuantityInterface) {
             return null;
         }
 

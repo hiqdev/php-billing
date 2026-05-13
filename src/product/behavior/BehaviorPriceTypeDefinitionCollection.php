@@ -14,19 +14,15 @@ use hiqdev\php\billing\product\price\PriceTypeDefinitionInterface;
 class BehaviorPriceTypeDefinitionCollection extends BehaviorCollection
 {
     /**
-     * @psalm-var TPriceDefinition
-     */
-    private readonly PriceTypeDefinitionInterface $parent;
-
-    /**
      * @psalm-param TPriceDefinition $parent
      */
     public function __construct(
-        PriceTypeDefinitionInterface $parent,
+        /**
+         * @psalm-var TPriceDefinition
+         */
+        private readonly PriceTypeDefinitionInterface $parent,
         TariffTypeInterface $tariffType
     ) {
-        $this->parent = $parent;
-
         parent::__construct($tariffType);
     }
 

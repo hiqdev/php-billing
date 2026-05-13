@@ -19,11 +19,6 @@ namespace hiqdev\php\billing\charge\modifiers;
  */
 class Increase extends Modifier
 {
-    public function __construct(array $addons = [])
-    {
-        parent::__construct($addons);
-    }
-
     public function grows($step, $min = null): GrowingDiscount
     {
         $increase = new GrowingDiscount($step, $min, $this->addons);

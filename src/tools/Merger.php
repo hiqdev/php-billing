@@ -29,11 +29,7 @@ class Merger implements MergerInterface
         $res = [];
         foreach ($bills as $bill) {
             $uid = $bill->getUniqueString();
-            if (empty($res[$uid])) {
-                $res[$uid] = $bill;
-            } else {
-                $res[$uid] = $this->mergeBill($res[$uid], $bill);
-            }
+            $res[$uid] = empty($res[$uid]) ? $bill : $this->mergeBill($res[$uid], $bill);
         }
 
         return $res;
@@ -71,11 +67,7 @@ class Merger implements MergerInterface
         $res = [];
         foreach ($charges as $charge) {
             $uid = $charge->getUniqueString();
-            if (empty($res[$uid])) {
-                $res[$uid] = $charge;
-            } else {
-                $res[$uid] = $this->mergeCharge($res[$uid], $charge);
-            }
+            $res[$uid] = empty($res[$uid]) ? $charge : $this->mergeCharge($res[$uid], $charge);
         }
 
         return $res;

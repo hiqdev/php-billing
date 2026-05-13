@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -7,7 +10,6 @@
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
-
 namespace hiqdev\php\billing\charge;
 
 use hiqdev\php\billing\charge\modifiers\AddonInterface;
@@ -22,8 +24,6 @@ interface AddonsContainerInterface
     /**
      * Adds the $addon into the container
      *
-     * @param string $name
-     * @param AddonInterface $addon
      * @return ChargeModifier|AddonsContainerInterface
      * @throw Exception when the addon $name already exists in the container
      */
@@ -38,7 +38,6 @@ interface AddonsContainerInterface
     public function getAddon(string $name): ?AddonInterface;
 
     /**
-     * @param string $name
      * @return bool whether addon is in the container
      */
     public function hasAddon(string $name): bool;
