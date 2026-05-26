@@ -8,7 +8,7 @@ src/
 ├── bill/          Bill entity — aggregated invoice line item
 ├── charge/        Charge entity, ChargeModifier interface, modifier classes and addons
 ├── customer/      Customer entity — billable party with seller hierarchy
-├── event/         Domain events (e.g., InstallmentWasStarted)
+├── event/         Domain events (e.g., InstallmentWasCharged)
 ├── Exception/     Shared exceptions (CannotReassignException, etc.)
 ├── formula/       FormulaEngine — parses DSL strings into ChargeModifier objects
 ├── helpers/       Utility classes

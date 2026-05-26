@@ -35,8 +35,8 @@ Feature: Combination
             | 2018-08-01 | monthly 100 USD            |                        | discount -10 USD reason TWO |
             | 2018-09-01 | monthly 100 USD            |                        | discount -20 USD reason TWO |
             | 2018-10-01 | monthly 100 USD            |                        | discount -30 USD reason TWO |
-            | 2018-11-01 | leasing 100 USD reason ONE | InstallmentWasStarted  |                             |
-            | 2018-12-01 | leasing 100 USD reason ONE |                        |                             |
+            | 2018-11-01 | leasing 100 USD reason ONE | InstallmentWasCharged  |                             |
+            | 2018-12-01 | leasing 100 USD reason ONE | InstallmentWasCharged  |                             |
             | 2019-01-11 | leasing   0 USD reason ONE | InstallmentWasFinished |                             |
             | 2028-11-01 |                            |                        |                             |
 
@@ -52,8 +52,8 @@ Feature: Combination
         | 2018-08-01 | monthly 100 USD            |                        | discount -10 USD reason ONE |
         | 2018-09-01 | monthly 100 USD            |                        | discount -20 USD reason ONE |
         | 2018-10-01 | monthly 100 USD            |                        | discount -30 USD reason ONE |
-        | 2018-11-01 | leasing  60 USD reason TWO | InstallmentWasStarted  |                             |
-        | 2018-12-01 | leasing  50 USD reason TWO |                        |                             |
+        | 2018-11-01 | leasing  60 USD reason TWO | InstallmentWasCharged  |                             |
+        | 2018-12-01 | leasing  50 USD reason TWO | InstallmentWasCharged  |                             |
         | 2019-01-11 | leasing   0 USD reason TWO | InstallmentWasFinished |                             |
         | 2028-11-01 |                            |                        |                             |
 
@@ -99,4 +99,3 @@ Feature: Combination
         | 2022-01-01 | 1        | monthly 100 USD for 672 hour           | monthly 0 USD for 72 hour |                  |
         | 2022-04-01 | 1        | monthly 90 USD for 672 hour            | monthly 0 USD for 48 hour |                  |
         | 2022-05-15 | 0.5      | monthly 49.82 USD for 408 hour         |                           |                  |
-

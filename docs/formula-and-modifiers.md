@@ -91,7 +91,7 @@ Spreads a charge over a fixed term as monthly payments.
 installment.since('08.2018').lasts('3 months').reason('TEST')
 ```
 
-Returns a single charge with type `leasing` (pre-2024) or `installment` (2024+). The `till()` method is forbidden — use `lasts()` instead. Records domain events `InstallmentWasStarted` / `InstallmentWasFinished`.
+Returns a single charge with type `leasing` (pre-2024) or `installment` (2024+). The `till()` method is forbidden — use `lasts()` instead. Records domain events `InstallmentWasCharged` / `InstallmentWasFinished`.
 
 ### Cap / MonthlyCap
 
