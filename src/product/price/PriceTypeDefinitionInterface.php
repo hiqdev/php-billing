@@ -68,4 +68,12 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
     public function belongsToTariffType(string $tariffTypeName): bool;
 
     public function getQuantityFormatterDefinition(): ?QuantityFormatterDefinition;
+
+    /**
+     * Mark this price type as deprecated — it exists only for backward-compatible invoice regeneration
+     * and must not appear in new tariff configurations.
+     */
+    public function deprecated(): static;
+
+    public function isDeprecated(): bool;
 }

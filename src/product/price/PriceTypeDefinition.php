@@ -48,6 +48,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
 
     private ?AggregateInterface $aggregate = null;
 
+    private bool $deprecated = false;
+
     private readonly PriceTypeBehaviorRegistry $behaviorRegistry;
 
     /**
@@ -234,5 +236,19 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     public function belongsToTariffType(string $tariffTypeName): bool
     {
         return $this->getTariffTypeDefinition()->tariffType()->equalsName($tariffTypeName);
+    }
+
+    public function deprecated(): static
+    {
+        $this->ensureNotLocked();
+
+        $this->deprecated = true;
+
+        return $this;
+    }
+
+    public function isDeprecated(): bool
+    {
+        return $this->deprecated;
     }
 }
