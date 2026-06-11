@@ -19,8 +19,8 @@ use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
+use hiqdev\php\billing\charge\modifiers\event\InstallmentWasCharged;
 use hiqdev\php\billing\charge\modifiers\event\InstallmentWasFinished;
-use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -102,15 +102,6 @@ class Installment extends Modifier
         }
     }
 
-    private function isFirstMonthInInstallmentPassed(DateTimeImmutable $time): bool
-    {
-        $since = $this->getSince();
-        if ($since && $since->getValue() > $time) {
-            return false;
-        }
-        return $since->getValue()->diff($time)->format('%a') === '0';
-    }
-
     private function isFirstMonthAfterInstallmentPassed(DateTimeImmutable $time): bool
     {
         $since = $this->getSince();
@@ -148,7 +139,7 @@ class Installment extends Modifier
 
     private function createInstallmentStartingCharge(Charge $charge, DateTimeImmutable $month): ChargeInterface
     {
-        $charge->recordThat(InstallmentWasStarted::onCharge($charge, $month));
+        $charge->recordThat(InstallmentWasCharged::onCharge($charge, $month));
 
         return $charge;
     }
@@ -169,11 +160,7 @@ class Installment extends Modifier
             $result->setComment($charge->getComment());
         }
 
-        if ($this->isFirstMonthInInstallmentPassed($month)) {
-            return $this->createInstallmentStartingCharge($result, $month);
-        }
-
-        return $result;
+        return $this->createInstallmentStartingCharge($result, $month);
     }
 
     public function getRemainingPeriods(DateTimeImmutable $currentDate): ?Period

@@ -15,9 +15,9 @@ Feature: installment
         Examples:
           | date       | first                       | events                 |
           | 2018-07-01 |                             |                        |
-          | 2018-08-01 | leasing 100 USD reason TEST | InstallmentWasStarted  |
-          | 2018-09-01 | leasing 100 USD reason TEST |                        |
-          | 2018-10-01 | leasing 100 USD reason TEST |                        |
+          | 2018-08-01 | leasing 100 USD reason TEST | InstallmentWasCharged  |
+          | 2018-09-01 | leasing 100 USD reason TEST | InstallmentWasCharged  |
+          | 2018-10-01 | leasing 100 USD reason TEST | InstallmentWasCharged  |
           | 2018-11-01 | leasing 0 USD reason TEST   | InstallmentWasFinished |
           | 2028-01-01 |                             |                        |
 
@@ -28,9 +28,9 @@ Feature: installment
       Examples:
         | date       | first                            | events                     |
         | 2023-12-01 |                                  |                            |
-        | 2024-01-01 | installment 100 USD reason TEST  | InstallmentWasStarted      |
-        | 2024-02-01 | installment 100 USD reason TEST  |                            |
-        | 2024-03-01 | installment 100 USD reason TEST  |                            |
+        | 2024-01-01 | installment 100 USD reason TEST  | InstallmentWasCharged      |
+        | 2024-02-01 | installment 100 USD reason TEST  | InstallmentWasCharged      |
+        | 2024-03-01 | installment 100 USD reason TEST  | InstallmentWasCharged      |
         | 2024-04-01 | installment 0 USD reason TEST    | InstallmentWasFinished     |
         | 2028-01-01 |                                  |                            |
 
@@ -42,8 +42,8 @@ Feature: installment
         Examples:
           | date       | first                     | events                 |
           | 2018-07-01 |                           |                        |
-          | 2018-08-01 | leasing 0 USD reason TEST | InstallmentWasStarted  |
-          | 2018-09-01 | leasing 0 USD reason TEST |                        |
-          | 2018-10-01 | leasing 0 USD reason TEST |                        |
+          | 2018-08-01 | leasing 0 USD reason TEST | InstallmentWasCharged  |
+          | 2018-09-01 | leasing 0 USD reason TEST | InstallmentWasCharged  |
+          | 2018-10-01 | leasing 0 USD reason TEST | InstallmentWasCharged  |
           | 2018-11-01 | leasing 0 USD reason TEST | InstallmentWasFinished |
           | 2028-01-01 |                           |                        |
