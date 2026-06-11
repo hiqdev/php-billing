@@ -74,6 +74,4 @@ interface PriceTypeDefinitionInterface extends HasBehaviorsInterface, HasLockInt
      * and must not appear in new tariff configurations.
      */
     public function deprecated(): static;
-
-    public function isDeprecated(): bool;
 }
