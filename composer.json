@@ -61,6 +61,7 @@
         "hiqdev/hidev-hiqdev": "dev-master",
         "hiqdev/php-data-mapper": "dev-master",
         "vimeo/psalm": "^6.13.1",
+        "hiqdev/yii-compat": "dev-master",
         "opis/closure": "3.x-dev as 3.6.x-dev",
         "matthiasnoback/behat-expect-exception": "^v0.3.0",
         "behat/gherkin": "~v4.11.0",
