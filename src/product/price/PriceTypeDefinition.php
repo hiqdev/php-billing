@@ -237,4 +237,11 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         return $this->getTariffTypeDefinition()->tariffType()->equalsName($tariffTypeName);
     }
+
+    public function deprecated(): static
+    {
+        $this->ensureNotLocked();
+
+        return $this;
+    }
 }
