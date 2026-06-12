@@ -48,6 +48,8 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
      */
     private RepresentationCollection $representationCollection;
 
+    private bool $deprecated = false;
+
     private ?AggregateInterface $aggregate = null;
 
     private readonly PriceTypeBehaviorRegistry $behaviorRegistry;
@@ -242,6 +244,13 @@ class PriceTypeDefinition implements PriceTypeDefinitionInterface
     {
         $this->ensureNotLocked();
 
+        $this->deprecated = true;
+
         return $this;
+    }
+
+    public function isDeprecated(): bool
+    {
+        return $this->deprecated;
     }
 }
