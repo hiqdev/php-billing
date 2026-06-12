@@ -30,15 +30,12 @@ class PriceFactory implements PriceFactoryInterface
         'progressive' => ProgressivePrice::class,
     ];
 
-    /**
-     * @param string $defaultClass
-     */
     public function __construct(
         array $types = [],
         /**
-         * @var string default price class, when given will be used for not found types
+         * @var string|null default price class, when given will be used for not found types
          */
-        protected $defaultClass = null
+        protected ?string $defaultClass = null
     ) {
         $this->types = $types;
     }

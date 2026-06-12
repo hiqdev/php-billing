@@ -24,6 +24,13 @@
     </projectFiles>
 
     <issueHandlers>
+        <!-- library public API — methods/classes used by consumers outside this repo -->
+        <PossiblyUnusedMethod errorLevel="info" />
+        <UnusedClass errorLevel="info" />
+        <PossiblyUnusedReturnValue errorLevel="info" />
+        <PossiblyUnusedProperty errorLevel="info" />
+        <PossiblyUnusedParam errorLevel="info" />
+
         <LessSpecificReturnType errorLevel="info" />
 
         <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
