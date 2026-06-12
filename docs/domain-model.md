@@ -23,11 +23,33 @@ Can have null Plan (for one-time sales). Represents "customer X uses resource Y 
 
 **Action** — a metered activity. The only thing that gets charged.
 Has: type, target, quantity, customer, time, optional sale, optional parent, fractionOfMonth.
+`TemporaryAction` is a runtime-only subclass used for reseller hierarchy expansion and ActionMux — it must never be persisted.
 
 **Charge** — result of matching an Action to a Price. Holds: used quantity (usage),
 calculated money (sum), reference to the Price that created it, optional parent charge.
 
 **Bill** — aggregation of Charges. Represents an invoice line item. Immutable once created.
+Can carry a `BillRequisite` (structured billing address/recipient details) via `getRequisite()`.
+
+## State Value Objects
+
+These small value objects model lifecycle state for Actions and Charges:
+
+**ActionState** (`src/action/ActionState.php`) — `NEW` / `FINISHED` / `FAILED`.
+Factory methods: `ActionState::new()`, `::finished()`, `::failed()`, `::fromString(string)`.
+Check methods: `isNew()`, `isFinished()`.
+
+**ChargeState** (`src/charge/ChargeState.php`) — `NEW` / `FINISHED`.
+Same factory/check pattern as ActionState.
+
+**UsageInterval** (`src/action/UsageInterval.php`) — immutable time span representing how much of a calendar month an action covers. Used for pro-rating charges when a sale starts or ends mid-month.
+
+Static constructors:
+- `wholeMonth(DateTimeImmutable $month)` — full month interval
+- `withinMonth(DateTimeImmutable $month, $start, $end)` — clamps sale start/end to the given month
+- `withMonthAndFraction(DateTimeImmutable $month, $start, float $fraction)` — builds interval from a pre-calculated fraction
+
+Key methods: `seconds()`, `ratioOfMonth()` (0.0–1.0), `extend(UsageInterval $other)` (union of two intervals).
 
 ## Matching Constants
 
@@ -84,6 +106,36 @@ currency + customer.uniqueId + target.uniqueId + type.uniqueId + time (ISO 8601)
 ```
 
 Bills with the same key are merged: sums are added, quantities are added (if same unit), charge arrays are concatenated.
+
+## Higher-Level Orchestration
+
+For most use cases, interact through `Billing` rather than `Calculator` directly.
+
+**Collector** (`src/order/Collector.php`) — normalizes any billing input into an `OrderInterface`:
+- `OrderInterface` → passed through unchanged
+- `ActionInterface` → wrapped in `Order::fromAction()`
+- `ActionInterface[]` → wrapped in `Order::fromActions()`
+- `OrderInterface[]` → merged into a single Order
+
+**Billing** (`src/order/Billing.php`) — top-level entry point that wires everything together:
+- `calculate($source)` → runs Collector → Calculator → Aggregator → Merger; returns `Bill[]` without persisting
+- `perform($source)` → same as `calculate()` but also persists via `BillRepository`; returns saved `Bill[]`
+- `calculateCharges($source)` → returns raw `Charge[]` before aggregation
+
+```php
+$billing = new Billing($calculator, $aggregator, $merger, $repository, $collector);
+$bills = $billing->calculate($action);   // dry run
+$bills = $billing->perform($order);      // calculate + save
+```
+
+## Statement
+
+**Statement** (`src/statement/Statement.php`) — a snapshot of a customer's billing state for a given period. Holds: customer, time, month, balance, total, payment, amount, bills[], plans[], period.
+
+Period constants: `Statement::PERIOD_MONTH`, `Statement::PERIOD_YEAR`.
+
+`StatementRepositoryInterface` defines the contract for loading statements from storage.
+`StatementBill` is a bill representation enriched with statement-context data.
 
 ## Money and Units
 

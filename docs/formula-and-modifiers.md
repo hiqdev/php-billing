@@ -135,6 +135,20 @@ Applies both modifiers sequentially — left modifier first, then right modifier
 
 First-match-wins: applies right modifier if suitable, otherwise falls back to left.
 
+## ChargeDerivative
+
+`ChargeDerivative` (`src/charge/derivative/`) implements a **copy-with** pattern for producing a modified copy of an existing Charge without mutating the original.
+
+```php
+$query = (new ChargeDerivativeQuery())
+    ->changeSum($newSum)
+    ->changeType($newType);
+
+$derivedCharge = ($derivative)($originalCharge, $query);
+```
+
+`ChargeDerivativeQuery` is a fluent builder — call `change*()` methods for any fields to override; unchanged fields fall through from the original charge. Used by modifiers (e.g., Installment, Cap) that need to emit a new Charge with adjusted values based on an existing one.
+
 ## Addon System
 
 Modifiers use a composable addon system for configuration:
