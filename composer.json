@@ -43,13 +43,13 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.3 | ^8.5",
         "moneyphp/money": "^3.0 | ^4.0",
         "hiqdev/php-units": "dev-master",
         "psr/simple-cache": "^2.0 | ^3.0"
     },
     "require-dev": {
-        "php": "^8.3",
+        "php": "^8.3 | ^8.5",
         "ext-intl": "*",
         "behat/behat": "^3.4.3",
         "phpunit/phpunit": "^12.0",
