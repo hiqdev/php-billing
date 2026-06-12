@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -98,7 +99,7 @@ class FormulaEngine implements FormulaEngineInterface
             }
 
             return $model;
-        } catch (CompilerException|Interpreter $exception) {
+        } catch (CompilerException | Interpreter $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
         } catch (\Throwable $exception) {
             throw FormulaSyntaxError::create($formula, 'Failed to interpret formula: ' . $exception->getMessage());

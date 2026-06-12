@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
+
 namespace hiqdev\php\billing\type;
 
 /**
@@ -33,9 +34,9 @@ interface TypeInterface extends \JsonSerializable
     /**
      * @var null - any type can be used as ID or type name
      */
-    const null ANY  = null;
+    public const null ANY  = null;
 
-    const float NONE = INF;
+    public const float NONE = INF;
 
     /**
      * Returns type id.

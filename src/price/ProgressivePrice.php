@@ -14,7 +14,8 @@ use Money\Currency;
 use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 
-class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInterface,
+class ProgressivePrice extends AbstractPrice implements
+    PriceWithThresholdsInterface,
     PriceWithMoneyInterface,
     PriceWithQuantityInterface
 {
@@ -29,8 +30,7 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
         Money $price,
         protected ProgressivePriceThresholdList $thresholds,
         ?PlanInterface $plan = null
-    )
-    {
+    ) {
         parent::__construct($id, $type, $target, $plan);
         $this->price = $price;
         $this->prepaid = $prepaid;
@@ -107,7 +107,9 @@ class ProgressivePrice extends AbstractPrice implements PriceWithThresholdsInter
                                    ->divide(sprintf('%.14F', $price->multiplier()));
 
             $this->calculationTraces[] = new ProgressivePriceCalculationTrace(
-                $threshold, $billedUsage, $chargedAmount
+                $threshold,
+                $billedUsage,
+                $chargedAmount
             );
 
             $result = $result->add($chargedAmount);

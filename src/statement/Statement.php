@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -23,8 +24,8 @@ use Money\Money;
  */
 class Statement implements \JsonSerializable
 {
-    const PERIOD_MONTH = 'month';
-    const PERIOD_YEAR = 'year';
+    public const PERIOD_MONTH = 'month';
+    public const PERIOD_YEAR = 'year';
 
     public function __construct(
         private readonly CustomerInterface $customer,

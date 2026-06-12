@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
+
 namespace hiqdev\php\billing\target;
 
 use hiqdev\php\billing\EntityInterface;
@@ -36,8 +37,8 @@ use hiqdev\php\billing\EntityInterface;
  */
 interface TargetInterface extends EntityInterface
 {
-    const ANY = null;
-    const NONE = INF;
+    public const ANY = null;
+    public const NONE = INF;
 
     /**
      * Get target ID, unique only between targets of the same type.

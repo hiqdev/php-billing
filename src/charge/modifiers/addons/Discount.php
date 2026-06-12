@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -109,7 +110,7 @@ class Discount implements AddonInterface
             throw new FormulaSemanticsError('multiplier for discount must be numeric');
         }
 
-        return new static($this->isAbsolute() ? $this->value->multiply((string)$multiplier) : $this->getValue()*$multiplier);
+        return new static($this->isAbsolute() ? $this->value->multiply((string)$multiplier) : $this->getValue() * $multiplier);
     }
 
     public function add($addend)

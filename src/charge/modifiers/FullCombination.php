@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -88,7 +89,8 @@ class FullCombination implements ChargeModifier
                 // Dereference left charges from right charges parents
                 $leftSplObjectIds = array_map(spl_object_id(...), $leftCharges);
                 foreach ($rightCharges as $rightCharge) {
-                    if ($rightCharge->getParent() !== null
+                    if (
+                        $rightCharge->getParent() !== null
                         && in_array(spl_object_id($rightCharge->getParent()), $leftSplObjectIds, true)
                     ) {
                         $rightCharge->overwriteParent(null);

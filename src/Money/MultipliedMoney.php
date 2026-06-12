@@ -119,5 +119,4 @@ final class MultipliedMoney
 
         return self::$moneyParser;
     }
-
 }

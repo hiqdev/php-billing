@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace hiqdev\php\billing\Exception;
@@ -25,8 +26,10 @@ final class ActionChargingException extends RuntimeException implements HasConte
         } else {
             $message = sprintf(
                 'Failed to charge action (type: %s, target: %s, quantity: %s %s, customer: %s, time: %s): %s',
-                $action->getType()->getName(), $action->getTarget()->getUniqueId(),
-                $action->getQuantity()->getQuantity(), $action->getQuantity()->getUnit()->getName(),
+                $action->getType()->getName(),
+                $action->getTarget()->getUniqueId(),
+                $action->getQuantity()->getQuantity(),
+                $action->getQuantity()->getUnit()->getName(),
                 $action->getCustomer()->getLogin(),
                 $action->getTime()->format(DATE_ATOM),
                 $previousException->getMessage()

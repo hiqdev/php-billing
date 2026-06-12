@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -40,7 +41,7 @@ class Factory implements FactoryInterface
     {
         $res = [];
         foreach ($data as $key => $value) {
-            $res[$key] = $value*100;
+            $res[$key] = $value * 100;
         }
 
         return $res;
@@ -51,7 +52,7 @@ class Factory implements FactoryInterface
         [$amount, $currency] = explode(' ', (string) $str);
 
         return [
-            'amount' => $amount*100,
+            'amount' => $amount * 100,
             'currency' => $currency,
         ];
     }

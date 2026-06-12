@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace hiqdev\php\billing\product\price;
@@ -21,6 +22,7 @@ use hiqdev\php\billing\product\quantity\QuantityFormatterInterface;
 use hiqdev\php\billing\product\TariffTypeDefinitionInterface;
 use hiqdev\php\billing\product\trait\HasLock;
 use hiqdev\php\billing\type\TypeInterface;
+
 use function class_exists;
 
 /**

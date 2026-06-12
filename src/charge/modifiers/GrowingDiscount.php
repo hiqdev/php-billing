@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -27,10 +28,10 @@ use Money\Money;
  */
 class GrowingDiscount extends FixedDiscount
 {
-    const PERIOD = 'period';
-    const STEP = 'step';
-    const MIN = 'min';
-    const MAX = 'max';
+    public const PERIOD = 'period';
+    public const STEP = 'step';
+    public const MIN = 'min';
+    public const MAX = 'max';
 
     public function __construct($step, $min = null, array $addons = [])
     {

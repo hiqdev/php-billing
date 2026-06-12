@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace hiqdev\php\billing\product\quantity;
 
@@ -10,5 +12,6 @@ final readonly class FractionQuantityData
         public Quantity $quantity,
         public string $time,
         public ?float $fractionOfMonth
-    ) {}
+    ) {
+    }
 }

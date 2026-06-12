@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
+
 namespace hiqdev\php\billing\charge\modifiers\addons;
 
 use DateTimeImmutable;
@@ -25,7 +26,7 @@ class MonthPeriod extends Period
     {
         $diff = $time->diff($since);
 
-        return ($diff->m + $diff->y*12) / $this->value;
+        return ($diff->m + $diff->y * 12) / $this->value;
     }
 
     public function addTo(DateTimeImmutable $since): DateTimeImmutable

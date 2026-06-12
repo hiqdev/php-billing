@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
+
 namespace hiqdev\php\billing\plan;
 
 /**
@@ -30,6 +31,6 @@ class PlanCreationDto
     public $is_grouping;
 
     public $type;
-    
+
     public ?int $parent_id = null;
 }

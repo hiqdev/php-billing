@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -45,7 +46,8 @@ class BillFactory implements BillFactoryInterface
             } else {
                 $month = $dto->usageInterval['month']['date'];
                 $start = $dto->usageInterval['start']['date'];
-                $end = $dto->usageInterval['end']['date'];;
+                $end = $dto->usageInterval['end']['date'];
+                ;
                 $interval = UsageInterval::withinMonth(
                     new DateTimeImmutable($month),
                     new DateTimeImmutable($start),

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace hiqdev\php\billing\product\Application;
 
@@ -31,13 +33,13 @@ final readonly class BillingRegistryService implements BillingRegistryServiceInt
             ]);
         }
 
-        if (class_exists($representationClass)
+        if (
+            class_exists($representationClass)
             && !is_subclass_of($representationClass, RepresentationInterface::class)
         ) {
             throw InvalidBehaviorException::make('Representation class does not implement RepresentationInterface', [
                     'representationClass' => $representationClass,
-                ]
-            );
+                ]);
         }
 
         $representations = [];
@@ -68,15 +70,15 @@ final readonly class BillingRegistryService implements BillingRegistryServiceInt
     public function getBehavior(string $type, string $behaviorClassWrapper): BehaviorInterface
     {
         if (!class_exists($behaviorClassWrapper)) {
-            throw InvalidBehaviorException::make( 'Behavior class does not exist', [
+            throw InvalidBehaviorException::make('Behavior class does not exist', [
                     'behavior' => $behaviorClassWrapper,
-                ]
-            );
+                ]);
         }
 
         if (!is_subclass_of($behaviorClassWrapper, BehaviorInterface::class)) {
             throw InvalidBehaviorException::make(
-                'Behavior class does not implement BehaviorInterface', [
+                'Behavior class does not implement BehaviorInterface',
+                [
                     'behavior' => $behaviorClassWrapper,
                 ]
             );
@@ -97,8 +99,7 @@ final readonly class BillingRegistryService implements BillingRegistryServiceInt
         throw BehaviorNotFoundException::make('Behavior was not found', [
                 'behavior' => $behaviorClassWrapper,
                 'type' => $type,
-            ],
-        );
+            ],);
     }
 
     private function convertStringTypeToType(string $type): TypeInterface

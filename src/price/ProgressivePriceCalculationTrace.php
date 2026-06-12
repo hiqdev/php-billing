@@ -29,7 +29,7 @@ final class ProgressivePriceCalculationTrace implements Stringable
             $this->billedUsage->getQuantity(),
             $this->billedUsage->getUnit()->getName(),
             $this->threshold->getRawPrice(),
-            number_format($this->charged->getAmount()/100, 2),
+            number_format($this->charged->getAmount() / 100, 2),
         );
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -27,7 +28,7 @@ use Money\Money;
  */
 class FixedDiscount extends Modifier
 {
-    const VALUE = 'value';
+    public const VALUE = 'value';
 
     public function __construct($value, array $addons = [])
     {

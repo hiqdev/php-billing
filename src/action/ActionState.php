@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2017-2020, HiQDev (http://hiqdev.com/)
  */
+
 namespace hiqdev\php\billing\action;
 
 /**
@@ -19,9 +20,9 @@ namespace hiqdev\php\billing\action;
  */
 class ActionState
 {
-    const STATE_NEW      = 'new';
-    const STATE_FINISHED = 'finished';
-    const STATE_FAILED   = 'failed';
+    public const STATE_NEW      = 'new';
+    public const STATE_FINISHED = 'finished';
+    public const STATE_FAILED   = 'failed';
 
     /** @var string */
     protected $state;

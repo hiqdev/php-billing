@@ -93,5 +93,4 @@ class DbMergingAggregator implements AggregatorInterface, MergerInterface
 
         return $localBills;
     }
-
 }
