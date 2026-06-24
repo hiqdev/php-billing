@@ -71,9 +71,10 @@ discount.since('08.2018').grows('1%').every('month').min('10 USD')
 discount.since('08.2000').grows('30%').every('year').max('100%')
 discount.since('08.2018').grows('20 USD').every('2 months').min('15 USD').max('80 USD')
 discount.since('08.2018').till('12.2018').grows('10pp').every('month')
+discount.since('08.2018').grows('10 USD').every('month').stopsGrowing('10.2018')
 ```
 
-Supports absolute (`USD`), relative (`%`), and percentage point (`pp`) steps. `min`/`max` cap the accumulated discount.
+Supports absolute (`USD`), relative (`%`), and percentage point (`pp`) steps. `min`/`max` cap the accumulated discount. `stopsGrowing()` caps the growth calculation at the given month while the discount continues to apply.
 
 ### Increase
 
@@ -159,6 +160,7 @@ Modifiers use a composable addon system for configuration:
 | `MonthPeriod` / `YearPeriod` / `DayPeriod` | Time periods for `every()` and `lasts()` |
 | `Discount` | Discount value (absolute, relative %, or percentage point) |
 | `Step` | Growth step for GrowingDiscount |
+| `StopsGrowing` | Last month when GrowingDiscount grows |
 | `Reason` | Human-readable comment attached to modifier charges |
 | `Minimum` / `Maximum` | Bounds for accumulated discount values |
 
