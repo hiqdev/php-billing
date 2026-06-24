@@ -59,6 +59,9 @@ class PriceFactory implements PriceFactoryInterface
     public function findClassForTypes(array $types)
     {
         foreach ($types as $type) {
+            if ($type === null) {
+                continue;
+            }
             if (isset($this->types[$type])) {
                 return $this->types[$type];
             }
