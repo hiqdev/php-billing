@@ -19,6 +19,7 @@ use hiqdev\php\billing\charge\modifiers\addons\Minimum;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
 use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\addons\Step;
+use hiqdev\php\billing\charge\modifiers\addons\StopsGrowing;
 use Money\Money;
 
 /**
@@ -32,6 +33,7 @@ class GrowingDiscount extends FixedDiscount
     public const STEP = 'step';
     public const MIN = 'min';
     public const MAX = 'max';
+    public const STOPS_GROWING = 'stopsGrowing';
 
     public function __construct($step, $min = null, array $addons = [])
     {
@@ -90,6 +92,16 @@ class GrowingDiscount extends FixedDiscount
         return $this->addAddon(self::PERIOD, Period::fromString($string));
     }
 
+    public function stopsGrowing($month)
+    {
+        return $this->addAddon(self::STOPS_GROWING, new StopsGrowing($month));
+    }
+
+    public function getStopsGrowing(): ?StopsGrowing
+    {
+        return $this->getAddon(self::STOPS_GROWING);
+    }
+
     #[\Override]
     public function calculateSum(?ChargeInterface $charge = null): Money
     {
@@ -126,6 +138,15 @@ class GrowingDiscount extends FixedDiscount
             throw new \Exception('no period given for growing discount');
         }
 
-        return $period->countPeriodsPassed($since->getValue(), $time);
+        $sinceTime = $since->getValue();
+        $stopsGrowing = $this->getStopsGrowing();
+        if ($stopsGrowing instanceof StopsGrowing && $stopsGrowing->getValue() < $time) {
+            $time = $stopsGrowing->getValue();
+        }
+        if ($time < $sinceTime) {
+            $time = $sinceTime;
+        }
+
+        return $period->countPeriodsPassed($sinceTime, $time);
     }
 }

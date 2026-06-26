@@ -73,6 +73,40 @@ Feature: Growing discount
             | 2019-01-01 | monthly 100 USD | discount -80 USD |
             | 2028-11-01 | monthly 100 USD | discount -80 USD |
 
+    Scenario Outline: absolute discount stops growing but keeps applying
+        Given formula is discount.since('08.2018').grows('20 USD').every('2 months').min('15 USD').max('80 USD').stopsGrowing('10.2018')
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
+        Examples:
+            | date       | first           | second           |
+            | 2018-07-31 | monthly 100 USD |                  |
+            | 2018-08-01 | monthly 100 USD | discount -30 USD |
+            | 2018-09-01 | monthly 100 USD | discount -30 USD |
+            | 2018-10-01 | monthly 100 USD | discount -70 USD |
+            | 2018-11-01 | monthly 100 USD | discount -70 USD |
+            | 2018-12-01 | monthly 100 USD | discount -70 USD |
+            | 2019-01-01 | monthly 100 USD | discount -70 USD |
+            | 2028-11-01 | monthly 100 USD | discount -70 USD |
+
+    Scenario Outline: relative discount stops growing but keeps applying
+        Given formula is discount.since('08.2000').grows('30%').every('year').max('100%').stopsGrowing('08.2003')
+         When action date is <date>
+         Then first charge is <first>
+          And second charge is <second>
+        Examples:
+            | date       | first           | second              |
+            | 2000-07-31 | monthly 100 USD |                     |
+            | 2000-08-01 | monthly 100 USD | discount -30.00 USD |
+            | 2001-08-01 | monthly 100 USD | discount -51.00 USD |
+            | 2002-08-01 | monthly 100 USD | discount -65.70 USD |
+            | 2003-01-01 | monthly 100 USD | discount -65.70 USD |
+            | 2003-08-01 | monthly 100 USD | discount -75.99 USD |
+            | 2004-08-01 | monthly 100 USD | discount -75.99 USD |
+            | 2005-08-01 | monthly 100 USD | discount -75.99 USD |
+            | 2011-08-01 | monthly 100 USD | discount -75.99 USD |
+            | 2024-08-01 | monthly 100 USD | discount -75.99 USD |
+
     Scenario Outline: discount maximum may not match step: relative step but absolute max
         Given formula is discount.since('08.2018').grows('20pp').every('month').min('30%').max('77 USD')
          When action date is <date>
