@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -28,4 +31,6 @@ class PlanCreationDto
     public $is_grouping;
 
     public $type;
+
+    public ?int $parent_id = null;
 }

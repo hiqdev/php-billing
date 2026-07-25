@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -31,7 +32,7 @@ trait SettableChargeModifierTrait
             return $this->modifier->modifyCharge($charge, $action);
         }
 
-        return $charge ? [$charge] : [];
+        return $charge instanceof ChargeInterface ? [$charge] : [];
     }
 
     /** {@inheritdoc} */

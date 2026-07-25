@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -12,6 +15,7 @@ namespace hiqdev\php\billing\tools;
 
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\bill\BillRepositoryInterface;
+use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 
 /**
@@ -19,18 +23,11 @@ use hiqdev\php\billing\charge\ChargeInterface;
  */
 class DbMergingAggregator implements AggregatorInterface, MergerInterface
 {
-    protected BillRepositoryInterface $billRepository;
-    protected MergerInterface $merger;
-    private AggregatorInterface $localAggregator;
-
     public function __construct(
-        AggregatorInterface $localAggregator,
-        BillRepositoryInterface $billRepository,
-        MergerInterface $merger
+        private readonly AggregatorInterface $localAggregator,
+        protected BillRepositoryInterface $billRepository,
+        protected MergerInterface $merger
     ) {
-        $this->billRepository = $billRepository;
-        $this->merger = $merger;
-        $this->localAggregator = $localAggregator;
     }
 
     public function mergeBills(array $bills): array
@@ -74,6 +71,7 @@ class DbMergingAggregator implements AggregatorInterface, MergerInterface
     {
         foreach ($localBills as $i => $localBill) {
             foreach ($localBill->getCharges() as $charge) {
+                /** @var Charge $charge */
                 if ($charge->hasEvents()) {
                     continue 2;
                 }
@@ -95,5 +93,4 @@ class DbMergingAggregator implements AggregatorInterface, MergerInterface
 
         return $localBills;
     }
-
 }

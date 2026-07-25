@@ -10,7 +10,6 @@
 
 namespace hiqdev\php\billing\tests\unit\formula;
 
-use Cache\Adapter\PHPArray\ArrayCachePool;
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\Reason;
@@ -18,7 +17,9 @@ use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\FixedDiscount;
 use hiqdev\php\billing\charge\modifiers\Installment;
 use hiqdev\php\billing\formula\FormulaEngine;
+use hiqdev\yii\compat\PsrCache;
 use PHPUnit\Framework\TestCase;
+use yii\caching\ArrayCache;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -32,7 +33,8 @@ class FormulaEngineTest extends TestCase
 
     public function setUp(): void
     {
-        $this->engine = new FormulaEngine(new ArrayCachePool());
+        $cache = new PsrCache(new ArrayCache());
+        $this->engine = new FormulaEngine($cache);
     }
 
     public function testSimpleDiscount()
@@ -72,7 +74,7 @@ class FormulaEngineTest extends TestCase
         $this->assertNull($formula->getTill());
     }
 
-    public function normalizeDataProvider()
+    public static function normalizeDataProvider()
     {
         return [
             ["ab\ncd", "ab\ncd"],
@@ -86,23 +88,19 @@ class FormulaEngineTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider normalizeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('normalizeDataProvider')]
     public function testNormalize($formula, $expected)
     {
         return $this->assertSame($expected, $this->engine->normalize($formula));
     }
 
-    /**
-     * @dataProvider validateDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateDataProvider')]
     public function testValidate($formula, $error)
     {
         return $this->assertSame($error, $this->engine->validate($formula));
     }
 
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['', "Unexpected token \"EOF\" (EOF) at line 1 and column 1:\n\n↑ : "],

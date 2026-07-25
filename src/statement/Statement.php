@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -22,51 +24,21 @@ use Money\Money;
  */
 class Statement implements \JsonSerializable
 {
-    const PERIOD_MONTH = 'month';
-    const PERIOD_YEAR = 'year';
-
-    private CustomerInterface $customer;
-
-    private DateTimeImmutable $month;
-
-    private DateTimeImmutable $time;
-
-    private Money $balance;
-
-    private Money $total;
-
-    private Money $payment;
-
-    private Money $amount;
-
-    private array $bills = [];
-
-    private string $period = self::PERIOD_MONTH;
-
-    private array $plans = [];
+    public const PERIOD_MONTH = 'month';
+    public const PERIOD_YEAR = 'year';
 
     public function __construct(
-        CustomerInterface $customer,
-        DateTimeImmutable $time,
-        DateTimeImmutable $month,
-        Money $balance,
-        Money $total,
-        Money $payment,
-        Money $amount,
-        array $bills = [],
-        string $period = self::PERIOD_MONTH,
-        array $plans = []
+        private readonly CustomerInterface $customer,
+        private readonly DateTimeImmutable $time,
+        private readonly DateTimeImmutable $month,
+        private readonly Money $balance,
+        private readonly Money $total,
+        private readonly Money $payment,
+        private readonly Money $amount,
+        private array $bills = [],
+        private readonly string $period = self::PERIOD_MONTH,
+        private array $plans = []
     ) {
-        $this->customer = $customer;
-        $this->time = $time;
-        $this->balance = $balance;
-        $this->bills = $bills;
-        $this->period = $period;
-        $this->month = $month;
-        $this->total = $total;
-        $this->payment = $payment;
-        $this->amount = $amount;
-        $this->plans = $plans;
     }
 
     public function getCustomer(): CustomerInterface

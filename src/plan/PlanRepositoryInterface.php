@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -10,6 +13,7 @@
 
 namespace hiqdev\php\billing\plan;
 
+use hiqdev\DataMapper\Repository\RepositoryInterface;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\Exception\EntityNotFoundException;
 use hiqdev\php\billing\order\OrderInterface;
@@ -17,7 +21,7 @@ use hiqdev\php\billing\order\OrderInterface;
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-interface PlanRepositoryInterface
+interface PlanRepositoryInterface extends RepositoryInterface
 {
     /**
      * Finds suitable plan for given action: customer + type + target.

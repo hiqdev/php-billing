@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -21,7 +24,6 @@ use DateTimeImmutable;
 interface SaleRepositoryInterface
 {
     /**
-     * @param \hiqdev\php\billing\sale\SaleInterface $sale
      * @return string
      */
     public function findId(SaleInterface $sale);
@@ -34,7 +36,7 @@ interface SaleRepositoryInterface
 
     /**
      * Finds suitable sales for given order.
-     * @return PlanInterface[] array: actionKey => plan
+     * @return SaleInterface[] array: actionKey => sale
      */
     public function findByOrder(OrderInterface $order);
 
@@ -42,4 +44,8 @@ interface SaleRepositoryInterface
      * Find all active sales at given time
      */
     public function findAllActive(Specification $specification, ?DateTimeImmutable $time): array;
+
+    public function isTariffInUse(int $tariffId): bool;
+
+    public function deleteByTariffId(int $tariffId): void;
 }

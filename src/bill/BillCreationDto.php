@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -36,4 +39,6 @@ class BillCreationDto
     public $charges;
 
     public $state;
+
+    public $usageInterval;
 }

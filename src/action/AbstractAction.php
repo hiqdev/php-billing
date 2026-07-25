@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -13,7 +14,6 @@ namespace hiqdev\php\billing\action;
 use DateInterval;
 use DateTimeImmutable;
 use hiqdev\php\billing\customer\CustomerInterface;
-use hiqdev\php\billing\EntityInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
 use hiqdev\php\billing\sale\SaleInterface;
 use hiqdev\php\billing\target\TargetInterface;
@@ -27,11 +27,8 @@ use hiqdev\php\units\QuantityInterface;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class AbstractAction implements ActionInterface, EntityInterface
+abstract class AbstractAction implements \JsonSerializable, ActionInterface
 {
-    /** @var int */
-    protected $id;
-
     /** @var TypeInterface */
     protected $type;
 
@@ -57,21 +54,20 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
     protected $parent;
 
     /**
-     * @param SaleInterface $sale
-     * @param ActionInterface $parent
+     * @param int $id
      */
     public function __construct(
-        $id,
+        protected $id,
         TypeInterface $type,
         TargetInterface $target,
         QuantityInterface $quantity,
         CustomerInterface $customer,
         DateTimeImmutable $time,
-        SaleInterface $sale = null,
-        ActionState $state = null,
-        ActionInterface $parent = null
+        ?SaleInterface $sale = null,
+        ?ActionState $state = null,
+        ?ActionInterface $parent = null,
+        protected float $fractionOfMonth = 0.0
     ) {
-        $this->id       = $id;
         $this->type     = $type;
         $this->target   = $target;
         $this->quantity = $quantity;
@@ -219,6 +215,10 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
         $this->sale = $sale;
     }
 
+    public function getFractionOfMonth(): float
+    {
+        return $this->fractionOfMonth;
+    }
     /**
      * {@inheritdoc}
      */
@@ -229,10 +229,21 @@ abstract class AbstractAction implements ActionInterface, EntityInterface
 
     public function getUsageInterval(): UsageInterval
     {
-        if ($this->getSale() === null) {
+        if ($this->getSale()?->getTime() === null) {
             return UsageInterval::wholeMonth($this->getTime());
         }
 
-        return UsageInterval::withinMonth($this->getTime(), $this->getSale()->getTime(), $this->getSale()->getCloseTime());
+        if ($this->getFractionOfMonth() > 0) {
+            return UsageInterval::withMonthAndFraction(
+                $this->getTime(),
+                $this->getSale()->getTime(),
+                $this->getFractionOfMonth()
+            );
+        }
+        return UsageInterval::withinMonth(
+            $this->getTime(),
+            $this->getSale()->getTime(),
+            $this->getSale()->getCloseTime()
+        );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -27,40 +28,22 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class SinglePrice extends AbstractPrice
+class SinglePrice extends AbstractPrice implements PriceWithQuantityInterface, PriceWithMoneyInterface
 {
-    /**
-     * @var QuantityInterface prepaid quantity also implies Unit
-     * XXX cannot be null cause Unit is required
-     */
-    protected $prepaid;
-
-    /**
-     * @var Money
-     */
-    protected $price;
+    use HasMoney;
+    use HasQuantity;
 
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
-        PlanInterface $plan = null,
-        QuantityInterface $prepaid,
-        Money $price
+        ?QuantityInterface $prepaid = null,
+        ?Money $price = null,
+        ?PlanInterface $plan = null,
     ) {
         parent::__construct($id, $type, $target, $plan);
         $this->prepaid  = $prepaid;
         $this->price    = $price;
-    }
-
-    public function getPrepaid()
-    {
-        return $this->prepaid;
-    }
-
-    public function getPrice()
-    {
-        return $this->price;
     }
 
     /**
@@ -81,7 +64,7 @@ class SinglePrice extends AbstractPrice
      * {@inheritdoc}
      * Same price for any usage.
      */
-    public function calculatePrice(QuantityInterface $usage): ?Money
+    public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         return $this->price;
     }

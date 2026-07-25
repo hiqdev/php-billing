@@ -1,27 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace hiqdev\php\billing\action;
+
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use JsonSerializable;
 
-/** @readonly */
-final class UsageInterval
+final readonly class UsageInterval implements JsonSerializable
 {
-    /** @readonly */
-    private DateTimeImmutable $start;
-    /** @readonly */
-    private DateTimeImmutable $end;
-    /** @readonly */
     private DateTimeImmutable $month;
+
     private function __construct(
-        DateTimeImmutable $start,
-        DateTimeImmutable $end
+        private DateTimeImmutable $start,
+        private DateTimeImmutable $end
     ) {
-        $this->start = $start;
-        $this->end = $end;
-        $this->month = self::toMonth($start);
+        $this->month = self::toMonth($this->start);
     }
 
     private static function toMonth(DateTimeImmutable $date): DateTimeImmutable
@@ -45,7 +41,7 @@ final class UsageInterval
      * @param DateTimeImmutable $month the month to calculate the usage interval for
      * @param DateTimeImmutable $start the start date of the sale
      * @param DateTimeImmutable|null $end the end date of the sale or null if the sale is active
-     * @return static
+     * @throws InvalidArgumentException if the start date is greater than the end date
      */
     public static function withinMonth(
         DateTimeImmutable $month,
@@ -55,7 +51,7 @@ final class UsageInterval
         $month = self::toMonth($month);
         $nextMonth = $month->modify('+1 month');
 
-        if ($end !== null && $start > $end) {
+        if ($end instanceof \DateTimeImmutable && $start > $end) {
             throw new InvalidArgumentException('Start date must be less than end date');
         }
 
@@ -64,7 +60,7 @@ final class UsageInterval
             $end = $month;
         }
 
-        if ($end !== null && $end < $month) {
+        if ($end instanceof \DateTimeImmutable && $end < $month) {
             $start = $month;
             $end = $month;
         }
@@ -74,6 +70,44 @@ final class UsageInterval
             $end ?? new DateTimeImmutable('2999-01-01'),
             $month->modify('+1 month')
         );
+
+        return new self(
+            $effectiveSince,
+            $effectiveTill,
+        );
+    }
+
+    /**
+     * Calculates the usage interval for the given month for the given start date and fraction of month value.
+     *
+     * @param DateTimeImmutable $month the month to calculate the usage interval for
+     * @param DateTimeImmutable $start the start date of the sale
+     * @param float $fractionOfMonth the fraction of manth
+     */
+    public static function withMonthAndFraction(
+        DateTimeImmutable $month,
+        DateTimeImmutable $start,
+        float $fractionOfMonth
+    ): self {
+        if ($fractionOfMonth < 0 || $fractionOfMonth > 1) {
+            throw new InvalidArgumentException('Fraction of month must be between 0 and 1');
+        }
+        $month = self::toMonth($month);
+        $nextMonth = $month->modify('+1 month');
+
+        if ($start >= $nextMonth) {
+            $start = $month;
+        }
+
+        $effectiveSince = max($start, $month);
+
+        if ($fractionOfMonth === 1.0) {
+            $effectiveTill = $month->modify('+1 month');
+        } else {
+            $interval = new self($month, $nextMonth);
+            $seconds = $interval->secondsInMonth() * $fractionOfMonth;
+            $effectiveTill = $effectiveSince->modify(sprintf('+%d seconds', $seconds));
+        }
 
         return new self(
             $effectiveSince,
@@ -106,6 +140,16 @@ final class UsageInterval
                 + $interval->days * 86400;
     }
 
+    public function minutes(): float
+    {
+        return $this->seconds() / 60;
+    }
+
+    public function hours(): float
+    {
+        return $this->seconds() / 60 / 60;
+    }
+
     public function secondsInMonth(): int
     {
         return $this->month->format('t') * 86400;
@@ -117,5 +161,27 @@ final class UsageInterval
         $secondsInCurrentMonth = $this->secondsInMonth();
 
         return $usageSeconds / $secondsInCurrentMonth;
+    }
+
+    /**
+     * Extends the usage interval to include both current and other intervals.
+     */
+    public function extend(self $other): self
+    {
+        $newStart = min($this->start, $other->start);
+        $newEnd = max($this->end, $other->end);
+
+        if ($newStart > $newEnd) {
+            throw new InvalidArgumentException('Cannot extend intervals: resulting interval would be invalid');
+        }
+        return new self(
+            $newStart,
+            $newEnd,
+        );
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_filter(get_object_vars($this));
     }
 }

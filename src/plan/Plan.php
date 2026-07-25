@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -23,30 +24,9 @@ use hiqdev\php\billing\type\TypeInterface;
 class Plan implements PlanInterface
 {
     /**
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var Plan|null
-     * XXX not sure to implement
-     */
-    protected $parent;
-
-    /**
      * @var CustomerInterface
      */
     protected $seller;
-
-    /**
-     * @var PriceInterface[]
-     */
-    protected $prices = [];
 
     /**
      * @var ?TypeInterface
@@ -59,16 +39,14 @@ class Plan implements PlanInterface
      * @param PriceInterface[] $prices
      */
     public function __construct(
-        $id,
-        $name,
-        CustomerInterface $seller = null,
-        $prices = [],
-        TypeInterface $type = null
+        protected $id,
+        protected $name,
+        ?CustomerInterface $seller = null,
+        protected $prices = [],
+        ?TypeInterface $type = null,
+        protected ?int $parent_id = null
     ) {
-        $this->id = $id;
-        $this->name = $name;
         $this->seller = $seller;
-        $this->prices = $prices;
         $this->type = $type;
     }
 
@@ -85,9 +63,6 @@ class Plan implements PlanInterface
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -106,9 +81,14 @@ class Plan implements PlanInterface
         return $this->seller;
     }
 
-    public function getParent(): ?PlanInterface
+    public function getParentId(): ?int
     {
-        return $this->parent;
+        return $this->parent_id;
+    }
+
+    public function setParentId(int $parentId): void
+    {
+        $this->parent_id = $parentId;
     }
 
     public function hasPrices(): bool

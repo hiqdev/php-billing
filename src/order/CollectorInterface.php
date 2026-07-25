@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -31,8 +34,6 @@ interface CollectorInterface
 {
     /**
      * @param OrderInterface|ActionInterface|mixed $source
-     * @param DateTimeImmutable|null $time
-     * @return OrderInterface
      */
-    public function collect($source, DateTimeImmutable $time = null): OrderInterface;
+    public function collect($source, ?DateTimeImmutable $time = null): OrderInterface;
 }

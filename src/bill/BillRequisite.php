@@ -1,18 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace hiqdev\php\billing\bill;
 
 class BillRequisite
 {
-    /** @var int|string|null */
-    protected $id;
-
-    protected ?string $name = null;
-
-    public function __construct($id = null, string $name = null)
-    {
-        $this->id = $id;
-        $this->name = $name;
+    /**
+     * @param int|string|null $id
+     */
+    public function __construct(
+        protected $id = null,
+        protected ?string $name = null
+    ) {
     }
 
     public function getId()

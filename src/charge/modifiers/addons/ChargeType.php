@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -36,7 +39,7 @@ class ChargeType implements AddonInterface
 
     private function ensureValidValue($value): string
     {
-        if (!preg_match('/^[\w_,]+$/', $value)) {
+        if (!preg_match('/^[\w_,]+$/', (string) $value)) {
             throw new \InvalidArgumentException('Charge type is not valid');
         }
 

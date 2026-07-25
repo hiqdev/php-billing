@@ -16,7 +16,6 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\Generalizer;
 use hiqdev\php\billing\order\Calculator;
-use hiqdev\php\billing\plan\Plan;
 use hiqdev\php\billing\plan\PlanInterface;
 use hiqdev\php\billing\tests\support\plan\CertificatePlan;
 use hiqdev\php\billing\tests\support\plan\SimplePlanRepository;
@@ -28,12 +27,11 @@ use Money\Money;
 
 class PlanTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Plan|PlanInterface */
-    protected $plan;
-    /** @var DateTimeImmutable */
-    protected $time;
-    /** @var Calculator */
-    protected $calculator;
+    protected PlanInterface $plan;
+
+    protected DateTimeImmutable $time;
+
+    private Calculator $calculator;
 
     protected function setUp(): void
     {
@@ -45,7 +43,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
         $this->calculator = new Calculator(new Generalizer(), $saleRepository, $planRepository, $timeProvider);
     }
 
-    public function testCalculateCharges()
+    public function testCalculateCharges(): void
     {
         foreach ($this->plan->types as $type) {
             foreach ($this->plan->targets as $target) {
@@ -62,7 +60,7 @@ class PlanTest extends \PHPUnit\Framework\TestCase
     /**
      * @param ActionInterface|Action $action
      */
-    public function checkCharges(ActionInterface $action, array $charges)
+    public function checkCharges(ActionInterface $action, array $charges): void
     {
         $this->assertIsArray($charges);
         $this->assertCount(1, $charges);

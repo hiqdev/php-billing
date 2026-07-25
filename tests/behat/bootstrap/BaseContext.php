@@ -18,9 +18,7 @@ abstract class BaseContext implements Context
     /** @var BuilderInterface */
     protected $builder;
 
-    /**
-     * @BeforeScenario
-     */
+    #[\Behat\Hook\BeforeScenario]
     public function getBuilder(BeforeScenarioScope $scope)
     {
         $this->builder = $scope->getEnvironment()->getContext(BuilderContext::class)->getBuilder();

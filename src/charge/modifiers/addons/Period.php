@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -19,7 +20,7 @@ use hiqdev\php\billing\formula\FormulaSemanticsError;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-abstract class Period implements AddonInterface
+abstract class Period implements AddonInterface, \Stringable
 {
     /**
      * @var int
@@ -49,12 +50,9 @@ abstract class Period implements AddonInterface
 
     public static function fromString($string)
     {
-        if (preg_match('/^((\d+) +)?(\w+)$/', trim($string), $ms)) {
-            if (isset(static::$periods[$ms[3]])) {
-                $class = static::$periods[$ms[3]];
-
-                return new $class($ms[1] ?: 1);
-            }
+        if (preg_match('/^((\d+) +)?(\w+)$/', trim((string) $string), $ms) && isset(static::$periods[$ms[3]])) {
+            $class = static::$periods[$ms[3]];
+            return new $class($ms[1] ?: 1);
         }
 
         throw new FormulaSemanticsError("invalid period given: $string");
@@ -69,10 +67,17 @@ abstract class Period implements AddonInterface
         return (int) $value;
     }
 
+    abstract public function __toString(): string;
+
+    public function toString(): string
+    {
+        return $this->__toString();
+    }
+
     /**
      * Adds current period to the passed $startTime
      *
      * @return DateTimeImmutable time of period end
      */
-    abstract public function addTo(DateTimeImmutable $startTime): DateTimeImmutable;
+    abstract public function addTo(DateTimeImmutable $since): DateTimeImmutable;
 }

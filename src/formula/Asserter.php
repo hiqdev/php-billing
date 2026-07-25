@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -13,6 +14,7 @@ namespace hiqdev\php\billing\formula;
 use hiqdev\php\billing\charge\modifiers\FullCombination;
 use Hoa\Ruler\Context;
 use Hoa\Ruler\Model\Model;
+use Hoa\Visitor\Element;
 
 /**
  * @author Andrii Vasyliev <sol@hiqdev.com>
@@ -20,12 +22,12 @@ use Hoa\Ruler\Model\Model;
 class Asserter extends \Hoa\Ruler\Visitor\Asserter
 {
     /**
-     * @param Context $context context
+     * @param Context|null $context context
      */
-    public function __construct(Context $context = null)
+    public function __construct(?Context $context = null)
     {
         parent::__construct($context);
-        $this->setOperator('and', [$this, 'makeAnd']);
+        $this->setOperator('and', $this->makeAnd(...));
     }
 
     public function makeAnd($lhs, $rhs)
@@ -33,8 +35,14 @@ class Asserter extends \Hoa\Ruler\Visitor\Asserter
         return new FullCombination($lhs, $rhs);
     }
 
+    #[\Override]
     public function visitModel(Model $element, &$handle = null, $eldnah = null)
     {
-        return $element->getExpression()->accept($this, $handle, $eldnah);
+        return $this->getExpression($element)->accept($this, $handle, $eldnah);
+    }
+
+    private function getExpression(Model $element): Element
+    {
+        return $element->getExpression();
     }
 }

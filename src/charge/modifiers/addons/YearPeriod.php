@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -29,5 +32,10 @@ class YearPeriod extends Period
     public function addTo(DateTimeImmutable $since): DateTimeImmutable
     {
         return $since->add(new \DateInterval("P{$this->value}Y"));
+    }
+
+    public function __toString(): string
+    {
+        return $this->value . ' year' . ($this->value > 1 ? 's' : '');
     }
 }

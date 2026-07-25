@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -10,6 +11,7 @@
 
 namespace hiqdev\php\billing\tools;
 
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\bill\Bill;
 use hiqdev\php\billing\bill\BillInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
@@ -65,11 +67,9 @@ class Aggregator implements AggregatorInterface
     {
         foreach ($others as $bill) {
             $uid = $bill->getUniqueString();
-            if (empty($bills[$uid])) {
-                $bills[$uid] = $bill;
-            } else {
-                $bills[$uid] = $this->aggregateBill($bills[$uid], $bill);
-            }
+            $bills[$uid] = empty($bills[$uid])
+                ? $bill
+                : $this->aggregateBill($bills[$uid], $bill);
         }
 
         return $bills;
@@ -77,7 +77,7 @@ class Aggregator implements AggregatorInterface
 
     protected function aggregateBill(BillInterface $first, BillInterface $other): BillInterface
     {
-        return new Bill(
+        $bill = new Bill(
             $this->aggregateId($first, $other),
             $first->getType(),
             $first->getTime(),
@@ -88,6 +88,15 @@ class Aggregator implements AggregatorInterface
             $first->getPlan(),
             array_merge($first->getCharges(), $other->getCharges())
         );
+
+        $bill->setUsageInterval($this->aggregateUsageInterval($first, $other));
+
+        return $bill;
+    }
+
+    protected function aggregateUsageInterval(BillInterface $first, BillInterface $other): UsageInterval
+    {
+        return $first->getUsageInterval()->extend($other->getUsageInterval());
     }
 
     /**

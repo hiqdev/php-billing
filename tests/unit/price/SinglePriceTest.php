@@ -22,20 +22,17 @@ use Money\Money;
  */
 class SinglePriceTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var SinglePrice
-     */
-    protected $price;
+    protected SinglePrice $price;
 
-    /**
-     * @var Action
-     */
-    protected $action;
+    protected Action $action;
 
-    /**
-     * @var Money
-     */
-    protected $money;
+    protected Money $money;
+
+    private Target $target;
+
+    private Type $type;
+
+    private $quantity;
 
     protected function setUp(): void
     {
@@ -43,7 +40,7 @@ class SinglePriceTest extends \PHPUnit\Framework\TestCase
         $this->type     = new Type(null, 'server_traf');
         $this->quantity = Quantity::gigabyte(10);
         $this->money    = Money::USD(15);
-        $this->price    = new SinglePrice(null, $this->type, $this->target, null, $this->quantity, $this->money);
+        $this->price    = new SinglePrice(null, $this->type, $this->target, $this->quantity, $this->money);
     }
 
     protected function tearDown(): void

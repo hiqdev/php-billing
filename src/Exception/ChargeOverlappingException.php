@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -10,13 +11,15 @@
 
 namespace hiqdev\php\billing\Exception;
 
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\ExceptionInterface;
 use Exception;
 
-final class ChargeOverlappingException extends Exception implements ExceptionInterface
+final class ChargeOverlappingException extends Exception implements ExceptionInterface, HasContextInterface
 {
-    private ChargeInterface $charge;
+    use HasContext;
 
     public static function forCharge(ChargeInterface $charge): self
     {
@@ -25,13 +28,11 @@ final class ChargeOverlappingException extends Exception implements ExceptionInt
             $charge->getId(),
             $charge->getUniqueString()
         ));
-        $self->charge = $charge;
+        $self->addContext([
+            'chargeTypeName' => $charge->getType()->getName(),
+            'chargeActionTime' => $charge->getAction()->getTime()->format(DATE_ATOM),
+        ]);
 
         return $self;
-    }
-
-    public function getCharge(): ChargeInterface
-    {
-        return $this->charge;
     }
 }

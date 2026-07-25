@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -26,16 +27,17 @@ class PlanFactory implements PlanFactoryInterface
         return $this->createAnyPlan($dto);
     }
 
-    protected function createAnyPlan(PlanCreationDto $dto, string $class = null)
+    protected function createAnyPlan(PlanCreationDto $dto, ?string $class = null)
     {
-        $class = $class ?? Plan::class;
+        $class ??= Plan::class;
 
         return new $class(
             $dto->id,
             $dto->name,
             $dto->seller,
             $dto->prices ?? [],
-            $dto->type ?? null
+            $dto->type ?? null,
+            $dto->parent_id ?? null
         );
     }
 }

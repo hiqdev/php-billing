@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -15,19 +16,10 @@ use League\Event\AbstractEvent;
 
 class InstallmentWasFinished extends AbstractEvent implements \JsonSerializable
 {
-    /**
-     * @var ChargeInterface
-     */
-    private $charge;
-    /**
-     * @var \DateTimeImmutable
-     */
-    private $time;
-
-    private function __construct(ChargeInterface $charge, \DateTimeImmutable $time)
-    {
-        $this->charge = $charge;
-        $this->time = $time;
+    private function __construct(
+        private readonly ChargeInterface $charge,
+        private readonly \DateTimeImmutable $time
+    ) {
     }
 
     public static function onCharge(ChargeInterface $charge, \DateTimeImmutable $time): self

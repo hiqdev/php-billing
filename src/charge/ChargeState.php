@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -17,8 +20,8 @@ namespace hiqdev\php\billing\charge;
  */
 class ChargeState
 {
-    const STATE_NEW      = 'new';
-    const STATE_FINISHED = 'finished';
+    public const STATE_NEW      = 'new';
+    public const STATE_FINISHED = 'finished';
 
     /** @var string */
     protected $state;

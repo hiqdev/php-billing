@@ -25,7 +25,7 @@ class SimpleCalculator extends Calculator
      * @param SaleRepositoryInterface|SaleInterface $sale
      * @param PlanRepositoryInterface|PlanInterface $plan
      */
-    public function __construct(GeneralizerInterface $generalizer = null, $sale = null, $plan = null)
+    public function __construct(?GeneralizerInterface $generalizer = null, $sale = null, $plan = null)
     {
         $this->generalizer = $generalizer ?: new Generalizer();
         if ($sale instanceof SaleInterface) {

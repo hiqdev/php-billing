@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -21,22 +22,23 @@ class PriceFactory implements PriceFactoryInterface
         EnumPrice::class    => 'createEnumPrice',
         RatePrice::class    => 'createRatePrice',
         SinglePrice::class  => 'createSinglePrice',
+        ProgressivePrice::class => 'createProgressivePrice',
     ];
 
     protected $types = [
         'enum'      => EnumPrice::class,
         'single'    => SinglePrice::class,
+        'progressive' => ProgressivePrice::class,
     ];
 
-    /**
-     * @var string default price class, when given will be used for not found types
-     */
-    protected $defaultClass = null;
-
-    public function __construct(array $types = [], $defaultClass = null)
-    {
+    public function __construct(
+        array $types = [],
+        /**
+         * @var string|null default price class, when given will be used for not found types
+         */
+        protected ?string $defaultClass = null
+    ) {
         $this->types = $types;
-        $this->defaultClass = $defaultClass;
     }
 
 
@@ -46,7 +48,7 @@ class PriceFactory implements PriceFactoryInterface
     public function create(PriceCreationDto $dto): PriceInterface
     {
         $class = $this->findClassForTypes([
-            get_class($dto),
+            $dto::class,
             $dto->type->getName(),
         ]);
         $method = $this->findMethodForClass($class);
@@ -57,6 +59,9 @@ class PriceFactory implements PriceFactoryInterface
     public function findClassForTypes(array $types)
     {
         foreach ($types as $type) {
+            if ($type === null) {
+                continue;
+            }
             if (isset($this->types[$type])) {
                 return $this->types[$type];
             }
@@ -75,9 +80,9 @@ class PriceFactory implements PriceFactoryInterface
         throw new FailedCreatePriceException("unknown class: $class");
     }
 
-    public function createEnumPrice(PriceCreationDto $dto)
+    public function createEnumPrice(PriceCreationDto $dto): EnumPrice
     {
-        return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->unit, $dto->currency, $dto->sums);
+        return new EnumPrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->unit, $dto->currency, new Sums($dto->sums));
     }
 
     public function createRatePrice(PriceCreationDto $dto)
@@ -87,6 +92,13 @@ class PriceFactory implements PriceFactoryInterface
 
     public function createSinglePrice(PriceCreationDto $dto)
     {
-        return new SinglePrice($dto->id, $dto->type, $dto->target, $dto->plan, $dto->prepaid, $dto->price);
+        return new SinglePrice($dto->id, $dto->type, $dto->target, $dto->prepaid, $dto->price, $dto->plan);
+    }
+
+    public function createProgressivePrice(PriceCreationDto $dto): ProgressivePrice
+    {
+        $thresholds = ProgressivePriceThresholdList::fromScalarsArray($dto->thresholds);
+
+        return new ProgressivePrice($dto->id, $dto->type, $dto->target, $dto->prepaid, $dto->price, $thresholds, $dto->plan);
     }
 }

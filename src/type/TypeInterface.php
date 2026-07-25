@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -28,8 +31,12 @@ namespace hiqdev\php\billing\type;
  */
 interface TypeInterface extends \JsonSerializable
 {
-    const ANY  = null;
-    const NONE = INF;
+    /**
+     * @var null - any type can be used as ID or type name
+     */
+    public const null ANY  = null;
+
+    public const float NONE = INF;
 
     /**
      * Returns type id.
@@ -57,4 +64,6 @@ interface TypeInterface extends \JsonSerializable
      * @param TypeInterface $other other type to match against
      */
     public function matches(self $other): bool;
+
+    public function isDefined(): bool;
 }

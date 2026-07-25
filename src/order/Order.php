@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -19,11 +22,6 @@ use hiqdev\php\billing\customer\CustomerInterface;
 class Order implements OrderInterface
 {
     /**
-     * @var int|string|null
-     */
-    protected $id;
-
-    /**
      * @var CustomerInterface
      */
     protected $customer;
@@ -33,9 +31,11 @@ class Order implements OrderInterface
      */
     protected $actions = [];
 
-    public function __construct($id, CustomerInterface $customer, array $actions = [])
+    /**
+     * @param int|string|null $id
+     */
+    public function __construct(protected $id, CustomerInterface $customer, array $actions = [])
     {
-        $this->id = $id;
         $this->customer = $customer;
         $this->actions = $actions;
     }

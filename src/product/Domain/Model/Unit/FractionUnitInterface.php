@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+namespace hiqdev\php\billing\product\Domain\Model\Unit;
+
+interface FractionUnitInterface
+{
+    public function name(): string;
+
+    public function label(): string;
+
+    public function equals(FractionUnitInterface $other): bool;
+}

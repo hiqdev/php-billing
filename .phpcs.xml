@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="php-billing">
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+    <arg name="colors"/>
+
+    <file>src</file>
+
+    <rule ref="PSR12">
+        <!-- Files have BSD license headers; PSR-12 file header order conflicts with this convention -->
+        <exclude name="PSR12.Files.FileHeader"/>
+        <!-- Long lines are acceptable in comments and docblocks -->
+        <exclude name="Generic.Files.LineLength"/>
+    </rule>
+</ruleset>

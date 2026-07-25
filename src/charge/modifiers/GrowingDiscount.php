@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -16,7 +17,9 @@ use hiqdev\php\billing\charge\modifiers\addons\Discount;
 use hiqdev\php\billing\charge\modifiers\addons\Maximum;
 use hiqdev\php\billing\charge\modifiers\addons\Minimum;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\modifiers\addons\Step;
+use hiqdev\php\billing\charge\modifiers\addons\StopsGrowing;
 use Money\Money;
 
 /**
@@ -26,10 +29,11 @@ use Money\Money;
  */
 class GrowingDiscount extends FixedDiscount
 {
-    const PERIOD = 'period';
-    const STEP = 'step';
-    const MIN = 'min';
-    const MAX = 'max';
+    public const PERIOD = 'period';
+    public const STEP = 'step';
+    public const MIN = 'min';
+    public const MAX = 'max';
+    public const STOPS_GROWING = 'stopsGrowing';
 
     public function __construct($step, $min = null, array $addons = [])
     {
@@ -40,6 +44,7 @@ class GrowingDiscount extends FixedDiscount
         }
     }
 
+    #[\Override]
     public function isAbsolute()
     {
         return $this->getStep()->isAbsolute();
@@ -87,7 +92,18 @@ class GrowingDiscount extends FixedDiscount
         return $this->addAddon(self::PERIOD, Period::fromString($string));
     }
 
-    public function calculateSum(ChargeInterface $charge = null): Money
+    public function stopsGrowing($month)
+    {
+        return $this->addAddon(self::STOPS_GROWING, new StopsGrowing($month));
+    }
+
+    public function getStopsGrowing(): ?StopsGrowing
+    {
+        return $this->getAddon(self::STOPS_GROWING);
+    }
+
+    #[\Override]
+    public function calculateSum(?ChargeInterface $charge = null): Money
     {
         $sum = parent::calculateSum($charge);
 
@@ -101,9 +117,10 @@ class GrowingDiscount extends FixedDiscount
         return $sum;
     }
 
-    public function getValue(ChargeInterface $charge = null): Discount
+    #[\Override]
+    public function getValue(?ChargeInterface $charge = null): Discount
     {
-        $time = $charge ? $charge->getAction()->getTime() : new DateTimeImmutable();
+        $time = $charge instanceof ChargeInterface ? $charge->getAction()->getTime() : new DateTimeImmutable();
         $num = (int) $this->countPeriodsPassed($time);
 
         return $this->getStep()->calculateFor($num, $this->getMin());
@@ -112,7 +129,7 @@ class GrowingDiscount extends FixedDiscount
     protected function countPeriodsPassed(DateTimeImmutable $time)
     {
         $since = $this->getSince();
-        if ($since === null) {
+        if (!$since instanceof Since) {
             throw new \Exception('no since given for growing discount');
         }
 
@@ -121,6 +138,15 @@ class GrowingDiscount extends FixedDiscount
             throw new \Exception('no period given for growing discount');
         }
 
-        return $period->countPeriodsPassed($since->getValue(), $time);
+        $sinceTime = $since->getValue();
+        $stopsGrowing = $this->getStopsGrowing();
+        if ($stopsGrowing instanceof StopsGrowing && $stopsGrowing->getValue() < $time) {
+            $time = $stopsGrowing->getValue();
+        }
+        if ($time < $sinceTime) {
+            $time = $sinceTime;
+        }
+
+        return $period->countPeriodsPassed($sinceTime, $time);
     }
 }

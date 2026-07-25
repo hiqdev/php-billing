@@ -1,0 +1,11 @@
+MD013:
+  line_length: 100
+  heading_line_length: 100
+  code_blocks: false
+  tables: false
+MD022: false
+MD029: false
+MD030: false
+MD031: false
+MD032: false
+MD040: false

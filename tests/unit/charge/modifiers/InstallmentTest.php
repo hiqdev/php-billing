@@ -13,8 +13,8 @@ namespace hiqdev\php\billing\tests\unit\charge\modifiers;
 use DateTimeImmutable;
 use hiqdev\php\billing\charge\modifiers\addons\MonthPeriod;
 use hiqdev\php\billing\charge\modifiers\addons\YearPeriod;
-use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
-use hiqdev\php\billing\charge\modifiers\Leasing;
+use hiqdev\php\billing\charge\modifiers\event\InstallmentWasCharged;
+use hiqdev\php\billing\charge\modifiers\Installment;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\tests\unit\action\ActionTest;
 use hiqdev\php\billing\type\Type;
@@ -29,15 +29,15 @@ class InstallmentTest extends ActionTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->type = new Type(Type::ANY, 'monthly,installment');
-        $this->price = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+        $this->type = Type::anyId('monthly,installment');
+        $this->price = new SinglePrice(5, $this->type, $this->target, $this->prepaid, $this->money);
     }
 
     protected function buildInstallment($term)
     {
-        $month = (new DateTimeImmutable())->modify('first day of this month midnight');
+        $month = new DateTimeImmutable()->modify('first day of this month midnight');
 
-        return (new Installment())->since($month)->lasts($term);
+        return new Installment()->since($month)->lasts($term);
     }
 
     public function testCreateMonth()
@@ -76,7 +76,7 @@ class InstallmentTest extends ActionTest
         $charge = $this->calculator->calculateCharge($this->price, $action);
         $charges = $installment->modifyCharge($charge, $action);
         $event = $charges[0]->releaseEvents()[0];
-        $this->assertInstanceOf(InstallmentWasStarted::class, $event);
+        $this->assertInstanceOf(InstallmentWasCharged::class, $event);
         $this->assertIsArray($charges);
         $this->assertSame(1, count($charges));
         $this->assertEquals($charge, $charges[0]);

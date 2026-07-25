@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -61,17 +64,13 @@ interface SaleInterface extends EntityInterface
 
     public function getCloseTime(): ?DateTimeImmutable;
 
-    /**
-     * @return array|null
-     */
     public function getData(): ?array;
 
     /**
-     * @param DateTimeImmutable $time
      * @throws InvariantException
      * @throws ConstraintException
      */
-    public function close(DateTimeImmutable $time): void;
+    public function close(DateTimeImmutable $closeTime): self;
 
     public function cancelClosing(): void;
 }

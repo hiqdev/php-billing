@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\billing\tests\support\plan;
 
+use hiqdev\DataMapper\Query\Specification;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\order\OrderInterface;
 use hiqdev\php\billing\plan\PlanInterface;
@@ -39,7 +40,7 @@ class SimplePlanRepository implements PlanRepositoryInterface
         return $plans;
     }
 
-    public function findByIds(array $ids)
+    public function findByIds(array $ids): never
     {
         throw new \Exception('not implemented');
     }
@@ -48,6 +49,26 @@ class SimplePlanRepository implements PlanRepositoryInterface
      * {@inheritdoc}
      */
     public function getById(int $id): PlanInterface
+    {
+        throw new \Exception('not implemented');
+    }
+
+    public function count(Specification $specification): never
+    {
+        throw new \Exception('not implemented');
+    }
+
+    public function findAll(Specification $specification): never
+    {
+        throw new \Exception('not implemented');
+    }
+
+    public function findOne(Specification $specification): never
+    {
+        throw new \Exception('not implemented');
+    }
+
+    public function findOneOrFail(Specification $specification): never
     {
         throw new \Exception('not implemented');
     }

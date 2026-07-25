@@ -22,7 +22,9 @@ use hiqdev\php\billing\charge\modifiers\Modifier;
  */
 class ModifierTest extends \PHPUnit\Framework\TestCase
 {
-    protected $modifier;
+    private DateTimeImmutable $now;
+
+    protected Modifier $modifier;
 
     const SOME_TEXT = 'some text';
 

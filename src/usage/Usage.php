@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace hiqdev\php\billing\usage;
@@ -16,17 +17,12 @@ use hiqdev\php\units\Quantity;
  */
 class Usage implements UsageInterface
 {
-    private TargetInterface $target;
-    private DateTimeImmutable $time;
-    private TypeInterface $type;
-    private Quantity $amount;
-
-    public function __construct(TargetInterface $target, DateTimeImmutable $time, TypeInterface $type, Quantity $amount)
-    {
-        $this->target = $target;
-        $this->time = $time;
-        $this->type = $type;
-        $this->amount = $amount;
+    public function __construct(
+        private readonly TargetInterface $target,
+        private readonly DateTimeImmutable $time,
+        private readonly TypeInterface $type,
+        private readonly Quantity $amount
+    ) {
     }
 
     public function target(): TargetInterface

@@ -1,139 +1,196 @@
 @startuml
 
-legend right
-        |<#FFDDDD>  <b>E</b>  |  <b>Entity</b> |
-        |<#DDFFDD>  <b>V</b>  |  <b>Value Object</b>  |
-        |<#FFFFDD>  <b>A</b>  |  <b>Auxiliary</b> |
-endlegend
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 6
+skinparam shadowing false
+skinparam defaultFontSize 12
+skinparam defaultFontName "Helvetica"
 
-!define Entity(name,desc) class name as "desc" << (E,#EEEEEE) >> #FFDDDD
-!define ValueObject(name,desc) class name as "desc" << (V,#FFFFFF) >> #DDFFDD
-!define Auxiliary(name,desc) class name as "desc" << (A,#FFFFFF) >> #FFFFDD
-!define primary_key(x) x INTEGER
-!define foreign_key(x, y) <i>x</i> --> <b>y</b>
-!define value_object(x, y) x <b>y</b>
-hide methods
+skinparam class {
+    BackgroundColor<<Entity>>       #DDEEFF
+    BorderColor<<Entity>>           #336699
+    BackgroundColor<<ValueObject>>  #DDFFDD
+    BorderColor<<ValueObject>>      #448833
+    BackgroundColor<<Service>>      #FFF3CC
+    BorderColor<<Service>>          #997700
+    BackgroundColor<<Orchestrator>> #FFE6CC
+    BorderColor<<Orchestrator>>     #994400
+    ArrowColor                      #444444
+    FontColor                       #222222
+}
+
+hide empty members
 hide stereotypes
 
-package "Tariff plans" {
-    Entity(plan, "Plan") {
-        primary_key(id)
+' ─── Legend ───────────────────────────────────────────────
+legend right
+    |<#DDEEFF> E |  Entity         |
+    |<#DDFFDD> V |  Value Object   |
+    |<#FFF3CC> S |  Service        |
+    |<#FFE6CC> O |  Orchestrator   |
+endlegend
+
+' ─── Configuration ────────────────────────────────────────
+package "Tariff Configuration" #F5F8FF {
+    class Plan <<Entity>> {
+        id
+        prices : Price[]
     }
 
-    Entity(price, "Price") {
-        primary_key(id)
-        foreign_key(plan, Plan)
-        foreign_key(target, Target)
-        value_object(type, Type)
-        value_object(price, Money)
-        value_object(prepaid, Quantity)
-    }
-}
-
-package "Payments" {
-    Entity(bill, "Bill") {
-        primary_key(id)
-        foreign_key(customer, Customer)
-        foreign_key(target, Target)
-        foreign_key(plan, Plan)
-        value_object(type, Type)
-        value_object(sum, Money)
-        value_object(quantity, Quantity)
-        comment TEXT
-        time DATETIME
-    }
-
-    Entity(charge, "Charge") {
-        primary_key(id)
-        foreign_key(parent, Charge)
-        foreign_key(bill, Bill)
-        foreign_key(target, Target)
-        foreign_key(action, Action)
-        value_object(type, Type)
-        value_object(usage, Quantity)
-        value_object(sum, Money)
+    class Price <<Entity>> {
+        id
+        type : Type
+        target : Target
+        price : Money
+        prepaid : Quantity
+        modifier : ChargeModifier
     }
 }
 
-package "Subscriptions" {
-    Entity(sale, "Sale") {
-        primary_key(id)
-        foreign_key(target, Target)
-        foreign_key(customer, Customer)
-        foreign_key(plan, Plan)
-        time DATETIME
+' ─── Subscriptions ────────────────────────────────────────
+package "Subscriptions" #F5FFF5 {
+    class Customer <<Entity>> {
+        id
+        seller : Customer
     }
 
-    Auxiliary(customer, "Customer") {
-        primary_key(id)
-        foreign_key(seller, Customer)
+    class Target <<ValueObject>> {
+        id
+        type : Type
+        name
     }
 
-    Auxiliary(target, "Target") {
-        primary_key(id)
-        value_object(type, Type)
-        name TEXT
-    }
-}
-
-package "Metered activity" {
-    Auxiliary(order, "Order") {
-    }
-
-    Entity(action, "Action") {
-        primary_key(id)
-        foreign_key(parent, Action)
-        foreign_key(customer, Customer)
-        foreign_key(target, Target)
-        value_object(type, Type)
-        value_object(quantity, Quantity)
-        time DATETIME
+    class Sale <<Entity>> {
+        id
+        customer : Customer
+        target : Target
+        plan : Plan
+        time : DateTime
+        closeTime : DateTime
     }
 }
 
-package "Value Objects" {
-    ValueObject(type, "Type") {
-        value_object(parent, Type)
-        name TEXT
+' ─── Metered Activity ─────────────────────────────────────
+package "Metered Activity" #FFFDF0 {
+    class Action <<Entity>> {
+        id
+        type : Type
+        target : Target
+        quantity : Quantity
+        customer : Customer
+        time : DateTime
+        state : ActionState
+        sale : Sale
+        parent : Action
     }
 
-    ValueObject(money, "Money") {
-        sum INTEGER [in cents]
-        value_object(currency, Type)
-    }
-
-    ValueObject(quantity, "Quantity") {
-        quantity NUMERIC
-        value_object(unit, Type)
+    class UsageInterval <<ValueObject>> {
+        start : DateTime
+        end : DateTime
+        ..
+        ratioOfMonth() : float
+        seconds() : int
+        extend(other) : self
     }
 }
 
-type -up-> type : Parent
+' ─── Pipeline ─────────────────────────────────────────────
+package "Billing Pipeline" #FFF8F0 {
+    class Collector <<Service>> {
+        collect(source) : Order
+    }
 
-price --> plan
-price -down-> target
+    class Calculator <<Service>> {
+        calculateOrder(order) : Charge[]
+    }
 
-sale --> customer
-sale --> plan
-sale -down-> target
+    class Aggregator <<Service>> {
+        aggregateCharges(charges) : Bill[]
+    }
 
-customer -up-> customer : Seller
+    class Billing <<Orchestrator>> {
+        calculate(source) : Bill[]
+        perform(source) : Bill[]
+        calculateCharges(source) : Charge[]
+    }
+}
 
-action -up-> action : Parent
-action -down-> target
-action --> customer
+' ─── Results ──────────────────────────────────────────────
+package "Results" #FFF0F5 {
+    class Charge <<Entity>> {
+        id
+        type : Type
+        target : Target
+        usage : Quantity
+        sum : Money
+        action : Action
+        price : Price
+        parent : Charge
+    }
 
-order "1" -up-{ "N" action
+    class Bill <<Entity>> {
+        id
+        type : Type
+        target : Target
+        sum : Money
+        quantity : Quantity
+        customer : Customer
+        time : DateTime
+    }
+}
 
-charge -up-> charge : Parent
-charge -left-> bill
-charge -up-> action
-charge -up-> target
+' ─── Value Objects ────────────────────────────────────────
+package "Value Objects" #F5FFF5 {
+    class Type <<ValueObject>> {
+        name
+        parent : Type
+    }
 
-bill -up-> customer
-bill -up-> plan
-bill -up-> target
+    class Money <<ValueObject>> {
+        amount : int
+        currency : Currency
+    }
 
-charge -[hidden]-> money
+    class Quantity <<ValueObject>> {
+        quantity : numeric
+        unit : Unit
+    }
+}
+
+' ─── Relationships ────────────────────────────────────────
+
+' Configuration
+Plan "1" *-right- "N" Price
+Price -down-> Target
+Price -right-> Type
+
+' Subscriptions
+Sale -up-> Customer
+Sale -up-> Target
+Sale -left-> Plan
+Customer -up-> Customer : seller
+
+' Activity
+Action -up-> Customer
+Action -up-> Target
+Action -right-> Sale
+Action -up-> Action : parent
+Action ..> UsageInterval : uses for\npro-rating
+
+' Pipeline flow
+Billing -down-> Collector
+Billing -down-> Calculator
+Billing -down-> Aggregator
+Collector ..> Calculator : feeds
+Calculator ..> Aggregator : feeds
+
+' Results
+Charge -up-> Action
+Charge -up-> Price
+Charge -left-> Charge : parent
+Charge -right-> Bill : aggregated into
+Bill -up-> Customer
+Bill -up-> Target
+Bill -right-> Type
 
 @enduml

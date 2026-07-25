@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -11,6 +14,7 @@
 namespace hiqdev\php\billing\bill;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\EntityInterface;
@@ -50,4 +54,14 @@ interface BillInterface extends EntityInterface
      * @return ChargeInterface[]
      */
     public function getCharges();
+
+    public function getUsageInterval(): UsageInterval;
+
+    public function setUsageInterval(UsageInterval $usageInterval): void;
+
+    public function getSource(): ?BillSource;
+
+    public function getTxn(): ?BillTxn;
+
+    public function getReversesId(): ?BillReversesId;
 }

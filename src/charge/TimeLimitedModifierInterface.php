@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -18,7 +21,6 @@ use hiqdev\php\billing\formula\FormulaRuntimeError;
 interface TimeLimitedModifierInterface
 {
     /**
-     * @param DateTimeImmutable $time
      * @return bool whether the modifier is applicable at the passed $time
      * @throws FormulaRuntimeError when modifier is misconfigured
      */

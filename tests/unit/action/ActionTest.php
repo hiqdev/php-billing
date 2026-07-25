@@ -83,11 +83,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->type     = new Type(null, 'server_traf');
+        $this->type     = Type::anyId('server_traf');
         $this->target   = new Target(2, 'server');
         $this->prepaid  = Quantity::gigabyte(1);
         $this->money    = Money::USD(10000);
-        $this->price    = new SinglePrice(5, $this->type, $this->target, null, $this->prepaid, $this->money);
+        $this->price    = new SinglePrice(5, $this->type, $this->target, $this->prepaid, $this->money);
         $this->customer = new Customer(2, 'client');
         $this->time     = new DateTimeImmutable('now');
         $this->generalizer = new Generalizer();
@@ -128,6 +128,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     public function assertZeroCharge(ChargeInterface $charge): void
     {
         $this->assertSame('0', $charge->getSum()->getAmount());
+    }
+
+    public function assertNonZeroCharge(ChargeInterface $charge): void
+    {
+        $this->assertNotSame('0', $charge->getSum()->getAmount(), 'Charge is zero');
     }
 
     public function testChargesForNextMonthSalesAreNotCalculated()

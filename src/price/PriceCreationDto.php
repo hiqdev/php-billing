@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -70,4 +73,7 @@ class PriceCreationDto
 
     /** @var float */
     public $rate;
+
+    /** @var ProgressivePriceThreshold[]  */
+    public array $thresholds = [];
 }

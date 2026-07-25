@@ -1,8 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace hiqdev\php\billing\Exception;
 
+use hidev\exception\HasContext;
+use hidev\exception\HasContextInterface;
 use hiqdev\php\billing\action\ActionInterface;
 use Throwable;
 
@@ -12,9 +15,9 @@ use Throwable;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-final class ActionChargingException extends RuntimeException
+final class ActionChargingException extends RuntimeException implements HasContextInterface
 {
-    private readonly ActionInterface $action;
+    use HasContext;
 
     public static function forAction(ActionInterface $action, Throwable $previousException): self
     {
@@ -23,8 +26,10 @@ final class ActionChargingException extends RuntimeException
         } else {
             $message = sprintf(
                 'Failed to charge action (type: %s, target: %s, quantity: %s %s, customer: %s, time: %s): %s',
-                $action->getType()->getName(), $action->getTarget()->getUniqueId(),
-                $action->getQuantity()->getQuantity(), $action->getQuantity()->getUnit()->getName(),
+                $action->getType()->getName(),
+                $action->getTarget()->getUniqueId(),
+                $action->getQuantity()->getQuantity(),
+                $action->getQuantity()->getUnit()->getName(),
                 $action->getCustomer()->getLogin(),
                 $action->getTime()->format(DATE_ATOM),
                 $previousException->getMessage()
@@ -32,13 +37,8 @@ final class ActionChargingException extends RuntimeException
         }
 
         $self = new self($message, 0, $previousException);
-        $self->action = $action;
+        $self->addContext(['action' => $action]);
 
         return $self;
-    }
-
-    public function getAction(): ActionInterface
-    {
-        return $this->action;
     }
 }

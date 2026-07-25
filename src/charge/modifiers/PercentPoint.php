@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -18,16 +21,10 @@ namespace hiqdev\php\billing\charge\modifiers;
 class PercentPoint
 {
     /**
-     * @var int|float|string
-     */
-    private $number;
-
-    /**
      * @param int|float|string $number
      */
-    public function __construct($number)
+    public function __construct(private $number)
     {
-        $this->number = $number;
     }
 
     /**

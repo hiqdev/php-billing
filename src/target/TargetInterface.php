@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -34,8 +37,8 @@ use hiqdev\php\billing\EntityInterface;
  */
 interface TargetInterface extends EntityInterface
 {
-    const ANY = null;
-    const NONE = INF;
+    public const ANY = null;
+    public const NONE = INF;
 
     /**
      * Get target ID, unique only between targets of the same type.
@@ -51,7 +54,6 @@ interface TargetInterface extends EntityInterface
 
     /**
      * Get target state.
-     * @return null|string
      */
     public function getState(): ?string;
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -30,5 +33,10 @@ class DayPeriod extends Period
     public function addTo(DateTimeImmutable $since): DateTimeImmutable
     {
         return $since->add(new DateInterval("P{$this->value}D"));
+    }
+
+    public function __toString(): string
+    {
+        return $this->value . ' day' . ($this->value > 1 ? 's' : '');
     }
 }

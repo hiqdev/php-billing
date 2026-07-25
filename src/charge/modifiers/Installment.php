@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -17,8 +18,10 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Reason;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
+use hiqdev\php\billing\charge\modifiers\event\InstallmentWasCharged;
 use hiqdev\php\billing\charge\modifiers\event\InstallmentWasFinished;
-use hiqdev\php\billing\charge\modifiers\event\InstallmentWasStarted;
 use hiqdev\php\billing\formula\FormulaSemanticsError;
 use hiqdev\php\billing\price\SinglePrice;
 use hiqdev\php\billing\target\Target;
@@ -39,16 +42,16 @@ class Installment extends Modifier
         $target = $this->getTarget();
         $prepaid = Quantity::create('items', 0);
 
-        return new SinglePrice(null, $type, $target, null, $prepaid, $sum);
+        return new SinglePrice(null, $type, $target, $prepaid, $sum);
     }
 
     public function getType()
     {
         $since = $this->getSince();
         if ($since->getValue() < new DateTimeImmutable('2024-01-01')) {
-            return new Type(Type::ANY, 'monthly,leasing');
+            return Type::anyId('monthly,leasing');
         }
-        return new Type(Type::ANY, 'monthly,installment');
+        return Type::anyId('monthly,installment');
     }
 
     public function getTarget()
@@ -56,21 +59,22 @@ class Installment extends Modifier
         return new Target(Target::ANY, Target::ANY);
     }
 
-    public function till($dummy)
+    #[\Override]
+    public function till($time): never
     {
         throw new FormulaSemanticsError('till can not be defined for installment');
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        if ($charge === null) {
+        if (!$charge instanceof ChargeInterface) {
             throw new \Exception('unexpected null charge in Installment, to be implemented');
         }
 
         $this->ensureIsValid();
 
         $reason = $this->getReason();
-        if ($reason) {
+        if ($reason instanceof Reason) {
             $charge->setComment($reason->getValue());
         }
 
@@ -89,28 +93,14 @@ class Installment extends Modifier
     protected function ensureIsValid(): void
     {
         $since = $this->getSince();
-        if ($since === null) {
+        if (!$since instanceof Since) {
             throw new FormulaSemanticsError('no since given for installment');
         }
 
         $term = $this->getTerm();
-        if ($term === null) {
+        if (!$term instanceof Period) {
             throw new FormulaSemanticsError('no term given for installment');
         }
-    }
-
-    private function isFirstMonthInInstallmentPassed(DateTimeImmutable $time): bool
-    {
-        $since = $this->getSince();
-        if ($since && $since->getValue() > $time) {
-            return false;
-        }
-
-        if ($since->getValue()->diff($time)->format('%a') === '0') {
-            return true;
-        }
-
-        return false;
     }
 
     private function isFirstMonthAfterInstallmentPassed(DateTimeImmutable $time): bool
@@ -121,18 +111,12 @@ class Installment extends Modifier
         }
 
         $till = $this->getTill();
-        if ($till && $till->getValue() <= $time) {
-            if ($till->getValue()->diff($time)->format('%a') === '0') {
-                return true;
-            }
-        }
-
-        $term = $this->getTerm();
-        if ($term && $term->addTo($since->getValue())->diff($time)->format('%a') === '0') {
+        if ($till && $till->getValue() <= $time && $till->getValue()->diff($time)->format('%a') === '0') {
             return true;
         }
 
-        return false;
+        $term = $this->getTerm();
+        return $term && $term->addTo($since->getValue())->diff($time)->format('%a') === '0';
     }
 
     private function createInstallmentFinishingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
@@ -154,9 +138,9 @@ class Installment extends Modifier
         return $result;
     }
 
-    private function createInstallmentStartingCharge(ChargeInterface $charge, DateTimeImmutable $month): ChargeInterface
+    private function createInstallmentStartingCharge(Charge $charge, DateTimeImmutable $month): ChargeInterface
     {
-        $charge->recordThat(InstallmentWasStarted::onCharge($charge, $month));
+        $charge->recordThat(InstallmentWasCharged::onCharge($charge, $month));
 
         return $charge;
     }
@@ -177,11 +161,7 @@ class Installment extends Modifier
             $result->setComment($charge->getComment());
         }
 
-        if ($this->isFirstMonthInInstallmentPassed($month)) {
-            return $this->createInstallmentStartingCharge($result, $month);
-        }
-
-        return $result;
+        return $this->createInstallmentStartingCharge($result, $month);
     }
 
     public function getRemainingPeriods(DateTimeImmutable $currentDate): ?Period
@@ -189,11 +169,11 @@ class Installment extends Modifier
         $since = $this->getSince();
         $term = $this->getTerm();
 
-        if ($since === null || $term === null) {
+        if (!$since instanceof Since || !$term instanceof Period) {
             return null;
         }
 
-        $className = get_class($term);
+        $className = $term::class;
         $passedRatio = $term->countPeriodsPassed($since->getValue(), $currentDate);
 
         return new $className(

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -17,9 +20,9 @@ namespace hiqdev\php\billing\action;
  */
 class ActionState
 {
-    const STATE_NEW      = 'new';
-    const STATE_FINISHED = 'finished';
-    const STATE_FAILED   = 'failed';
+    public const STATE_NEW      = 'new';
+    public const STATE_FINISHED = 'finished';
+    public const STATE_FAILED   = 'failed';
 
     /** @var string */
     protected $state;

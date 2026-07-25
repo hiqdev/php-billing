@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -26,49 +27,31 @@ use Money\Money;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class EnumPrice extends AbstractPrice
+class EnumPrice extends AbstractPrice implements PriceWithSumsInterface, PriceWithCurrencyInterface, PriceWithUnitInterface
 {
-    /**
-     * @var UnitInterface
-     */
-    protected $unit;
-
-    /**
-     * @var Currency
-     */
-    protected $currency;
-
-    /**
-     * @var array quantity => total sum for the quantity
-     */
-    protected $sums;
-
     public function __construct(
-                            $id,
+        $id,
         TypeInterface $type,
         TargetInterface $target,
         ?PlanInterface $plan,
-        UnitInterface $unit,
-        Currency $currency,
-        array $sums
+        protected UnitInterface $unit,
+        protected Currency $currency,
+        protected Sums $sums,
     ) {
         parent::__construct($id, $type, $target, $plan);
-        $this->unit = $unit;
-        $this->currency = $currency;
-        $this->sums = $sums;
     }
 
-    public function getUnit()
+    public function getUnit(): UnitInterface
     {
         return $this->unit;
     }
 
-    public function getCurrency()
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    public function getSums()
+    public function getSums(): Sums
     {
         return $this->sums;
     }
@@ -76,11 +59,12 @@ class EnumPrice extends AbstractPrice
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $usage = $this->calculateUsage($quantity)->getQuantity();
 
-        foreach ($this->sums as $value => $price) {
+        foreach ($this->sums->values() as $value => $price) {
             if ((string) $value === (string) $usage) {
                 return new Money($price, $this->currency);
             }
@@ -95,12 +79,12 @@ class EnumPrice extends AbstractPrice
     public function calculatePrice(QuantityInterface $quantity): ?Money
     {
         $sum = $this->calculateSum($quantity);
-        if ($sum === null) {
+        if (!$sum instanceof Money) {
             return null;
         }
 
         $usage = $this->calculateUsage($quantity);
-        if ($usage === null) {
+        if (!$usage instanceof QuantityInterface) {
             return null;
         }
 

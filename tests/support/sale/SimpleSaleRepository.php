@@ -52,12 +52,22 @@ class SimpleSaleRepository implements SaleRepositoryInterface
         throw new Exception('not implemented');
     }
 
-    public function findByIds(array $ids)
+    public function findByIds(array $ids): never
     {
         throw new Exception('not implemented');
     }
 
     public function findById(string $id): ?object
+    {
+        throw new Exception('not implemented');
+    }
+
+    public function isTariffInUse(int $tariffId): bool
+    {
+        throw new Exception('not implemented');
+    }
+
+    public function deleteByTariffId(int $tariffId): void
     {
         throw new Exception('not implemented');
     }

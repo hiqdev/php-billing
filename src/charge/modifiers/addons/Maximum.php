@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -22,10 +23,11 @@ class Maximum extends Extremum
 {
     protected static $name = 'maximum';
 
+    #[\Override]
     public function calculateSum(ChargeInterface $charge): Money
     {
         return $this->value instanceof Money
             ? $this->value
-            : $charge->getSum()->multiply(sprintf('%.14F', $this->value*0.01));
+            : $charge->getSum()->multiply(sprintf('%.14F', $this->value * 0.01));
     }
 }

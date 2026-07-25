@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -16,6 +17,8 @@ use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\AddonsContainerInterface;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\charge\ChargeModifier;
+use hiqdev\php\billing\charge\modifiers\addons\Period;
+use hiqdev\php\billing\charge\modifiers\addons\Since;
 use hiqdev\php\billing\charge\TimeLimitedModifierInterface;
 use hiqdev\php\billing\formula\FormulaRuntimeError;
 
@@ -52,11 +55,7 @@ class Modifier implements ChargeModifier, AddonsContainerInterface, TimeLimitedM
         $month = $action->getTime()->modify('first day of this month midnight');
 
         $since = $this->getSince();
-        if ($since && $since->getValue() > $month) {
-            return false;
-        }
-
-        return true;
+        return !($since && $since->getValue() > $month);
     }
 
     public function discount()
@@ -125,8 +124,8 @@ class Modifier implements ChargeModifier, AddonsContainerInterface, TimeLimitedM
         }
 
         $term = $this->getTerm();
-        if ($term) {
-            if (!$since) {
+        if ($term instanceof Period) {
+            if (!$since instanceof Since) {
                 throw new FormulaRuntimeError('since must be set to use term');
             }
             if ($term->countPeriodsPassed($since->getValue(), $time) >= 1) {

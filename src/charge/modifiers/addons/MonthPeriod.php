@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Billing Library
  *
@@ -23,11 +26,16 @@ class MonthPeriod extends Period
     {
         $diff = $time->diff($since);
 
-        return ($diff->m + $diff->y*12) / $this->value;
+        return ($diff->m + $diff->y * 12) / $this->value;
     }
 
     public function addTo(DateTimeImmutable $since): DateTimeImmutable
     {
         return $since->add(new \DateInterval("P{$this->value}M"));
+    }
+
+    public function __toString(): string
+    {
+        return $this->value . ' month' . ($this->value > 1 ? 's' : '');
     }
 }

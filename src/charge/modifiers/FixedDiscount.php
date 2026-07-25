@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -13,7 +14,9 @@ namespace hiqdev\php\billing\charge\modifiers;
 use hiqdev\php\billing\action\ActionInterface;
 use hiqdev\php\billing\charge\Charge;
 use hiqdev\php\billing\charge\ChargeInterface;
+use hiqdev\php\billing\charge\modifiers\addons\ChargeType;
 use hiqdev\php\billing\charge\modifiers\addons\Discount;
+use hiqdev\php\billing\charge\modifiers\addons\Reason;
 use hiqdev\php\billing\type\Type;
 use hiqdev\php\units\Quantity;
 use Money\Money;
@@ -25,7 +28,7 @@ use Money\Money;
  */
 class FixedDiscount extends Modifier
 {
-    const VALUE = 'value';
+    public const VALUE = 'value';
 
     public function __construct($value, array $addons = [])
     {
@@ -33,19 +36,20 @@ class FixedDiscount extends Modifier
         $this->addAddon(self::VALUE, new Discount($value));
     }
 
+    #[\Override]
     public function getNext()
     {
         return $this;
     }
 
-    public function getValue(ChargeInterface $charge = null): Discount
+    public function getValue(?ChargeInterface $charge = null): Discount
     {
         return $this->getAddon(self::VALUE);
     }
 
     public function isAbsolute()
     {
-        return $this->getAddon(self::VALUE)->isAbsolute();
+        return $this->getValue()->isAbsolute();
     }
 
     public function isRelative()
@@ -53,7 +57,7 @@ class FixedDiscount extends Modifier
         return !$this->isAbsolute();
     }
 
-    public function calculateSum(ChargeInterface $charge = null): Money
+    public function calculateSum(?ChargeInterface $charge = null): Money
     {
         return $this->getValue($charge)->calculateSum($charge);
     }
@@ -62,14 +66,14 @@ class FixedDiscount extends Modifier
     {
         $chargeTypeAddon = $this->getChargeType();
 
-        $type = $chargeTypeAddon ? $chargeTypeAddon->getValue() : 'discount,discount';
+        $type = $chargeTypeAddon instanceof ChargeType ? $chargeTypeAddon->getValue() : 'discount,discount';
 
         return new Type(Type::ANY, $type);
     }
 
     public function modifyCharge(?ChargeInterface $charge, ActionInterface $action): array
     {
-        if ($charge === null) {
+        if (!$charge instanceof ChargeInterface) {
             return [];
         }
 
@@ -88,7 +92,7 @@ class FixedDiscount extends Modifier
         $discount->setParent($charge);
 
         $reason = $this->getReason();
-        if ($reason) {
+        if ($reason instanceof Reason) {
             $discount->setComment($reason->getValue());
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -33,11 +34,6 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     use SettableChargeModifierTrait;
 
     /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
      * @var TypeInterface
      */
     protected $type;
@@ -52,13 +48,15 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
      */
     protected $plan;
 
+    /**
+     * @param int $id
+     */
     public function __construct(
-                            $id,
+        protected $id,
         TypeInterface $type,
         TargetInterface $target,
-        PlanInterface $plan = null
+        ?PlanInterface $plan = null
     ) {
-        $this->id = $id;
         $this->type = $type;
         $this->target = $target;
         $this->plan = $plan;
@@ -122,19 +120,36 @@ abstract class AbstractPrice implements PriceInterface, ChargeModifier
     public function calculateSum(QuantityInterface $quantity): ?Money
     {
         $usage = $this->calculateUsage($quantity);
-        if ($usage === null) {
+        if (!$usage instanceof QuantityInterface) {
             return null;
         }
 
         $price = $this->calculatePrice($quantity);
-        if ($price === null) {
+        if (!$price instanceof Money) {
             return null;
         }
 
-        /// TODO add configurable rounding mode later
-        return $price->multiply(sprintf('%.14F', $usage->getQuantity()), Money::ROUND_UP);
+        if ($price->isZero()) {
+            return $price;
+        }
+
+        $stringQty = sprintf('%.14F', $usage->getQuantity());
+
+        $sum = $price->multiply($stringQty, Money::ROUND_HALF_UP);
+        if ($sum->isZero() && !$quantity->isZero()) {
+            // If there is any usage, but sum is zero, we should charge at least 1 cent
+            $sum = $price->multiply($stringQty, Money::ROUND_UP);
+        }
+
+        return $sum;
     }
 
+    /**
+     * What purpose of this method? Because it looks like duplicate of PriceHydrator::extract()
+     * Where we are using the result of this method?
+     * Magic calls can't be determined and I don't know what can be broken if we change the method result.
+     * Which structure must have the result, because array can contain anything?
+     */
     public function jsonSerialize(): array
     {
         $res = array_filter(get_object_vars($this));

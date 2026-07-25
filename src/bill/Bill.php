@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -11,6 +12,7 @@
 namespace hiqdev\php\billing\bill;
 
 use DateTimeImmutable;
+use hiqdev\php\billing\action\UsageInterval;
 use hiqdev\php\billing\charge\ChargeInterface;
 use hiqdev\php\billing\customer\CustomerInterface;
 use hiqdev\php\billing\Exception\CannotReassignException;
@@ -27,9 +29,6 @@ use Money\Money;
  */
 class Bill implements BillInterface
 {
-    /** @var int|string */
-    protected $id;
-
     /** @var TypeInterface */
     protected $type;
 
@@ -63,19 +62,36 @@ class Bill implements BillInterface
     /** @var string */
     protected $comment;
 
+    /** @var UsageInterval */
+    protected $usageInterval;
+
+    /** @var BillSource|null */
+    protected $source;
+
+    /** @var BillTxn|null */
+    protected $txn;
+
+    /** @var BillReversesId|null */
+    protected $reversesId;
+
+    /**
+     * @param int|string $id
+     */
     public function __construct(
-                            $id,
+        protected $id,
         TypeInterface $type,
         DateTimeImmutable $time,
         Money $sum,
         QuantityInterface $quantity,
         CustomerInterface $customer,
-        TargetInterface $target = null,
-        PlanInterface $plan = null,
+        ?TargetInterface $target = null,
+        ?PlanInterface $plan = null,
         array $charges = [],
-        BillState $state = null
+        ?BillState $state = null,
+        ?BillSource $source = null,
+        ?BillTxn $txn = null,
+        ?BillReversesId $reversesId = null,
     ) {
-        $this->id           = $id;
         $this->type         = $type;
         $this->time         = $time;
         $this->sum          = $sum;
@@ -85,6 +101,9 @@ class Bill implements BillInterface
         $this->plan         = $plan;
         $this->charges      = $charges;
         $this->state        = $state;
+        $this->source       = $source;
+        $this->txn          = $txn;
+        $this->reversesId   = $reversesId;
     }
 
     /**
@@ -102,6 +121,20 @@ class Bill implements BillInterface
         ];
 
         return implode('-', $parts);
+    }
+
+    public function getUsageInterval(): UsageInterval
+    {
+        if ($this->usageInterval === null) {
+            $this->initializeWholeMonthUsageInterval();
+        }
+
+        return $this->usageInterval;
+    }
+
+    private function initializeWholeMonthUsageInterval(): void
+    {
+        $this->setUsageInterval(UsageInterval::wholeMonth($this->time));
     }
 
     public function calculatePrice()
@@ -224,6 +257,16 @@ class Bill implements BillInterface
         return $this->comment;
     }
 
+    public function getSource(): ?BillSource
+    {
+        return $this->source;
+    }
+
+    public function getTxn(): ?BillTxn
+    {
+        return $this->txn;
+    }
+
     public function setComment(string $comment)
     {
         $this->comment = $comment;
@@ -232,5 +275,24 @@ class Bill implements BillInterface
     public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this));
+    }
+
+    public function setUsageInterval(UsageInterval $usageInterval): void
+    {
+        $this->usageInterval = $usageInterval;
+    }
+
+    public function getReversesId(): ?BillReversesId
+    {
+        return $this->reversesId;
+    }
+
+    /**
+     * @param BillReversesId|null $reversesId
+     * @return void
+     */
+    public function setReversesId($reversesId): void
+    {
+        $this->reversesId = $reversesId;
     }
 }

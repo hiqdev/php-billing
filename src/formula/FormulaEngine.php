@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Billing Library
  *
@@ -16,7 +17,10 @@ use hiqdev\php\billing\charge\modifiers\Cap;
 use hiqdev\php\billing\charge\modifiers\Discount;
 use hiqdev\php\billing\charge\modifiers\Increase;
 use hiqdev\php\billing\charge\modifiers\Installment;
+use hiqdev\php\billing\charge\modifiers\Once;
+use Hoa\Compiler\Exception\Exception as CompilerException;
 use Hoa\Ruler\Context;
+use Hoa\Ruler\Exception\Interpreter;
 use Hoa\Ruler\Model\Model;
 use Hoa\Ruler\Ruler;
 use Hoa\Visitor\Visit;
@@ -29,49 +33,28 @@ class FormulaEngine implements FormulaEngineInterface
 {
     public const FORMULAS_SEPARATOR = "\n";
 
-    /**
-     * @var Ruler
-     */
-    protected $ruler;
+    protected ?Ruler $ruler = null;
 
-    /**
-     * @var Visit|Asserter
-     */
-    protected $asserter;
+    protected ?Visit $asserter = null;
 
-    /**
-     * @var Context
-     */
-    protected $context;
+    protected ?Context $context = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $discount;
+    protected ?ChargeModifier $discount = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $installment;
+    protected ?ChargeModifier $installment = null;
 
-    /**
-     * @var ChargeModifier
-     */
-    protected $increase;
+    protected ?ChargeModifier $increase = null;
 
     protected ?Cap $cap = null;
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
 
-    public function __construct(CacheInterface $cache)
-    {
+    protected ?Once $once = null;
+
+    public function __construct(
+        private readonly CacheInterface $cache
+    ) {
         if (!class_exists(Context::class)) {
             throw new Exception('to use formula engine install `hoa/ruler`');
         }
-
-        $this->cache = $cache;
     }
 
     public function build(string $formula): ChargeModifier
@@ -116,9 +99,7 @@ class FormulaEngine implements FormulaEngineInterface
             }
 
             return $model;
-        } catch (\Hoa\Compiler\Exception\Exception $exception) {
-            throw FormulaSyntaxError::fromException($exception, $formula);
-        } catch (\Hoa\Ruler\Exception\Interpreter $exception) {
+        } catch (CompilerException | Interpreter $exception) {
             throw FormulaSyntaxError::fromException($exception, $formula);
         } catch (\Throwable $exception) {
             throw FormulaSyntaxError::create($formula, 'Failed to interpret formula: ' . $exception->getMessage());
@@ -159,7 +140,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     public function getRuler(): Ruler
     {
-        if ($this->ruler === null) {
+        if (!$this->ruler instanceof Ruler) {
             $this->ruler = new Ruler();
             $this->ruler->setAsserter($this->getAsserter());
         }
@@ -170,7 +151,7 @@ class FormulaEngine implements FormulaEngineInterface
     public function setAsserter(Visit $asserter): self
     {
         $this->asserter = $asserter;
-        if ($this->ruler !== null) {
+        if ($this->ruler instanceof Ruler) {
             $this->ruler->setAsserter($asserter);
         }
 
@@ -179,7 +160,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     public function getAsserter(): Visit
     {
-        if ($this->asserter === null) {
+        if (!$this->asserter instanceof Visit) {
             $this->asserter = new Asserter();
         }
 
@@ -188,7 +169,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     public function getContext(): Context
     {
-        if ($this->context === null) {
+        if (!$this->context instanceof Context) {
             $this->context = $this->buildContext();
         }
 
@@ -202,13 +183,14 @@ class FormulaEngine implements FormulaEngineInterface
         $context['installment'] = $this->getInstallment();
         $context['increase'] = $this->getIncrease();
         $context['cap'] = $this->getCap();
+        $context['once'] = $this->getOnce();
 
         return $context;
     }
 
     public function getDiscount(): ChargeModifier
     {
-        if ($this->discount === null) {
+        if (!$this->discount instanceof ChargeModifier) {
             $this->discount = new Discount();
         }
 
@@ -217,7 +199,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     public function getInstallment(): ChargeModifier
     {
-        if ($this->installment === null) {
+        if (!$this->installment instanceof ChargeModifier) {
             $this->installment = new Installment();
         }
 
@@ -226,7 +208,7 @@ class FormulaEngine implements FormulaEngineInterface
 
     public function getIncrease(): ChargeModifier
     {
-        if ($this->increase === null) {
+        if (!$this->increase instanceof ChargeModifier) {
             $this->increase = new Increase();
         }
 
@@ -235,10 +217,32 @@ class FormulaEngine implements FormulaEngineInterface
 
     private function getCap(): ChargeModifier
     {
-        if ($this->cap === null) {
+        if (!$this->cap instanceof Cap) {
             $this->cap = new Cap();
         }
 
         return $this->cap;
+    }
+
+    private function getOnce(): ChargeModifier
+    {
+        if (!$this->once instanceof Once) {
+            $this->once = new Once();
+        }
+
+        return $this->once;
+    }
+
+    public function __clone()
+    {
+        if ($this->context instanceof Context) {
+            $this->context = clone $this->context;
+        }
+        if ($this->ruler instanceof Ruler) {
+            $this->ruler = clone $this->ruler;
+        }
+        if ($this->asserter instanceof Visit) {
+            $this->asserter = clone $this->asserter;
+        }
     }
 }
