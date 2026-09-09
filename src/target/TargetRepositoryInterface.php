@@ -24,5 +24,10 @@ interface TargetRepositoryInterface
      */
     public function findOne($specification);
 
+    /**
+     * @param int|string $id
+     */
+    public function findOneById($id): ?TargetInterface;
+
     public function save(TargetInterface $target): void;
 }
