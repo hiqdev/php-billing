@@ -78,7 +78,7 @@ class PriceChargesEstimator
             }
             unset($action);
 
-            foreach ($chargesByTargetAndAction['targets'] as &$actions) {
+            foreach ($chargesByTargetAndAction['targets'] ?? [] as &$actions) {
                 foreach ($actions as &$action) {
                     $this->decorateAction($action);
                 }
