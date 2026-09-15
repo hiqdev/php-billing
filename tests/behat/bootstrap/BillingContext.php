@@ -201,7 +201,7 @@ class BillingContext extends BaseContext
     }
 
     #[\Behat\Step\Given('/recalculate autotariff for target (\S+)( +at (\S+))?$/')]
-    public function recalculateAutoTariff(string $target, ?string $time = null): void
+    public function recalculateAutoTariff(string $target, ?string $at = null, ?string $time = null): void
     {
         $this->builder->clientSetAutoTariff($target, $time);
     }
