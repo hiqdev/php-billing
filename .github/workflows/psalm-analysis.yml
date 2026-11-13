@@ -37,7 +37,6 @@ jobs:
         run: composer self-update
 
       - name: Composer install
-        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install -n
 
       - name: Run Psalm
