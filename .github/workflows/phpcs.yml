@@ -28,7 +28,6 @@ jobs:
           key: 8.5-composer-phpcs-${{ hashFiles('composer.json') }}
 
       - name: Composer install
-        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install -n --no-interaction
 
       - name: Run phpcs
